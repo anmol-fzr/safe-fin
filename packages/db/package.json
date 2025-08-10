@@ -1,0 +1,33 @@
+{
+	"name": "@safe-fin/db",
+	"version": "0.0.0",
+	"description": "DB package for Safe Fin",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"db:dev:generate": "bun run --env-file=.env.dev drizzle-kit generate --config=drizzle.config.dev.ts",
+		"db:prod:generate": "bun run --env-file=.env.prod drizzle-kit generate --config=drizzle.config.prod.ts",
+
+		"db:dev:migrate": "bun run --env-file=.env drizzle-kit migrate --config=drizzle.config.dev.ts",
+		"db:prod:migrate": "bun run --env-file=.env.prod drizzle-kit migrate --config=drizzle.config.prod.ts",
+
+		"db:dev:pull": "bun run --env-file=.env.dev drizzle-kit pull --config=drizzle.config.dev.ts",
+		"db:prod:pull": "bun run --env-file=.env.prod drizzle-kit pull --config=drizzle.config.prod.ts",
+
+		"db:dev:push": "bun run --env-file=.env.dev drizzle-kit push --config=drizzle.config.dev.ts",
+		"db:prod:push": "bun run --env-file=.env.prod drizzle-kit push --config=drizzle.config.prod.ts",
+
+		"db:dev:studio": "bun run --env-file=.env.dev drizzle-kit studio --config=drizzle.config.dev.ts",
+		"db:prod:studio": "bun run --env-file=.env.prod drizzle-kit studio --config=drizzle.config.prod.ts"
+	},
+	"dependencies": {
+		"@libsql/client": "^0.15.10",
+		"drizzle-orm": "^0.44.3"
+	},
+	"devDependencies": {
+		"drizzle-kit": "^0.31.4"
+	}
+}

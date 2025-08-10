@@ -1,0 +1,8 @@
+{
+  "name": "server",
+  "main": "./apps/server/src/index.ts",
+  "compatibility_date": "2022-07-12",
+  "dev": {
+    "port": 3000
+  }
+}

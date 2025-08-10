@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f5f5e9e0-da30-4760-8a43-3847b89ad89d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/apps/docs/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/app/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/app/fonts/GeistMonoVF.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/app/fonts/GeistVF.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/app/globals.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/app/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/app/page.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/app/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/eslint.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/next.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/public/file-text.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/public/globe.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/public/next.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/public/turborepo-dark.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/public/turborepo-light.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/public/vercel.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/public/window.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/docs/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/app/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/app/fonts/GeistMonoVF.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/app/fonts/GeistVF.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/app/globals.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/app/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/app/page.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/app/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/eslint.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/next.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/file-text.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/globe.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/next.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/turborepo-dark.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/turborepo-light.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/vercel.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/public/window.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/eslint-config/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/eslint-config/base.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/eslint-config/next.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/eslint-config/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/eslint-config/react-internal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/base.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/nextjs.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/typescript-config/react-library.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/eslint.config.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/button.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/card.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/code.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/turbo.json" beforeDir="false" afterPath="$PROJECT_DIR$/turbo.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="316Jbnpu5YmcLzIzvqnaK3Kku51" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/immortal/anmol/projects/safefin/apps/native/android",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f5f5e9e0-da30-4760-8a43-3847b89ad89d" name="Changes" comment="" />
+      <created>1754838662725</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1754838662725</updated>
+    </task>
+    <servers />
+  </component>
+</project>

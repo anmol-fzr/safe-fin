@@ -1,24 +1,32 @@
 {
-  "name": "safefin",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
-  },
-  "devDependencies": {
-    "prettier": "^3.6.2",
-    "turbo": "^2.5.5",
-    "typescript": "5.8.3"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "bun@1.2.18",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+	"name": "safefin",
+	"devDependencies": {
+		"@biomejs/biome": "2.1.4",
+		"syncpack": "^13.0.4",
+		"turbo": "^2.5.5",
+		"typescript": "5.9.2",
+		"wrangler": "^4.24.3"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"packageManager": "bun@1.2.18",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"check": "biome check",
+		"lint": "biome lint",
+		"lint:fix": "biome lint --write",
+		"format": "biome format --write",
+		"check-types": "turbo run check-types",
+		"deps:check": "syncpack list-mismatches",
+		"deps:fix": "syncpack fix-mismatches",
+		"deps:update": "syncpack update",
+		"auth:generate": "turbo run auth:generate --filter=@safe-fin/auth"
+	},
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	]
 }
