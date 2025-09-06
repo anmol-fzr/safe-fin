@@ -27,28 +27,23 @@ import {
 import { useSession } from "@/hooks/api/auth";
 
 type Data = {
-	navSecondary: {
+	[key: string]: {
 		title: string;
-		url: LinkComponentProps["to"] | "#";
-		icon: LucideIcon;
-	}[];
-	projects: {
-		name: string;
-		url: LinkComponentProps["to"] | "#";
+		url: LinkComponentProps["to"];
 		icon: LucideIcon;
 	}[];
 };
 
 const data: Data = {
-	navSecondary: [
+	footer: [
 		{
 			title: "Support",
-			url: "#",
+			url: "/dashboard/settings",
 			icon: LifeBuoy,
 		},
 		{
 			title: "Feedback",
-			url: "#",
+			url: "/dashboard/settings",
 			icon: Send,
 		},
 		{
@@ -57,19 +52,19 @@ const data: Data = {
 			icon: Settings,
 		},
 	],
-	projects: [
+	navigation: [
 		{
-			name: "Users",
+			title: "Users",
 			url: "/dashboard/users",
 			icon: User,
 		},
 		{
-			name: "Lessons",
+			title: "Lessons",
 			url: "/dashboard/lessons",
 			icon: Brain,
 		},
 		{
-			name: "Quiz",
+			title: "Quiz",
 			url: "/dashboard/quiz",
 			icon: CircleQuestionMark,
 		},
@@ -104,8 +99,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
       */}
 			<SidebarContent>
-				<NavProjects projects={data.projects} />
-				<NavSecondary items={data.navSecondary} className="mt-auto" />
+				<NavProjects projects={data.navigation} />
+				<NavSecondary items={data.footer} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>
 				{isPending ? <NavUser.Loading /> : <NavUser user={sessionData?.user} />}

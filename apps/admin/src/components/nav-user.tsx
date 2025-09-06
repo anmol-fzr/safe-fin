@@ -26,7 +26,7 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "./ui/skeleton";
-import type { User } from "@/lib/auth";
+import { type User } from "@/lib/auth";
 
 type NavUserProps = {
 	user: User;

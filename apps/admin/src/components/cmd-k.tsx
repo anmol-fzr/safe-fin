@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/command";
 import { useCommandState } from "cmdk";
 import type { LucideIcon } from "lucide-react";
+import { Card } from "./ui/card";
 
 type ListItem = {
 	icon: LucideIcon;
@@ -51,11 +52,6 @@ const list: List = [
 				shortDec: "Create, Update, Delete, Manage -- Quizzes",
 				desc: "Create, Update, Delete, Manage -- Quizzes",
 			},
-		],
-	},
-	{
-		title: "Settings",
-		list: [
 			{
 				icon: Settings,
 				label: "Settings",
@@ -127,10 +123,10 @@ function Stuff() {
 	const { setOpen } = React.useContext(cmdkContext);
 
 	return (
-		<CommandList>
+		<CommandList className="min-h-[500px]">
 			<CommandEmpty>No results found.</CommandEmpty>
-			<div className="flex">
-				<div className="flex-1 pr-1 border-r ">
+			<div className="flex !h-[500px]">
+				<div className="flex-1 pr-1 border-r !h-full">
 					{list.map((list) => (
 						<CommandGroup heading={list.title} key={list.title}>
 							{list.list.map((item) => (
@@ -156,14 +152,16 @@ function Stuff() {
 					))}
 				</div>
 
-				{selected && (
-					<div className="!min-w-[400px] p-2">
-						<div className="bg-sidebar p-4 rounded-md">
-							{map.get(selected)?.desc}
-						</div>
-					</div>
-				)}
+				{selected && <CommandSelectedDetail selected={selected} />}
 			</div>
 		</CommandList>
+	);
+}
+
+function CommandSelectedDetail({ selected }: { selected: string }) {
+	return (
+		<div className="!min-w-[450px] w-[450px] p-2">
+			<Card className="bg-sidebar p-4">{map.get(selected)?.desc}</Card>
+		</div>
 	);
 }

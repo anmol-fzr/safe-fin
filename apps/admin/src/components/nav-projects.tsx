@@ -12,7 +12,7 @@ export function NavProjects({
 	projects,
 }: {
 	projects: {
-		name: string;
+		title: string;
 		url: LinkComponentProps["to"];
 		icon: LucideIcon;
 	}[];
@@ -22,12 +22,12 @@ export function NavProjects({
 			<SidebarGroupLabel>Projects</SidebarGroupLabel>
 			<SidebarMenu>
 				{projects.map((item) => (
-					<SidebarMenuItem key={item.name}>
+					<SidebarMenuItem key={item.title}>
 						<Link to={item.url} activeOptions={{ exact: true }}>
 							{({ isActive }) => (
-								<SidebarMenuButton tooltip={item.name} isActive={isActive}>
+								<SidebarMenuButton tooltip={item.title} isActive={isActive}>
 									<item.icon />
-									<span className="z-10 font-medium">{item.name}</span>
+									<span className="z-10 font-medium">{item.title}</span>
 								</SidebarMenuButton>
 							)}
 						</Link>

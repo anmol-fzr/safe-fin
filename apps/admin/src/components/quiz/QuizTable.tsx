@@ -1,14 +1,18 @@
-import { useGetLessons } from "@/hooks/api/lesson";
 import { DataTable } from "../lessons/DataTable";
 import { TableSearch, useTableSearchValue } from "../table";
 import { useDefaultTableOpts } from "@/hooks/table";
-import { useMemo } from "react";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { useMemo, type ReactNode } from "react";
 import { useReactTable, type ColumnDef } from "@tanstack/react-table";
 import type { ILesson, IQuiz } from "@/services/api";
 import { Checkbox } from "../ui/checkbox";
 import { formatDateTime } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import { ExternalLink, MoreHorizontal } from "lucide-react";
+import { ChevronRight, ExternalLink, MoreHorizontal } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -50,6 +54,21 @@ const columns: ColumnDef<IQuiz>[] = [
 	{
 		accessorKey: "title",
 		header: "Title",
+		cell: ({ row }) => {
+			const { id = 0, title = "N/A", desc = "" } = row.original;
+
+			return (
+				<QuizHoverCard {...{ id, title, desc }}>
+					<Link
+						to="/dashboard/quiz/$quizId"
+						params={{ quizId: id }}
+						className="hover:underline"
+					>
+						{title}
+					</Link>
+				</QuizHoverCard>
+			);
+		},
 	},
 	{
 		accessorKey: "createdAt",
@@ -143,5 +162,35 @@ export function QuizTable() {
 				totalRows={totalRows}
 			/>
 		</div>
+	);
+}
+
+type QuizHoverCardProps = Pick<IQuiz, "id" | "title" | "desc"> & {
+	children: ReactNode;
+};
+
+function QuizHoverCard({ id, title, desc, children }: QuizHoverCardProps) {
+	return (
+		<HoverCard>
+			<HoverCardTrigger>{children}</HoverCardTrigger>
+			<HoverCardContent className="w-80">
+				<div className="flex flex-col gap-4">
+					<div className="flex justify-between gap-4">
+						<div className="space-y-1">
+							<h4 className="text-sm font-semibold">{title}</h4>
+							<p className="text-sm">{desc}</p>
+						</div>
+					</div>
+					<Link
+						to="/dashboard/quiz/$quizId"
+						params={{ quizId: id }}
+						className="hover:underline ml-auto mr-0 inline-flex items-center justify-center gap-1"
+					>
+						See more
+						<ChevronRight size={20} />
+					</Link>
+				</div>
+			</HoverCardContent>
+		</HoverCard>
 	);
 }
