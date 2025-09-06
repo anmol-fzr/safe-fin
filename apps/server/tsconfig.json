@@ -1,9 +1,21 @@
 {
   "compilerOptions": {
-    "jsx": "react/jsx",
+    "composite": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
     "extends": "../../tsconfig.json",
+    "include": [
+      "src/**/*"
+    ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": [
+      "@cloudflare/workers-types",
+      "vitest-environment-miniflare/globals"
+    ]
   }
 }

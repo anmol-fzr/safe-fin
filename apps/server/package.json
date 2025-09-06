@@ -4,23 +4,42 @@
 	"main": "./src/index.ts",
 	"types": "./src/index.ts",
 	"exports": {
-		".": "./src/index.ts"
+		".": "./src/index.ts",
+		"./hc": {
+			"import": {
+				"types": "./src/hc.ts",
+				"default": "./src/hc.ts"
+			}
+		}
 	},
 	"scripts": {
+		"cf:typegen": "wrangler types --env-interface CloudflareBindings",
+		"dev:conc": "concurrently \"npm run dev:tsc\" \"npm run dev:wrangler\"",
+		"dev:tsc": "bunx tsc -p tsconfig.build.json --watch",
 		"dev": "wrangler dev",
-		"cf:typegen": "wrangler types --env-interface CloudflareBindings"
+		"build": "bunx tsc -p tsconfig.build.json",
+		"test": "vitest run ",
+		"test:watch": "vitest",
+		"test:ui": "vitest --ui"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.0",
 		"country-state-city": "^3.2.1",
 		"drizzle-orm": "^0.44.3",
 		"hono": "^4.8.4",
-		"zod": "4.0.17"
+		"zod": "3.25.76"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250715.0",
 		"@types/bun": "latest",
+		"@vitest/coverage-c8": "^0.33.0",
+		"@vitest/ui": "^3.2.4",
+		"concurrently": "^9.2.0",
+		"miniflare": "^4.20250829.0",
+		"supertest": "^7.1.4",
 		"tsx": "^4.20.3",
+		"vitest": "^3.2.4",
+		"vitest-environment-miniflare": "^2.14.4",
 		"wrangler": "^4.24.3"
 	}
 }

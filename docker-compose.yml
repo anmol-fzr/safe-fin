@@ -1,0 +1,32 @@
+networks:
+  safefin:
+    driver: bridge
+
+services:
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      - safefin
+    volumes:
+      - ./minio-data:/data
+    restart: always
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://minio:9000/minio/health/live"] 
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+volumes:
+  minio-data:
+    driver: local

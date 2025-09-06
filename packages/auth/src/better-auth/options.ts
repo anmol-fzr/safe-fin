@@ -1,5 +1,5 @@
 import type { BetterAuthOptions } from "better-auth";
-import { phoneNumber, admin, openAPI } from "better-auth/plugins";
+import { phoneNumber, admin, openAPI, multiSession } from "better-auth/plugins";
 import { expo } from "@better-auth/expo";
 
 /**
@@ -20,8 +20,11 @@ export const betterAuthOptions: BetterAuthOptions = {
 	},
 	plugins: [
 		expo(),
-		admin(),
+		admin({
+			adminUserIds: ["F7EOrNtgbhOUA4FYvj0r7bN4eJykYGMb"],
+		}),
 		openAPI(),
+		multiSession(),
 		phoneNumber({
 			allowedAttempts: 3,
 			sendOTP: ({ phoneNumber, code }) => {

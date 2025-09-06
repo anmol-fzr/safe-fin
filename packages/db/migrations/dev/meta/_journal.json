@@ -15,6 +15,34 @@
       "when": 1754827916492,
       "tag": "0001_orange_luke_cage",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1754848329280,
+      "tag": "0002_rapid_green_goblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1754890428421,
+      "tag": "0003_spotty_amphibian",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1754890693729,
+      "tag": "0004_whole_justice",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1754890712237,
+      "tag": "0005_special_starjammers",
+      "breakpoints": true
     }
   ]
 }

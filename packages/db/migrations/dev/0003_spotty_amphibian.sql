@@ -1,0 +1,1 @@
+ALTER TABLE `lesson` ADD `is_published` integer DEFAULT false;

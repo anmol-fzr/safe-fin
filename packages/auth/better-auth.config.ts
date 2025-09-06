@@ -19,6 +19,8 @@ type GetDbParams = {
 };
 
 function getDb(envs: GetDbParams): ReturnType<typeof drizzle> {
+	console.log("getDB", envs);
+
 	const turso = createClient({
 		url: envs.TURSO_DB_URL,
 		authToken: envs.TURSO_DB_TOKEN,
@@ -42,5 +44,5 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
 	database,
 	baseURL: BETTER_AUTH.URL,
 	secret: BETTER_AUTH.SECRET,
-	trustedOrigins: [CORS_URL],
+	trustedOrigins: [CORS_URL, "http://192.168.29.57:5173"],
 });

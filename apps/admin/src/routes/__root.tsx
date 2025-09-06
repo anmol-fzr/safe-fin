@@ -1,61 +1,48 @@
-import Header from "@/components/header";
-import Loader from "@/components/loader";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
 import {
-  HeadContent,
-  Outlet,
-  createRootRouteWithContext,
-  useRouterState,
+	HeadContent,
+	Outlet,
+	createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import "../index.css";
+import { Providers } from "@/components/providers";
+import { QueryClient } from "@tanstack/react-query";
 
-export interface RouterAppContext {}
+export interface RouterAppContext {
+	queryClient: QueryClient;
+}
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
-  component: RootComponent,
-  head: () => ({
-    meta: [
-      {
-        title: "my-better-t-app",
-      },
-      {
-        name: "description",
-        content: "my-better-t-app is a web application",
-      },
-    ],
-    links: [
-      {
-        rel: "icon",
-        href: "/favicon.ico",
-      },
-    ],
-  }),
+	component: RootComponent,
+	head: () => ({
+		meta: [
+			{
+				title: "SafeFin Admin Panel",
+			},
+			{
+				name: "description",
+				content: "SafeFin Admin Panel",
+			},
+		],
+		// links: [
+		// 	{
+		// 		rel: "icon",
+		// 		href: "/favicon.ico",
+		// 	},
+		// ],
+	}),
 });
 
 function RootComponent() {
-  const isFetching = useRouterState({
-    select: (s) => s.isLoading,
-  });
+	// const isFetching = useRouterState({
+	// 	select: (s) => s.isLoading,
+	// });
 
-
-  return (
-    <>
-      <HeadContent />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        disableTransitionOnChange
-        storageKey="vite-ui-theme"
-      >
-        <div className="grid grid-rows-[auto_1fr] h-svh">
-          <Header />
-          {isFetching ? <Loader /> : <Outlet />}
-        </div>
-        <Toaster richColors />
-      </ThemeProvider>
-      <TanStackRouterDevtools position="bottom-left" />
-    </>
-  );
+	return (
+		<>
+			<HeadContent />
+			<Providers>
+				<Outlet />
+			</Providers>
+		</>
+	);
 }

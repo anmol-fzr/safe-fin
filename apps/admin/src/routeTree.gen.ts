@@ -9,38 +9,204 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardQuizRouteImport } from './routes/dashboard/quiz'
+import { Route as DashboardLessonsRouteImport } from './routes/dashboard/lessons'
+import { Route as DashboardLessonsIndexRouteImport } from './routes/dashboard/lessons/index'
+import { Route as DashboardSettingsCustomizationRouteImport } from './routes/dashboard/settings/customization'
+import { Route as DashboardSettingsAccountRouteImport } from './routes/dashboard/settings/account'
+import { Route as DashboardQuizNewRouteImport } from './routes/dashboard/quiz/new'
+import { Route as DashboardLessonsNewRouteImport } from './routes/dashboard/lessons/new'
+import { Route as DashboardLessonsLessonIdRouteImport } from './routes/dashboard/lessons/$lessonId'
+import { Route as DashboardLessonsLessonIdIndexRouteImport } from './routes/dashboard/lessons/$lessonId/index'
 
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardUsersRoute = DashboardUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardQuizRoute = DashboardQuizRouteImport.update({
+  id: '/quiz',
+  path: '/quiz',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardLessonsRoute = DashboardLessonsRouteImport.update({
+  id: '/lessons',
+  path: '/lessons',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardLessonsIndexRoute = DashboardLessonsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardLessonsRoute,
+} as any)
+const DashboardSettingsCustomizationRoute =
+  DashboardSettingsCustomizationRouteImport.update({
+    id: '/customization',
+    path: '/customization',
+    getParentRoute: () => DashboardSettingsRoute,
+  } as any)
+const DashboardSettingsAccountRoute =
+  DashboardSettingsAccountRouteImport.update({
+    id: '/account',
+    path: '/account',
+    getParentRoute: () => DashboardSettingsRoute,
+  } as any)
+const DashboardQuizNewRoute = DashboardQuizNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => DashboardQuizRoute,
+} as any)
+const DashboardLessonsNewRoute = DashboardLessonsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => DashboardLessonsRoute,
+} as any)
+const DashboardLessonsLessonIdRoute =
+  DashboardLessonsLessonIdRouteImport.update({
+    id: '/$lessonId',
+    path: '/$lessonId',
+    getParentRoute: () => DashboardLessonsRoute,
+  } as any)
+const DashboardLessonsLessonIdIndexRoute =
+  DashboardLessonsLessonIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardLessonsLessonIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/lessons': typeof DashboardLessonsRouteWithChildren
+  '/dashboard/quiz': typeof DashboardQuizRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRouteWithChildren
+  '/dashboard/users': typeof DashboardUsersRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdRouteWithChildren
+  '/dashboard/lessons/new': typeof DashboardLessonsNewRoute
+  '/dashboard/quiz/new': typeof DashboardQuizNewRoute
+  '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
+  '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
+  '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
+  '/dashboard/lessons/$lessonId/': typeof DashboardLessonsLessonIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard/quiz': typeof DashboardQuizRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRouteWithChildren
+  '/dashboard/users': typeof DashboardUsersRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/lessons/new': typeof DashboardLessonsNewRoute
+  '/dashboard/quiz/new': typeof DashboardQuizNewRoute
+  '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
+  '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
+  '/dashboard/lessons': typeof DashboardLessonsIndexRoute
+  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/lessons': typeof DashboardLessonsRouteWithChildren
+  '/dashboard/quiz': typeof DashboardQuizRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRouteWithChildren
+  '/dashboard/users': typeof DashboardUsersRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdRouteWithChildren
+  '/dashboard/lessons/new': typeof DashboardLessonsNewRoute
+  '/dashboard/quiz/new': typeof DashboardQuizNewRoute
+  '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
+  '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
+  '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
+  '/dashboard/lessons/$lessonId/': typeof DashboardLessonsLessonIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/lessons'
+    | '/dashboard/quiz'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard/'
+    | '/dashboard/lessons/$lessonId'
+    | '/dashboard/lessons/new'
+    | '/dashboard/quiz/new'
+    | '/dashboard/settings/account'
+    | '/dashboard/settings/customization'
+    | '/dashboard/lessons/'
+    | '/dashboard/lessons/$lessonId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/dashboard/quiz'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard'
+    | '/dashboard/lessons/new'
+    | '/dashboard/quiz/new'
+    | '/dashboard/settings/account'
+    | '/dashboard/settings/customization'
+    | '/dashboard/lessons'
+    | '/dashboard/lessons/$lessonId'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/dashboard/lessons'
+    | '/dashboard/quiz'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+    | '/dashboard/'
+    | '/dashboard/lessons/$lessonId'
+    | '/dashboard/lessons/new'
+    | '/dashboard/quiz/new'
+    | '/dashboard/settings/account'
+    | '/dashboard/settings/customization'
+    | '/dashboard/lessons/'
+    | '/dashboard/lessons/$lessonId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +214,170 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/users': {
+      id: '/dashboard/users'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/quiz': {
+      id: '/dashboard/quiz'
+      path: '/quiz'
+      fullPath: '/dashboard/quiz'
+      preLoaderRoute: typeof DashboardQuizRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/lessons': {
+      id: '/dashboard/lessons'
+      path: '/lessons'
+      fullPath: '/dashboard/lessons'
+      preLoaderRoute: typeof DashboardLessonsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/lessons/': {
+      id: '/dashboard/lessons/'
+      path: '/'
+      fullPath: '/dashboard/lessons/'
+      preLoaderRoute: typeof DashboardLessonsIndexRouteImport
+      parentRoute: typeof DashboardLessonsRoute
+    }
+    '/dashboard/settings/customization': {
+      id: '/dashboard/settings/customization'
+      path: '/customization'
+      fullPath: '/dashboard/settings/customization'
+      preLoaderRoute: typeof DashboardSettingsCustomizationRouteImport
+      parentRoute: typeof DashboardSettingsRoute
+    }
+    '/dashboard/settings/account': {
+      id: '/dashboard/settings/account'
+      path: '/account'
+      fullPath: '/dashboard/settings/account'
+      preLoaderRoute: typeof DashboardSettingsAccountRouteImport
+      parentRoute: typeof DashboardSettingsRoute
+    }
+    '/dashboard/quiz/new': {
+      id: '/dashboard/quiz/new'
+      path: '/new'
+      fullPath: '/dashboard/quiz/new'
+      preLoaderRoute: typeof DashboardQuizNewRouteImport
+      parentRoute: typeof DashboardQuizRoute
+    }
+    '/dashboard/lessons/new': {
+      id: '/dashboard/lessons/new'
+      path: '/new'
+      fullPath: '/dashboard/lessons/new'
+      preLoaderRoute: typeof DashboardLessonsNewRouteImport
+      parentRoute: typeof DashboardLessonsRoute
+    }
+    '/dashboard/lessons/$lessonId': {
+      id: '/dashboard/lessons/$lessonId'
+      path: '/$lessonId'
+      fullPath: '/dashboard/lessons/$lessonId'
+      preLoaderRoute: typeof DashboardLessonsLessonIdRouteImport
+      parentRoute: typeof DashboardLessonsRoute
+    }
+    '/dashboard/lessons/$lessonId/': {
+      id: '/dashboard/lessons/$lessonId/'
+      path: '/'
+      fullPath: '/dashboard/lessons/$lessonId/'
+      preLoaderRoute: typeof DashboardLessonsLessonIdIndexRouteImport
+      parentRoute: typeof DashboardLessonsLessonIdRoute
+    }
   }
 }
 
+interface DashboardLessonsLessonIdRouteChildren {
+  DashboardLessonsLessonIdIndexRoute: typeof DashboardLessonsLessonIdIndexRoute
+}
+
+const DashboardLessonsLessonIdRouteChildren: DashboardLessonsLessonIdRouteChildren =
+  {
+    DashboardLessonsLessonIdIndexRoute: DashboardLessonsLessonIdIndexRoute,
+  }
+
+const DashboardLessonsLessonIdRouteWithChildren =
+  DashboardLessonsLessonIdRoute._addFileChildren(
+    DashboardLessonsLessonIdRouteChildren,
+  )
+
+interface DashboardLessonsRouteChildren {
+  DashboardLessonsLessonIdRoute: typeof DashboardLessonsLessonIdRouteWithChildren
+  DashboardLessonsNewRoute: typeof DashboardLessonsNewRoute
+  DashboardLessonsIndexRoute: typeof DashboardLessonsIndexRoute
+}
+
+const DashboardLessonsRouteChildren: DashboardLessonsRouteChildren = {
+  DashboardLessonsLessonIdRoute: DashboardLessonsLessonIdRouteWithChildren,
+  DashboardLessonsNewRoute: DashboardLessonsNewRoute,
+  DashboardLessonsIndexRoute: DashboardLessonsIndexRoute,
+}
+
+const DashboardLessonsRouteWithChildren =
+  DashboardLessonsRoute._addFileChildren(DashboardLessonsRouteChildren)
+
+interface DashboardQuizRouteChildren {
+  DashboardQuizNewRoute: typeof DashboardQuizNewRoute
+}
+
+const DashboardQuizRouteChildren: DashboardQuizRouteChildren = {
+  DashboardQuizNewRoute: DashboardQuizNewRoute,
+}
+
+const DashboardQuizRouteWithChildren = DashboardQuizRoute._addFileChildren(
+  DashboardQuizRouteChildren,
+)
+
+interface DashboardSettingsRouteChildren {
+  DashboardSettingsAccountRoute: typeof DashboardSettingsAccountRoute
+  DashboardSettingsCustomizationRoute: typeof DashboardSettingsCustomizationRoute
+}
+
+const DashboardSettingsRouteChildren: DashboardSettingsRouteChildren = {
+  DashboardSettingsAccountRoute: DashboardSettingsAccountRoute,
+  DashboardSettingsCustomizationRoute: DashboardSettingsCustomizationRoute,
+}
+
+const DashboardSettingsRouteWithChildren =
+  DashboardSettingsRoute._addFileChildren(DashboardSettingsRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardLessonsRoute: typeof DashboardLessonsRouteWithChildren
+  DashboardQuizRoute: typeof DashboardQuizRouteWithChildren
+  DashboardSettingsRoute: typeof DashboardSettingsRouteWithChildren
+  DashboardUsersRoute: typeof DashboardUsersRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardLessonsRoute: DashboardLessonsRouteWithChildren,
+  DashboardQuizRoute: DashboardQuizRouteWithChildren,
+  DashboardSettingsRoute: DashboardSettingsRouteWithChildren,
+  DashboardUsersRoute: DashboardUsersRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

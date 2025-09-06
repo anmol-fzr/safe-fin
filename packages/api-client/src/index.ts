@@ -1,4 +1,8 @@
-import type { AppType } from "@safe-fin/server";
-import { hc } from "hono/client";
+import { hcWithType } from "@safe-fin/server/hc";
 
-export const apiClient = hc<AppType>("http://localhost:3000/");
+export const getApiClient = (uri: string) =>
+	hcWithType(uri, {
+		init: {
+			credentials: "include",
+		},
+	});

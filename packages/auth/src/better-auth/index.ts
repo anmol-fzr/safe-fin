@@ -29,7 +29,7 @@ const createKVStorage = (kv: KVNamespace<string>): SecondaryStorage => {
 export const auth = (
 	env: CloudflareBindings,
 ): ReturnType<typeof betterAuth> => {
-	const kv = env.SAFE_FIN_KV;
+	//const kv = env.SAFE_FIN_KV;
 
 	const database = getAuthDrizzleAdapter(env);
 
@@ -42,3 +42,10 @@ export const auth = (
 		//secondaryStorage: createKVStorage(kv),
 	});
 };
+
+type BaTypes = ReturnType<typeof auth>["$Infer"]["Session"];
+
+type Session = BaTypes["session"];
+type User = BaTypes["user"];
+
+export type { Session, User };

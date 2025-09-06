@@ -17,6 +17,7 @@ const getQuizzes = factory.createHandlers(async (c) => {
 			id: quiz.id,
 			title: quiz.title,
 			desc: quiz.desc,
+			createdAt: quiz.createdAt,
 		})
 		.from(quiz)
 		.where(eq(quiz.isPublished, true))

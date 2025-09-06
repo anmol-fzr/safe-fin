@@ -3,6 +3,9 @@
     "extends": "../../tsconfig.json",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "references": [
+      { "path": "../types" }
+    ]
   }
 }

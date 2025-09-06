@@ -3,16 +3,18 @@ import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 
 import { auth } from "@/auth";
-import { quizRouter } from "@/router";
+import { quizRouter, lessonRouter } from "@/router";
 import { quizResultRouter } from "./router/quizResult.router";
-//import type { User, Session } from "@/lib/better-auth";
-import { authenticate } from "./middleware";
+import { authenticate } from "@/middleware";
+import { getDb } from "@/db";
+
+import type { Session, User } from "@/auth";
 
 type HonoAppProps = {
-	// Variables: {
-	// 	user: User;
-	// 	session: Session;
-	// };
+	Variables: {
+		user: User;
+		session: Session;
+	};
 	Bindings: CloudflareBindings;
 };
 
@@ -34,11 +36,20 @@ app.on(["POST", "GET"], "/api/auth/*", async (c) => {
 	return auth(c.env).handler(c.req.raw);
 });
 
-app.use(authenticate);
+//app.use(authenticate);
 const routes = app
 	.route("/quiz", quizRouter)
-	.route("/result", quizResultRouter);
+	.route("/lessons", lessonRouter)
+	.route("/result", quizResultRouter)
+	.get("/env-check", (c) => {
+		return c.json({
+			env: c.env,
+			// url: c.env.TURSO_DB_URL,
+			// token: c.env.TURSO_DB_AUTH_TOKEN,
+		});
+	});
 
 type AppType = typeof routes;
+
 export type { HonoAppProps, AppType };
 export default app;
