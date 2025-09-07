@@ -5,18 +5,22 @@ import {
 	keepPreviousData,
 	queryOptions,
 	useMutation,
+	useQueryClient,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useId } from "react";
 import { toast } from "sonner";
+import { initialPageParam, useInvalidateResource } from "./defaults";
+
+const baseQueryKey = "LESSON";
 
 function getLessonsOpts(params: IReqParams) {
 	return infiniteQueryOptions({
-		queryKey: ["LESSON", params] as const,
+		queryKey: [baseQueryKey, params] as const,
 		queryFn: ({ pageParam, queryKey }) =>
 			API.LESSON.GET({ ...pageParam, ...queryKey[1] }),
-		initialPageParam: { limit: 10, skip: 0 },
+		initialPageParam,
 		getNextPageParam: (lastPage, allPages, lastPageParam, allPagesParams) => {
 			return undefined;
 			const total = allPages[allPages.length - 1].total;
@@ -48,12 +52,15 @@ const useGetLessons = (params: IReqParams) => {
 
 function getLessonOpts(lessonId: ResourceId) {
 	return queryOptions({
-		queryKey: ["LESSON", lessonId] as const,
+		queryKey: [baseQueryKey, lessonId] as const,
 		queryFn: ({ queryKey }) => API.LESSON.ONE(queryKey[1]),
 	});
 }
 
 const useGetLesson = (lessonId: ResourceId) => {
+	// return {
+	// 	lesson: ,
+	// };
 	const opts = getLessonOpts(lessonId);
 	const { data, ...rest } = useSuspenseQuery(opts);
 
@@ -65,15 +72,17 @@ const useGetLesson = (lessonId: ResourceId) => {
 
 const useCreateLesson = () => {
 	const id = useId();
+	const { invalidateLessons } = useInvalidateLessons();
 
 	const { mutate, ...rest } = useMutation({
-		mutationKey: ["CREATE", "LESSON"],
+		mutationKey: ["CREATE", baseQueryKey],
 		mutationFn: API.LESSON.CREATE,
 		onMutate: () => {
 			toast.loading("Adding New Lesson ...", { id });
 		},
 		onSuccess: ({ message = "Lesson Added Successfully" }) => {
 			toast.success(message, { id });
+			invalidateLessons();
 		},
 		onError: ({ message = "Unable to Add Lesson" }) => {
 			toast.error(message, { id });
@@ -86,10 +95,36 @@ const useCreateLesson = () => {
 	};
 };
 
-export { useGetLessons, useGetLesson, useCreateLesson };
+const useDeleteLesson = () => {
+	const id = useId();
+	const { invalidateLessons } = useInvalidateLessons();
+
+	const { mutate, ...rest } = useMutation({
+		mutationKey: ["DELETE", baseQueryKey],
+		mutationFn: API.LESSON.DELETE,
+		onMutate: () => {
+			toast.loading("Deleting New Lesson ...", { id });
+		},
+		onSuccess: ({ message = "Lesson Deleted Successfully" }) => {
+			toast.success(message, { id });
+			invalidateLessons();
+		},
+		onError: ({ message = "Unable to Delete Lesson" }) => {
+			toast.error(message, { id });
+		},
+	});
+
+	return {
+		deleteLesson: mutate,
+		...rest,
+	};
+};
+
+export { useGetLessons, useGetLesson, useCreateLesson, useDeleteLesson };
 export { getLessonsOpts, getLessonOpts };
 
-//"skip": 0, "limit": 10
-//"skip": 10, "limit": 10
-//"skip": 20, "limit": 10
-//"skip": 30, "limit": 10
+const useInvalidateLessons = () => {
+	const { invalidateResource } = useInvalidateResource(baseQueryKey);
+
+	return { invalidateLessons: invalidateResource };
+};
