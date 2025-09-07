@@ -18,6 +18,10 @@ coverage
 # Turbo
 .turbo
 
+# DB Dumps
+local.db
+dump.sql
+
 .dev.vars
 
 # Vercel
