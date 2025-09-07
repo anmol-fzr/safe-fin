@@ -22,6 +22,7 @@ const getLessons = createHandlers(authenticate, async (c) => {
 			id: true,
 			title: true,
 			desc: true,
+			isPublished: true,
 			content: false,
 			createdAt: true,
 			updatedAt: true,
