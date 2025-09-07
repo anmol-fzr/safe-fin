@@ -12,13 +12,11 @@ export const Route = createFileRoute("/dashboard/quiz/$quizId")({
 function RouteComponent() {
 	const params = Route.useParams();
 	const { lesson } = useGetLesson(params.lessonId);
-	const contentJson = lesson.data.contentJson;
-	const content = lesson.data.content ?? "";
 
 	return (
 		<>
-			<BackButton to="/dashboard/lessons" resource="Lessons" />
-			<Editor content={contentJson ?? content} />
+			<BackButton to="/dashboard/quiz" resource="Quiz" />
+			Render Quiz Here
 		</>
-	)
+	);
 }

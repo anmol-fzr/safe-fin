@@ -2,7 +2,7 @@ import { useMemo, type ReactNode } from "react";
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { useReactTable } from "@tanstack/react-table";
-import { ChevronRight, EyeIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import {
 	HoverCard,
 	HoverCardContent,
@@ -11,100 +11,16 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTable } from "./DataTable";
 import { useDefaultTableOpts } from "@/hooks/table";
-import { useGetLessons } from "@/hooks/api/lesson";
+import { useGetLessons, useDeleteLesson } from "@/hooks/api/lesson";
 import type { ILesson } from "@/services/api";
 import { Link } from "@tanstack/react-router";
-import { formatDateTime } from "@/lib/utils";
-import { TableSearch, useTableSearchValue } from "../table";
-
-export const columns: ColumnDef<ILesson>[] = [
-	{
-		id: "select",
-		header: ({ table }) => (
-			<Checkbox
-				checked={
-					table.getIsAllPageRowsSelected() ||
-					(table.getIsSomePageRowsSelected() && "indeterminate")
-				}
-				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-				aria-label="Select all"
-			/>
-		),
-		cell: ({ row }) => (
-			<Checkbox
-				checked={row.getIsSelected()}
-				onCheckedChange={(value) => row.toggleSelected(!!value)}
-				aria-label="Select row"
-			/>
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: "id",
-		header: "Id",
-	},
-	{
-		accessorKey: "title",
-		header: "Title",
-		cell: ({ row }) => {
-			const { id = 0, title = "N/A", desc = "" } = row.original;
-
-			return (
-				<LessonHoverCard {...{ id, title, desc }}>
-					<Link
-						to="/dashboard/lessons/$lessonId"
-						params={{ lessonId: id }}
-						className="hover:underline"
-					>
-						{title}
-					</Link>
-				</LessonHoverCard>
-			);
-		},
-	},
-	{
-		accessorKey: "createdAt",
-		header: "CreatedAt",
-		cell: ({ row }) => {
-			const createdAt = row.original.createdAt;
-
-			return (
-				<p className="text-muted-foreground">{formatDateTime(createdAt)}</p>
-			);
-		},
-	},
-	{
-		accessorKey: "updatedAt",
-		header: "UpdatedAt",
-		cell: ({ row }) => {
-			const { updatedAt, createdAt } = row.original;
-			return (
-				<p className="text-muted-foreground">
-					{createdAt === updatedAt ? "-" : formatDateTime(updatedAt)}
-				</p>
-			);
-		},
-	},
-	{
-		id: "actions",
-		header: "Actions",
-		enableHiding: false,
-		cell: ({ row }) => {
-			const lessonId = row.original.id.toString();
-
-			return (
-				<div className="flex gap-2">
-					<Link to="/dashboard/lessons/$lessonId" params={{ lessonId }}>
-						<EyeIcon />
-					</Link>
-					<PencilIcon />
-					<Trash2Icon color="red" />
-				</div>
-			);
-		},
-	},
-];
+import {
+	TableColActions,
+	TableColCreatedAt,
+	TableColUpdatedAt,
+	TableSearch,
+	useTableSearchValue,
+} from "../table";
 
 const queryParamKey = "query";
 
@@ -114,6 +30,7 @@ export function LessonsTable() {
 	const { lessons, isFetching, fetchNextPage } = useGetLessons({
 		query: searchQuery,
 	});
+	const { deleteLesson } = useDeleteLesson();
 
 	const tableOpts = useDefaultTableOpts();
 
@@ -129,12 +46,104 @@ export function LessonsTable() {
 
 	const totalRows = useMemo(() => lessons.pages[0].total, [lessons]);
 
+	const columns = useMemo<ColumnDef<ILesson>[]>(
+		() => [
+			{
+				id: "select",
+				header: ({ table }) => (
+					<Checkbox
+						checked={
+							table.getIsAllPageRowsSelected() ||
+							(table.getIsSomePageRowsSelected() && "indeterminate")
+						}
+						onCheckedChange={(value) =>
+							table.toggleAllPageRowsSelected(!!value)
+						}
+						aria-label="Select all"
+					/>
+				),
+				cell: ({ row }) => (
+					<Checkbox
+						checked={row.getIsSelected()}
+						onCheckedChange={(value) => row.toggleSelected(!!value)}
+						aria-label="Select row"
+					/>
+				),
+				enableSorting: false,
+				enableHiding: false,
+			},
+			{
+				accessorKey: "id",
+				header: "Id",
+			},
+			{
+				accessorKey: "title",
+				header: "Title",
+				cell: ({ row }) => {
+					const { id = 0, title = "N/A", desc = "" } = row.original;
+
+					return (
+						<LessonHoverCard {...{ id, title, desc }}>
+							<Link
+								to="/dashboard/lessons/$lessonId"
+								params={{ lessonId: id.toString() }}
+								className="hover:underline"
+							>
+								{title}
+							</Link>
+						</LessonHoverCard>
+					);
+				},
+			},
+			{
+				accessorKey: "createdAt",
+				header: "CreatedAt",
+				cell: TableColCreatedAt,
+			},
+			{
+				accessorKey: "updatedAt",
+				header: "UpdatedAt",
+				cell: TableColUpdatedAt,
+			},
+			{
+				id: "actions",
+				header: "Actions",
+				enableHiding: false,
+				cell: ({ row }) => {
+					const id = row.original.id;
+					const lessonId = id.toString();
+
+					const handleDeleteLesson = () => deleteLesson(id);
+
+					return (
+						<TableColActions>
+							<TableColActions.View
+								to="/dashboard/lessons/$lessonId"
+								params={{ lessonId }}
+							/>
+
+							<TableColActions.Edit
+								to="/dashboard/lessons/$lessonId"
+								params={{ lessonId }}
+							/>
+
+							<TableColActions.Delete
+								phrase={`lesson/${lessonId}`}
+								onDelete={handleDeleteLesson}
+							/>
+						</TableColActions>
+					);
+				},
+			},
+		],
+		[deleteLesson],
+	);
+
 	const table = useReactTable({
 		data,
 		columns,
 		...tableOpts,
 	});
-
 	return (
 		<div className="flex flex-col gap-5">
 			<TableSearch searchQueryParamKey={queryParamKey} />
@@ -156,7 +165,7 @@ type LessonHoverCardProps = Pick<ILesson, "id" | "title" | "desc"> & {
 function LessonHoverCard({ id, title, desc, children }: LessonHoverCardProps) {
 	return (
 		<HoverCard>
-			<HoverCardTrigger>{children}</HoverCardTrigger>
+			<HoverCardTrigger asChild>{children}</HoverCardTrigger>
 			<HoverCardContent className="w-80">
 				<div className="flex flex-col gap-4">
 					<div className="flex justify-between gap-4">

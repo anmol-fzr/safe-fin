@@ -236,7 +236,7 @@ export function Editor({ content, setContent }: EditorProps) {
 	const toolbarRef = React.useRef<HTMLDivElement>(null);
 
 	const editor = useEditor({
-		content,
+		content: content ? JSON.parse(content) : undefined,
 		immediatelyRender: false,
 		shouldRerenderOnTransaction: false,
 		editorProps: {

@@ -11,12 +11,24 @@ import {
 	type ControllerProps,
 	type FieldPath,
 	type FieldValues,
+	type FormProviderProps,
+	type UseFormReturn,
 } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 
-const Form = FormProvider;
+interface FormProps extends FormProviderProps {
+	onSubmit: UseFormReturn["handleSubmit"];
+}
+
+const Form = ({ onSubmit, ...props }: FormProps) => {
+	return (
+		<form onSubmit={onSubmit}>
+			<FormProvider {...props} />
+		</form>
+	);
+};
 
 type FormFieldContextValue<
 	TFieldValues extends FieldValues = FieldValues,

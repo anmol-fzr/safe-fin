@@ -1,5 +1,10 @@
 import { DataTable } from "../lessons/DataTable";
-import { TableSearch, useTableSearchValue } from "../table";
+import {
+	TableColCreatedAt,
+	TableColUpdatedAt,
+	TableSearch,
+	useTableSearchValue,
+} from "../table";
 import { useDefaultTableOpts } from "@/hooks/table";
 import {
 	HoverCard,
@@ -12,7 +17,14 @@ import type { ILesson, IQuiz } from "@/services/api";
 import { Checkbox } from "../ui/checkbox";
 import { formatDateTime } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, ExternalLink, MoreHorizontal } from "lucide-react";
+import {
+	ChevronRight,
+	ExternalLink,
+	EyeIcon,
+	MoreHorizontal,
+	PencilIcon,
+	Trash2Icon,
+} from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -73,23 +85,12 @@ const columns: ColumnDef<IQuiz>[] = [
 	{
 		accessorKey: "createdAt",
 		header: "CreatedAt",
-		cell: ({ row }) => {
-			const createdAt = row.original.createdAt;
-			return formatDateTime(createdAt);
-		},
+		cell: TableColCreatedAt,
 	},
 	{
-		id: "View",
-		header: "View",
-		cell: ({ row }) => {
-			const lessonId = row.original.id.toString();
-
-			return (
-				<Link to="/dashboard/lessons/$lessonId" params={{ lessonId }}>
-					<ExternalLink />
-				</Link>
-			);
-		},
+		accessorKey: "updatedAt",
+		header: "UpdatedAt",
+		cell: TableColUpdatedAt,
 	},
 	{
 		id: "actions",
@@ -99,24 +100,13 @@ const columns: ColumnDef<IQuiz>[] = [
 			const lessonId = row.original.id.toString();
 
 			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							<Link to="/dashboard/lessons/$lessonId" params={{ lessonId }}>
-								View Lesson
-							</Link>
-						</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<div className="flex gap-2">
+					<Link to="/dashboard/lessons/$lessonId" params={{ lessonId }}>
+						<EyeIcon />
+					</Link>
+					<PencilIcon />
+					<Trash2Icon color="red" />
+				</div>
 			);
 		},
 	},

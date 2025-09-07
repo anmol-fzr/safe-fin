@@ -15,6 +15,14 @@ function getQuizzesOpts(params: IReqParams) {
 	});
 }
 
+function getQuizOpts(params: IReqParams) {
+	return infiniteQueryOptions({
+		queryKey: ["QUIZ", params] as const,
+		queryFn: ({ queryKey }) => API.QUIZ.GET(queryKey[1]),
+		initialPageParam,
+		getNextPageParam: () => undefined,
+	});
+}
 const useGetQuizzes = (params: IReqParams) => {
 	const opts = getQuizzesOpts(params);
 	const { data, ...rest } = useSuspenseInfiniteQuery(opts);
