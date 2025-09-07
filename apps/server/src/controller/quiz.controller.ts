@@ -107,15 +107,18 @@ const deleteQuizById = factory.createHandlers(async (c) => {
 const createQuiz = factory.createHandlers(
 	zValidator("json", fullQuizReqSchema),
 	async (c) => {
-		const body = c.req.valid("json");
+		const { title, desc, isPublished = false } = c.req.valid("json");
 		const db = getDb(c.env);
 
 		try {
 			const newQuiz = await db.transaction(async (tx) => {
-				const quizBody = { title: body.title, desc: body.desc };
+				const quizBody = { title, desc, isPublished };
 
-				const insertedQuiz = await tx.insert(quiz).values(quizBody).returning();
-				const newQuizId = insertedQuiz[0].id;
+				const [insertedQuiz] = await tx
+					.insert(quiz)
+					.values(quizBody)
+					.returning();
+				const newQuizId = insertedQuiz.id;
 
 				for (const questionData of body.questions) {
 					const insertedQuestion = await tx
@@ -155,7 +158,7 @@ const createQuiz = factory.createHandlers(
 						.where(eq(question.id, questionId));
 				}
 
-				return insertedQuiz[0]; // return full quiz object
+				return insertedQuiz; // return full quiz object
 			});
 			return c.json({ data: newQuiz });
 		} catch (error) {
