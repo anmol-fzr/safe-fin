@@ -9,8 +9,24 @@ type IPaginatedReqParams = {
 	skip: number;
 };
 
+interface ITimestamps {
+	createdAt: string;
+	updatedAt: string;
+}
+
+interface IBaseData {
+	id: ResourceId;
+}
+
 type IReqParams = Record<string, string | number>;
 
-type ResourceId = string | number;
+type ResourceId = number;
 
-export type { IResData, IReqParams, IPaginatedReqParams, ResourceId };
+export type {
+	IResData,
+	IReqParams,
+	IPaginatedReqParams,
+	ResourceId,
+	ITimestamps,
+	IBaseData,
+};

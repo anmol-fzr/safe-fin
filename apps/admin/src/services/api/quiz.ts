@@ -1,25 +1,22 @@
 import { axiosInstance } from "./axios";
-import type {
-	IResData,
-	IPaginatedReqParams,
-	ResourceId,
-	IReqParams,
-} from "./types";
+import type { IResData, IReqParams, ITimestamps, IBaseData } from "./types";
 
 const { get } = axiosInstance;
 
-export const QUIZ = {
-	GET: (params: IReqParams) => get(`/quiz`, { params }),
-	// ONE: (lessonId) => get(`/lessons/${lessonId}`),
-	// CREATE: (lesson) => post(`/lessons`, lesson),
+export const QUIZ: ApiQuiz = {
+	GET: (params) => get(`/quiz`, { params }),
 } as const;
 
-interface IQuiz {
-	id: number;
+interface IQuiz extends IBaseData, ITimestamps {
 	title: string;
 	desc: string;
 }
 
 type IQuizzes = IQuiz[];
+type IQuizzesRes = IResData<IQuizzes>;
+
+type ApiQuiz = {
+	GET: (params: IReqParams) => Promise<IQuizzesRes>;
+};
 
 export type { IQuiz, IQuizzes };
