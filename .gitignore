@@ -18,6 +18,9 @@ coverage
 # Turbo
 .turbo
 
+# Wrangler
+.wrangler
+
 # DB Dumps
 local.db
 dump.sql

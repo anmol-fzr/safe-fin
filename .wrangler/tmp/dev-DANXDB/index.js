@@ -65728,7 +65728,7 @@ var betterAuthOptions = {
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60
+      maxAge: 216e3
       // Cache duration in seconds
     }
   },
