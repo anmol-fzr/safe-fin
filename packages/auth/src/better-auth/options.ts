@@ -15,7 +15,7 @@ export const betterAuthOptions: BetterAuthOptions = {
 	session: {
 		cookieCache: {
 			enabled: true,
-			maxAge: 5 * 60, // Cache duration in seconds
+			maxAge: 216000, // Cache duration in seconds
 		},
 	},
 	plugins: [

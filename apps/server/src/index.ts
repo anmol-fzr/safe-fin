@@ -2,11 +2,11 @@ import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 
+import { cache } from "hono/cache";
+import { etag } from "hono/etag";
 import { auth } from "@/auth";
 import { quizRouter, lessonRouter } from "@/router";
 import { quizResultRouter } from "./router/quizResult.router";
-import { authenticate } from "@/middleware";
-import { getDb } from "@/db";
 
 import type { Session, User } from "@/auth";
 
@@ -31,6 +31,17 @@ app.use(
 );
 
 app.get("/health", (c) => c.text("Hello Hono!"));
+
+app.get(
+	"*",
+	cache({
+		cacheName: "my-app",
+		cacheControl: "max-age=3600",
+		vary: "Authorization, Cookie",
+	}),
+);
+
+app.get("*", etag());
 
 app.on(["POST", "GET"], "/api/auth/*", async (c) => {
 	return auth(c.env).handler(c.req.raw);
