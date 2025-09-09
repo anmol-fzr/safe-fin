@@ -2,18 +2,21 @@ import { API } from "@/services";
 import type { IReqParams, ResourceId } from "@/services/api/types";
 import {
 	infiniteQueryOptions,
-	keepPreviousData,
 	queryOptions,
 	useMutation,
-	useQueryClient,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useId } from "react";
-import { toast } from "sonner";
-import { initialPageParam, useInvalidateResource } from "./defaults";
+import {
+	createToastMessages,
+	initialPageParam,
+	useInvalidateResource,
+	useResourceActionToast,
+} from "./defaults";
+import { type ICreateLessonReq } from "@/services/api";
 
 const baseQueryKey = "LESSON";
+const { createMsg, updateMsg, deleteMsg } = createToastMessages("Lesson");
 
 function getLessonsOpts(params: IReqParams) {
 	return infiniteQueryOptions({
@@ -22,10 +25,9 @@ function getLessonsOpts(params: IReqParams) {
 			API.LESSON.GET({ ...pageParam, ...queryKey[1] }),
 		initialPageParam,
 		getNextPageParam: (lastPage, allPages, lastPageParam, allPagesParams) => {
-			return undefined;
 			const total = allPages[allPages.length - 1].total;
 			const totalFetched = allPages.reduce((prev, curr) => {
-				return prev + curr.length;
+				return prev + curr.data.length;
 			}, 0);
 
 			return totalFetched < total
@@ -35,8 +37,6 @@ function getLessonsOpts(params: IReqParams) {
 					}
 				: undefined;
 		},
-		refetchOnWindowFocus: false,
-		placeholderData: keepPreviousData,
 	});
 }
 
@@ -58,9 +58,6 @@ function getLessonOpts(lessonId: ResourceId) {
 }
 
 const useGetLesson = (lessonId: ResourceId) => {
-	// return {
-	// 	lesson: ,
-	// };
 	const opts = getLessonOpts(lessonId);
 	const { data, ...rest } = useSuspenseQuery(opts);
 
@@ -71,21 +68,23 @@ const useGetLesson = (lessonId: ResourceId) => {
 };
 
 const useCreateLesson = () => {
-	const id = useId();
+	const toast = useResourceActionToast();
 	const { invalidateLessons } = useInvalidateLessons();
 
+	const { loadingMsg, successMsg, errorMsg } = createMsg;
+
 	const { mutate, ...rest } = useMutation({
-		mutationKey: ["CREATE", baseQueryKey],
+		mutationKey: [baseQueryKey, "CREATE"],
 		mutationFn: API.LESSON.CREATE,
 		onMutate: () => {
-			toast.loading("Adding New Lesson ...", { id });
+			toast.loading(loadingMsg);
 		},
-		onSuccess: ({ message = "Lesson Added Successfully" }) => {
-			toast.success(message, { id });
+		onSuccess: ({ message = successMsg }) => {
+			toast.success(message);
 			invalidateLessons();
 		},
-		onError: ({ message = "Unable to Add Lesson" }) => {
-			toast.error(message, { id });
+		onError: ({ message = errorMsg }) => {
+			toast.error(message);
 		},
 	});
 
@@ -96,21 +95,23 @@ const useCreateLesson = () => {
 };
 
 const useDeleteLesson = () => {
-	const id = useId();
+	const toast = useResourceActionToast();
 	const { invalidateLessons } = useInvalidateLessons();
 
+	const { loadingMsg, successMsg, errorMsg } = deleteMsg;
+
 	const { mutate, ...rest } = useMutation({
-		mutationKey: ["DELETE", baseQueryKey],
+		mutationKey: [baseQueryKey, "DELETE"],
 		mutationFn: API.LESSON.DELETE,
 		onMutate: () => {
-			toast.loading("Deleting New Lesson ...", { id });
+			toast.loading(loadingMsg);
 		},
-		onSuccess: ({ message = "Lesson Deleted Successfully" }) => {
-			toast.success(message, { id });
+		onSuccess: ({ message = successMsg }) => {
+			toast.success(message);
 			invalidateLessons();
 		},
-		onError: ({ message = "Unable to Delete Lesson" }) => {
-			toast.error(message, { id });
+		onError: ({ message = errorMsg }) => {
+			toast.error(message);
 		},
 	});
 
@@ -120,7 +121,41 @@ const useDeleteLesson = () => {
 	};
 };
 
-export { useGetLessons, useGetLesson, useCreateLesson, useDeleteLesson };
+const useUpdateLesson = (lessonId: ResourceId) => {
+	const toast = useResourceActionToast();
+	const { invalidateLessons } = useInvalidateLessons();
+
+	const { loadingMsg, successMsg, errorMsg } = updateMsg;
+
+	const { mutate, ...rest } = useMutation({
+		mutationKey: [baseQueryKey, "UPDATE"],
+		mutationFn: (lesson: ICreateLessonReq) =>
+			API.LESSON.UPDATE(lessonId, lesson),
+		onMutate: () => {
+			toast.loading(loadingMsg);
+		},
+		onSuccess: ({ message = successMsg }) => {
+			toast.success(message);
+			invalidateLessons();
+		},
+		onError: ({ message = errorMsg }) => {
+			toast.error(message);
+		},
+	});
+
+	return {
+		updateLesson: mutate,
+		...rest,
+	};
+};
+
+export {
+	useGetLessons,
+	useGetLesson,
+	useCreateLesson,
+	useUpdateLesson,
+	useDeleteLesson,
+};
 export { getLessonsOpts, getLessonOpts };
 
 const useInvalidateLessons = () => {
