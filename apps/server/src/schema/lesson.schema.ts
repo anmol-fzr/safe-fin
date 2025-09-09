@@ -19,5 +19,6 @@ const lessonQuizLinkSchema = z.object({
 });
 
 const createLessonSchema = lessonSchema;
+const updateLessonSchema = lessonSchema.partial();
 
-export { createLessonSchema, lessonQuizLinkSchema };
+export { createLessonSchema, updateLessonSchema, lessonQuizLinkSchema };

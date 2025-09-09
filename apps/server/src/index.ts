@@ -24,7 +24,7 @@ app.use(logger());
 app.use(
 	cors({
 		origin: ["*", "http://localhost:5173", "http://192.168.29.57:5173"],
-		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+		allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
 		allowHeaders: ["Content-Type", "Authorization"],
 		credentials: true, // if you need to send cookies or authorization headers
 	}),

@@ -6,6 +6,7 @@ import { userRole } from "@/middleware/userRole";
 import { zValidator } from "@hono/zod-validator";
 import {
 	createLessonSchema,
+	updateLessonSchema,
 	lessonQuizLinkSchema,
 } from "@/schema/lesson.schema";
 import { lesson, lessonQuiz, getDb } from "@/db";
@@ -151,30 +152,45 @@ const linkLessonWithQuiz = createHandlers(
 	},
 );
 
-const updateLesson = createHandlers(
+const updateLessonById = createHandlers(
 	authenticate,
 	userRole("admin"),
+	zValidator("json", updateLessonSchema),
 	async (c) => {
 		const lessonId = c.req.param("lesson_id");
+		const lessonData = c.req.valid("json");
 
-		const db = getDb(c.env);
+		try {
+			const db = getDb(c.env);
 
-		const foundLesson = await db.delete(lesson).where(eq(lesson.id, lessonId));
+			const foundLesson = await db
+				.update(lesson)
+				.set(lessonData)
+				.where(eq(lesson.id, lessonId));
 
-		// Check If There is a Quiz with associated this Lesson
-		if (foundLesson.rowsAffected === 0) {
-			return c.json(
-				{
-					error: "Lesson Not Found",
-					message: "Lesson Not Found",
-				},
-				404,
-			);
+			// Check If There is a Quiz with associated this Lesson
+			if (foundLesson.rowsAffected === 0) {
+				return c.json(
+					{
+						error: "Lesson Not Found",
+						message: "Lesson Not Found",
+					},
+					404,
+				);
+			}
+
+			return c.json({ message: "Lesson Updated Successfully" });
+		} catch (error) {
+			return c.json({ message: "Unable to Update Lesson", error });
 		}
-
-		return c.json({ message: "Lesson Deleted Successfully" });
 	},
 );
 
-export { getLessons, getLessonById, createLesson, deleteLesson };
+export {
+	getLessons,
+	getLessonById,
+	createLesson,
+	deleteLesson,
+	updateLessonById,
+};
 export { linkLessonWithQuiz };

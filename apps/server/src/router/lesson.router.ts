@@ -5,14 +5,14 @@ import {
 	getLessonById,
 	getLessons,
 	deleteLesson,
+	updateLessonById,
 	linkLessonWithQuiz,
 } from "@/controller/lesson.controller";
-import { authenticate } from "@/middleware";
-import { getDb } from "@/db";
 
 const lessonRouter = new Hono<HonoAppProps>()
 	.get("/", ...getLessons)
 	.get("/:lesson_id", ...getLessonById)
+	.patch("/:lesson_id", ...updateLessonById)
 	.post("/", ...createLesson)
 	.post("/link", ...linkLessonWithQuiz)
 	.delete("/:lesson_id", ...deleteLesson);
