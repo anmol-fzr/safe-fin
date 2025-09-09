@@ -1,5 +1,6 @@
 import { DataTable } from "../lessons/DataTable";
 import {
+	TableColActions,
 	TableColCreatedAt,
 	TableColUpdatedAt,
 	TableSearch,
@@ -13,27 +14,10 @@ import {
 } from "@/components/ui/hover-card";
 import { useMemo, type ReactNode } from "react";
 import { useReactTable, type ColumnDef } from "@tanstack/react-table";
-import type { ILesson, IQuiz } from "@/services/api";
+import type { IQuiz } from "@/services/api";
 import { Checkbox } from "../ui/checkbox";
-import { formatDateTime } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import {
-	ChevronRight,
-	ExternalLink,
-	EyeIcon,
-	MoreHorizontal,
-	PencilIcon,
-	Trash2Icon,
-} from "lucide-react";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
+import { ChevronRight, EyeIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { useGetQuizzes } from "@/hooks/api/quiz";
 
 const columns: ColumnDef<IQuiz>[] = [
@@ -97,16 +81,28 @@ const columns: ColumnDef<IQuiz>[] = [
 		header: "Actions",
 		enableHiding: false,
 		cell: ({ row }) => {
-			const lessonId = row.original.id.toString();
+			const id = row.original.id;
+			const quizId = id.toString();
+
+			const handleDeleteLesson = () => console.log(id);
 
 			return (
-				<div className="flex gap-2">
-					<Link to="/dashboard/lessons/$lessonId" params={{ lessonId }}>
-						<EyeIcon />
-					</Link>
-					<PencilIcon />
-					<Trash2Icon color="red" />
-				</div>
+				<TableColActions>
+					<TableColActions.View
+						to="/dashboard/quiz/$quizId"
+						params={{ quizId }}
+					/>
+
+					<TableColActions.Edit
+						to="/dashboard/quiz/$quizId"
+						params={{ quizId }}
+					/>
+
+					<TableColActions.Delete
+						phrase={`quiz/${quizId}`}
+						onDelete={handleDeleteLesson}
+					/>
+				</TableColActions>
 			);
 		},
 	},
@@ -162,7 +158,7 @@ type QuizHoverCardProps = Pick<IQuiz, "id" | "title" | "desc"> & {
 function QuizHoverCard({ id, title, desc, children }: QuizHoverCardProps) {
 	return (
 		<HoverCard>
-			<HoverCardTrigger>{children}</HoverCardTrigger>
+			<HoverCardTrigger asChild>{children}</HoverCardTrigger>
 			<HoverCardContent className="w-80">
 				<div className="flex flex-col gap-4">
 					<div className="flex justify-between gap-4">

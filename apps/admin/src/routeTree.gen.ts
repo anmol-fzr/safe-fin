@@ -16,6 +16,7 @@ import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as DashboardQuizRouteImport } from './routes/dashboard/quiz'
 import { Route as DashboardLessonsRouteImport } from './routes/dashboard/lessons'
+import { Route as DashboardQuizIndexRouteImport } from './routes/dashboard/quiz/index'
 import { Route as DashboardLessonsIndexRouteImport } from './routes/dashboard/lessons/index'
 import { Route as DashboardSettingsCustomizationRouteImport } from './routes/dashboard/settings/customization'
 import { Route as DashboardSettingsAccountRouteImport } from './routes/dashboard/settings/account'
@@ -58,6 +59,11 @@ const DashboardLessonsRoute = DashboardLessonsRouteImport.update({
   id: '/lessons',
   path: '/lessons',
   getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardQuizIndexRoute = DashboardQuizIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardQuizRoute,
 } as any)
 const DashboardLessonsIndexRoute = DashboardLessonsIndexRouteImport.update({
   id: '/',
@@ -113,10 +119,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
+  '/dashboard/quiz/': typeof DashboardQuizIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard/quiz': typeof DashboardQuizRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRouteWithChildren
   '/dashboard/users': typeof DashboardUsersRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -127,6 +133,7 @@ export interface FileRoutesByTo {
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons': typeof DashboardLessonsIndexRoute
+  '/dashboard/quiz': typeof DashboardQuizIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -144,6 +151,7 @@ export interface FileRoutesById {
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
+  '/dashboard/quiz/': typeof DashboardQuizIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -162,10 +170,10 @@ export interface FileRouteTypes {
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
     | '/dashboard/lessons/'
+    | '/dashboard/quiz/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard/quiz'
     | '/dashboard/settings'
     | '/dashboard/users'
     | '/dashboard'
@@ -176,6 +184,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
     | '/dashboard/lessons'
+    | '/dashboard/quiz'
   id:
     | '__root__'
     | '/'
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
     | '/dashboard/lessons/'
+    | '/dashboard/quiz/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,6 +259,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/lessons'
       preLoaderRoute: typeof DashboardLessonsRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/quiz/': {
+      id: '/dashboard/quiz/'
+      path: '/'
+      fullPath: '/dashboard/quiz/'
+      preLoaderRoute: typeof DashboardQuizIndexRouteImport
+      parentRoute: typeof DashboardQuizRoute
     }
     '/dashboard/lessons/': {
       id: '/dashboard/lessons/'
@@ -320,11 +337,13 @@ const DashboardLessonsRouteWithChildren =
 interface DashboardQuizRouteChildren {
   DashboardQuizQuizIdRoute: typeof DashboardQuizQuizIdRoute
   DashboardQuizNewRoute: typeof DashboardQuizNewRoute
+  DashboardQuizIndexRoute: typeof DashboardQuizIndexRoute
 }
 
 const DashboardQuizRouteChildren: DashboardQuizRouteChildren = {
   DashboardQuizQuizIdRoute: DashboardQuizQuizIdRoute,
   DashboardQuizNewRoute: DashboardQuizNewRoute,
+  DashboardQuizIndexRoute: DashboardQuizIndexRoute,
 }
 
 const DashboardQuizRouteWithChildren = DashboardQuizRoute._addFileChildren(

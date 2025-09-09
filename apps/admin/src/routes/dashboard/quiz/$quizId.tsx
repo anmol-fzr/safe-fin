@@ -1,17 +1,28 @@
-import { Editor } from "@/components/editor/Editor";
 import { BackButton } from "@/components/form/button/BackButton";
-import { getLessonOpts, useGetLesson } from "@/hooks/api/lesson";
-import { createFileRoute } from "@tanstack/react-router";
+import { getQuizOpts } from "@/hooks/api/quiz";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard/quiz/$quizId")({
 	component: RouteComponent,
-	loader: ({ context, params }) =>
-		context.queryClient.ensureQueryData(getLessonOpts(params.lessonId)),
+	loader: async ({ context, params }) => {
+		const quizId = params.quizId;
+		const id = parseInt(quizId);
+
+		if (isNaN(id)) {
+			throw redirect({ to: "/dashboard/quiz" });
+		}
+
+		const quiz = await context.queryClient.ensureQueryData(getQuizOpts(id));
+		return {
+			crumb: `Quiz: ${quiz.data.title}`,
+			quiz,
+		};
+	},
 });
 
 function RouteComponent() {
 	const params = Route.useParams();
-	const { lesson } = useGetLesson(params.lessonId);
+	const { quiz } = Route.useLoaderData();
 
 	return (
 		<>
