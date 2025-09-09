@@ -8,7 +8,7 @@ import {
 	type NodeType,
 	type TextType,
 } from "@tiptap/react";
-
+import { renderToMarkdown } from "@tiptap/static-renderer";
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit";
 import { Image } from "@tiptap/extension-image";
@@ -228,6 +228,15 @@ export const extensions = [
 		onError: (error) => console.error("Upload failed:", error),
 	}),
 ];
+
+export function convertJsonToMarkdown(jsonString: string) {
+	const markdown = renderToMarkdown({
+		content: JSON.parse(jsonString),
+		extensions,
+	});
+
+	return markdown;
+}
 
 export function Editor({ content, setContent }: EditorProps) {
 	const isMobile = useIsMobile();

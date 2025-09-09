@@ -1,9 +1,9 @@
-import { mixed, object, string } from "yup";
+import { object, string } from "yup";
 
 const newLessonSchema = object({
 	title: string().required().label("Title"),
 	desc: string().required().label("Description"),
-	content: mixed().required().label("Content"),
+	content: string().required().label("Content"),
 });
 
 export { newLessonSchema };
