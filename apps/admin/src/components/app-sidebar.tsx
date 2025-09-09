@@ -25,6 +25,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSession } from "@/hooks/api/auth";
+import { logout } from "@/lib/auth";
 
 type Data = {
 	[key: string]: {
@@ -72,7 +73,28 @@ const data: Data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-	const { data: sessionData, isPending } = useSession();
+	//const { data: sessionData, isPending } = useSession();
+	const isPending = true;
+	const sessionData = {
+		status: true,
+		token: "Ea9yvmSTupL8U9yiqRpPsDu1U61XiNxF",
+		user: {
+			id: "F7EOrNtgbhOUA4FYvj0r7bN4eJykYGMb",
+			email: "8427822949",
+			emailVerified: false,
+			name: "Anmol",
+			image: null,
+			phoneNumber: "8427822949",
+			phoneNumberVerified: true,
+			createdAt: "2025-08-10T12:13:11.000Z",
+			updatedAt: "2025-08-10T12:13:11.000Z",
+		},
+	};
+
+	if (isPending === false && sessionData === null) {
+		console.log("should call logout");
+		//logout();
+	}
 
 	return (
 		<Sidebar

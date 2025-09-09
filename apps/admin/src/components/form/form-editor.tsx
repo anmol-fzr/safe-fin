@@ -8,10 +8,8 @@ import {
 	FormDescription,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import * as React from "react";
 import { Editor } from "../editor/Editor";
 
@@ -40,7 +38,10 @@ const FormEditor = <
 			render={({ field }) => (
 				<FormItem>
 					<FormControl>
-						<Editor setContent={field.onChange} />
+						<Editor
+							content={field.value}
+							setContent={(val) => field.onChange(JSON.stringify(val))}
+						/>
 					</FormControl>
 					<FormDescription>{props?.desc}</FormDescription>
 					<FormMessage />

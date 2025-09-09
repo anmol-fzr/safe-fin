@@ -12,19 +12,17 @@ import {
 	type FieldPath,
 	type FieldValues,
 	type FormProviderProps,
-	type UseFormReturn,
 } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 
-interface FormProps extends FormProviderProps {
-	onSubmit: UseFormReturn["handleSubmit"];
-}
+type FormProps = FormProviderProps &
+	Pick<React.ComponentPropsWithoutRef<"form">, "className" | "onSubmit">;
 
-const Form = ({ onSubmit, ...props }: FormProps) => {
+const Form = ({ className, onSubmit, ...props }: FormProps) => {
 	return (
-		<form onSubmit={onSubmit}>
+		<form onSubmit={onSubmit} className={cn("flex gap-6", className)}>
 			<FormProvider {...props} />
 		</form>
 	);

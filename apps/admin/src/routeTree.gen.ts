@@ -23,7 +23,6 @@ import { Route as DashboardQuizNewRouteImport } from './routes/dashboard/quiz/ne
 import { Route as DashboardQuizQuizIdRouteImport } from './routes/dashboard/quiz/$quizId'
 import { Route as DashboardLessonsNewRouteImport } from './routes/dashboard/lessons/new'
 import { Route as DashboardLessonsLessonIdRouteImport } from './routes/dashboard/lessons/$lessonId'
-import { Route as DashboardLessonsLessonIdIndexRouteImport } from './routes/dashboard/lessons/$lessonId/index'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -98,12 +97,6 @@ const DashboardLessonsLessonIdRoute =
     path: '/$lessonId',
     getParentRoute: () => DashboardLessonsRoute,
   } as any)
-const DashboardLessonsLessonIdIndexRoute =
-  DashboardLessonsLessonIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => DashboardLessonsLessonIdRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -113,14 +106,13 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof DashboardSettingsRouteWithChildren
   '/dashboard/users': typeof DashboardUsersRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdRouteWithChildren
+  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdRoute
   '/dashboard/lessons/new': typeof DashboardLessonsNewRoute
   '/dashboard/quiz/$quizId': typeof DashboardQuizQuizIdRoute
   '/dashboard/quiz/new': typeof DashboardQuizNewRoute
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
-  '/dashboard/lessons/$lessonId/': typeof DashboardLessonsLessonIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -128,13 +120,13 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof DashboardSettingsRouteWithChildren
   '/dashboard/users': typeof DashboardUsersRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdRoute
   '/dashboard/lessons/new': typeof DashboardLessonsNewRoute
   '/dashboard/quiz/$quizId': typeof DashboardQuizQuizIdRoute
   '/dashboard/quiz/new': typeof DashboardQuizNewRoute
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons': typeof DashboardLessonsIndexRoute
-  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -145,14 +137,13 @@ export interface FileRoutesById {
   '/dashboard/settings': typeof DashboardSettingsRouteWithChildren
   '/dashboard/users': typeof DashboardUsersRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdRouteWithChildren
+  '/dashboard/lessons/$lessonId': typeof DashboardLessonsLessonIdRoute
   '/dashboard/lessons/new': typeof DashboardLessonsNewRoute
   '/dashboard/quiz/$quizId': typeof DashboardQuizQuizIdRoute
   '/dashboard/quiz/new': typeof DashboardQuizNewRoute
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
-  '/dashboard/lessons/$lessonId/': typeof DashboardLessonsLessonIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,7 +162,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
     | '/dashboard/lessons/'
-    | '/dashboard/lessons/$lessonId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -179,13 +169,13 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/users'
     | '/dashboard'
+    | '/dashboard/lessons/$lessonId'
     | '/dashboard/lessons/new'
     | '/dashboard/quiz/$quizId'
     | '/dashboard/quiz/new'
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
     | '/dashboard/lessons'
-    | '/dashboard/lessons/$lessonId'
   id:
     | '__root__'
     | '/'
@@ -202,7 +192,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
     | '/dashboard/lessons/'
-    | '/dashboard/lessons/$lessonId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -310,38 +299,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLessonsLessonIdRouteImport
       parentRoute: typeof DashboardLessonsRoute
     }
-    '/dashboard/lessons/$lessonId/': {
-      id: '/dashboard/lessons/$lessonId/'
-      path: '/'
-      fullPath: '/dashboard/lessons/$lessonId/'
-      preLoaderRoute: typeof DashboardLessonsLessonIdIndexRouteImport
-      parentRoute: typeof DashboardLessonsLessonIdRoute
-    }
   }
 }
-
-interface DashboardLessonsLessonIdRouteChildren {
-  DashboardLessonsLessonIdIndexRoute: typeof DashboardLessonsLessonIdIndexRoute
-}
-
-const DashboardLessonsLessonIdRouteChildren: DashboardLessonsLessonIdRouteChildren =
-  {
-    DashboardLessonsLessonIdIndexRoute: DashboardLessonsLessonIdIndexRoute,
-  }
-
-const DashboardLessonsLessonIdRouteWithChildren =
-  DashboardLessonsLessonIdRoute._addFileChildren(
-    DashboardLessonsLessonIdRouteChildren,
-  )
 
 interface DashboardLessonsRouteChildren {
-  DashboardLessonsLessonIdRoute: typeof DashboardLessonsLessonIdRouteWithChildren
+  DashboardLessonsLessonIdRoute: typeof DashboardLessonsLessonIdRoute
   DashboardLessonsNewRoute: typeof DashboardLessonsNewRoute
   DashboardLessonsIndexRoute: typeof DashboardLessonsIndexRoute
 }
 
 const DashboardLessonsRouteChildren: DashboardLessonsRouteChildren = {
-  DashboardLessonsLessonIdRoute: DashboardLessonsLessonIdRouteWithChildren,
+  DashboardLessonsLessonIdRoute: DashboardLessonsLessonIdRoute,
   DashboardLessonsNewRoute: DashboardLessonsNewRoute,
   DashboardLessonsIndexRoute: DashboardLessonsIndexRoute,
 }

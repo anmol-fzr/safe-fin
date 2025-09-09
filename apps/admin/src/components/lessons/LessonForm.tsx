@@ -1,44 +1,38 @@
-import { useRef } from "react";
+import { useRef, type ComponentPropsWithoutRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Form, FormProvider } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
+import { Form } from "../ui/form";
 import { FormInput } from "@/components/form/form-input";
 import { FormTextarea } from "@/components/form/form-textarea";
 import { FormEditor } from "@/components/form/form-editor";
-import { newLessonSchema } from "@/schema/lesson";
 import { useYupForm } from "@/hooks/form/useYupForm";
-import { useCreateLesson } from "@/hooks/api/lesson";
-import { renderToMarkdown } from "@tiptap/static-renderer";
-import { extensions } from "../editor/Editor";
+import type { ResourceId } from "@/services/api/types";
+
+type UpdateLessonFormProps = {
+	lessonId: ResourceId;
+	form: ReturnType<typeof useYupForm>;
+	handleSubmit: Pick<ComponentPropsWithoutRef<"form">, "onSubmit">;
+	handlePublish: VoidFunction;
+	handleDraft: VoidFunction;
+};
 
 type Action = "publish" | "draft";
 
-export function LessonForm() {
-	const form = useYupForm({ schema: newLessonSchema });
-	const actionRef = useRef<Action>("publish");
-	const { createLesson } = useCreateLesson();
+export const useLessonActionFormRef = () => {
+	const ref = useRef<Action>("publish");
 
-	const handleSubmit = form.handleSubmit((values) => {
-		//const draft = actionRef.current === "draft";
+	const toPublish = () => (ref.current = "publish");
+	const toDraft = () => (ref.current = "draft");
 
-		const json = values.content;
-		const markdown = renderToMarkdown({ content: json, extensions });
+	return { ref, toDraft, toPublish };
+};
 
-		console.log({
-			...values,
-			content: markdown,
-			contentJson: JSON.stringify(json),
-		});
-
-		createLesson({
-			...values,
-			content: markdown,
-			contentJson: JSON.stringify(json),
-		});
-	});
-
-	const toPublish = () => (actionRef.current = "publish");
-	const toDraft = () => (actionRef.current = "draft");
-
+export function LessonForm({
+	form,
+	handleSubmit,
+	handlePublish,
+	handleDraft,
+}: UpdateLessonFormProps) {
 	return (
 		<Form
 			control={form.control}
@@ -57,10 +51,10 @@ export function LessonForm() {
 						placeholder="Description"
 					/>
 					<div className="flex gap-4 ml-auto mr-0 mt-4">
-						<Button variant="outline" size="lg" onClick={toPublish}>
+						<Button variant="outline" size="lg" onClick={handlePublish}>
 							Publish
 						</Button>
-						<Button size="lg" onClick={toDraft}>
+						<Button size="lg" onClick={handleDraft}>
 							Save Draft
 						</Button>
 					</div>

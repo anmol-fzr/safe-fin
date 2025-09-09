@@ -1,6 +1,7 @@
 type IResData<D = any> = {
 	data: D;
 	message: string;
+	error: string;
 	total: number;
 };
 

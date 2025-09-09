@@ -8,30 +8,36 @@ import type {
 	IBaseData,
 } from "./types";
 
-const { get, post } = ax;
+const { get, post, patch } = ax;
 
 export const LESSON: ApiLesson = {
 	GET: (params) => get(`/lessons`, { params }),
 	ONE: (lessonId) => get(`/lessons/${lessonId}`),
 	CREATE: (lesson) => post(`/lessons`, lesson),
 	DELETE: (lessonId) => ax.delete(`/lessons/${lessonId}`),
+	UPDATE: (lessonId, lesson) => patch(`/lessons/${lessonId}`, lesson),
 } as const;
 
 type ILessonsRes = IResData<ILesson[]>;
 type ILessonRes = IResData<ILesson>;
 
-type ICreateLessonReq = Omit<ILesson, "id" | "createdAt">;
+export type ICreateLessonReq = Pick<
+	ILesson,
+	"title" | "desc" | "content" | "contentJson" | "isPublished"
+>;
 
 type ApiLesson = {
 	GET: (params: IPaginatedReqParams & IReqParams) => Promise<ILessonsRes>;
-	ONE: (lessonId: ResourceId) => Promise<ILessonRes>;
+	ONE: (id: ResourceId) => Promise<ILessonRes>;
 	CREATE: (lesson: ICreateLessonReq) => Promise<ILessonRes>;
 	DELETE: (lesson: ResourceId) => Promise<ILessonRes>;
+	UPDATE: (id: ResourceId, lesson: ICreateLessonReq) => Promise<ILessonRes>;
 };
 
 interface ILesson extends IBaseData, ITimestamps {
 	title: string;
 	desc: string;
+	isPublished: boolean;
 	content: string;
 	contentJson: Object;
 }

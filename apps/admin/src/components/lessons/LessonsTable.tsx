@@ -21,6 +21,7 @@ import {
 	TableSearch,
 	useTableSearchValue,
 } from "../table";
+import { LessonStatusBadge } from "./LessonStatusBadge";
 
 const queryParamKey = "query";
 
@@ -93,6 +94,14 @@ export function LessonsTable() {
 							</Link>
 						</LessonHoverCard>
 					);
+				},
+			},
+			{
+				id: "status",
+				header: "Status",
+				cell: ({ row }) => {
+					const { isPublished } = row.original;
+					return <LessonStatusBadge {...{ isPublished }} />;
 				},
 			},
 			{

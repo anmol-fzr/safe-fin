@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Page } from "@/components/page";
-import { LessonForm } from "@/components/lessons/LessonForm";
+import { NewLessonForm } from "@/components/lessons/NewLessonForm";
 import { BackButton } from "@/components/form/button/BackButton";
 
 export const Route = createFileRoute("/dashboard/lessons/new")({
@@ -18,7 +18,7 @@ function RouteComponent() {
 				<Page.Title title="Create New Lesson" />
 			</div>
 			<div className="mx-auto">
-				<LessonForm />
+				<NewLessonForm />
 			</div>
 		</div>
 	);

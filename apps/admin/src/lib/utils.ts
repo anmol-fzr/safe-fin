@@ -11,3 +11,5 @@ export function formatDateTime(date: string) {
 		timeStyle: "medium",
 	}).format(new Date(date));
 }
+
+export const { isNaN } = Number;
