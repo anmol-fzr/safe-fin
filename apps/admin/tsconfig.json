@@ -8,7 +8,10 @@
     "moduleResolution": "Bundler",
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "types": ["vite/client"],
+    "types": [
+      "vite/client",
+      "vitest/globals"
+    ],
     "rootDirs": ["."],
     "baseUrl": ".",
     "paths": {

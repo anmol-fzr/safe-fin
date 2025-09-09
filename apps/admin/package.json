@@ -7,6 +7,7 @@
 		"dev": "vite --host",
 		"build": "vite build",
 		"serve": "vite preview",
+		"test": "vitest",
 		"start": "vite",
 		"check-types": "tsc --noEmit"
 	},
@@ -58,6 +59,7 @@
 		"lucide-react": "^0.542.0",
 		"next-themes": "^0.4.6",
 		"nuqs": "^2.5.2",
+		"posthog-js": "^1.261.8",
 		"radix-ui": "^1.4.2",
 		"react": "^0.0.0-experimental-8e60cb7e-20250902",
 		"react-dom": "^0.0.0-experimental-8e60cb7e-20250902",
@@ -77,15 +79,23 @@
 		"@tanstack/react-query-devtools": "^5.80.5",
 		"@tanstack/react-router-devtools": "^1.114.27",
 		"@tanstack/router-plugin": "^1.114.27",
+		"@testing-library/dom": "^10.4.1",
+		"@testing-library/jest-dom": "^6.8.0",
+		"@testing-library/react": "^16.3.0",
+		"@testing-library/user-event": "^14.6.1",
 		"@types/lodash.throttle": "^4.1.9",
 		"@types/node": "^22.13.13",
-		"@types/react": "^19.0.12",
-		"@types/react-dom": "^19.0.4",
+		"@types/react": "^19.1.12",
+		"@types/react-dom": "^19.1.9",
 		"@vitejs/plugin-react": "^4.3.4",
+		"js-dom": "^0.0.1",
+		"jsdom": "^26.1.0",
 		"postcss": "^8.5.3",
 		"sass-embedded": "^1.92.0",
 		"tailwindcss": "^4.0.15",
 		"typescript": "^5.8.3",
-		"vite": "^6.2.2"
+		"vite": "^6.2.2",
+		"vite-plugin-mkcert": "^1.17.8",
+		"vitest": "^3.2.4"
 	}
 }
