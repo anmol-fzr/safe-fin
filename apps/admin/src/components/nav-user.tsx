@@ -26,7 +26,7 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "./ui/skeleton";
-import { type User } from "@/lib/auth";
+import { logout, type User } from "@/lib/auth";
 
 type NavUserProps = {
 	user: User;
@@ -100,7 +100,7 @@ export function NavUser({ user }: NavUserProps) {
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem onClick={logout}>
 							<LogOut />
 							Log out
 						</DropdownMenuItem>
