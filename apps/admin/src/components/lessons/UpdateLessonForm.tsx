@@ -7,16 +7,21 @@ import { LessonForm, useLessonActionFormRef } from "./LessonForm";
 
 type UpdateLessonFormProps = {
 	lessonId: ResourceId;
+	disabled?: boolean;
 };
 
-export function UpdateLessonForm({ lessonId }: UpdateLessonFormProps) {
+export function UpdateLessonForm({
+	lessonId,
+	disabled = false,
+}: UpdateLessonFormProps) {
 	const { lesson } = useGetLesson(lessonId);
 
 	const form = useYupForm({
 		schema: newLessonSchema,
+		disabled,
 		defaultValues: {
 			...lesson.data,
-			content: JSON.parse(lesson.data.contentJson),
+			content: lesson.data.contentJson,
 		},
 	});
 

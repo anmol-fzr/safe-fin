@@ -197,6 +197,7 @@ type EditorProps = {
 		>,
 	) => void;
 	content?: Content;
+	disabled?: boolean;
 };
 
 export const extensions = [
@@ -238,7 +239,7 @@ export function convertJsonToMarkdown(jsonString: string) {
 	return markdown;
 }
 
-export function Editor({ content, setContent }: EditorProps) {
+export function Editor({ content, setContent, disabled = false }: EditorProps) {
 	const isMobile = useIsMobile();
 	const { height } = useWindowSize();
 	const [mobileView, setMobileView] = React.useState<MobileView>("main");
@@ -248,6 +249,7 @@ export function Editor({ content, setContent }: EditorProps) {
 		content: content ? JSON.parse(content) : undefined,
 		immediatelyRender: false,
 		shouldRerenderOnTransaction: false,
+		editable: !disabled,
 		editorProps: {
 			attributes: {
 				// autocomplete: "off",
@@ -284,30 +286,32 @@ export function Editor({ content, setContent }: EditorProps) {
 	return (
 		<div className="bg-sidebar/50 rounded-xl">
 			<EditorContext.Provider value={{ editor }}>
-				<Toolbar
-					className="!bg-sidebar rounded-t-xl"
-					ref={toolbarRef}
-					style={{
-						...(isMobile
-							? {
-									bottom: `calc(100% - ${height - rect.y}px)`,
-								}
-							: {}),
-					}}
-				>
-					{mobileView === "main" ? (
-						<MainToolbarContent
-							onHighlighterClick={handleHighlighterClick}
-							onLinkClick={handleLinkClick}
-							isMobile={isMobile}
-						/>
-					) : (
-						<MobileToolbarContent
-							type={mobileView === "highlighter" ? "highlighter" : "link"}
-							onBack={handleMain}
-						/>
-					)}
-				</Toolbar>
+				{!disabled && (
+					<Toolbar
+						className="!bg-sidebar rounded-t-xl"
+						ref={toolbarRef}
+						style={{
+							...(isMobile
+								? {
+										bottom: `calc(100% - ${height - rect.y}px)`,
+									}
+								: {}),
+						}}
+					>
+						{mobileView === "main" ? (
+							<MainToolbarContent
+								onHighlighterClick={handleHighlighterClick}
+								onLinkClick={handleLinkClick}
+								isMobile={isMobile}
+							/>
+						) : (
+							<MobileToolbarContent
+								type={mobileView === "highlighter" ? "highlighter" : "link"}
+								onBack={handleMain}
+							/>
+						)}
+					</Toolbar>
+				)}
 
 				<EditorContent
 					editor={editor}

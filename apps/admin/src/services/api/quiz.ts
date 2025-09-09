@@ -19,9 +19,13 @@ interface IQuiz extends IBaseData, ITimestamps {
 	desc: string;
 }
 
+interface IFullQuiz extends IQuiz {
+	questions: Question[];
+}
+
 type IQuizzes = IQuiz[];
 type IQuizzesRes = IResData<IQuizzes>;
-type IQuizRes = IResData<IQuiz>;
+type IQuizRes = IResData<IFullQuiz>;
 
 type ApiQuiz = {
 	GET: (params: IReqParams) => Promise<IQuizzesRes>;
@@ -29,3 +33,24 @@ type ApiQuiz = {
 };
 
 export type { IQuiz, IQuizzes };
+
+interface Question {
+	id: number;
+	quizId: number;
+	question: string;
+	answerId: number;
+	options: Option[];
+	answer: Answer;
+}
+
+interface Option {
+	id: number;
+	question_id: number;
+	value: string;
+}
+
+interface Answer {
+	id: number;
+	question_id: number;
+	value: string;
+}

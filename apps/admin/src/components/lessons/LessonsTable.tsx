@@ -127,12 +127,12 @@ export function LessonsTable() {
 					return (
 						<TableColActions>
 							<TableColActions.View
-								to="/dashboard/lessons/$lessonId"
+								to="/dashboard/lessons/$lessonId/view"
 								params={{ lessonId }}
 							/>
 
 							<TableColActions.Edit
-								to="/dashboard/lessons/$lessonId"
+								to="/dashboard/lessons/$lessonId/edit"
 								params={{ lessonId }}
 							/>
 

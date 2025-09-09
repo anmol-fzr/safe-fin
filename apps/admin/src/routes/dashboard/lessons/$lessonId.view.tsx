@@ -6,7 +6,7 @@ import { getLessonOpts } from "@/hooks/api/lesson";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Suspense } from "react";
 
-export const Route = createFileRoute("/dashboard/lessons/$lessonId")({
+export const Route = createFileRoute("/dashboard/lessons/$lessonId/view")({
 	component: RouteComponent,
 	loader: async ({ context, params }) => {
 		const lessonId = params.lessonId;
@@ -31,11 +31,11 @@ function RouteComponent() {
 		<div>
 			<div className="flex flex-col mb-4 items-start">
 				<BackButton to="/dashboard/lessons" resource="Lessons" />
-				<Page.Title title="Update Lesson" />
+				<Page.Title title="View Lesson" />
 			</div>
 			<div className="mx-auto">
 				<Suspense fallback={<Loader />}>
-					<UpdateLessonForm lessonId={lessonId} />
+					<UpdateLessonForm lessonId={lessonId} disabled />
 				</Suspense>
 			</div>
 		</div>

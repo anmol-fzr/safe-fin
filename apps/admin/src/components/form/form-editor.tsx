@@ -40,6 +40,7 @@ const FormEditor = <
 					<FormControl>
 						<Editor
 							content={field.value}
+							disabled={field.disabled}
 							setContent={(val) => field.onChange(JSON.stringify(val))}
 						/>
 					</FormControl>
