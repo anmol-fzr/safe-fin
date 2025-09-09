@@ -22,10 +22,9 @@ export const useCountdown = (secs = 30) => {
 			setCountdown((prev) => {
 				if (prev > 0) {
 					return prev - 1;
-				} else {
-					clear(); // auto-clear when countdown reaches 0
-					return 0;
 				}
+				clear(); // auto-clear when countdown reaches 0
+				return 0;
 			});
 		}, 1000);
 	}, []);
