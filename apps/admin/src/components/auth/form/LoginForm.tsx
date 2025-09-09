@@ -55,16 +55,20 @@ export function LoginForm({
 				if (!otp) {
 					toast.error("OTP is Required");
 				}
-				const verifyOtpPrms = verifyOtp({ phoneNumber, code: otp });
+				const verifyOtpPrms = verifyOtp(
+					{ phoneNumber, code: otp },
+					{
+						onSuccess: () => {
+							navigate({
+								to: "/dashboard",
+							});
+						},
+					},
+				);
 
 				toast.promise(verifyOtpPrms, {
 					loading: "Verifying OTP ...",
-					success: () => {
-						navigate({
-							to: "/dashboard",
-						});
-						return "OTP Verified Successfully";
-					},
+					success: "OTP Verified Successfully",
 					error: "Unable to Verify OTP",
 				});
 			}

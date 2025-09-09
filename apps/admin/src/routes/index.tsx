@@ -1,26 +1,20 @@
-import { useEffect } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { LoginForm } from "@/components/auth/form/LoginForm";
-import { useSession } from "@/hooks/api/auth";
+import { authClient } from "@/lib/auth";
 import Loader from "@/components/loader";
 
 export const Route = createFileRoute("/")({
+	beforeLoad: async () => {
+		const session = await authClient.getSession();
+		if (session.data !== null) {
+			throw redirect({ to: "/dashboard" });
+		}
+	},
 	component: HomeComponent,
+	pendingComponent: Loader,
 });
 
 function HomeComponent() {
-	const { isPending, session } = useSession();
-	const navigate = Route.useNavigate();
-
-	useEffect(() => {
-		if (session !== undefined) {
-			//navigate({ to: "/dashboard" });
-		}
-	}, [isPending]);
-
-	if (isPending) {
-		return <Loader />;
-	}
 	return (
 		<div className="h-screen grid place-items-center">
 			<LoginForm />

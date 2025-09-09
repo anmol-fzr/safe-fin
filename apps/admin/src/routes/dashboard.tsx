@@ -1,30 +1,23 @@
-import { useEffect } from "react";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
-import { useSession } from "@/hooks/api/auth";
 import Loader from "@/components/loader";
+import { authClient } from "@/lib/auth";
 
 export const Route = createFileRoute("/dashboard")({
+	beforeLoad: async () => {
+		const session = await authClient.getSession();
+		if (session.data === null) {
+			throw redirect({ to: "/" });
+		}
+	},
 	component: Dashboard,
 	loader: () => ({ crumb: "Dashboard" }),
+	pendingComponent: Loader,
 });
 
 function Dashboard() {
-	const { isPending, session } = useSession();
-	const navigate = Route.useNavigate();
-
-	useEffect(() => {
-		if (session === undefined) {
-			//navigate({ to: "/" });
-		}
-	}, [isPending]);
-
-	if (isPending) {
-		return <Loader />;
-	}
-
 	return (
 		<div className="grid grid-rows-[auto_1fr] h-svh">
 			<div className="[--header-height:calc(--spacing(14))]">

@@ -17,7 +17,7 @@ export const queryClient = new QueryClient({
 const router = createRouter({
 	routeTree,
 	defaultPreload: "intent",
-	defaultPendingComponent: () => <Loader />,
+	defaultPendingComponent: Loader,
 	context: {
 		queryClient,
 	},
