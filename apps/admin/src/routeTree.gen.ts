@@ -24,7 +24,7 @@ import { Route as DashboardQuizNewRouteImport } from './routes/dashboard/quiz/ne
 import { Route as DashboardQuizQuizIdRouteImport } from './routes/dashboard/quiz/$quizId'
 import { Route as DashboardLessonsNewRouteImport } from './routes/dashboard/lessons/new'
 import { Route as DashboardLessonsLessonIdViewRouteImport } from './routes/dashboard/lessons/$lessonId.view'
-import { Route as DashboardLessonsLessonIdEditRouteImport } from './routes/dashboard/lessons/$lessonId.edit'
+import { Route as DashboardLessonsLessonIdUpdateRouteImport } from './routes/dashboard/lessons/$lessonId.update'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -104,10 +104,10 @@ const DashboardLessonsLessonIdViewRoute =
     path: '/$lessonId/view',
     getParentRoute: () => DashboardLessonsRoute,
   } as any)
-const DashboardLessonsLessonIdEditRoute =
-  DashboardLessonsLessonIdEditRouteImport.update({
-    id: '/$lessonId/edit',
-    path: '/$lessonId/edit',
+const DashboardLessonsLessonIdUpdateRoute =
+  DashboardLessonsLessonIdUpdateRouteImport.update({
+    id: '/$lessonId/update',
+    path: '/$lessonId/update',
     getParentRoute: () => DashboardLessonsRoute,
   } as any)
 
@@ -126,7 +126,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
   '/dashboard/quiz/': typeof DashboardQuizIndexRoute
-  '/dashboard/lessons/$lessonId/edit': typeof DashboardLessonsLessonIdEditRoute
+  '/dashboard/lessons/$lessonId/update': typeof DashboardLessonsLessonIdUpdateRoute
   '/dashboard/lessons/$lessonId/view': typeof DashboardLessonsLessonIdViewRoute
 }
 export interface FileRoutesByTo {
@@ -141,7 +141,7 @@ export interface FileRoutesByTo {
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons': typeof DashboardLessonsIndexRoute
   '/dashboard/quiz': typeof DashboardQuizIndexRoute
-  '/dashboard/lessons/$lessonId/edit': typeof DashboardLessonsLessonIdEditRoute
+  '/dashboard/lessons/$lessonId/update': typeof DashboardLessonsLessonIdUpdateRoute
   '/dashboard/lessons/$lessonId/view': typeof DashboardLessonsLessonIdViewRoute
 }
 export interface FileRoutesById {
@@ -160,7 +160,7 @@ export interface FileRoutesById {
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
   '/dashboard/lessons/': typeof DashboardLessonsIndexRoute
   '/dashboard/quiz/': typeof DashboardQuizIndexRoute
-  '/dashboard/lessons/$lessonId/edit': typeof DashboardLessonsLessonIdEditRoute
+  '/dashboard/lessons/$lessonId/update': typeof DashboardLessonsLessonIdUpdateRoute
   '/dashboard/lessons/$lessonId/view': typeof DashboardLessonsLessonIdViewRoute
 }
 export interface FileRouteTypes {
@@ -180,7 +180,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/customization'
     | '/dashboard/lessons/'
     | '/dashboard/quiz/'
-    | '/dashboard/lessons/$lessonId/edit'
+    | '/dashboard/lessons/$lessonId/update'
     | '/dashboard/lessons/$lessonId/view'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -195,7 +195,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/customization'
     | '/dashboard/lessons'
     | '/dashboard/quiz'
-    | '/dashboard/lessons/$lessonId/edit'
+    | '/dashboard/lessons/$lessonId/update'
     | '/dashboard/lessons/$lessonId/view'
   id:
     | '__root__'
@@ -213,7 +213,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings/customization'
     | '/dashboard/lessons/'
     | '/dashboard/quiz/'
-    | '/dashboard/lessons/$lessonId/edit'
+    | '/dashboard/lessons/$lessonId/update'
     | '/dashboard/lessons/$lessonId/view'
   fileRoutesById: FileRoutesById
 }
@@ -329,11 +329,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLessonsLessonIdViewRouteImport
       parentRoute: typeof DashboardLessonsRoute
     }
-    '/dashboard/lessons/$lessonId/edit': {
-      id: '/dashboard/lessons/$lessonId/edit'
-      path: '/$lessonId/edit'
-      fullPath: '/dashboard/lessons/$lessonId/edit'
-      preLoaderRoute: typeof DashboardLessonsLessonIdEditRouteImport
+    '/dashboard/lessons/$lessonId/update': {
+      id: '/dashboard/lessons/$lessonId/update'
+      path: '/$lessonId/update'
+      fullPath: '/dashboard/lessons/$lessonId/update'
+      preLoaderRoute: typeof DashboardLessonsLessonIdUpdateRouteImport
       parentRoute: typeof DashboardLessonsRoute
     }
   }
@@ -342,14 +342,14 @@ declare module '@tanstack/react-router' {
 interface DashboardLessonsRouteChildren {
   DashboardLessonsNewRoute: typeof DashboardLessonsNewRoute
   DashboardLessonsIndexRoute: typeof DashboardLessonsIndexRoute
-  DashboardLessonsLessonIdEditRoute: typeof DashboardLessonsLessonIdEditRoute
+  DashboardLessonsLessonIdUpdateRoute: typeof DashboardLessonsLessonIdUpdateRoute
   DashboardLessonsLessonIdViewRoute: typeof DashboardLessonsLessonIdViewRoute
 }
 
 const DashboardLessonsRouteChildren: DashboardLessonsRouteChildren = {
   DashboardLessonsNewRoute: DashboardLessonsNewRoute,
   DashboardLessonsIndexRoute: DashboardLessonsIndexRoute,
-  DashboardLessonsLessonIdEditRoute: DashboardLessonsLessonIdEditRoute,
+  DashboardLessonsLessonIdUpdateRoute: DashboardLessonsLessonIdUpdateRoute,
   DashboardLessonsLessonIdViewRoute: DashboardLessonsLessonIdViewRoute,
 }
 

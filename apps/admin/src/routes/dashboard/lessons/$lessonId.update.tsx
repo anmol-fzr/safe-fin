@@ -6,7 +6,7 @@ import { getLessonOpts } from "@/hooks/api/lesson";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Suspense } from "react";
 
-export const Route = createFileRoute("/dashboard/lessons/$lessonId/edit")({
+export const Route = createFileRoute("/dashboard/lessons/$lessonId/update")({
 	component: RouteComponent,
 	loader: async ({ context, params }) => {
 		const lessonId = params.lessonId;
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/dashboard/lessons/$lessonId/edit")({
 		const lesson = await context.queryClient.ensureQueryData(getLessonOpts(id));
 		return {
 			crumb: `Lesson: ${lesson.data.title}`,
-		};
+		}
 	},
 });
 
@@ -39,5 +39,5 @@ function RouteComponent() {
 				</Suspense>
 			</div>
 		</div>
-	);
+	)
 }
