@@ -15,6 +15,8 @@ import { queryClient } from "@/main";
 import { ViewTransition } from "./extras";
 import { CmdK } from "./cmd-k";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+// import { PostHogProvider } from "posthog-js/react";
+// import { posthogClient } from "@/lib/posthog";
 
 function Fallback({ error, resetErrorBoundary }: FallbackProps) {
 	return (
@@ -46,8 +48,10 @@ function Fallback({ error, resetErrorBoundary }: FallbackProps) {
 
 export function Providers({ children }: { children: ReactElement }) {
 	const router = useRouter();
+
 	return (
 		<>
+			{/* <PostHogProvider client={posthogClient}> */}
 			<ErrorBoundary
 				fallbackRender={Fallback}
 				onReset={(details) => {
@@ -80,6 +84,7 @@ export function Providers({ children }: { children: ReactElement }) {
 			</ErrorBoundary>
 
 			<TanStackRouterDevtools position="bottom-right" />
+			{/* </PostHogProvider> */}
 		</>
 	);
 }
