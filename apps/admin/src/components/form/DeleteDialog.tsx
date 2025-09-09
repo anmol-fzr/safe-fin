@@ -52,7 +52,7 @@ export function DeleteDialog({
 					</DialogDescription>
 				</DialogHeader>
 				<div className="grid gap-4">
-					<Form {...form} onSubmit={handleSubmit}>
+					<Form {...form} onSubmit={handleSubmit} className="flex-col">
 						<FormInput
 							name="deleteName"
 							label={`To confirm, type "${phrase}" below`}
