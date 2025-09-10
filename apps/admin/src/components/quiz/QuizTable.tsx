@@ -17,8 +17,10 @@ import { useReactTable, type ColumnDef } from "@tanstack/react-table";
 import type { IQuiz } from "@/services/api";
 import { Checkbox } from "../ui/checkbox";
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, EyeIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useGetQuizzes } from "@/hooks/api/quiz";
+import { LessonStatusBadge } from "../lessons/LessonStatusBadge";
+import { ResourceProvider } from "@/context/resource.context";
 
 const columns: ColumnDef<IQuiz>[] = [
 	{
@@ -67,6 +69,14 @@ const columns: ColumnDef<IQuiz>[] = [
 		},
 	},
 	{
+		id: "status",
+		header: "Status",
+		cell: ({ row }) => {
+			const { isPublished } = row.original;
+			return <LessonStatusBadge {...{ isPublished }} />;
+		},
+	},
+	{
 		accessorKey: "createdAt",
 		header: "CreatedAt",
 		cell: TableColCreatedAt,
@@ -88,11 +98,6 @@ const columns: ColumnDef<IQuiz>[] = [
 
 			return (
 				<TableColActions>
-					<TableColActions.View
-						to="/dashboard/quiz/$quizId"
-						params={{ quizId }}
-					/>
-
 					<TableColActions.Edit
 						to="/dashboard/quiz/$quizId"
 						params={{ quizId }}
@@ -139,14 +144,16 @@ export function QuizTable() {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<TableSearch searchQueryParamKey={searchQueryParamKey} />
-			<DataTable
-				table={table}
-				isFetching={isFetching}
-				fetchNextPage={fetchNextPage}
-				currRows={currRows}
-				totalRows={totalRows}
-			/>
+			<ResourceProvider value={{ resource: "Quiz" }}>
+				<TableSearch searchQueryParamKey={searchQueryParamKey} />
+				<DataTable
+					table={table}
+					isFetching={isFetching}
+					fetchNextPage={fetchNextPage}
+					currRows={currRows}
+					totalRows={totalRows}
+				/>
+			</ResourceProvider>
 		</div>
 	);
 }

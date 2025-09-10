@@ -15,7 +15,8 @@
     "rootDirs": ["."],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@faker-js/faker": ["node_modules/@faker-js/faker/locale/en"]
     }
   },
   "include": [

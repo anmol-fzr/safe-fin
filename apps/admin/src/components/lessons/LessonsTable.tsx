@@ -22,6 +22,7 @@ import {
 	useTableSearchValue,
 } from "../table";
 import { LessonStatusBadge } from "./LessonStatusBadge";
+import { ResourceProvider } from "@/context/resource.context";
 
 const queryParamKey = "query";
 
@@ -126,11 +127,6 @@ export function LessonsTable() {
 
 					return (
 						<TableColActions>
-							<TableColActions.View
-								to="/dashboard/lessons/$lessonId/view"
-								params={{ lessonId }}
-							/>
-
 							<TableColActions.Edit
 								to="/dashboard/lessons/$lessonId/edit"
 								params={{ lessonId }}
@@ -155,14 +151,16 @@ export function LessonsTable() {
 	});
 	return (
 		<div className="flex flex-col gap-5">
-			<TableSearch searchQueryParamKey={queryParamKey} />
-			<DataTable
-				table={table}
-				isFetching={isFetching}
-				fetchNextPage={fetchNextPage}
-				currRows={currRows}
-				totalRows={totalRows}
-			/>
+			<ResourceProvider value={{ resource: "Lesson" }}>
+				<TableSearch searchQueryParamKey={queryParamKey} />
+				<DataTable
+					table={table}
+					isFetching={isFetching}
+					fetchNextPage={fetchNextPage}
+					currRows={currRows}
+					totalRows={totalRows}
+				/>
+			</ResourceProvider>
 		</div>
 	);
 }

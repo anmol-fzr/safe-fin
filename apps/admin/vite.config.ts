@@ -10,6 +10,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
+			"@faker-js/faker": "@faker-js/faker/locale/en",
 		},
 	},
 });

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/dashboard/lessons/$lessonId/update")({
 		const lesson = await context.queryClient.ensureQueryData(getLessonOpts(id));
 		return {
 			crumb: `Lesson: ${lesson.data.title}`,
-		}
+		};
 	},
 });
 
@@ -39,5 +39,5 @@ function RouteComponent() {
 				</Suspense>
 			</div>
 		</div>
-	)
+	);
 }

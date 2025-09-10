@@ -1,11 +1,7 @@
-import { Badge } from "@/components/ui/badge";
+import { DraftBadge, PublishedBadge } from "../form/badge";
 
 function LessonStatusBadge({ isPublished = false }) {
-	return (
-		<Badge variant={isPublished ? "default" : "outline"}>
-			{isPublished ? "Publishd" : "Draft"}
-		</Badge>
-	);
+	return isPublished ? <PublishedBadge /> : <DraftBadge />;
 }
 
 export { LessonStatusBadge };

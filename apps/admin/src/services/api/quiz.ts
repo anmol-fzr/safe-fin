@@ -7,16 +7,18 @@ import type {
 	ResourceId,
 } from "./types";
 
-const { get } = axiosInstance;
+const { get, post } = axiosInstance;
 
 export const QUIZ: ApiQuiz = {
 	GET: (params) => get(`/quiz`, { params }),
 	ONE: (quizId) => get(`/quiz/${quizId}`),
+	CREATE: (payload) => post(`/quiz`, payload),
 } as const;
 
 interface IQuiz extends IBaseData, ITimestamps {
 	title: string;
 	desc: string;
+	isPublished: boolean;
 }
 
 interface IFullQuiz extends IQuiz {
@@ -26,13 +28,29 @@ interface IFullQuiz extends IQuiz {
 type IQuizzes = IQuiz[];
 type IQuizzesRes = IResData<IQuizzes>;
 type IQuizRes = IResData<IFullQuiz>;
+type ICreateQuizRes = IResData<IQuiz>;
 
 type ApiQuiz = {
 	GET: (params: IReqParams) => Promise<IQuizzesRes>;
 	ONE: (quizId: ResourceId) => Promise<IQuizRes>;
+	CREATE: (quizData: ICreateQuizReqPayload) => Promise<ICreateQuizRes>;
 };
 
 export type { IQuiz, IQuizzes };
+
+interface ICreateQuizReqPayload {
+	title: string;
+	desc: string;
+	questions: ICreateQuizReqQuestions;
+}
+
+type ICreateQuizReqQuestions = ICreateQuizReqQuestion[];
+
+interface ICreateQuizReqQuestion {
+	question: string;
+	answer: string;
+	options: { value: string }[];
+}
 
 interface Question {
 	id: number;
