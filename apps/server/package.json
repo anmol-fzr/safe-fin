@@ -8,10 +8,7 @@
 	},
 	"scripts": {
 		"cf:typegen": "wrangler types --env-interface CloudflareBindings",
-		"dev:conc": "concurrently \"npm run dev:tsc\" \"npm run dev:wrangler\"",
-		"dev:tsc": "bunx tsc -p tsconfig.build.json --watch",
 		"dev": "wrangler dev",
-		"build": "bunx tsc -p tsconfig.build.json",
 		"test": "vitest run ",
 		"test:watch": "vitest",
 		"test:ui": "vitest --ui"
