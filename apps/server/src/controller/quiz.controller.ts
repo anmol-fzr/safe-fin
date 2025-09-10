@@ -6,23 +6,21 @@ import { getDb } from "@/db";
 import { option, question, quiz } from "@/db";
 import { zValidator } from "@hono/zod-validator";
 import { fullQuizReqSchema } from "@/schema";
+import { authenticate } from "@/middleware";
 
 const factory = createFactory<HonoAppProps>();
 
-const getQuizzes = factory.createHandlers(async (c) => {
+const getQuizzes = factory.createHandlers(authenticate, async (c) => {
 	const db = getDb(c.env);
+	const user = c.get("user");
 
-	const quizzes = await db
-		.select({
-			id: quiz.id,
-			title: quiz.title,
-			desc: quiz.desc,
-			createdAt: quiz.createdAt,
-			updatedAt: quiz.updatedAt,
-		})
-		.from(quiz)
-		.where(eq(quiz.isPublished, true))
-		.orderBy(desc(quiz.createdAt));
+	const query = db.select().from(quiz).orderBy(desc(quiz.createdAt));
+
+	if (user.role === "user") {
+		query.where(eq(quiz.isPublished, true));
+	}
+
+	const quizzes = await Promise.resolve(query);
 
 	return c.json({ data: quizzes });
 });
@@ -107,7 +105,7 @@ const deleteQuizById = factory.createHandlers(async (c) => {
 const createQuiz = factory.createHandlers(
 	zValidator("json", fullQuizReqSchema),
 	async (c) => {
-		const { title, desc, isPublished = false } = c.req.valid("json");
+		const { title, desc, isPublished = false, questions } = c.req.valid("json");
 		const db = getDb(c.env);
 
 		try {
@@ -120,7 +118,7 @@ const createQuiz = factory.createHandlers(
 					.returning();
 				const newQuizId = insertedQuiz.id;
 
-				for (const questionData of body.questions) {
+				for (const questionData of questions) {
 					const insertedQuestion = await tx
 						.insert(question)
 						.values({
