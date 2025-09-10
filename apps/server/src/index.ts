@@ -32,14 +32,14 @@ app.use(
 
 app.get("/health", (c) => c.text("Hello Hono!"));
 
-app.get(
-	"*",
-	cache({
-		cacheName: "my-app",
-		cacheControl: "max-age=3600",
-		vary: "Authorization, Cookie",
-	}),
-);
+// app.get(
+// 	"*",
+// 	cache({
+// 		cacheName: "my-app",
+// 		cacheControl: "max-age=3600",
+// 		vary: "Authorization, Cookie",
+// 	}),
+// );
 
 app.get("*", etag());
 

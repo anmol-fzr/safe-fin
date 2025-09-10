@@ -9,13 +9,13 @@
       "ESNext"
     ],
     "types": ["worker-configuration.d.ts"]
-  },
-  "references": [
-    { "path": "packages/api-client" },
-    { "path": "packages/auth" },
-    { "path": "packages/db" },
-    { "path": "apps/server" },
-    { "path": "apps/native" },
-    { "path": "apps/admin" }
-  ]
+  }
+  // "references": [
+  //   { "path": "packages/api-client" },
+  //   { "path": "packages/auth" },
+  //   { "path": "packages/db" },
+  //   { "path": "apps/server" },
+  //   { "path": "apps/native" },
+  //   { "path": "apps/admin" }
+  // ]
 }

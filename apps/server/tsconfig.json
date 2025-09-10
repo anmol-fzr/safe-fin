@@ -6,7 +6,7 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "skipLibCheck": true,
-    "extends": "../../tsconfig.json",
+    //"extends": "../../tsconfig.json",
     "include": [
       "src/**/*"
     ],
@@ -16,6 +16,11 @@
     "types": [
       "@cloudflare/workers-types",
       "vitest-environment-miniflare/globals"
-    ]
+    ],
+    "lib": [
+      "ESNext"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx"
   }
 }
