@@ -2,54 +2,36 @@ import { z } from "zod";
 
 const dbIdSchema = z.number().int().positive().safe();
 
-const quizSchema = z.object({
-	title: z.string().describe("Title of the Quiz"),
-	desc: z.string().describe("Desc of the Quiz"),
-});
+const optionSchema = z
+	.object({
+		value: z.string(),
+	})
+	.describe("Option");
 
-// {
-//   "question": "Batman's City ?",
-//   "options": [
-//     "New York",
-//     "New Jersey",
-//     "Gotham",
-//     "Detroit",
-//   ],
-//   "answer": 2
-// }
-const questionSchema = z.object({
-	quiz_id: z.number().describe("Quiz Id Referencing to Quiz"),
-	question: z.string().describe("Question"),
-	options: z
-		.array(z.string().describe("Available Options"))
-		.min(4)
-		.max(6)
-		.nonempty(),
-	answer: z
-		.number()
-		.describe("Answer Index from Available Options")
-		.min(0)
-		.max(5),
-});
+const optionsSchema = z.array(optionSchema).nonempty().describe("Options");
+
+const questionSchema = z
+	.object({
+		question: z.string(),
+		answer: z.string(),
+		options: optionsSchema,
+	})
+	.describe("Question");
+
+const questionsSchema = z
+	.array(questionSchema)
+	.nonempty()
+	.describe("Questions");
 
 const fullQuizReqSchema = z.object({
 	title: z.string().describe("Title of the Quiz"),
 	desc: z.string().describe("Description of the Quiz"),
-	questions: z
-		.array(
-			z.object({
-				question: z.string(),
-				answer: z.string(),
-				options: z
-					.array(
-						z.object({
-							value: z.string(),
-						}),
-					)
-					.nonempty(),
-			}),
-		)
-		.nonempty(),
+	isPublished: z
+		.boolean()
+		.default(false)
+		.optional()
+		.describe("Whether to Publish the Quiz or not"),
+	questions: questionsSchema,
 });
 
 const quizResultReqSchema = z.object({
@@ -62,10 +44,4 @@ const quizResultReqSchema = z.object({
 	),
 });
 
-export {
-	quizSchema,
-	questionSchema,
-	fullQuizReqSchema,
-	quizResultReqSchema,
-	dbIdSchema,
-};
+export { fullQuizReqSchema, quizResultReqSchema, dbIdSchema };
