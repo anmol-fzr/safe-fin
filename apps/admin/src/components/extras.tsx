@@ -1,6 +1,7 @@
-import {
-	unstable_ViewTransition as ViewTransition,
-	startTransition,
-} from "react";
+import { startTransition, type ReactNode } from "react";
+
+const ViewTransition = ({ children }: { children: ReactNode }) => {
+	return children;
+};
 
 export { ViewTransition, startTransition };
