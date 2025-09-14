@@ -7,6 +7,8 @@ on:
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write # Required for commenting on the PR
 
     steps:
       - name: Checkout repo
@@ -20,29 +22,32 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      # 1. Deploy Hono Server
+      # 1. Deploy Hono Server & Capture URL
       - name: Deploy Hono Server
-        id: deploy-server
+        id: deploy-server # Give the step an ID to reference its outputs
         run: |
           cd apps/server
-          bun run build
-          npx wrangler publish --env preview-pr-${{ github.event.pull_request.number }}
+          # Deploy using the 'preview' env config but with a unique name for this PR.
+          # Then, capture the output, find the URL, and save it as a step output.
+          DEPLOY_OUTPUT=$(npx wrangler deploy --env preview --name myapp-pr-${{ github.event.pull_request.number }})
+          echo "DEPLOY_OUTPUT<<EOF" >> $GITHUB_ENV
+          echo "$DEPLOY_OUTPUT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          URL=$(echo "$DEPLOY_OUTPUT" | grep -o 'https://[^ ]*workers.dev')
+          echo "url=$URL" >> $GITHUB_OUTPUT
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
 
-      # 2. Extract Cloudflare Preview URL
-      - name: Set Server URL
-        run: echo "SERVER_URL=${{ steps.deploy-server.outputs.url }}" >> $GITHUB_ENV
-
-      # 3. Build Admin React App
+      # 2. Build Admin React App (using the captured URL)
       - name: Build Admin App
         run: |
           cd apps/admin
-          echo "VITE_PUBLIC_SERVER_URL=${{ env.SERVER_URL }}" > .env
+          echo "VITE_PUBLIC_SERVER_URL=${{ steps.deploy-server.outputs.url }}" > .env
+          echo "Built with server URL: ${{ steps.deploy-server.outputs.url }}"
           bun run build
 
-      # 4. Deploy Admin to Netlify
+      # 3. Deploy Admin to Netlify
       - name: Deploy Admin to Netlify
         id: deploy-admin
         uses: nwtgck/actions-netlify@v2
@@ -54,11 +59,12 @@ jobs:
           netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
 
-      # 5. Comment PR
+      # 4. Comment on PR with the live URLs
       - name: Comment PR with preview links
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            🚀 Preview for this PR is live:
-            - Admin Panel (React): ${{ steps.deploy-admin.outputs.deploy-url }}
-            - Hono Server (Worker): https://pr-${{ github.event.pull_request.number }}.myapp.workers.dev
+            🚀 **Preview for this PR is live!**
+
+            - **Admin Panel (React):** ${{ steps.deploy-admin.outputs.deploy-url }}
+            - **Hono Server (Worker):** ${{ steps.deploy-server.outputs.url }}
