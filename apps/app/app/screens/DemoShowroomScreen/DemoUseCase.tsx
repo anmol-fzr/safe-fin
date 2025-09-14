@@ -1,17 +1,17 @@
-import type { ReactNode } from "react"
-import { type TextStyle, View, type ViewStyle } from "react-native"
-import { type TxKeyPath, translate } from "@/i18n"
-import { Text } from "../../components"
-import type { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { $styles } from "@/theme"
+import type { ReactNode } from "react";
+import { type TextStyle, View, type ViewStyle } from "react-native";
+import { type TxKeyPath, translate } from "@/i18n";
+import { Text } from "../../components";
+import type { ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { $styles } from "@/theme";
 
 interface DemoUseCaseProps {
-  name: TxKeyPath
-  description?: TxKeyPath
-  layout?: "column" | "row"
-  itemStyle?: ViewStyle
-  children: ReactNode
+	name: TxKeyPath;
+	description?: TxKeyPath;
+	layout?: "column" | "row";
+	itemStyle?: ViewStyle;
+	children: ReactNode;
 }
 
 /**
@@ -19,30 +19,40 @@ interface DemoUseCaseProps {
  * @returns {JSX.Element} The rendered `DemoUseCase` component.
  */
 export function DemoUseCase(props: DemoUseCaseProps) {
-  const { name, description, children, layout = "column", itemStyle = {} } = props
-  const { themed } = useAppTheme()
+	const {
+		name,
+		description,
+		children,
+		layout = "column",
+		itemStyle = {},
+	} = props;
+	const { themed } = useAppTheme();
 
-  return (
-    <View>
-      <Text style={themed($name)}>{translate(name)}</Text>
-      {description && <Text style={themed($description)}>{translate(description)}</Text>}
+	return (
+		<View>
+			<Text style={themed($name)}>{translate(name)}</Text>
+			{description && (
+				<Text style={themed($description)}>{translate(description)}</Text>
+			)}
 
-      <View style={[itemStyle, layout === "row" && $styles.row, themed($item)]}>{children}</View>
-    </View>
-  )
+			<View style={[itemStyle, layout === "row" && $styles.row, themed($item)]}>
+				{children}
+			</View>
+		</View>
+	);
 }
 
 const $description: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  marginTop: spacing.md,
-})
+	marginTop: spacing.md,
+});
 
 const $item: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  backgroundColor: colors.palette.neutral100,
-  borderRadius: 8,
-  padding: spacing.lg,
-  marginVertical: spacing.md,
-})
+	backgroundColor: colors.palette.neutral100,
+	borderRadius: 8,
+	padding: spacing.lg,
+	marginVertical: spacing.md,
+});
 
 const $name: ThemedStyle<TextStyle> = ({ typography }) => ({
-  fontFamily: typography.primary.bold,
-})
+	fontFamily: typography.primary.bold,
+});

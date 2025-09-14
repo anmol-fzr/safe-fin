@@ -3,7 +3,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.1.4",
 		"syncpack": "^13.0.4",
-		"turbo": "^2.5.5",
+		"turbo": "^2.5.6",
 		"typescript": "5.9.2",
 		"wrangler": "^4.24.3"
 	},

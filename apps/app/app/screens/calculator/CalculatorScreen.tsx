@@ -1,4 +1,4 @@
-import { ScreenProps } from "@/navigators";
+import type { ScreenProps } from "@/navigators";
 import { CalcScreenWrapper } from "./CalcScreenWrapper";
 import { CALCULATOR_CONFIG } from "@/utils/const";
 import { StyleSheet, View } from "react-native";

@@ -2,7 +2,7 @@ import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Text, Screen, ScreenHeader, ListView } from "@/components";
 import { $styles, spacing } from "@/theme";
-import { CalcListItem, CALCULATOR_CONFIG } from "@/utils/const";
+import { type CalcListItem, CALCULATOR_CONFIG } from "@/utils/const";
 
 const calcs: CalcListItem[] = [];
 

@@ -1,21 +1,19 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "lib": [
-      "ESNext"
-    ],
-    "types": ["worker-configuration.d.ts"]
-  }
-  // "references": [
-  //   { "path": "packages/api-client" },
-  //   { "path": "packages/auth" },
-  //   { "path": "packages/db" },
-  //   { "path": "apps/server" },
-  //   { "path": "apps/native" },
-  //   { "path": "apps/admin" }
-  // ]
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"lib": ["ESNext"],
+		"types": ["worker-configuration.d.ts"]
+	}
+	// "references": [
+	//   { "path": "packages/api-client" },
+	//   { "path": "packages/auth" },
+	//   { "path": "packages/db" },
+	//   { "path": "apps/server" },
+	//   { "path": "apps/native" },
+	//   { "path": "apps/admin" }
+	// ]
 }

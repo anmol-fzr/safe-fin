@@ -1,26 +1,22 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    //"extends": "../../tsconfig.json",
-    "include": [
-      "src/**/*"
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "types": [
-      "@cloudflare/workers-types",
-      "vitest-environment-miniflare/globals"
-    ],
-    "lib": [
-      "ESNext"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
-  }
+	"compilerOptions": {
+		"composite": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		//"extends": "../../tsconfig.json",
+		"include": ["src/**/*"],
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"types": [
+			"@cloudflare/workers-types",
+			"vitest-environment-miniflare/globals"
+		],
+		"lib": ["ESNext"],
+		"jsx": "react-jsx",
+		"jsxImportSource": "hono/jsx"
+	}
 }

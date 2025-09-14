@@ -5,7 +5,11 @@ import type {
 	ReactElement,
 	RefObject,
 } from "react";
-import { LegendList, LegendListProps, LegendListRef } from "@legendapp/list";
+import {
+	LegendList,
+	type LegendListProps,
+	type LegendListRef,
+} from "@legendapp/list";
 
 export type ListViewRef = LegendListRef;
 

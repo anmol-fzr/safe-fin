@@ -1,2 +1,2 @@
-export * from "./quiz.controller"
-export * from "./quiz-result.controller"
+export * from "./quiz.controller";
+export * from "./quiz-result.controller";

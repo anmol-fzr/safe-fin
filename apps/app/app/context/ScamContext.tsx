@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { useSet } from "@/hooks";
+import type { useSet } from "@/hooks";
 import { MissingContextError } from "@/utils/error";
 
 type ScamListContext = ReturnType<typeof useSet<string>>;

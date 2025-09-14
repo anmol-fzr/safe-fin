@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { type TextStyle } from "react-native";
+import type { TextStyle } from "react-native";
 import { Screen, Text, GoBack, Button } from "@/components";
 import { $styles, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";

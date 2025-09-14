@@ -24,7 +24,7 @@ import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
 import { createTamagui, TamaguiProvider } from "@tamagui/core";
 import { PortalProvider } from "@tamagui/portal";
 import { defaultConfig } from "@tamagui/config/v4";
-import { ResultRecord } from "@/components/quiz/QuizRender";
+import type { ResultRecord } from "@/components/quiz/QuizRender";
 import { View } from "react-native";
 import { Text } from "@/components";
 

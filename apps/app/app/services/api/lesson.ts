@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/services/axios";
 import { apiClient } from "@/services/axios";
-import { IResData } from "@/services/axios";
+import type { IResData } from "@/services/axios";
 
 type ILesson = {
 	id: number;

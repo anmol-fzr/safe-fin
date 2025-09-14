@@ -1,5 +1,5 @@
 import { useSIPCalculatorLogic } from "@/hooks/useSip";
-import { CalculatorType } from "@/navigators";
+import type { CalculatorType } from "@/navigators";
 import { calcMF, calcPPF, calcSwp } from "./funcs";
 
 type ConstantConfig = {

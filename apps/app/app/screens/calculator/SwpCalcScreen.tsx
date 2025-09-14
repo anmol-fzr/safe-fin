@@ -17,7 +17,7 @@ export const SwpCalcScreen = () => {
 	const i = rate / 12 / 100;
 
 	const totalValue = useMemo(
-		() => totalInvestment * ((Math.pow(1 + i, n) - 1) / i) * (1 + i),
+		() => totalInvestment * (((1 + i) ** n - 1) / i) * (1 + i),
 		[totalInvestment, rate, duration],
 	);
 

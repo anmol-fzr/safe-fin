@@ -16,7 +16,7 @@ export const SipCalcScreen = () => {
 	const i = rate / 12 / 100;
 
 	const totalValue = useMemo(
-		() => investment * ((Math.pow(1 + i, n) - 1) / i) * (1 + i),
+		() => investment * (((1 + i) ** n - 1) / i) * (1 + i),
 		[investment, rate, duration],
 	);
 

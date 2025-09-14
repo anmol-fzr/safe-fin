@@ -12,7 +12,7 @@ export function useSIPCalculatorLogic(formState: Props) {
 	const n = duration * 12;
 	const i = rate / 12 / 100;
 
-	const totalValue = investment * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+	const totalValue = investment * (((1 + i) ** n - 1) / i) * (1 + i);
 	const totalInvested = investment * n;
 	const returns = totalValue - totalInvested;
 

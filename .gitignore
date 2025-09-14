@@ -20,6 +20,8 @@ coverage
 
 # Wrangler
 .wrangler
+.wrangler/
+.wrangler/*
 
 # DB Dumps
 local.db

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Screen, GoBack } from "@/components";
 import { $styles } from "@/theme";
 

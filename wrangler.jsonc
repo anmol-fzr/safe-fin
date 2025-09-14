@@ -1,10 +1,9 @@
 {
-  "name": "server",
-  "main": "./apps/server/src/index.ts",
-  "compatibility_date": "2022-07-12",
-  "compatibility_flags": ["export_commonjs_default", "nodejs_compat"],
-  "dev": {
-    "ip": "192.168.29.57",
-    "port": 3000
-  }
+	"name": "server",
+	"main": "./apps/server/src/index.ts",
+	"compatibility_date": "2022-07-12",
+	"compatibility_flags": ["export_commonjs_default", "nodejs_compat"],
+	"dev": {
+		"port": 3000
+	}
 }

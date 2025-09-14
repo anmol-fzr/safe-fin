@@ -13,7 +13,7 @@ import { QuestionProvider, useQuestion } from "./QuestionContext";
 import { Question } from "./Question";
 import { useMutation } from "@tanstack/react-query";
 import { API } from "@/services/api";
-import { IQuizResult } from "@/services/api/quiz-result";
+import type { IQuizResult } from "@/services/api/quiz-result";
 
 export type ResultRecord = Record<string, number>;
 

@@ -4,7 +4,7 @@ import { View, Pressable, StyleSheet } from "react-native";
 import { spacing } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
 import { useSet } from "@/hooks";
-import { Scam } from "@/services/api/scam";
+import type { Scam } from "@/services/api/scam";
 import { useScamList, ScamListProvider } from "@/context/ScamContext";
 import { useScams } from "@/hooks/query/scam";
 

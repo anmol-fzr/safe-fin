@@ -1,4 +1,4 @@
-import { Question } from "@/services/api/quiz";
+import type { Question } from "@/services/api/quiz";
 import { MissingContextError } from "@/utils/error";
 import { useState, useCallback, useContext, createContext } from "react";
 

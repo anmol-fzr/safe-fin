@@ -7,7 +7,7 @@ function compoundInterest(
 	n: number = 12, // Default to monthly compounding
 ): number {
 	const r = rate / 100;
-	const totalAmount = principal * Math.pow(1 + r / n, n * time);
+	const totalAmount = principal * (1 + r / n) ** (n * time);
 	return totalAmount;
 }
 
@@ -34,8 +34,7 @@ function calcSwp(formState: CalcSwpProps) {
 	const i = rate / 12 / 100;
 
 	const futureValue =
-		totalInvestment * Math.pow(1 + i, n) -
-		withdrawlPM * ((Math.pow(1 + i, n) - 1) / i);
+		totalInvestment * (1 + i) ** n - withdrawlPM * (((1 + i) ** n - 1) / i);
 
 	return {
 		totalInvestment,

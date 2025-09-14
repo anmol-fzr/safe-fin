@@ -1,7 +1,13 @@
 import { Screen, ScreenHeader, Text } from "@/components";
-import { $styles, spacing, ThemedStyle } from "@/theme";
+import { $styles, spacing, type ThemedStyle } from "@/theme";
 import { Link } from "@react-navigation/native";
-import { View, Image, StyleSheet, ViewStyle, TextStyle } from "react-native";
+import {
+	View,
+	Image,
+	StyleSheet,
+	type ViewStyle,
+	type TextStyle,
+} from "react-native";
 import chainReactLogo from "../../../assets/images/ui/books.png";
 import checkList from "../../../assets/images/ui/checklist.png";
 import { useAppTheme } from "@/utils/useAppTheme";

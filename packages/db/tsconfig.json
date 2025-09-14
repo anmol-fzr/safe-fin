@@ -1,18 +1,14 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "lib": [
-      "ESNext"
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "references": [
-      { "path": "../types" }
-    ]
-  }
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"lib": ["ESNext"],
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"references": [{ "path": "../types" }]
+	}
 }
