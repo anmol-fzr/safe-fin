@@ -6,7 +6,7 @@ import { DataTable } from "@/components/lessons/DataTable";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { pageSearchSchema } from "@/schema/page";
 import { getQuizzesOpts } from "@/hooks/api/quiz";
-import { AddButton } from "@/components/form/button/AddButton";
+import { AddButtonLink } from "@/components/form/button/AddButton";
 import { Page } from "@/components/page/Page";
 
 export const Route = createFileRoute("/dashboard/quiz/")({
@@ -28,7 +28,7 @@ function RouteComponent() {
 		<Page>
 			<Page.Header>
 				<Page.Title title="Quizzes" />
-				<AddButton to="/dashboard/quiz/new" resource="Quiz" />
+				<AddButtonLink to="/dashboard/quiz/new" resource="Quiz" />
 			</Page.Header>
 			<Page.Content>
 				<ViewTransition>

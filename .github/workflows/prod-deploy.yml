@@ -20,22 +20,21 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-        # 1. Deploy Hono Server (Production)
+      # 1. Deploy Hono Server (Production)
       - name: Deploy Hono Server
         id: deploy-server
-        working-directory: apps/server
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: publish --env production
+        run: |
+          cd apps/server
+          npx wrangler publish --env production \
+            --api-token ${{ secrets.CF_API_TOKEN }} \
+            --account-id ${{ secrets.CF_ACCOUNT_ID }}
 
-          # Extract Production Server URL (depends on your Cloudflare Worker route)
+      # Extract Production Server URL
       - name: Set Server URL
         id: set-server-url
         run: echo "SERVER_URL=https://api.myapp.com" >> $GITHUB_ENV
 
-        # 2. Build and Deploy Admin React App to Netlify (Production)
+      # 2. Build and Deploy Admin React App to Netlify (Production)
       - name: Build Admin App
         working-directory: apps/admin
         run: |
@@ -55,11 +54,11 @@ jobs:
           netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
 
-          # 3. Release summary comment
+      # 3. Release summary comment
       - name: Comment Release URLs
         uses: softprops/action-gh-release@v2
         with:
           body: |
             🚀 Production Release ${{ github.event.release.tag_name }} deployed!
-      - Admin Panel: https://your-netlify-site.netlify.app
-      - API Server: https://api.myapp.com
+            - Admin Panel: https://your-netlify-site.netlify.app
+            - API Server: https://api.myapp.com

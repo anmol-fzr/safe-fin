@@ -45,13 +45,11 @@ export function UpdateLessonForm({
 	});
 
 	return (
-		<>
-			<LessonForm
-				form={form}
-				handleSubmit={handleSubmit}
-				handleDraft={toDraft}
-				handlePublish={toPublish}
-			/>
-		</>
+		<LessonForm
+			form={form}
+			handleSubmit={handleSubmit}
+			handleDraft={toDraft}
+			handlePublish={toPublish}
+		/>
 	);
 }

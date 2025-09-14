@@ -155,9 +155,12 @@ function NewQuestionForm() {
 	return (
 		<fieldset className="gap-4 border @container border-border p-3 rounded-md w-full">
 			<legend>Questions</legend>
-			<AddButton className="ml-auto mr-0" onClick={handleAddNewQuestion}>
-				Add Question
-			</AddButton>
+			<AddButton
+				withKeyBind={false}
+				className="ml-auto mr-0"
+				onClick={handleAddNewQuestion}
+				resource="Question"
+			/>
 			{/*
 			<div ref={animate} className="grid gap-3 @lg:grid-cols-2 @xl:grid-cols-4">
       */}
@@ -195,7 +198,11 @@ const OptionsField = memo(({ questionIndex }: { questionIndex: number }) => {
 		<fieldset className="grid gap-4 border border-border p-3 rounded-md">
 			<legend className="font-medium">Options</legend>
 			<div className="flex items-center justify-between ml-auto mr-0">
-				<AddButton onClick={handleAddNewOption}>Add Option</AddButton>
+				<AddButton
+					onClick={handleAddNewOption}
+					resource="Option"
+					withKeyBind={false}
+				/>
 			</div>
 
 			<div ref={animate} className="grid gap-2">

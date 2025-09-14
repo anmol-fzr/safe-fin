@@ -13,7 +13,7 @@ import {
 	useInvalidateResource,
 	useResourceActionToast,
 } from "./defaults";
-import { type ICreateLessonReq } from "@/services/api";
+import type { ICreateLessonReq } from "@/services/api";
 
 const baseQueryKey = "LESSON";
 const { createMsg, updateMsg, deleteMsg } = createToastMessages("Lesson");

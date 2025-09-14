@@ -1,0 +1,18 @@
+{
+	"root": false,
+	"extends": "//",
+	"linter": {
+		"includes": ["src/**/*"],
+		"domains": {
+			"react": "recommended",
+			"test": "recommended"
+		},
+		"rules": {
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useSemanticElements": "off",
+				"useAriaPropsForRole": "off"
+			}
+		}
+	}
+}

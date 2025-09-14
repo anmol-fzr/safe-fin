@@ -1,3 +1,4 @@
+import { useSettingsStore } from "@/store/useSettingsStore";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -6,9 +7,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDateTime(date: string) {
+	const { dateStyle, timeStyle } = useSettingsStore.getState().dateTime;
+
 	return new Intl.DateTimeFormat("en-US", {
-		dateStyle: "medium",
-		timeStyle: "medium",
+		dateStyle,
+		timeStyle,
 	}).format(new Date(date));
 }
 
@@ -26,5 +29,7 @@ export const formatOrdinals = (n: number) => {
 	const suffix = suffixes.get(rule);
 	return `${n}${suffix}`;
 };
+
+export const getEmptyArr = (length = 10) => Array.from({ length }, (_, i) => i);
 
 export const { isNaN } = Number;

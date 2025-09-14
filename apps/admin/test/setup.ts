@@ -1,7 +1,7 @@
 import { afterEach } from "vitest";
 import { cleanup, render, type RenderOptions } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { wrapper } from "./wrapper";
 
 afterEach(() => {

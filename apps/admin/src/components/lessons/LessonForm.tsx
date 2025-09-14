@@ -1,11 +1,11 @@
-import { useRef, type ComponentPropsWithoutRef } from "react";
+import { useCallback, useRef, type ComponentPropsWithoutRef } from "react";
 import { Button } from "@/components/ui/button";
 import { FormProvider } from "react-hook-form";
 import { Form } from "../ui/form";
 import { FormInput } from "@/components/form/form-input";
 import { FormTextarea } from "@/components/form/form-textarea";
 import { FormEditor } from "@/components/form/form-editor";
-import { useYupForm } from "@/hooks/form/useYupForm";
+import type { useYupForm } from "@/hooks/form/useYupForm";
 import type { ResourceId } from "@/services/api/types";
 
 type UpdateLessonFormProps = {
@@ -21,8 +21,13 @@ type Action = "publish" | "draft";
 export const useLessonActionFormRef = () => {
 	const ref = useRef<Action>("publish");
 
-	const toPublish = () => (ref.current = "publish");
-	const toDraft = () => (ref.current = "draft");
+	const toPublish = useCallback(() => {
+		ref.current = "publish";
+	}, []);
+
+	const toDraft = useCallback(() => {
+		ref.current = "draft";
+	}, []);
 
 	return { ref, toDraft, toPublish };
 };

@@ -1,3 +1,5 @@
+name: Destroy Preview PR
+
 on:
   pull_request:
     types: [closed]
@@ -5,6 +7,7 @@ on:
 jobs:
   delete-preview:
     runs-on: ubuntu-latest
+
     steps:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1

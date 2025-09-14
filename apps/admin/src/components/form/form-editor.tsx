@@ -10,7 +10,7 @@ import {
 	FormItem,
 	FormMessage,
 } from "@/components/ui/form";
-import * as React from "react";
+import type * as React from "react";
 import { Editor } from "../editor/Editor";
 
 type InputProps = React.ComponentProps<"textarea">;

@@ -36,21 +36,6 @@ type TableColActions<TData extends IBaseData> = {
 };
 
 const TableColActions = (props: ComponentPropsWithoutRef<"div">) => {
-	//const dataId = row.original.id.toString();
-
-	{
-		/*
-			<Link
-				//to="/dashboard/lessons/$lessonId" params={{ lessonId }}
-				{...viewLinkProps}
-			>
-				<EyeIcon />
-			</Link>
-			<PencilIcon />
-			<Trash2Icon color="red" />
-      */
-	}
-
 	return <div {...props} className={cn("flex gap-2", props.className)} />;
 };
 

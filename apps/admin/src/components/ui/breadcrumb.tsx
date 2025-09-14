@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -56,6 +56,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
 			role="link"
 			aria-disabled="true"
 			aria-current="page"
+			tabIndex={-1}
 			className={cn("text-foreground font-normal", className)}
 			{...props}
 		/>

@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-router";
 import "../index.css";
 import { Providers } from "@/components/providers";
-import { QueryClient } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
 
 export interface RouterAppContext {
 	queryClient: QueryClient;

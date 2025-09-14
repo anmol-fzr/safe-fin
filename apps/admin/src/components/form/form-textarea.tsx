@@ -12,7 +12,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import * as React from "react";
+import type * as React from "react";
 
 type InputProps = React.ComponentProps<"textarea">;
 

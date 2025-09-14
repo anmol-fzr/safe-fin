@@ -11,6 +11,13 @@ export const authClient = createAuthClient({
 	plugins: [phoneNumberClient(), adminClient(), multiSessionClient()],
 });
 
+export type AuthType = (typeof authClient)["$Infer"]["Session"];
+
+export type User = AuthType["user"] & {
+	role: "user" | "admin";
+};
+export type Session = AuthType["session"];
+
 export async function logout() {
 	await authClient.signOut({
 		fetchOptions: {
@@ -20,32 +27,4 @@ export async function logout() {
 		},
 	});
 	//window.location.href = "/";
-}
-
-export interface Session {
-	expiresAt: string;
-	token: string;
-	createdAt: string;
-	updatedAt: string;
-	ipAddress: string;
-	userAgent: string;
-	userId: string;
-	impersonatedBy: any;
-	id: string;
-}
-
-export interface User {
-	name: string;
-	email: string;
-	emailVerified: boolean;
-	image: string | null;
-	createdAt: string;
-	updatedAt: string;
-	role: string;
-	banned: any;
-	banReason: any;
-	banExpires: any;
-	phoneNumber: string;
-	phoneNumberVerified: boolean;
-	id: string;
 }

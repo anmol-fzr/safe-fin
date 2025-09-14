@@ -6,6 +6,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useResource } from "@/context/resource.context";
+import { CircleCheckBigIcon } from "lucide-react";
 
 export const PublishedBadge = memo(() => {
 	const { resource } = useResource();
@@ -14,6 +15,7 @@ export const PublishedBadge = memo(() => {
 		<Tooltip>
 			<TooltipTrigger>
 				<Badge className="bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-100 border-green-300 dark:border-green-600">
+					<CircleCheckBigIcon />
 					Published
 				</Badge>
 			</TooltipTrigger>

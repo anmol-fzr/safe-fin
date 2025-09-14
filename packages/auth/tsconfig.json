@@ -1,11 +1,9 @@
 {
-  "compilerOptions": {
-    "extends": "../../tsconfig.json",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "references": [
-      { "path": "../types" }
-    ]
-  }
+	"compilerOptions": {
+		"extends": "../../tsconfig.json",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"references": [{ "path": "../types" }]
+	}
 }

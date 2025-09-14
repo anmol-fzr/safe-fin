@@ -6,6 +6,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useResource } from "@/context/resource.context";
+import { CircleDashedIcon } from "lucide-react";
 
 export const DraftBadge = memo(() => {
 	const { resource } = useResource();
@@ -14,6 +15,7 @@ export const DraftBadge = memo(() => {
 		<Tooltip>
 			<TooltipTrigger>
 				<Badge className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-100 border-gray-300 dark:border-gray-600">
+					<CircleDashedIcon />
 					Draft
 				</Badge>
 			</TooltipTrigger>
