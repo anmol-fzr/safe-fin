@@ -1,0 +1,44 @@
+name: PR Preview Deploy
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build React App
+        working-directory: apps/react-app
+        run: bun run build
+
+      - name: Build Hono Server
+        working-directory: apps/hono-server
+        run: bun run build
+
+      - name: Deploy to Cloudflare
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: publish --env preview-pr-${{ github.event.pull_request.number }}
+
+      - name: Comment PR with preview link
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            🚀 Preview for this PR is live:  
+            https://pr-${{ github.event.pull_request.number }}.myapp.workers.dev
