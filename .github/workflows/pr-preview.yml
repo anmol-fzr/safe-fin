@@ -33,13 +33,13 @@ jobs:
 
       # 2. Extract Cloudflare Preview URL
       - name: Set Server URL
-        run: echo "SERVER_URL=https://pr-${{ github.event.pull_request.number }}.myapp.workers.dev" >> $GITHUB_ENV
+        run: echo "SERVER_URL=${{ steps.deploy-server.outputs.url }}" >> $GITHUB_ENV
 
       # 3. Build Admin React App
       - name: Build Admin App
         run: |
           cd apps/admin
-          echo "VITE_API_URL=${{ env.SERVER_URL }}" > .env
+          echo "VITE_PUBLIC_SERVER_URL=${{ env.SERVER_URL }}" > .env
           bun run build
 
       # 4. Deploy Admin to Netlify
