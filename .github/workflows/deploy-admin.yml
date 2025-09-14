@@ -26,7 +26,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2
         with:
-          publish-dir: ./apps/web/dist
+          publish-dir: ./apps/admin/dist
           production-deploy: true
           deploy-message: "Release ${{ github.event.release.tag_name }}"
           github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -21,11 +21,11 @@ jobs:
         run: bun install
 
       - name: Build React App
-        working-directory: apps/react-app
+        working-directory: apps/admin
         run: bun run build
 
       - name: Build Hono Server
-        working-directory: apps/hono-server
+        working-directory: apps/server
         run: bun run build
 
       - name: Deploy to Cloudflare
