@@ -28,11 +28,12 @@ type FormSelectProps<
 	placeholder: string;
 	name: TName;
 	options: { label: string; value: string }[];
+	className?: string;
 	desc?: string;
 };
 
 export function FormSelect(props: FormSelectProps) {
-	const { name, label, placeholder, desc, options } = props;
+	const { name, label, placeholder, className, desc, options } = props;
 	const { control } = useFormContext();
 
 	return (
@@ -44,7 +45,7 @@ export function FormSelect(props: FormSelectProps) {
 					<FormLabel>{label}</FormLabel>
 					<Select onValueChange={field.onChange} defaultValue={field.value}>
 						<FormControl>
-							<SelectTrigger>
+							<SelectTrigger className={className}>
 								<SelectValue placeholder={placeholder} />
 							</SelectTrigger>
 						</FormControl>
