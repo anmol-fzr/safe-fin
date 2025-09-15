@@ -20,7 +20,6 @@ import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { useGetQuizzes } from "@/hooks/api/quiz";
 import { LessonStatusBadge } from "../lessons/LessonStatusBadge";
-import { ResourceProvider } from "@/context/resource.context";
 
 const columns: ColumnDef<IQuiz>[] = [
 	{
@@ -144,16 +143,14 @@ export function QuizTable() {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<ResourceProvider value={{ resource: "Quiz" }}>
-				<TableSearch searchQueryParamKey={searchQueryParamKey} />
-				<DataTable
-					table={table}
-					isFetching={isFetching}
-					fetchNextPage={fetchNextPage}
-					currRows={currRows}
-					totalRows={totalRows}
-				/>
-			</ResourceProvider>
+			<TableSearch searchQueryParamKey={searchQueryParamKey} />
+			<DataTable
+				table={table}
+				isFetching={isFetching}
+				fetchNextPage={fetchNextPage}
+				currRows={currRows}
+				totalRows={totalRows}
+			/>
 		</div>
 	);
 }

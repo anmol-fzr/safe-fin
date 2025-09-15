@@ -11,21 +11,27 @@ type TableColumn<TData extends ITimestamps | IBaseData> = {
 	row: Row<TData>;
 };
 
+const naValue = "-";
+
+const TableColNaValue = () => (
+	<p className="text-center text-muted-foreground">{naValue}</p>
+);
+
 const TableColCreatedAt = <TData extends ITimestamps>({
 	row,
 }: TableColumn<TData>) => {
-	const { createdAt = "N/A" } = row.original;
+	const { createdAt = naValue } = row.original;
 	return <p className="text-muted-foreground">{formatDateTime(createdAt)}</p>;
 };
 
 const TableColUpdatedAt = <TData extends ITimestamps>({
 	row,
 }: TableColumn<TData>) => {
-	const { updatedAt = "N/A", createdAt = "N/A" } = row.original;
+	const { updatedAt = naValue, createdAt = naValue } = row.original;
 
 	return (
 		<p className="text-muted-foreground">
-			{createdAt === updatedAt ? "-" : formatDateTime(updatedAt)}
+			{createdAt == updatedAt ? "-" : formatDateTime(updatedAt)}
 		</p>
 	);
 };
@@ -65,4 +71,9 @@ TableColActions.Delete = (props: TableColActionsDelete) => {
 	);
 };
 
-export { TableColCreatedAt, TableColUpdatedAt, TableColActions };
+export {
+	TableColCreatedAt,
+	TableColUpdatedAt,
+	TableColActions,
+	TableColNaValue,
+};
