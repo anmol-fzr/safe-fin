@@ -3,7 +3,7 @@ import { Page } from "@/components/page";
 import { NewQuizForm } from "@/components/quiz/NewQuizForm";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/dashboard/quiz/new")({
+export const Route = createFileRoute("/dashboard/quiz/add")({
 	component: RouteComponent,
 });
 

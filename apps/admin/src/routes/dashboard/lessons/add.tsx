@@ -3,7 +3,7 @@ import { Page } from "@/components/page";
 import { NewLessonForm } from "@/components/lessons/NewLessonForm";
 import { BackButton } from "@/components/form/button/BackButton";
 
-export const Route = createFileRoute("/dashboard/lessons/new")({
+export const Route = createFileRoute("/dashboard/lessons/add")({
 	component: RouteComponent,
 	loader: () => ({
 		crumb: "New Lesson",
