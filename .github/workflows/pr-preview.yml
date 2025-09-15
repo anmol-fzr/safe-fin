@@ -13,41 +13,58 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
 
+      # 1. Setup Node,js (required for wrangler)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 1. Setup Bun (for dependencies installation)
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
+          fetch-depth: 0
 
+      # 2. Cache Bun installs
+      - name: Cache Bun
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            **/node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      # 3. Install dependencies
       - name: Install dependencies
         run: bun install
 
-      # 1. Deploy Hono Server & Capture URL
-      - name: Deploy Hono Server
-        id: deploy-server # Give the step an ID to reference its outputs
-        run: |
-          cd apps/server
-          # Deploy using the 'preview' env config but with a unique name for this PR.
-          # Then, capture the output, find the URL, and save it as a step output.
-          DEPLOY_OUTPUT=$(npx wrangler deploy --env preview --name myapp-pr-${{ github.event.pull_request.number }})
-          echo "DEPLOY_OUTPUT<<EOF" >> $GITHUB_ENV
-          echo "$DEPLOY_OUTPUT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          URL=$(echo "$DEPLOY_OUTPUT" | grep -o 'https://[^ ]*workers.dev')
-          echo "url=$URL" >> $GITHUB_OUTPUT
+      # 4. Deploy Hono Server with Wrangler Action
+      - name: Deploy Hono Server (Preview)
+        id: deploy-server
+        uses: cloudflare/wrangler-action@v3.12.0
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: apps/server
+          command: deploy
 
-      # 2. Build Admin React App (using the captured URL)
+      # 5. Build Admin App (with dynamic server URL)
       - name: Build Admin App
         run: |
           cd apps/admin
-          echo "VITE_PUBLIC_SERVER_URL=${{ steps.deploy-server.outputs.url }}" > .env
-          echo "Built with server URL: ${{ steps.deploy-server.outputs.url }}"
+          echo "VITE_PUBLIC_SERVER_URL=https://myapp-pr-${{ github.event.pull_request.number }}.workers.dev" > .env
           bun run build
 
-      # 3. Deploy Admin to Netlify
+      # 6. Deploy Admin to Netlify
       - name: Deploy Admin to Netlify
         id: deploy-admin
         uses: nwtgck/actions-netlify@v2
@@ -59,12 +76,11 @@ jobs:
           netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
 
-      # 4. Comment on PR with the live URLs
+      # 7. Comment PR with preview links
       - name: Comment PR with preview links
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
             🚀 **Preview for this PR is live!**
-
             - **Admin Panel (React):** ${{ steps.deploy-admin.outputs.deploy-url }}
-            - **Hono Server (Worker):** ${{ steps.deploy-server.outputs.url }}
+            - **Hono Server (Worker):** https://myapp-pr-${{ github.event.pull_request.number }}.workers.dev
