@@ -44,6 +44,19 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      # [NEW] Check Cloudflare API Token
+      - name: Check Cloudflare API Token
+        run: |
+          if [[ -z "${{ secrets.CF_API_TOKEN }}" ]]; then
+            echo "CLOUDFLARE_API_TOKEN is missing! Set it in repository secrets."
+            exit 1
+          fi
+
+      # [NEW] Print wrangler.toml for debugging
+      - name: Print wrangler.toml config
+        run: |
+          cat apps/server/wrangler.toml || echo "No wrangler.toml found in apps/server"
+
       # 4. Deploy Hono Server with Wrangler Action
       - name: Deploy Hono Server (Preview)
         id: deploy-server
