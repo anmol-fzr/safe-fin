@@ -8,6 +8,7 @@ import { pageSearchSchema } from "@/schema/page";
 import { getQuizzesOpts } from "@/hooks/api/quiz";
 import { AddButtonLink } from "@/components/form/button/AddButton";
 import { Page } from "@/components/page/Page";
+import { ResourceProvider } from "@/context/resource.context";
 
 export const Route = createFileRoute("/dashboard/quiz/")({
 	component: RouteComponent,
@@ -25,18 +26,20 @@ export const Route = createFileRoute("/dashboard/quiz/")({
 
 function RouteComponent() {
 	return (
-		<Page>
-			<Page.Header>
-				<Page.Title title="Quizzes" />
-				<AddButtonLink to="/dashboard/quiz/new" resource="Quiz" />
-			</Page.Header>
-			<Page.Content>
-				<ViewTransition>
-					<Suspense fallback={<DataTable.Loading />}>
-						<QuizTable />
-					</Suspense>
-				</ViewTransition>
-			</Page.Content>
-		</Page>
+		<ResourceProvider value={{ resource: "Quiz" }}>
+			<Page>
+				<Page.Header>
+					<Page.Title title="Quizzes" />
+					<AddButtonLink to="/dashboard/quiz/add" />
+				</Page.Header>
+				<Page.Content>
+					<ViewTransition>
+						<Suspense fallback={<DataTable.Loading />}>
+							<QuizTable />
+						</Suspense>
+					</ViewTransition>
+				</Page.Content>
+			</Page>
+		</ResourceProvider>
 	);
 }
