@@ -8,6 +8,7 @@ import {
 import { useHotkeys } from "react-hotkeys-hook";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { Shortcut } from "@/components/Shortcut";
+import { useResource } from "@/context/resource.context";
 
 type BaseProps = ButtonProps & {
 	keyBind?: string;
@@ -44,20 +45,20 @@ export function AddButton({
 	);
 }
 
-type AddButtonLinkProps = BaseProps & {
+type AddButtonLinkProps = Omit<BaseProps, "resource"> & {
 	to: LinkComponentProps["to"];
 };
 
 export function AddButtonLink({
 	keyBind = "a",
 	to,
-	resource,
 	children,
 	withKeyBind,
 	...props
 }: AddButtonLinkProps) {
 	const navigate = useNavigate();
 	const enabled = useSettingsStore((state) => state.shortcuts.enabled);
+	const { resource } = useResource();
 
 	useHotkeys(
 		keyBind,
