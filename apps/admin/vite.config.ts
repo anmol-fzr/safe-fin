@@ -11,7 +11,7 @@ export default defineConfig({
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
 			"@tests": path.resolve(__dirname, "./test"),
-			"@faker-js/faker": "@faker-js/faker/locale/en",
+			"@faker-js/faker": "@faker-js/faker/locale/en_IN",
 		},
 	},
 });

@@ -20,16 +20,21 @@ const schema = Yup.object({
 
 export interface DeleteDialogProps {
 	isOpen: boolean;
+	userId: string;
 	onClose: VoidFunction;
 }
 
-export function UserBanDialog({ isOpen = false, onClose }: DeleteDialogProps) {
+export function UserBanDialog({
+	userId,
+	isOpen = false,
+	onClose,
+}: DeleteDialogProps) {
 	const form = useYupForm({ schema });
 
 	const handleSubmit = form.handleSubmit(async (values) => {
 		await authClient.admin.banUser({
 			banReason: values.banReason,
-			userId: "q213",
+			userId,
 		});
 	});
 

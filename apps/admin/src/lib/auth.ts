@@ -13,7 +13,7 @@ export const authClient = createAuthClient({
 
 export type AuthType = (typeof authClient)["$Infer"]["Session"];
 
-export type User = AuthType["user"] & {
+export type IUser = AuthType["user"] & {
 	role: "user" | "admin";
 };
 export type Session = AuthType["session"];

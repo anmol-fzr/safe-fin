@@ -1,27 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Page } from "@/components/page";
-import { ViewTransition } from "@/components/extras";
-import { Suspense } from "react";
-import { DataTable } from "@/components/lessons/DataTable";
-import { UsersTable } from "@/components/users/UsersTable";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard/users")({
-	component: RouteComponent,
+	component: Outlet,
+	loader: () => ({
+		crumb: "Users",
+	}),
 });
-
-function RouteComponent() {
-	return (
-		<Page>
-			<Page.Header>
-				<Page.Title title="Users" />
-			</Page.Header>
-			<Page.Content>
-				<ViewTransition>
-					<Suspense fallback={<DataTable.Loading columns={11} />}>
-						<UsersTable />
-					</Suspense>
-				</ViewTransition>
-			</Page.Content>
-		</Page>
-	);
-}

@@ -3,6 +3,7 @@ import type { IReqParams, ResourceId } from "@/services/api/types";
 import {
 	infiniteQueryOptions,
 	queryOptions,
+	mutationOptions,
 	useMutation,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
@@ -14,20 +15,30 @@ import {
 	useResourceActionToast,
 } from "./defaults";
 import type { ICreateLessonReq } from "@/services/api";
+import { authClient } from "@/lib/auth";
+import type { AddUserFormData } from "@/schema/user.schema";
 
 const baseQueryKey = "USER";
 const { createMsg, updateMsg, deleteMsg } = createToastMessages("User");
 
-function getUsersOpts(params: IReqParams) {
+function getUsersOpts(params: { name: string }) {
 	return infiniteQueryOptions({
 		queryKey: [baseQueryKey, params] as const,
-		queryFn: API.USER.GET,
-		//queryFn: ({ pageParam, queryKey }) => API.USER.GET(),
+		queryFn: ({ queryKey }) =>
+			authClient.admin.listUsers({
+				query: {
+					sortBy: "createdAt",
+					sortDirection: "desc",
+					searchField: "name",
+					searchValue: queryKey[1].name,
+					searchOperator: "contains",
+				},
+			}),
 		initialPageParam,
 		getNextPageParam: (lastPage, allPages, lastPageParam, allPagesParams) => {
-			const total = allPages[allPages.length - 1].total;
+			const total = allPages[allPages.length - 1].data.total;
 			const totalFetched = allPages.reduce((prev, curr) => {
-				return prev + curr.users.length;
+				return prev + curr.data.users.length;
 			}, 0);
 
 			return totalFetched < total
@@ -67,21 +78,40 @@ const useGetLesson = (lessonId: ResourceId) => {
 	};
 };
 
-const useCreateLesson = () => {
+const getCreateUserOpts = () => {
+	const mutationFn = (data: AddUserFormData) => {
+		return authClient.admin.createUser({
+			name: data.name,
+			email: data.email,
+			password: data.password,
+			role: data.role,
+			data: {
+				phoneNumber: data.phoneNumber,
+			},
+		});
+	};
+
+	return mutationOptions({
+		mutationKey: [baseQueryKey, "CREATE"],
+		mutationFn,
+	});
+};
+
+const useCreateUser = () => {
 	const toast = useResourceActionToast();
-	const { invalidateUsers: invalidateLessons } = useInvalidateUsers();
+	const { invalidateUsers } = useInvalidateUsers();
 
 	const { loadingMsg, successMsg, errorMsg } = createMsg;
 
+	const opts = getCreateUserOpts();
 	const { mutate, ...rest } = useMutation({
-		mutationKey: [baseQueryKey, "CREATE"],
-		mutationFn: API.LESSON.CREATE,
+		...opts,
 		onMutate: () => {
 			toast.loading(loadingMsg);
 		},
-		onSuccess: ({ message = successMsg }) => {
-			toast.success(message);
-			invalidateLessons();
+		onSuccess: () => {
+			toast.success(successMsg);
+			invalidateUsers();
 		},
 		onError: ({ message = errorMsg }) => {
 			toast.error(message);
@@ -89,26 +119,26 @@ const useCreateLesson = () => {
 	});
 
 	return {
-		createLesson: mutate,
+		createUser: mutate,
 		...rest,
 	};
 };
 
-const useDeleteLesson = () => {
+const useDeleteUser = () => {
 	const toast = useResourceActionToast();
-	const { invalidateUsers: invalidateLessons } = useInvalidateUsers();
+	const { invalidateUsers } = useInvalidateUsers();
 
 	const { loadingMsg, successMsg, errorMsg } = deleteMsg;
 
 	const { mutate, ...rest } = useMutation({
 		mutationKey: [baseQueryKey, "DELETE"],
-		mutationFn: API.LESSON.DELETE,
+		mutationFn: (userId: string) => authClient.admin.removeUser({ userId }),
 		onMutate: () => {
 			toast.loading(loadingMsg);
 		},
-		onSuccess: ({ message = successMsg }) => {
-			toast.success(message);
-			invalidateLessons();
+		onSuccess: () => {
+			toast.success(successMsg);
+			invalidateUsers();
 		},
 		onError: ({ message = errorMsg }) => {
 			toast.error(message);
@@ -116,7 +146,7 @@ const useDeleteLesson = () => {
 	});
 
 	return {
-		deleteLesson: mutate,
+		deleteUser: mutate,
 		...rest,
 	};
 };
@@ -152,9 +182,9 @@ const useUpdateLesson = (lessonId: ResourceId) => {
 export {
 	useGetUsers,
 	// useGetLesson,
-	// useCreateLesson,
+	useCreateUser,
 	// useUpdateLesson,
-	// useDeleteLesson,
+	useDeleteUser,
 };
 
 //export { getUsersOpts, getLessonOpts };

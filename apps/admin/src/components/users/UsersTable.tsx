@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { useReactTable } from "@tanstack/react-table";
@@ -6,17 +6,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTable } from "../lessons/DataTable";
 import { useDefaultTableOpts } from "@/hooks/table";
 import { useDeleteLesson } from "@/hooks/api/lesson";
-import type { IUser } from "@/services/api";
 import {
 	TableColCreatedAt,
+	TableColNaValue,
 	TableColUpdatedAt,
 	TableSearch,
 	useTableSearchValue,
 } from "../table";
-import { LessonStatusBadge } from "../lessons/LessonStatusBadge";
-import { ResourceProvider } from "@/context/resource.context";
 import { useGetUsers } from "@/hooks/api/user";
-import { UserRoleBadge } from "../form/badge/UserRoleBadge";
+import { UserRoleBadge } from "../users/UserRoleBadge";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
@@ -32,11 +30,11 @@ import { UserAvatar } from "../common/UserAvatar";
 import { useQueryStates, parseAsStringEnum, parseAsString } from "nuqs";
 import { UserBanDialog } from "./UserBanDialog";
 import { UserDeleteDialog } from "./UserDeleteDialog";
+import { UserVerificationBadge } from "./UserVerifiedBadge";
+import type { IUser } from "@/lib/auth";
 
-const queryParamKey = "query";
-
-const useUserQuerySearch = () => {
-	const [{ action }, setQueryParams] = useQueryStates({
+export const useUserQuerySearch = () => {
+	const [{ userId, action }, setQueryParams] = useQueryStates({
 		userId: parseAsString,
 		action: parseAsStringEnum(["ban", "delete"]),
 	});
@@ -44,48 +42,58 @@ const useUserQuerySearch = () => {
 	const isBanOpen = action === "ban";
 	const isDeleteOpen = action === "delete";
 
-	const clear = () => {
+	const clear = useCallback(() => {
 		setQueryParams({
 			userId: null,
 			action: null,
 		});
-	};
+	}, []);
 
-	const handleBanOpen = (userId: string) => {
+	const handleBanOpen = useCallback((userId: string) => {
 		setQueryParams({
 			action: "ban",
 			userId,
 		});
-	};
+	}, []);
 
-	const handleDeleteOpen = (userId: string) => {
+	const handleDeleteOpen = useCallback((userId: string) => {
 		setQueryParams({
 			action: "delete",
 			userId,
 		});
-	};
+	}, []);
 
-	return { isBanOpen, isDeleteOpen, clear, handleBanOpen, handleDeleteOpen };
+	return {
+		userId,
+		isBanOpen,
+		isDeleteOpen,
+		clear,
+		handleBanOpen,
+		handleDeleteOpen,
+	};
 };
+
+const queryParamKey = "name";
 
 export function UsersTable() {
 	const searchQuery = useTableSearchValue(queryParamKey);
-	const { isBanOpen, isDeleteOpen, clear, handleDeleteOpen, handleBanOpen } =
-		useUserQuerySearch();
-	const [state, setState] = useQueryStates({
-		userId: parseAsString,
-		action: parseAsStringEnum(["ban", "delete"]),
-	});
+	const {
+		userId,
+		isBanOpen,
+		isDeleteOpen,
+		clear,
+		handleDeleteOpen,
+		handleBanOpen,
+	} = useUserQuerySearch();
 
 	const { users, isFetching, fetchNextPage } = useGetUsers({
-		query: searchQuery,
+		name: searchQuery,
 	});
+
 	const { deleteLesson } = useDeleteLesson();
 
-	const tableOpts = useDefaultTableOpts();
-
 	const data = useMemo(
-		() => users?.pages?.flatMap((page) => page.users) ?? [],
+		() => users?.pages?.flatMap((page) => page.data?.users),
 		[users],
 	);
 
@@ -93,12 +101,12 @@ export function UsersTable() {
 	const currRows = useMemo(
 		() =>
 			users.pages.reduce((prev, curr) => {
-				return prev + curr.users.length;
+				return prev + (curr?.data?.users?.length ?? 0);
 			}, 0),
 		[users],
 	);
 
-	const totalRows = useMemo(() => users.pages[0].total, [users]);
+	const totalRows = useMemo(() => users?.pages?.[0]?.data?.total ?? 0, [users]);
 
 	const columns = useMemo<ColumnDef<IUser>[]>(
 		() => [
@@ -149,6 +157,10 @@ export function UsersTable() {
 			{
 				accessorKey: "phoneNumber",
 				header: "Phone Number",
+				cell: ({ row }) => {
+					const { phoneNumber } = row.original;
+					return phoneNumber || <TableColNaValue />;
+				},
 			},
 			{
 				accessorKey: "email",
@@ -159,18 +171,12 @@ export function UsersTable() {
 				header: "Banned",
 				cell: ({ row }) => {
 					const { banned } = row.original;
-					return (
-						<p
-							className={banned ? "text-destructive" : "text-muted-foreground"}
-						>
-							{banned ? (
-								<Badge className="border-destructive/50 bg-destructive text-destructive-foreground [a&]:hover:bg-destructive/90">
-									Banned
-								</Badge>
-							) : (
-								"-"
-							)}
-						</p>
+					return banned ? (
+						<Badge className="border-destructive/50 bg-destructive text-destructive-foreground [a&]:hover:bg-destructive/90">
+							Banned
+						</Badge>
+					) : (
+						<TableColNaValue />
 					);
 				},
 			},
@@ -182,15 +188,13 @@ export function UsersTable() {
 					return <UserRoleBadge role={role} />;
 				},
 			},
-
 			{
-				id: "phoneNumberVerified",
-				header: "Verified",
+				id: "verified",
+				accessorKey: "verified",
+				header: "verified",
 				cell: ({ row }) => {
 					const { phoneNumberVerified } = row.original;
-					return (
-						<LessonStatusBadge {...{ isPublished: phoneNumberVerified }} />
-					);
+					return <UserVerificationBadge isVerified={phoneNumberVerified} />;
 				},
 			},
 			{
@@ -246,26 +250,24 @@ export function UsersTable() {
 		[deleteLesson, handleBanOpen, handleDeleteOpen],
 	);
 
-	const table = useReactTable({
+	const tableOpts = useDefaultTableOpts();
+
+	const table = useReactTable<IUser>({
 		data,
 		columns,
 		...tableOpts,
 	});
 
 	return (
-		<div className="flex flex-col gap-5">
-			<ResourceProvider value={{ resource: "Lesson" }}>
+		<>
+			<div className="flex gap-4">
 				<TableSearch searchQueryParamKey={queryParamKey} />
-				<DataTable
-					table={table}
-					isFetching={isFetching}
-					fetchNextPage={fetchNextPage}
-					currRows={currRows}
-					totalRows={totalRows}
-				/>
-				<UserBanDialog isOpen={isBanOpen} onClose={clear} />
-				<UserDeleteDialog isOpen={isDeleteOpen} onClose={clear} />
-			</ResourceProvider>
-		</div>
+			</div>
+			<DataTable
+				{...{ table, isFetching, fetchNextPage, currRows, totalRows }}
+			/>
+			<UserBanDialog isOpen={isBanOpen} onClose={clear} userId={userId} />
+			<UserDeleteDialog isOpen={isDeleteOpen} onClose={clear} userId={userId} />
+		</>
 	);
 }
