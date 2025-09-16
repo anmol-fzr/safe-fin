@@ -1,15 +1,39 @@
 import { authClient } from "@/lib/auth";
 import { useMutation } from "@tanstack/react-query";
 import { createAuthHooks } from "@daveyplate/better-auth-tanstack";
+import { useResourceActionToast } from "./defaults";
+import { errorMonitor } from "events";
 
 const useSendOtp = () => {
-	const { mutate, isPending, ...rest } = useMutation({
+	const toast = useResourceActionToast();
+
+	const loadingMsg = "Sending OTP ...";
+	const successMsg = "OTP Sent Successfully";
+	const errorMsg = "Unable to Send OTP";
+
+	const { mutate, isPending, isSuccess, reset, ...rest } = useMutation({
 		mutationKey: ["AUTH", "SEND", "OTP"],
-		mutationFn: (phoneNumber: number) =>
-			authClient.phoneNumber.sendOtp({ phoneNumber }),
+		mutationFn(phoneNumber: string) {
+			return authClient.phoneNumber.sendOtp({ phoneNumber });
+		},
+		onMutate() {
+			toast.loading(loadingMsg);
+		},
+		onSuccess() {
+			toast.success(successMsg);
+		},
+		onError({ message = errorMsg }) {
+			toast.error(message);
+		},
 	});
 
-	return { sendOtp: mutate, isSendingOtp: isPending, ...rest };
+	return {
+		sendOtp: mutate,
+		isOtpSent: isSuccess,
+		resetSentOtp: reset,
+		isSendingOtp: isPending,
+		...rest,
+	};
 };
 
 type IVerifyOtp = {
@@ -18,12 +42,42 @@ type IVerifyOtp = {
 };
 
 const useVerifyOtp = () => {
-	const { mutate, isPending, ...rest } = useMutation({
-		mutationKey: ["AUTH", "VERIFY", "OTP"],
-		mutationFn: (payload: IVerifyOtp) => authClient.phoneNumber.verify(payload),
-	});
+	const toast = useResourceActionToast();
 
-	return { verifyOtp: mutate, isVerifyingOtp: isPending, ...rest };
+	const loadingMsg = "Verifying OTP ...";
+	const successMsg = "OTP Verified Successfully";
+	const errorMsg = "Unable to Verify OTP";
+
+	const { mutate, isPending, mutateAsync, isError, error, ...rest } =
+		useMutation({
+			mutationKey: ["AUTH", "VERIFY", "OTP"],
+			mutationFn(payload: IVerifyOtp) {
+				return authClient.phoneNumber.verify(payload);
+			},
+			onMutate() {
+				toast.loading(loadingMsg);
+			},
+			onSuccess(data) {
+				if (data.data === null) {
+					toast.error(data.error.message ?? errorMsg);
+					return;
+				}
+				toast.success(successMsg);
+			},
+			onError(data) {
+				console.log(data);
+				toast.error(data.message ?? errorMonitor);
+			},
+		});
+
+	return {
+		verifyOtp: mutate,
+		verifyOtpAsync: mutateAsync,
+		isVerifyingOtp: isPending,
+		isVerifyOtpError: isError,
+		verifyOtpError: error,
+		...rest,
+	};
 };
 
 export { useSendOtp, useVerifyOtp };

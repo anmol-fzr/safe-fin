@@ -32,4 +32,14 @@ export const formatOrdinals = (n: number) => {
 
 export const getEmptyArr = (length = 10) => Array.from({ length }, (_, i) => i);
 
+export const secsToClockTime = (seconds: number) => {
+	const minutes = Math.floor(seconds / 60);
+	const remainingSeconds = seconds % 60;
+
+	const paddedMinutes = String(minutes).padStart(2, "0");
+	const paddedSeconds = String(remainingSeconds).padStart(2, "0");
+
+	return `${paddedMinutes}:${paddedSeconds}`;
+};
+
 export const { isNaN } = Number;

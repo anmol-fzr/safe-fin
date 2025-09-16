@@ -223,7 +223,7 @@ export {
 	useBanUser,
 };
 
-//export { getUsersOpts, getLessonOpts };
+export { getUsersOpts };
 
 const useInvalidateUsers = () => {
 	const { invalidateResource } = useInvalidateResource(baseQueryKey);
