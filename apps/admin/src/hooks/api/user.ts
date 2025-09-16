@@ -179,12 +179,48 @@ const useUpdateLesson = (lessonId: ResourceId) => {
 	};
 };
 
+type BanUserFnPayload = {
+	userId: string;
+	banReason: string;
+};
+
+const useBanUser = () => {
+	const toast = useResourceActionToast();
+	const { invalidateUsers: invalidateLessons } = useInvalidateUsers();
+
+	const loadingMsg = "Banning User...";
+	const successMsg = "User Banned Successfully";
+	const errorMsg = "Unable to Ban User";
+
+	const { mutate, ...rest } = useMutation({
+		mutationKey: [baseQueryKey, "UPDATE"],
+		mutationFn: (payload: BanUserFnPayload) =>
+			authClient.admin.banUser(payload),
+		onMutate: () => {
+			toast.loading(loadingMsg);
+		},
+		onSuccess: () => {
+			toast.success(successMsg);
+			invalidateLessons();
+		},
+		onError: ({ message = errorMsg }) => {
+			toast.error(message);
+		},
+	});
+
+	return {
+		banUser: mutate,
+		...rest,
+	};
+};
+
 export {
 	useGetUsers,
 	// useGetLesson,
 	useCreateUser,
 	// useUpdateLesson,
 	useDeleteUser,
+	useBanUser,
 };
 
 //export { getUsersOpts, getLessonOpts };

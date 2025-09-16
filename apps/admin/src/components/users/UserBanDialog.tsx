@@ -12,7 +12,7 @@ import { FormInput } from "../form/form-input";
 import * as Yup from "yup";
 import { useYupForm } from "@/hooks/form/useYupForm";
 import { Form } from "@/components/ui/form";
-import { authClient } from "@/lib/auth";
+import { useBanUser } from "@/hooks/api/user";
 
 const schema = Yup.object({
 	banReason: Yup.string().required().label("Ban Reason"),
@@ -31,8 +31,10 @@ export function UserBanDialog({
 }: DeleteDialogProps) {
 	const form = useYupForm({ schema });
 
-	const handleSubmit = form.handleSubmit(async (values) => {
-		await authClient.admin.banUser({
+	const { banUser } = useBanUser();
+
+	const handleSubmit = form.handleSubmit((values) => {
+		banUser({
 			banReason: values.banReason,
 			userId,
 		});
