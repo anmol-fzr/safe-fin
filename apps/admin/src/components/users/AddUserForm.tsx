@@ -6,6 +6,7 @@ import { FormSelect } from "../form/form-select";
 import { Button } from "../ui/button";
 import { addUserSchema } from "@/schema/user.schema";
 import { useCreateUser } from "@/hooks/api/user";
+import { getPhonePlaceholder } from "@/lib/faker";
 
 export function getAddUserFormPlaceholders() {
 	const firstName = faker.person.firstName();
@@ -18,7 +19,7 @@ export function getAddUserFormPlaceholders() {
 			lastName,
 			allowSpecialCharacters: false,
 		}),
-		phoneNumber: faker.helpers.fromRegExp("[6-9]{3}[0-9]{2}-[0-9]{5}"),
+		phoneNumber: getPhonePlaceholder(),
 		password: faker.internet.password(),
 	};
 }
