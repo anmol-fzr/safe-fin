@@ -4,4 +4,8 @@ const pageSearchSchema = z.object({
 	query: z.string().default("").catch(""),
 });
 
-export { pageSearchSchema };
+const usersPageSearchSchema = z.object({
+	name: z.string().default("").catch(""),
+});
+
+export { pageSearchSchema, usersPageSearchSchema };
