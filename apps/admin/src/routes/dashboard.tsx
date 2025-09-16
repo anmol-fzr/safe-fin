@@ -3,12 +3,13 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import Loader from "@/components/loader";
-import { authClient } from "@/lib/auth";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const Route = createFileRoute("/dashboard")({
 	beforeLoad: async () => {
-		const session = await authClient.getSession();
-		if (session.data === null) {
+		const isLogin = useAuthStore.getState().isLogin;
+
+		if (!isLogin) {
 			throw redirect({ to: "/" });
 		}
 	},
