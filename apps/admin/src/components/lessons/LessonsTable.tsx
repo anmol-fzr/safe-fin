@@ -1,19 +1,19 @@
-import { useMemo, type ReactNode } from "react";
-
+import { Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useReactTable } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
+import { type ReactNode, useMemo } from "react";
+import { DataTable } from "@/components/table/DataTable";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DataTable } from "./DataTable";
+import { ResourceProvider } from "@/context/resource.context";
+import { useDeleteLesson, useGetLessons } from "@/hooks/api/lesson";
 import { useDefaultTableOpts } from "@/hooks/table";
-import { useGetLessons, useDeleteLesson } from "@/hooks/api/lesson";
 import type { ILesson } from "@/services/api";
-import { Link } from "@tanstack/react-router";
 import {
 	TableColActions,
 	TableColCreatedAt,
@@ -22,7 +22,6 @@ import {
 	useTableSearchValue,
 } from "../table";
 import { LessonStatusBadge } from "./LessonStatusBadge";
-import { ResourceProvider } from "@/context/resource.context";
 
 const queryParamKey = "query";
 

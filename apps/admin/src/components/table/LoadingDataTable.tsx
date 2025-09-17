@@ -1,14 +1,15 @@
+import { useMemo } from "react";
 import {
 	Table,
 	TableBody,
 	TableCell,
+	TableFooter,
 	TableHead,
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Skeleton } from "../ui/skeleton";
 import { getEmptyArr } from "@/lib/utils";
-import { useMemo } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 export function LoadingDataTable({ rows = 10, columns = 5 }) {
 	const tableColumns = useMemo(() => getEmptyArr(columns), [columns]);
@@ -16,6 +17,9 @@ export function LoadingDataTable({ rows = 10, columns = 5 }) {
 
 	return (
 		<div className="w-full">
+			<div className="flex gap-4">
+				<Skeleton className="w-60 h-8 mb-6" />
+			</div>
 			<div className="overflow-hidden rounded-md border">
 				<Table>
 					<TableHeader>
@@ -38,14 +42,16 @@ export function LoadingDataTable({ rows = 10, columns = 5 }) {
 							</TableRow>
 						))}
 					</TableBody>
+					<TableFooter>
+						<TableRow>
+							{tableColumns.map((column) => (
+								<TableHead key={column}>
+									<Skeleton className="h-6 w-24" />
+								</TableHead>
+							))}
+						</TableRow>
+					</TableFooter>
 				</Table>
-			</div>
-			<div className="flex items-center justify-end space-x-2 py-4">
-				<Skeleton className="h-6 w-48 ml-0 mr-auto" />
-				<div className="space-x-2 flex">
-					<Skeleton className="h-8 w-22" />
-					<Skeleton className="h-8 w-20" />
-				</div>
 			</div>
 		</div>
 	);

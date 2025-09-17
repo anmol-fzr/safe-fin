@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Page } from "@/components/page";
-import { ViewTransition } from "@/components/extras";
+import { zodValidator } from "@tanstack/zod-adapter";
 import { Suspense } from "react";
-import { DataTable } from "@/components/lessons/DataTable";
+import { ViewTransition } from "@/components/extras";
+import { Page } from "@/components/page";
+import { DataTable } from "@/components/table/DataTable";
+import { AddUserDrawer } from "@/components/users/AddUserDrawer";
 import { UsersTable } from "@/components/users/UsersTable";
 import { ResourceProvider } from "@/context/resource.context";
-import { AddUserDrawer } from "@/components/users/AddUserDrawer";
 import { getUsersOpts } from "@/hooks/api/user";
-import { zodValidator } from "@tanstack/zod-adapter";
 import { usersPageSearchSchema } from "@/schema/page";
 
 export const Route = createFileRoute("/dashboard/users/")({
@@ -29,7 +29,7 @@ function RouteComponent() {
 				</Page.Header>
 				<Page.Content>
 					<ViewTransition>
-						<Suspense fallback={<DataTable.Loading columns={11} />}>
+						<Suspense fallback={<DataTable.Loading columns={12} />}>
 							<UsersTable />
 						</Suspense>
 					</ViewTransition>

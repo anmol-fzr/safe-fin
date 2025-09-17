@@ -21,7 +21,6 @@ export const useTableSearchValue = (queryParamKey: string, delay = 750) => {
 };
 
 export function TableSearch({ searchQueryParamKey }: TableSearchProps) {
-	const [animateRef] = useAutoAnimate();
 	const [query, setQuery] = useQueryState(
 		searchQueryParamKey,
 		parseAsString

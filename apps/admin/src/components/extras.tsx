@@ -1,4 +1,4 @@
-import { startTransition, type ReactNode } from "react";
+import { type ReactNode, startTransition } from "react";
 
 const ViewTransition = ({ children }: { children: ReactNode }) => {
 	return children;

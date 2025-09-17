@@ -44,7 +44,12 @@ export function AddUserForm({ onClose }: AddUserFormProps) {
 	return (
 		<Form {...form} onSubmit={onSubmit} className="flex flex-col flex-1">
 			<div className="flex flex-col gap-4 !h-full flex-1">
-				<FormInput name="name" placeholder={placeholders.name} label="Name" />
+				<FormInput
+					name="name"
+					placeholder={placeholders.name}
+					label="Name"
+					autoFocus
+				/>
 				<FormInput
 					name="email"
 					placeholder={placeholders.email}

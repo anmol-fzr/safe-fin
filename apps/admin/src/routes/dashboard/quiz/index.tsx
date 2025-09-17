@@ -1,14 +1,14 @@
-import { ViewTransition } from "@/components/extras";
 import { createFileRoute } from "@tanstack/react-router";
-import { Suspense } from "react";
-import { QuizTable } from "@/components/quiz/QuizTable";
-import { DataTable } from "@/components/lessons/DataTable";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { pageSearchSchema } from "@/schema/page";
-import { getQuizzesOpts } from "@/hooks/api/quiz";
+import { Suspense } from "react";
+import { ViewTransition } from "@/components/extras";
 import { AddButtonLink } from "@/components/form/button/AddButton";
 import { Page } from "@/components/page/Page";
+import { QuizTable } from "@/components/quiz/QuizTable";
+import { DataTable } from "@/components/table/DataTable";
 import { ResourceProvider } from "@/context/resource.context";
+import { getQuizzesOpts } from "@/hooks/api/quiz";
+import { pageSearchSchema } from "@/schema/page";
 
 export const Route = createFileRoute("/dashboard/quiz/")({
 	component: RouteComponent,

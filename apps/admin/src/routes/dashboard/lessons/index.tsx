@@ -1,14 +1,14 @@
-import { ViewTransition } from "@/components/extras";
 import { createFileRoute } from "@tanstack/react-router";
+import { zodValidator } from "@tanstack/zod-adapter";
 import { Suspense } from "react";
+import { ViewTransition } from "@/components/extras";
+import { AddButtonLink } from "@/components/form/button/AddButton";
 import { LessonsTable } from "@/components/lessons/LessonsTable";
 import { Page } from "@/components/page";
-import { DataTable } from "@/components/lessons/DataTable";
-import { zodValidator } from "@tanstack/zod-adapter";
-import { pageSearchSchema } from "@/schema/page";
-import { getLessonsOpts } from "@/hooks/api/lesson";
-import { AddButtonLink } from "@/components/form/button/AddButton";
+import { DataTable } from "@/components/table/DataTable";
 import { ResourceProvider } from "@/context/resource.context";
+import { getLessonsOpts } from "@/hooks/api/lesson";
+import { pageSearchSchema } from "@/schema/page";
 
 export const Route = createFileRoute("/dashboard/lessons/")({
 	component: RouteComponent,

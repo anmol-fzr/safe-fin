@@ -1,23 +1,10 @@
-import { useMemo, useCallback } from "react";
-
 import type { ColumnDef } from "@tanstack/react-table";
 import { useReactTable } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DataTable } from "../lessons/DataTable";
-import { useDefaultTableOpts } from "@/hooks/table";
-import { useDeleteLesson } from "@/hooks/api/lesson";
-import {
-	TableColCreatedAt,
-	TableColNaValue,
-	TableColUpdatedAt,
-	TableSearch,
-	useTableSearchValue,
-} from "../table";
-import { useGetUsers } from "@/hooks/api/user";
-import { UserRoleBadge } from "../users/UserRoleBadge";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
+import { parseAsString, parseAsStringEnum, useQueryStates } from "nuqs";
+import { useCallback, useMemo } from "react";
+import { DataTable } from "@/components/table/DataTable";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -26,12 +13,24 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDeleteLesson } from "@/hooks/api/lesson";
+import { useGetUsers } from "@/hooks/api/user";
+import { useDefaultTableOpts } from "@/hooks/table";
+import type { IUser } from "@/lib/auth";
 import { UserAvatar } from "../common/UserAvatar";
-import { useQueryStates, parseAsStringEnum, parseAsString } from "nuqs";
+import {
+	TableColCreatedAt,
+	TableColNaValue,
+	TableColUpdatedAt,
+	TableSearch,
+	useTableSearchValue,
+} from "../table";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { UserRoleBadge } from "../users/UserRoleBadge";
 import { UserBanDialog } from "./UserBanDialog";
 import { UserDeleteDialog } from "./UserDeleteDialog";
 import { UserVerificationBadge } from "./UserVerifiedBadge";
-import type { IUser } from "@/lib/auth";
 
 export const useUserQuerySearch = () => {
 	const [{ userId, action }, setQueryParams] = useQueryStates({

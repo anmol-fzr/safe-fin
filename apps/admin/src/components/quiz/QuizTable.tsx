@@ -1,4 +1,17 @@
-import { DataTable } from "../lessons/DataTable";
+import { Link } from "@tanstack/react-router";
+import { type ColumnDef, useReactTable } from "@tanstack/react-table";
+import { ChevronRight } from "lucide-react";
+import { type ReactNode, useMemo } from "react";
+import { DataTable } from "@/components/table/DataTable";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { useGetQuizzes } from "@/hooks/api/quiz";
+import { useDefaultTableOpts } from "@/hooks/table";
+import type { IQuiz } from "@/services/api";
+import { LessonStatusBadge } from "../lessons/LessonStatusBadge";
 import {
 	TableColActions,
 	TableColCreatedAt,
@@ -6,20 +19,7 @@ import {
 	TableSearch,
 	useTableSearchValue,
 } from "../table";
-import { useDefaultTableOpts } from "@/hooks/table";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { useMemo, type ReactNode } from "react";
-import { useReactTable, type ColumnDef } from "@tanstack/react-table";
-import type { IQuiz } from "@/services/api";
 import { Checkbox } from "../ui/checkbox";
-import { Link } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
-import { useGetQuizzes } from "@/hooks/api/quiz";
-import { LessonStatusBadge } from "../lessons/LessonStatusBadge";
 
 const columns: ColumnDef<IQuiz>[] = [
 	{
@@ -160,6 +160,7 @@ type QuizHoverCardProps = Pick<IQuiz, "id" | "title" | "desc"> & {
 };
 
 function QuizHoverCard({ id, title, desc, children }: QuizHoverCardProps) {
+	const quizId = id.toString();
 	return (
 		<HoverCard>
 			<HoverCardTrigger asChild>{children}</HoverCardTrigger>
@@ -173,7 +174,7 @@ function QuizHoverCard({ id, title, desc, children }: QuizHoverCardProps) {
 					</div>
 					<Link
 						to="/dashboard/quiz/$quizId"
-						params={{ quizId: id }}
+						params={{ quizId }}
 						className="hover:underline ml-auto mr-0 inline-flex items-center justify-center gap-1"
 					>
 						See more

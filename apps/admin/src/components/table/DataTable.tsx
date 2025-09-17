@@ -1,6 +1,8 @@
-import type { Row, RowData, Table as TableType } from "@tanstack/react-table";
 import type { UseSuspenseInfiniteQueryResult } from "@tanstack/react-query";
+import type { Row, RowData, Table as TableType } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useCallback, useEffect, useRef } from "react";
 import {
 	Table,
 	TableBody,
@@ -11,8 +13,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { LoadingDataTable } from "./LoadingDataTable";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { useCallback, useEffect, useRef } from "react";
 
 type DataTableProps<TData = RowData> = {
 	table: TableType<TData>;
