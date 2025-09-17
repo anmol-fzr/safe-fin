@@ -1,10 +1,13 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { BackButton } from "@/components/form/button/BackButton";
 import { Page } from "@/components/page";
 import { NewQuizForm } from "@/components/quiz/NewQuizForm";
-import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard/quiz/add")({
 	component: RouteComponent,
+	loader: () => ({
+		crumb: "New Quiz",
+	}),
 });
 
 function RouteComponent() {

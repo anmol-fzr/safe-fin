@@ -1,6 +1,7 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type React from "react";
 import { useCallback } from "react";
-import { cn, secsToClockTime } from "@/lib/utils";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -10,21 +11,20 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 import { useSendOtp, useVerifyOtp } from "@/hooks/api/auth";
-import { isNull, isUndefined } from "@/lib/type-utils";
-import { Route } from "@/routes/index";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useAuthStore } from "@/store/useAuthStore";
+import useOtpTimer from "@/hooks/useOtpTimer";
 import { authClient } from "@/lib/auth";
 import { getPhonePlaceholder } from "@/lib/faker";
-import useOtpTimer from "@/hooks/useOtpTimer";
+import { isNull, isUndefined } from "@/lib/type-utils";
+import { cn, secsToClockTime } from "@/lib/utils";
+import { Route } from "@/routes/index";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function LoginForm({
 	className,
@@ -41,21 +41,19 @@ export function LoginForm({
 
 	const phonePlaceholder = getPhonePlaceholder();
 
-	const handleSendOtp = (phoneNumber: string) => {
-		sendOtp(phoneNumber);
-		resetTimer();
-		startTimer();
-	};
-
-	const handleReSendOtp = () => {
-		resetSentOtp();
-		handleSendOtp();
-	};
+	const handleSendOtp = useCallback(
+		(phoneNumber: string) => {
+			sendOtp(phoneNumber);
+			resetTimer();
+			startTimer();
+		},
+		[sendOtp, resetTimer, startTimer],
+	);
 
 	const handleSubmit = useCallback<React.FormEventHandler<HTMLFormElement>>(
 		async (e) => {
 			e.preventDefault();
-			const data = new FormData(e.target);
+			const data = new FormData(e.currentTarget);
 			const phoneNumber = data.get("phone-number")?.toString();
 
 			if (isUndefined(phoneNumber) || isNull(phoneNumber)) {
@@ -83,13 +81,14 @@ export function LoginForm({
 			if (respData.data.user.role !== "admin") {
 				return toast.error("Only Admins can Login");
 			}
-			setAuthData({ user: respData.data.user });
+			// biome-ignore assist: Will Fix this Later
+			setAuthData({ user: respData.data.user as any });
 
 			navigate({
 				to: "/dashboard",
 			});
 		},
-		[isOtpSent, verifyOtpAsync, sendOtp, navigate],
+		[isOtpSent, verifyOtpAsync, handleSendOtp, navigate, setAuthData],
 	);
 
 	return (
@@ -132,7 +131,7 @@ export function LoginForm({
 
 										<Button
 											variant="link"
-											onClick={handleReSendOtp}
+											onClick={resetSentOtp}
 											disabled={!isExpired}
 										>
 											Resend OTP

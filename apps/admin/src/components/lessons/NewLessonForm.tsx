@@ -1,6 +1,6 @@
-import { newLessonSchema } from "@/schema/lesson";
-import { useYupForm } from "@/hooks/form/useYupForm";
 import { useCreateLesson } from "@/hooks/api/lesson";
+import { useYupForm } from "@/hooks/form/useYupForm";
+import { newLessonSchema } from "@/schema/lesson";
 import { convertJsonToMarkdown } from "../editor/Editor";
 import { LessonForm, useLessonActionFormRef } from "./LessonForm";
 
@@ -18,7 +18,8 @@ export function NewLessonForm() {
 		const markdown = convertJsonToMarkdown(jsonString);
 
 		createLesson({
-			...values,
+			title: values.title,
+			desc: values.desc,
 			isPublished,
 			content: markdown,
 			contentJson: jsonString,

@@ -46,21 +46,27 @@ export const useUserQuerySearch = () => {
 			userId: null,
 			action: null,
 		});
-	}, []);
+	}, [setQueryParams]);
 
-	const handleBanOpen = useCallback((userId: string) => {
-		setQueryParams({
-			action: "ban",
-			userId,
-		});
-	}, []);
+	const handleBanOpen = useCallback(
+		(userId: string) => {
+			setQueryParams({
+				action: "ban",
+				userId,
+			});
+		},
+		[setQueryParams],
+	);
 
-	const handleDeleteOpen = useCallback((userId: string) => {
-		setQueryParams({
-			action: "delete",
-			userId,
-		});
-	}, []);
+	const handleDeleteOpen = useCallback(
+		(userId: string) => {
+			setQueryParams({
+				action: "delete",
+				userId,
+			});
+		},
+		[setQueryParams],
+	);
 
 	return {
 		userId,
@@ -88,8 +94,6 @@ export function UsersTable() {
 	const { users, isFetching, fetchNextPage } = useGetUsers({
 		name: searchQuery,
 	});
-
-	const { deleteLesson } = useDeleteLesson();
 
 	const data = useMemo(
 		() => users?.pages?.flatMap((page) => page.data?.users),
@@ -246,7 +250,7 @@ export function UsersTable() {
 				},
 			},
 		],
-		[deleteLesson, handleBanOpen, handleDeleteOpen],
+		[handleBanOpen, handleDeleteOpen],
 	);
 
 	const tableOpts = useDefaultTableOpts();

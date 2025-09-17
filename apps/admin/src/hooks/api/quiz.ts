@@ -1,13 +1,13 @@
-import { API } from "@/services";
-import type { IReqParams, ResourceId } from "@/services/api/types";
 import {
 	infiniteQueryOptions,
-	queryOptions,
 	mutationOptions,
+	queryOptions,
 	useMutation,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
+import { API } from "@/services";
+import type { IReqParams, ResourceId } from "@/services/api/types";
 import {
 	createToastMessages,
 	initialPageParam,

@@ -83,11 +83,12 @@ export function LessonsTable() {
 				cell: ({ row }) => {
 					const { id = 0, title = "N/A", desc = "" } = row.original;
 
+					const lessonId = id.toString();
 					return (
 						<LessonHoverCard {...{ id, title, desc }}>
 							<Link
-								to="/dashboard/lessons/$lessonId"
-								params={{ lessonId: id.toString() }}
+								to="/dashboard/lessons/$lessonId/view"
+								params={{ lessonId }}
 								className="hover:underline"
 							>
 								{title}
@@ -127,7 +128,7 @@ export function LessonsTable() {
 					return (
 						<TableColActions>
 							<TableColActions.Edit
-								to="/dashboard/lessons/$lessonId/edit"
+								to="/dashboard/lessons/$lessonId/update"
 								params={{ lessonId }}
 							/>
 
@@ -169,6 +170,7 @@ type LessonHoverCardProps = Pick<ILesson, "id" | "title" | "desc"> & {
 };
 
 function LessonHoverCard({ id, title, desc, children }: LessonHoverCardProps) {
+	const lessonId = id.toString();
 	return (
 		<HoverCard>
 			<HoverCardTrigger asChild>{children}</HoverCardTrigger>
@@ -181,8 +183,8 @@ function LessonHoverCard({ id, title, desc, children }: LessonHoverCardProps) {
 						</div>
 					</div>
 					<Link
-						to="/dashboard/lessons/$lessonId"
-						params={{ lessonId: id }}
+						to="/dashboard/lessons/$lessonId/view"
+						params={{ lessonId }}
 						className="hover:underline ml-auto mr-0 inline-flex items-center justify-center gap-1"
 					>
 						See more

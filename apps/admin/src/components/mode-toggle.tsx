@@ -1,4 +1,7 @@
 import { Moon, Sun } from "lucide-react";
+import { useHotkeys } from "react-hotkeys-hook";
+import { startTransition } from "@/components/extras";
+import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -6,9 +9,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTheme } from "@/components/theme-provider";
-import { useHotkeys } from "react-hotkeys-hook";
-import { startTransition } from "@/components/extras";
 
 export function ModeToggle() {
 	const { setTheme } = useTheme();

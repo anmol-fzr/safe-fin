@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -9,11 +10,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { FormInput } from "./form-input";
-import type { ReactNode } from "react";
-import { useYupForm } from "@/hooks/form/useYupForm";
 import { Form } from "@/components/ui/form";
+import { useYupForm } from "@/hooks/form/useYupForm";
 import { getPhraseSchema } from "@/schema/phrase.schema";
+import { FormInput } from "./form-input";
 
 export interface DeleteDialogProps {
 	onDelete: VoidFunction;

@@ -15,12 +15,9 @@ export const Route = createFileRoute("/dashboard/quiz/")({
 	validateSearch: zodValidator(pageSearchSchema),
 	loaderDeps: ({ search: { query } }) => ({ query }),
 	loader: ({ context, deps }) => {
-		context.queryClient.ensureInfiniteQueryData(
+		context.queryClient.prefetchInfiniteQuery(
 			getQuizzesOpts({ query: deps.query }),
 		);
-		return {
-			crumb: "Quizzes",
-		};
 	},
 });
 

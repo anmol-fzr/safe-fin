@@ -1,8 +1,10 @@
-import * as React from "react";
-import { Sun, CircleQuestionMark, Brain, Users, Settings } from "lucide-react";
 import type { LinkComponentProps } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
-
+import { useCommandState } from "cmdk";
+import type { LucideIcon } from "lucide-react";
+import { Brain, CircleQuestionMark, Settings, Sun, Users } from "lucide-react";
+import type { Dispatch, PropsWithChildren, SetStateAction } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -11,8 +13,7 @@ import {
 	CommandItem,
 	CommandList,
 } from "@/components/ui/command";
-import { useCommandState } from "cmdk";
-import type { LucideIcon } from "lucide-react";
+import { useSafeContext } from "@/context/helper";
 import { Card } from "./ui/card";
 
 type ListItem = {
@@ -83,44 +84,54 @@ list.forEach((lists) => {
 	});
 });
 
-const cmdkContext = React.createContext({
-	open: false,
-	setOpen: (_open) => {},
-});
+type ICmdkContext = {
+	open: boolean;
+	setOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+const cmdkContext = createContext<ICmdkContext | null>(null);
+
 const CmdkContext = cmdkContext.Provider;
 
-export function CmdK() {
-	const [open, setOpen] = React.useState(false);
+export const CmdKProvider = ({ children }: PropsWithChildren) => {
+	const [open, setOpen] = useState(false);
 
-	React.useEffect(() => {
-		const down = (e: KeyboardEvent) => {
+	return <CmdkContext value={{ open, setOpen }}>{children}</CmdkContext>;
+};
+
+export const useCmdk = () => {
+	return useSafeContext(cmdkContext, "useCmdk", "CmdkContext");
+};
+
+export function CmdK() {
+	const { open, setOpen } = useCmdk();
+
+	useEffect(() => {
+		const handleAltKPress = (e: KeyboardEvent) => {
 			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
 				setOpen((open) => !open);
 			}
 		};
 
-		document.addEventListener("keydown", down);
-		return () => document.removeEventListener("keydown", down);
-	}, []);
+		document.addEventListener("keydown", handleAltKPress);
+		return () => document.removeEventListener("keydown", handleAltKPress);
+	}, [setOpen]);
 
 	return (
-		<CmdkContext value={{ open, setOpen }}>
-			<CommandDialog
-				open={open}
-				onOpenChange={setOpen}
-				className="!min-w-[750px]"
-			>
-				<CommandInput placeholder="Type a command or search..." />
-				<Stuff />
-			</CommandDialog>
-		</CmdkContext>
+		<CommandDialog
+			open={open}
+			onOpenChange={setOpen}
+			className="!min-w-[750px]"
+		>
+			<CommandInput placeholder="Type a command or search..." />
+			<CommandContent />
+		</CommandDialog>
 	);
 }
-function Stuff() {
+
+function CommandContent() {
 	const selected = useCommandState((state) => state.value);
-	const navigate = useNavigate();
-	const { setOpen } = React.useContext(cmdkContext);
 
 	return (
 		<CommandList className="min-h-[500px]">
@@ -129,39 +140,52 @@ function Stuff() {
 				<div className="flex-1 pr-1 border-r !h-full">
 					{list.map((list) => (
 						<CommandGroup heading={list.title} key={list.title}>
-							{list.list.map((item) => (
-								<CommandItem
-									key={item.label}
-									onSelect={(val) => {
-										const to = map.get(val)?.to;
-										if (to) {
-											setOpen(false);
-											setTimeout(() => {
-												navigate({
-													to,
-												});
-											}, 0);
-										}
-									}}
-								>
-									<item.icon />
-									<span>{item.label}</span>
-								</CommandItem>
-							))}
+							<CmdkListItem list={list.list} />
 						</CommandGroup>
 					))}
 				</div>
 
-				{selected && <CommandSelectedDetail selected={selected} />}
+				{selected && <CmdkDetails selected={selected} />}
 			</div>
 		</CommandList>
 	);
 }
 
-function CommandSelectedDetail({ selected }: { selected: string }) {
+function CmdkDetails({ selected }: { selected: string }) {
 	return (
 		<div className="!min-w-[450px] w-[450px] p-2">
 			<Card className="bg-sidebar p-4">{map.get(selected)?.desc}</Card>
 		</div>
+	);
+}
+
+type CmdkListItemProps = {
+	list: ListItem[];
+};
+
+function CmdkListItem({ list }: CmdkListItemProps) {
+	return list.map((item) => <CmdkItem key={item.label} {...item} />);
+}
+
+function CmdkItem({ label, icon: Icon }: ListItem) {
+	const { setOpen } = useCmdk();
+	const navigate = useNavigate();
+	return (
+		<CommandItem
+			onSelect={(val) => {
+				const to = map.get(val)?.to;
+				if (to) {
+					setOpen(false);
+					setTimeout(() => {
+						navigate({
+							to,
+						});
+					}, 0);
+				}
+			}}
+		>
+			<Icon />
+			<span>{label}</span>
+		</CommandItem>
 	);
 }

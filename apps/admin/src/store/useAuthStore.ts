@@ -1,9 +1,8 @@
+import type { UserWithRole } from "better-auth/plugins/admin";
+import type { UserWithPhoneNumber } from "better-auth/plugins/phone-number";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import type { UserWithRole } from "better-auth/plugins/admin";
-import type { UserWithPhoneNumber } from "better-auth/plugins/phone-number";
-//import type { Session } from "better-auth";
 
 interface AuthStoreEmpty {
 	isLogin: false;

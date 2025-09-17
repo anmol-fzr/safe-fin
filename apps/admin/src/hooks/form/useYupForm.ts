@@ -1,12 +1,12 @@
-import { type FieldValues, useForm, type UseFormProps } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import type { InferType, ObjectSchema } from "yup";
+import { type FieldValues, type UseFormProps, useForm } from "react-hook-form";
+import type { ObjectSchema } from "yup";
 
 type UseYupFormProps<
 	TFieldValues extends FieldValues,
 	TSchema extends ObjectSchema<TFieldValues>,
 	TContext = any,
-> = Omit<UseFormProps<InferType<TSchema>, TContext>, "resolver"> & {
+> = Omit<UseFormProps<TFieldValues, TContext>, "resolver"> & {
 	schema: TSchema;
 	resolverOptions?: Parameters<typeof yupResolver>[1];
 };
@@ -20,14 +20,14 @@ type UseYupFormProps<
  */
 export function useYupForm<
 	TFieldValues extends FieldValues,
-	TSchema extends ObjectSchema<any>,
+	TSchema extends ObjectSchema<TFieldValues>,
 	TContext = any,
 >({
 	schema,
 	resolverOptions,
 	...props
 }: UseYupFormProps<TFieldValues, TSchema, TContext>) {
-	const form = useForm<InferType<TSchema>, TContext>({
+	const form = useForm<TFieldValues, TContext>({
 		resolver: yupResolver(schema, resolverOptions),
 		...props,
 	});

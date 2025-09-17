@@ -1,17 +1,17 @@
-import { useCallback, useRef, type ComponentPropsWithoutRef } from "react";
-import { Button } from "@/components/ui/button";
+import { useCallback, useRef } from "react";
 import { FormProvider } from "react-hook-form";
-import { Form } from "../ui/form";
+import { FormEditor } from "@/components/form/form-editor";
 import { FormInput } from "@/components/form/form-input";
 import { FormTextarea } from "@/components/form/form-textarea";
-import { FormEditor } from "@/components/form/form-editor";
+import { Button } from "@/components/ui/button";
 import type { useYupForm } from "@/hooks/form/useYupForm";
 import type { ResourceId } from "@/services/api/types";
+import { Form, type FormSubmitHandler } from "../ui/form";
 
 type UpdateLessonFormProps = {
 	lessonId: ResourceId;
 	form: ReturnType<typeof useYupForm>;
-	handleSubmit: Pick<ComponentPropsWithoutRef<"form">, "onSubmit">;
+	handleSubmit: FormSubmitHandler;
 	handlePublish: VoidFunction;
 	handleDraft: VoidFunction;
 };
@@ -39,11 +39,7 @@ export function LessonForm({
 	handleDraft,
 }: UpdateLessonFormProps) {
 	return (
-		<Form
-			control={form.control}
-			className="flex gap-6 mx-auto"
-			onSubmit={handleSubmit}
-		>
+		<Form {...form} className="flex gap-6 mx-auto" onSubmit={handleSubmit}>
 			<FormProvider {...form}>
 				<div className="w-full max-w-screen-lg ">
 					<FormEditor name="content" />

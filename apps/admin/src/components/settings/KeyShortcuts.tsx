@@ -24,7 +24,7 @@ const shortcuts = [
 		title: "Add New Record in Table",
 		keys: ["a"],
 	},
-] as const;
+];
 
 export const KeyShortcuts = memo(({ className }: { className: string }) => {
 	return (

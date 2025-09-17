@@ -11,7 +11,7 @@ export function SearchForm({ ...props }: React.ComponentProps<"form">) {
 				</Label>
 				<div
 					className={cn(
-						"placeholder:text-muted-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm  min-w-44 items-center justify-center",
+						"placeholder:text-muted-foreground dark:bg-input/30 border-input flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm  min-w-44 items-center justify-center cursor-pointer",
 						"bg-background h-8 w-full shadow-none",
 					)}
 				>

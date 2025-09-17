@@ -1,4 +1,9 @@
-import { cn } from "@/lib/utils";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import type { Column } from "@tanstack/react-table";
+import { CheckIcon, PlusCircleIcon as PlusCircledIcon } from "lucide-react";
+import type * as React from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Command,
 	CommandEmpty,
@@ -13,14 +18,8 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import * as React from "react";
-import { CheckIcon, PlusCircleIcon as PlusCircledIcon } from "lucide-react";
-import { UserVerificationBadge } from "../users/UserVerifiedBadge";
-import type { Column } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
 	title?: string;
@@ -43,8 +42,9 @@ function FacetedFilter<TData, TValue>({
 }: DataTableFacetedFilterProps<TData, TValue>) {
 	const [animateRef] = useAutoAnimate();
 
-	const filtersSet = column.getFilterValue() ?? new Set();
-	const filtersArr = Array.from(filtersSet ?? []);
+	const filtersSet = (column.getFilterValue() as Set<string>) ?? new Set();
+	// biome-ignore assist: Works Logically but typescript gives error
+	const filtersArr: string[] = Array.from(filtersSet);
 
 	const selSize = filtersArr?.length;
 	const haveValues = selSize > 0;
@@ -132,7 +132,7 @@ function FacetedFilter<TData, TValue>({
 								<CommandSeparator />
 								<CommandGroup>
 									<CommandItem
-										onSelect={column.setFilterValue(new Set())}
+										onSelect={() => column.setFilterValue(new Set())}
 										className="justify-center text-center"
 									>
 										Clear filters

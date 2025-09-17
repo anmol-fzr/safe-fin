@@ -1,22 +1,23 @@
-import { API } from "@/services";
-import type { IReqParams, ResourceId } from "@/services/api/types";
 import {
 	infiniteQueryOptions,
-	queryOptions,
 	mutationOptions,
+	queryOptions,
 	useMutation,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth";
+import { isNull } from "@/lib/type-utils";
+import type { AddUserFormData } from "@/schema/user.schema";
+import { API } from "@/services";
+import type { ICreateLessonReq } from "@/services/api";
+import type { IReqParams, ResourceId } from "@/services/api/types";
 import {
 	createToastMessages,
 	initialPageParam,
 	useInvalidateResource,
 	useResourceActionToast,
 } from "./defaults";
-import type { ICreateLessonReq } from "@/services/api";
-import { authClient } from "@/lib/auth";
-import type { AddUserFormData } from "@/schema/user.schema";
 
 const baseQueryKey = "USER";
 const { createMsg, updateMsg, deleteMsg } = createToastMessages("User");
@@ -35,8 +36,9 @@ function getUsersOpts(params: { name: string }) {
 				},
 			}),
 		initialPageParam,
-		getNextPageParam: (lastPage, allPages, lastPageParam, allPagesParams) => {
+		getNextPageParam: (_lastPage, allPages, lastPageParam, _allPagesParams) => {
 			const total = allPages[allPages.length - 1].data.total;
+
 			const totalFetched = allPages.reduce((prev, curr) => {
 				return prev + curr.data.users.length;
 			}, 0);
@@ -51,7 +53,7 @@ function getUsersOpts(params: { name: string }) {
 	});
 }
 
-const useGetUsers = (params: IReqParams) => {
+const useGetUsers = (params: { name: string }) => {
 	const opts = getUsersOpts(params);
 	const { data, ...rest } = useSuspenseInfiniteQuery(opts);
 
