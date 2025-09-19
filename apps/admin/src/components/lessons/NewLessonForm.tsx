@@ -4,7 +4,7 @@ import { newLessonSchema } from "@/schema/lesson";
 import { convertJsonToMarkdown } from "../editor/Editor";
 import { LessonForm, useLessonActionFormRef } from "./LessonForm";
 
-export function NewLessonForm() {
+function NewLessonForm() {
 	const form = useYupForm({ schema: newLessonSchema });
 	const { ref, toPublish, toDraft } = useLessonActionFormRef();
 
@@ -27,11 +27,21 @@ export function NewLessonForm() {
 	});
 
 	return (
-		<LessonForm
-			form={form}
-			handlePublish={toPublish}
-			handleDraft={toDraft}
-			handleSubmit={handleSubmit}
-		/>
+		<LessonForm.Root form={form} handleSubmit={handleSubmit}>
+			<LessonForm.Editor />
+			<div className="w-full max-w-md space-y-4">
+				<div className="w-full max-w-md space-y-4">
+					<LessonForm.TitleField />
+					<LessonForm.DescField />
+				</div>
+				<LessonForm.Actions>
+					<LessonForm.PublishAction handlePublish={toPublish} />
+					<LessonForm.DraftAction handleDraft={toDraft} />
+				</LessonForm.Actions>
+			</div>
+		</LessonForm.Root>
 	);
 }
+
+export { NewLessonForm };
+export default NewLessonForm;

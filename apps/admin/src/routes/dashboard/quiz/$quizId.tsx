@@ -1,17 +1,17 @@
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { optional } from "zod";
 import { BackButton } from "@/components/form/button/BackButton";
 import { Page } from "@/components/page";
 import { getQuizOpts } from "@/hooks/api/quiz";
 import { cn } from "@/lib/utils";
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { optional } from "zod";
 
 export const Route = createFileRoute("/dashboard/quiz/$quizId")({
 	component: RouteComponent,
 	loader: async ({ context, params }) => {
 		const quizId = params.quizId;
-		const id = parseInt(quizId);
+		const id = Number(quizId);
 
-		if (isNaN(id)) {
+		if (!Number.isInteger(id)) {
 			throw redirect({ to: "/dashboard/quiz" });
 		}
 

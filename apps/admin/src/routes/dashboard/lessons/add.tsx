@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Page } from "@/components/page";
-import { NewLessonForm } from "@/components/lessons/NewLessonForm";
+import { lazy, Suspense } from "react";
 import { BackButton } from "@/components/form/button/BackButton";
+import Loader from "@/components/loader";
+import { Page } from "@/components/page";
+
+const NewLessonForm = lazy(() => import("@/components/lessons/NewLessonForm"));
 
 export const Route = createFileRoute("/dashboard/lessons/add")({
 	component: RouteComponent,
@@ -18,7 +21,9 @@ function RouteComponent() {
 				<Page.Title title="Create New Lesson" />
 			</div>
 			<div className="mx-auto">
-				<NewLessonForm />
+				<Suspense fallback={<Loader />}>
+					<NewLessonForm />
+				</Suspense>
 			</div>
 		</div>
 	);

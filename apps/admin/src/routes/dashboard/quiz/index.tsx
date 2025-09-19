@@ -31,7 +31,7 @@ function RouteComponent() {
 				</Page.Header>
 				<Page.Content>
 					<ViewTransition>
-						<Suspense fallback={<DataTable.Loading />}>
+						<Suspense fallback={<DataTable.Loading columns={6} />}>
 							<QuizTable />
 						</Suspense>
 					</ViewTransition>
