@@ -16,7 +16,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-type FormSubmitHandler = (e?: React.BaseSyntheticEvent) => Promise<void>;
+export type FormSubmitHandler = (e?: React.BaseSyntheticEvent) => Promise<void>;
 
 type FormProps = FormProviderProps & {
 	className: string;

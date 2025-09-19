@@ -1,13 +1,12 @@
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import type { PropsWithChildren } from "react";
-import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-	RouterProvider,
-	Route,
-	createRouter,
 	createRootRoute,
+	createRouter,
 	Outlet,
+	Route,
+	RouterProvider,
 } from "@tanstack/react-router";
+import type { PropsWithChildren } from "react";
 
 const rootRoute = createRootRoute();
 

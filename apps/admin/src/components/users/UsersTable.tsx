@@ -13,10 +13,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDeleteLesson } from "@/hooks/api/lesson";
 import { useGetUsers } from "@/hooks/api/user";
 import { useDefaultTableOpts } from "@/hooks/table";
 import type { IUser } from "@/lib/auth";
+import { isNull } from "@/lib/type-utils";
 import { UserAvatar } from "../common/UserAvatar";
 import {
 	TableColCreatedAt,
@@ -100,7 +100,6 @@ export function UsersTable() {
 		[users],
 	);
 
-	//debugger;
 	const currRows = useMemo(
 		() =>
 			users.pages.reduce((prev, curr) => {
@@ -161,8 +160,11 @@ export function UsersTable() {
 				accessorKey: "phoneNumber",
 				header: "Phone Number",
 				cell: ({ row }) => {
-					const { phoneNumber } = row.original;
-					return phoneNumber || <TableColNaValue />;
+					const { phoneNumber = "" } = row.original;
+					if (isNull(phoneNumber)) {
+						return <TableColNaValue />;
+					}
+					return phoneNumber;
 				},
 			},
 			{

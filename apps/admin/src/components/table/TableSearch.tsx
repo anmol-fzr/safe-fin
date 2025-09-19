@@ -1,13 +1,13 @@
-import { useRef } from "react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { XIcon } from "lucide-react";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import { Input } from "../ui/input";
+import { useRef } from "react";
 import { useSearchKeyBinding } from "@/hooks/form/useSearchKeyBinding";
-import { Kbd } from "../ui/kbd";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { Button } from "../ui/button";
-import { XIcon } from "lucide-react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Input } from "../ui/input";
+import { Kbd } from "../ui/kbd";
 
 type TableSearchProps = {
 	searchQueryParamKey: string;
@@ -39,7 +39,7 @@ export function TableSearch({ searchQueryParamKey }: TableSearchProps) {
 				ref={searchRef}
 				value={query}
 				onChange={(e) => setQuery(e.target.value)}
-				className="max-w-60"
+				className="min-w-60 max-w-96"
 				type="search"
 				placeholder="Search ..."
 			/>
