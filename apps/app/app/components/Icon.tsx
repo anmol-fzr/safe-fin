@@ -127,6 +127,7 @@ export const iconRegistry = {
 	more: require("../../assets/icons/more.png"),
 	pin: require("../../assets/icons/demo/pin.png"),
 	podcast: require("../../assets/icons/demo/podcast.png"),
+	home: require("../../assets/icons/tabs/house.png"),
 	settings: require("../../assets/icons/settings.png"),
 	slack: require("../../assets/icons/demo/slack.png"),
 	view: require("../../assets/icons/view.png"),

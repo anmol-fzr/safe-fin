@@ -1,119 +1,95 @@
-import { observer } from "mobx-react-lite";
-import type { FC } from "react";
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import { Image, type ImageStyle, View, type ViewStyle } from "react-native";
 import {
-	Image,
-	type ImageStyle,
-	type TextStyle,
-	View,
-	type ViewStyle,
-} from "react-native";
-import { Button, Text, Screen } from "@/components";
-import { isRTL } from "@/i18n";
-import { useStores } from "../models";
-import type { AppStackScreenProps } from "../navigators";
-import { $styles, type ThemedStyle } from "@/theme";
-import { useHeader } from "../utils/useHeader";
-import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle";
+	interpolateColor,
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming,
+} from "react-native-reanimated";
+import { $sizeStyles, Button, Screen, Text } from "@/components";
+import { $styles, spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-const welcomeLogo = require("../../assets/images/logo.png");
-const welcomeFace = require("../../assets/images/welcome-face.png");
+const balanceImage = require("assets/images/start/balance@3x.png");
+const becomingRichImage = require("assets/images/start/becoming-rich.png");
+const unknownCallerImage = require("assets/images/start/unknown-caller.png");
 
-interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
-
-export const WelcomeScreen: FC<WelcomeScreenProps> = observer(
-	function WelcomeScreen({ navigation }) {
-		const { themed, theme } = useAppTheme();
-
-		const {
-			authenticationStore: { logout },
-		} = useStores();
-
-		const goNext = () =>
-			navigation.navigate("Demo", { screen: "CalculatorList" });
-
-		useHeader(
-			{
-				rightTx: "common:logOut",
-				onRightPress: logout,
-			},
-			[logout],
-		);
-
-		const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"]);
-
-		return (
-			<Screen preset="fixed" contentContainerStyle={$styles.flex1}>
-				<View style={themed($topContainer)}>
-					<Image
-						style={themed($welcomeLogo)}
-						source={welcomeLogo}
-						resizeMode="contain"
-					/>
-					<Text
-						testID="welcome-heading"
-						style={themed($welcomeHeading)}
-						tx="welcomeScreen:readyForLaunch"
-						preset="heading"
-					/>
-					<Text tx="welcomeScreen:exciting" preset="subheading" />
-					<Image
-						style={$welcomeFace}
-						source={welcomeFace}
-						resizeMode="contain"
-						tintColor={theme.colors.palette.neutral900}
-					/>
-				</View>
-
-				<View style={themed([$bottomContainer, $bottomContainerInsets])}>
-					<Text tx="welcomeScreen:postscript" size="md" />
-
-					<Button
-						testID="next-screen-button"
-						preset="reversed"
-						tx="welcomeScreen:letsGo"
-						onPress={goNext}
-					/>
-				</View>
-			</Screen>
-		);
+const contents = [
+	{
+		image: balanceImage,
+		bg: "#cce7ff",
+		text: "Gain Financial Clarity",
 	},
-);
+	{
+		image: becomingRichImage,
+		bg: "#e6fef1",
+		text: "Calculate and Invest",
+	},
+	{
+		image: unknownCallerImage,
+		bg: "#fff8e5",
+		text: "Stay aware of Scams",
+	},
+];
+
+export function WelcomeScreen({ navigation }) {
+	const { themed } = useAppTheme();
+	const [state, setState] = useState(0);
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			setState((state) => (state + 1) % contents.length);
+		}, 1500);
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, []);
+
+	const goNext = () =>
+		navigation.navigate("Demo", { screen: "CalculatorList" });
+
+	const curr = contents[state];
+
+	return (
+		<Screen
+			preset="fixed"
+			safeAreaEdges={["top"]}
+			contentContainerStyle={[$styles.flex1, { backgroundColor: curr.bg }]}
+		>
+			<StatusBar backgroundColor={curr.bg} />
+			<View style={themed($topContainer)}>
+				<Text preset="bold" style={{ textAlign: "center", ...$sizeStyles.xxl }}>
+					SafeFin
+				</Text>
+				<Image source={curr.image} style={themed($welcomeLogo)} />
+
+				<Text preset="bold" style={{ textAlign: "center", ...$sizeStyles.xl }}>
+					{curr.text}
+				</Text>
+			</View>
+			<Button
+				style={{ margin: spacing.lg, borderRadius: spacing.xl }}
+				onPress={goNext}
+			>
+				Next
+			</Button>
+		</Screen>
+	);
+}
 
 const $topContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	flexShrink: 1,
 	flexGrow: 1,
+	gap: spacing.lg,
 	flexBasis: "57%",
-	justifyContent: "center",
 	paddingHorizontal: spacing.lg,
-});
-
-const $bottomContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-	flexShrink: 1,
-	flexGrow: 0,
-	flexBasis: "43%",
-	backgroundColor: colors.palette.neutral100,
-	borderTopLeftRadius: 16,
-	borderTopRightRadius: 16,
-	paddingHorizontal: spacing.lg,
-	justifyContent: "space-around",
+	paddingTop: spacing.xxxl,
 });
 
 const $welcomeLogo: ThemedStyle<ImageStyle> = ({ spacing }) => ({
-	height: 88,
 	width: "100%",
+	objectFit: "contain",
+	aspectRatio: 1,
 	marginBottom: spacing.xxl,
-});
-
-const $welcomeFace: ImageStyle = {
-	height: 169,
-	width: 269,
-	position: "absolute",
-	bottom: -47,
-	right: -80,
-	transform: [{ scaleX: isRTL ? -1 : 1 }],
-};
-
-const $welcomeHeading: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.md,
 });

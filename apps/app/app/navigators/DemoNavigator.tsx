@@ -1,25 +1,34 @@
-import type { TextStyle, ViewStyle } from "react-native";
 import {
 	type BottomTabScreenProps,
 	createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import type { CompositeScreenProps } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Icon } from "../components";
-import { translate } from "@/i18n";
+import { SettingsService } from "better-auth/client/plugins";
+
 import {
-	ProfileScreen,
-	DemoDebugScreen,
+	BookOpenIcon,
+	CalculatorIcon,
+	HomeIcon,
+	ShieldIcon,
+	UserIcon,
+} from "lucide-react-native";
+import type { TextStyle, ViewStyle } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { translate } from "@/i18n";
+import { HomeScreen } from "@/screens/HomeScreen";
+import { LearningScreen } from "@/screens/lesson";
+import type { ThemedStyle } from "@/theme";
+import { envs } from "@/utils/envs";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { Icon } from "../components";
+import {
 	CalculatorListScreen,
+	DemoDebugScreen,
+	ProfileScreen,
 	ScamsScreen,
 	SettingScreen,
 } from "../screens";
-import type { ThemedStyle } from "@/theme";
 import type { AppStackParamList, AppStackScreenProps } from "./AppNavigator";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { envs } from "@/utils/envs";
-import { LearningScreen } from "@/screens/lesson";
-import { SettingsService } from "better-auth/client/plugins";
 
 export type DemoTabParamList = {
 	Profile: undefined;
@@ -68,16 +77,13 @@ export function DemoNavigator() {
 			}}
 		>
 			<Tab.Screen
-				name="CalculatorList"
-				component={CalculatorListScreen}
+				name="Home"
+				component={HomeScreen}
 				options={{
-					tabBarAccessibilityLabel: translate(
-						"demoNavigator:calculatorListTab",
-					),
-					tabBarLabel: translate("demoNavigator:calculatorListTab"),
+					tabBarAccessibilityLabel: translate("navigator:homeTab"),
+					tabBarLabel: translate("navigator:homeTab"),
 					tabBarIcon: ({ focused }) => (
-						<Icon
-							icon="podcast"
+						<HomeIcon
 							color={focused ? colors.tint : colors.tintInactive}
 							size={30}
 						/>
@@ -86,13 +92,26 @@ export function DemoNavigator() {
 			/>
 
 			<Tab.Screen
-				name="SettingScreen"
+				name="CalculatorList"
 				component={SettingScreen}
 				options={{
-					tabBarLabel: translate("demoNavigator:settingsTab"),
+					tabBarLabel: translate("navigator:calculatorListTab"),
 					tabBarIcon: ({ focused }) => (
-						<Icon
-							icon="community"
+						<CalculatorIcon
+							color={focused ? colors.tint : colors.tintInactive}
+							size={30}
+						/>
+					),
+				}}
+			/>
+
+			<Tab.Screen
+				name="Learning"
+				component={LearningScreen}
+				options={{
+					tabBarLabel: translate("navigator:learnTab"),
+					tabBarIcon: ({ focused }) => (
+						<BookOpenIcon
 							color={focused ? colors.tint : colors.tintInactive}
 							size={30}
 						/>
@@ -106,8 +125,7 @@ export function DemoNavigator() {
 				options={{
 					tabBarLabel: translate("demoNavigator:scamTab"),
 					tabBarIcon: ({ focused }) => (
-						<Icon
-							icon="bell"
+						<ShieldIcon
 							color={focused ? colors.tint : colors.tintInactive}
 							size={30}
 						/>
@@ -116,13 +134,12 @@ export function DemoNavigator() {
 			/>
 
 			<Tab.Screen
-				name="Learning"
-				component={LearningScreen}
+				name="Profile"
+				component={ProfileScreen}
 				options={{
-					tabBarLabel: translate("demoNavigator:learningTab"),
+					tabBarLabel: translate("navigator:profileTab"),
 					tabBarIcon: ({ focused }) => (
-						<Icon
-							icon="community"
+						<UserIcon
 							color={focused ? colors.tint : colors.tintInactive}
 							size={30}
 						/>
@@ -130,6 +147,8 @@ export function DemoNavigator() {
 				}}
 			/>
 
+			{/* TODO: Move this Debug Screen to Settings or Profile Screen */}
+			{/*
 			{envs.isDev && (
 				<Tab.Screen
 					name="DemoDebug"
@@ -146,6 +165,7 @@ export function DemoNavigator() {
 					}}
 				/>
 			)}
+      */}
 		</Tab.Navigator>
 	);
 }

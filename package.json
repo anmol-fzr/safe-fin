@@ -14,7 +14,7 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",
-		"dev": "turbo run dev -F @safe-fin/server -F @safe-fin/admin",
+		"dev": "turbo run dev",
 		"test": "turbo run test -F @safe-fin/server",
 		"check": "biome check",
 		"lint": "biome lint",

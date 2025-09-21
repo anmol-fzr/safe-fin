@@ -3,18 +3,18 @@ if (__DEV__) {
 	require("./devtools/ReactotronConfig.ts");
 }
 import "./utils/gestureHandler";
-import { initI18n } from "./i18n";
 import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
 import * as Linking from "expo-linking";
 import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
+import { Provider } from "@/components/Provider";
+import { LoadingScreen } from "@/screens";
+import { initI18n } from "./i18n";
 import { useInitialRootStore } from "./models";
 import { AppNavigator, useNavigationPersistence } from "./navigators";
-import * as storage from "./utils/storage";
 import { customFontsToLoad } from "./theme";
 import { loadDateFnsLocale } from "./utils/formatDate";
-import { LoadingScreen } from "@/screens";
-import { Provider } from "@/components/Provider";
+import * as storage from "./utils/storage";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
 

@@ -1,3 +1,4 @@
+import NetInfo from "@react-native-community/netinfo";
 import { useScrollToTop } from "@react-navigation/native";
 import {
 	StatusBar,
@@ -16,15 +17,14 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { $styles, spacing } from "../theme";
 import {
 	type ExtendedEdge,
 	useSafeAreaInsetsStyle,
 } from "../utils/useSafeAreaInsetsStyle";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { Text } from "./Text";
-import NetInfo from "@react-native-community/netinfo";
 
 export const DEFAULT_BOTTOM_OFFSET = 50;
 
