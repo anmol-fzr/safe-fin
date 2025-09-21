@@ -1,16 +1,16 @@
-import { Screen, ScreenHeader, Text } from "@/components";
-import { $styles, spacing, type ThemedStyle } from "@/theme";
 import { Link } from "@react-navigation/native";
 import {
-	View,
 	Image,
 	StyleSheet,
-	type ViewStyle,
 	type TextStyle,
+	View,
+	type ViewStyle,
 } from "react-native";
+import { Screen, ScreenHeader, Text } from "@/components";
+import { $styles, spacing, type ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import chainReactLogo from "../../../assets/images/ui/books.png";
 import checkList from "../../../assets/images/ui/checklist.png";
-import { useAppTheme } from "@/utils/useAppTheme";
 
 export function LearningScreen() {
 	const { themed } = useAppTheme();

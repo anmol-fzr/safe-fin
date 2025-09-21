@@ -28,6 +28,7 @@
 			"module": "commonjs"
 		}
 	},
-	"include": ["**/*.ts", "**/*.tsx"],
+	"types": ["react-native"],
+	"include": ["./index.tsx", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules", "test/**/*"]
 }

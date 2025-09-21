@@ -81,7 +81,7 @@ const en = {
 		tagLine: "Latest Lessons on Finance",
 	},
 	learningScreen: {
-		title: "Learnings",
+		title: "Learning",
 		tagLine: "Latest Lessons on Finance",
 	},
 	resultsScreen: {

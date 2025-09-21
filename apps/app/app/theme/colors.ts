@@ -26,15 +26,18 @@ const palette = {
 
 	accent100: "#FFEED4",
 	accent200: "#FFE1B2",
-	accent300: "#FDD495",
+	accent300: "#85D8FF",
 	accent400: "#FBC878",
-	accent500: "#FFBB50",
+	accent500: "#0D8CFF",
 
 	angry100: "#F2D6CD",
 	angry500: "#C03403",
 
 	success: "#2F855A",
-	successBackground: "#C6F6D5",
+	successBackground: "#70FFAE",
+
+	warning: "#2F855A",
+	warningBackground: "#FFDC86",
 
 	overlay20: "rgba(25, 16, 21, 0.2)",
 	overlay50: "rgba(25, 16, 21, 0.5)",

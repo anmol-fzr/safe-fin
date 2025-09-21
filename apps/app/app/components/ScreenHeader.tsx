@@ -23,7 +23,7 @@ export const ScreenHeader = memo(
 );
 
 const $title: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.sm,
+	marginBottom: spacing.xxxs,
 });
 
 const $tagline: ThemedStyle<TextStyle> = ({ spacing }) => ({
