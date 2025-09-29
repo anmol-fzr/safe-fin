@@ -1,6 +1,6 @@
+import { cva } from "class-variance-authority";
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
-import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 

@@ -24,9 +24,9 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { Skeleton } from "./ui/skeleton";
 import { logout, type User } from "@/lib/auth";
 import { UserAvatar } from "./common/UserAvatar";
+import { Skeleton } from "./ui/skeleton";
 
 type NavUserProps = {
 	user: User;
