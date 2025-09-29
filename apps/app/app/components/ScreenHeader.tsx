@@ -27,5 +27,5 @@ const $title: ThemedStyle<TextStyle> = ({ spacing }) => ({
 });
 
 const $tagline: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.xxl,
+	marginBottom: spacing.xl,
 });

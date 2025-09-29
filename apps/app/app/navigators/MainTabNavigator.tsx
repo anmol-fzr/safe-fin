@@ -3,7 +3,6 @@ import {
 	createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import type { CompositeScreenProps } from "@react-navigation/native";
-import { SettingsService } from "better-auth/client/plugins";
 
 import {
 	BookOpenIcon,
@@ -13,21 +12,15 @@ import {
 	UserIcon,
 } from "lucide-react-native";
 import type { TextStyle, ViewStyle } from "react-native";
+import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { translate } from "@/i18n";
+import { CalculatorListScreen } from "@/modules/Calculator/screens/CalculatorListScreen";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { LearningScreen } from "@/screens/lesson";
-import type { ThemedStyle } from "@/theme";
-import { envs } from "@/utils/envs";
+import { spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { Icon } from "../components";
-import {
-	CalculatorListScreen,
-	DemoDebugScreen,
-	ProfileScreen,
-	ScamsScreen,
-	SettingScreen,
-} from "../screens";
+import { ProfileScreen, ScamsScreen, SettingScreen } from "../screens";
 import type { AppStackParamList, AppStackScreenProps } from "./AppNavigator";
 
 export type DemoTabParamList = {
@@ -57,7 +50,7 @@ const Tab = createBottomTabNavigator<DemoTabParamList>();
  *
  * More info: https://reactnavigation.org/docs/bottom-tab-navigator/
  */
-export function DemoNavigator() {
+export function MainTabNavigator() {
 	const { bottom } = useSafeAreaInsets();
 	const {
 		themed,
@@ -93,14 +86,22 @@ export function DemoNavigator() {
 
 			<Tab.Screen
 				name="CalculatorList"
-				component={SettingScreen}
+				component={CalculatorListScreen}
 				options={{
 					tabBarLabel: translate("navigator:calculatorListTab"),
 					tabBarIcon: ({ focused }) => (
-						<CalculatorIcon
-							color={focused ? colors.tint : colors.tintInactive}
-							size={30}
-						/>
+						<View
+							style={{
+								padding: spacing.md,
+								borderBottomLeftRadius: 12,
+								backgroundColor: colors.palette.primary100,
+							}}
+						>
+							<CalculatorIcon
+								color={focused ? colors.tint : colors.tintInactive}
+								size={30}
+							/>
+						</View>
 					),
 				}}
 			/>

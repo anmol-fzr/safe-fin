@@ -46,8 +46,7 @@ export function WelcomeScreen({ navigation }) {
 		};
 	}, []);
 
-	const goNext = () =>
-		navigation.navigate("Demo", { screen: "CalculatorList" });
+	const goNext = () => navigation.navigate("MainTabs", { screen: "Home" });
 
 	const curr = contents[state];
 

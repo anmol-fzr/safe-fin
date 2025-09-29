@@ -1,8 +1,9 @@
-import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Text, Screen, ScreenHeader, ListView } from "@/components";
+import { Pressable } from "react-native";
+import { ListView, Screen, ScreenHeader, Text } from "@/components";
 import { $styles, spacing } from "@/theme";
-import { type CalcListItem, CALCULATOR_CONFIG } from "@/utils/const";
+import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 const calcs: CalcListItem[] = [];
 
@@ -14,6 +15,8 @@ Object.keys(CALCULATOR_CONFIG).map((calcConfigKey) => {
 
 export const CalculatorListScreen = () => {
 	const navigation = useNavigation();
+
+	const { theme } = useAppTheme();
 
 	return (
 		<Screen
@@ -35,14 +38,14 @@ export const CalculatorListScreen = () => {
 							navigation.navigate("Calculator", { type: calc.screen })
 						}
 						style={{
-							borderWidth: 1,
 							padding: spacing.md,
+							backgroundColor: theme.colors.successBackground,
 							borderRadius: spacing.md,
 							gap: spacing.xs,
-							marginBottom: spacing.md,
+							marginBottom: spacing.sm,
 						}}
 					>
-						<Text style={{ fontSize: 24, fontWeight: "heavy" }}>
+						<Text preset="heading" size="xl">
 							{calc.title}
 						</Text>
 						<Text style={{ fontSize: 14 }}>{calc.desc}</Text>

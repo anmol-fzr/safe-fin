@@ -4,7 +4,7 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import { type ComponentProps, useEffect } from "react";
+
 import {
 	NavigationContainer,
 	type NavigatorScreenParams,
@@ -14,19 +14,20 @@ import {
 	createNativeStackNavigator,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import { observer } from "mobx-react-lite";
-import * as Screens from "@/screens";
-import Config from "../config";
-import { useStores } from "../models";
-import { DemoNavigator, type DemoTabParamList } from "./DemoNavigator";
-import { navigationRef, useBackButtonHandler } from "./navigationUtilities";
-import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
+import { defaultConfig } from "@tamagui/config/v4";
 import { createTamagui, TamaguiProvider } from "@tamagui/core";
 import { PortalProvider } from "@tamagui/portal";
-import { defaultConfig } from "@tamagui/config/v4";
-import type { ResultRecord } from "@/components/quiz/QuizRender";
+import { observer } from "mobx-react-lite";
+import { type ComponentProps, useEffect } from "react";
 import { View } from "react-native";
 import { Text } from "@/components";
+import type { ResultRecord } from "@/components/quiz/QuizRender";
+import * as Screens from "@/screens";
+import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
+import Config from "../config";
+import { useStores } from "../models";
+import { type DemoTabParamList, MainTabNavigator } from "./MainTabNavigator";
+import { navigationRef, useBackButtonHandler } from "./navigationUtilities";
 
 const authStateXScreenMap = {
 	login: "Login",
@@ -53,7 +54,7 @@ export type AppStackParamList = {
 	Welcome: undefined;
 	Login: undefined;
 	Registration: undefined;
-	Demo: NavigatorScreenParams<DemoTabParamList>;
+	MainTabs: NavigatorScreenParams<DemoTabParamList>;
 	Quiz: { quizId: number };
 	QuizResult: {
 		answers: ResultRecord;
@@ -116,7 +117,7 @@ const AppStack = observer(function AppStack() {
 			{isAuthenticated ? (
 				<>
 					<RootStack.Screen name="Welcome" component={Screens.WelcomeScreen} />
-					<RootStack.Screen name="Demo" component={DemoNavigator} />
+					<RootStack.Screen name="MainTabs" component={MainTabNavigator} />
 					<RootStack.Screen name="Quizzes" component={Screens.QuizzesScreen} />
 					<RootStack.Screen name="Quiz" component={Screens.QuizScreen} />
 					<RootStack.Screen

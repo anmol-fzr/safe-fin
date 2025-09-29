@@ -1,7 +1,7 @@
 import type { ViewStyle } from "react-native";
 import { View } from "react-native";
 import { Screen, Text } from "@/components";
-import { QuickActions } from "@/components/home/QuickAction/QuickActions";
+import { QuickActions } from "@/modules/Home/components/QuickActions";
 import { spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -13,7 +13,7 @@ export function HomeScreen() {
 			contentContainerStyle={{
 				paddingHorizontal: spacing.lg,
 				paddingTop: spacing.md,
-				gap: spacing.xl,
+				gap: spacing.xs,
 			}}
 			safeAreaEdges={["top"]}
 		>
@@ -21,6 +21,25 @@ export function HomeScreen() {
 				<Text preset="bold" size="xl">
 					Make Your Money Work for You
 				</Text>
+
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						alignItems: "center",
+						gap: spacing.md,
+					}}
+				>
+					<Text preset="formLabel" size="xs">
+						3 min read
+					</Text>
+					<View
+						style={{ backgroundColor: "black", height: 2, aspectRatio: 1 }}
+					/>
+					<Text preset="formLabel" size="xs">
+						3 min read
+					</Text>
+				</View>
 			</View>
 
 			<QuickActions />

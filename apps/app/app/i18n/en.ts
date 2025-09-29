@@ -118,7 +118,7 @@ const en = {
 	},
 	calculatorListScreen: {
 		title: "Calculators",
-		tagLine: "All Financial Calculators",
+		tagLine: "Explore All Financial Calculators",
 	},
 	sipScreen: {
 		title: "SIP Calculator",
