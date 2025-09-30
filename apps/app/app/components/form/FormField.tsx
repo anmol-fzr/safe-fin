@@ -32,7 +32,7 @@ export const FormField = (props: FormFieldProps) => {
 						onChangeText={onChange}
 						onBlur={onBlur}
 						containerStyle={themed($textField)}
-						status={(disabled && "disabled") || (error && "error") || undefined}
+						status={disabled ? "disabled" : error ? "error" : undefined}
 						helper={props.helper || error}
 						{...props}
 					/>

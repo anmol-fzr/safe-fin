@@ -21,6 +21,7 @@ import { observer } from "mobx-react-lite";
 import { type ComponentProps, useEffect } from "react";
 import type { ResultRecord } from "@/components/quiz/QuizRender";
 import { LoginScreen, RegistrationScreen } from "@/modules/Auth/screen";
+import { useAuthStore } from "@/modules/Auth/store";
 import { CalculatorScreen } from "@/modules/Calculator/screens/CalculatorScreen";
 import * as Screens from "@/screens";
 import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
@@ -83,10 +84,9 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> =
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const RootStack = createNativeStackNavigator<AppStackParamList>();
 
-const AppStack = observer(function AppStack() {
-	const {
-		authenticationStore: { isAuthenticated, currAuthState },
-	} = useStores();
+function AppStack() {
+	const isAuthenticated = useAuthStore((state) => state.isLogin);
+	const currAuthState = useAuthStore((state) => state.state);
 
 	const {
 		theme: { colors },
@@ -138,7 +138,7 @@ const AppStack = observer(function AppStack() {
 			)}
 		</RootStack.Navigator>
 	);
-});
+}
 
 export interface NavigationProps
 	extends Partial<

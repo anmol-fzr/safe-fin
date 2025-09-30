@@ -1,4 +1,4 @@
-import { string, number, object } from "yup";
+import { number, object, string } from "yup";
 
 const phoneNumber = number()
 	.positive()
@@ -21,7 +21,7 @@ const otp = number()
 // 	return value?.toString().length === 6;
 // });
 
-const loginSchema = object({
+const loginSchema = object().shape({
 	phoneNumber,
 	otp,
 });

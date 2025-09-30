@@ -1,91 +1,83 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
-import { useSendOtp } from "@safe-fin/ui/hooks";
+import { useSendOtp, useVerifyOtp } from "@safe-fin/ui/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
-import { useCallback, useMemo, useState } from "react";
-import { FormProvider } from "react-hook-form";
+import { isUndefined } from "lodash";
+import { useCallback, useMemo } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import type { ViewStyle } from "react-native";
 import { View } from "react-native";
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
-import { useCountdown, useYupForm } from "@/hooks";
-import { useStores } from "@/models";
+import { useCountdown } from "@/hooks";
 import { loginSchema } from "@/schema";
 import { $styles, colors, type ThemedStyle } from "@/theme";
 import { authClient } from "@/utils/auth";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { useAuthStore } from "../store";
 
 export const LoginForm = () => {
 	const { countdown, reset, restart } = useCountdown(59);
-	const form = useYupForm({
-		schema: loginSchema,
+
+	const form = useForm({
+		resolver: yupResolver(loginSchema),
 	});
+
+	const setAuthData = useAuthStore((state) => state.setData);
 
 	const queryClient = useQueryClient();
-	const { sendOtp, isOtpSent } = useSendOtp(queryClient);
-
-	const {
-		authenticationStore: { setAuthState },
-	} = useStores();
+	const { sendOtp, isOtpSent, resetSentOtp } = useSendOtp(queryClient);
+	const { verifyOtpAsync } = useVerifyOtp(queryClient);
+	const { navigate } = useNavigation();
 
 	const { themed } = useAppTheme();
-	const navigation = useNavigation();
 
 	const handleSubmit = form.handleSubmit(async (data) => {
+		console.log(data);
 		if (!isOtpSent) {
-			sendOtp(data.phoneNumber);
+			sendOtp(data.phoneNumber.toString());
 			return;
 		}
 
-		return;
-		const vals = form.getValues();
-		const phoneNumber = vals.phoneNumber.toString();
-
-		const otpResp = await authClient.phoneNumber.sendOtp({ phoneNumber });
-		if (otpResp.error === null) {
-			Burnt.toast({
-				title: "OTP Sent Successfully",
-			});
-			restart();
+		if (isUndefined(data.otp)) {
+			form.setError("otp", { message: "OTP is a required field" });
+			return;
 		}
-	});
 
-	const login = form.handleSubmit(async (data) => {
-		if (isOtpSent) {
-			if (!data.otp) {
-				form.setError(
-					"otp",
-					{ message: "Enter a Valid OTP" },
-					{ shouldFocus: true },
-				);
-				return;
-			}
+		const payload = {
+			phoneNumber: data.phoneNumber.toString(),
+			code: data.otp.toString(),
+		};
 
-			const resp = await authClient.phoneNumber.verify({
-				phoneNumber: data.phoneNumber.toString(),
-				code: data.otp.toString(),
-			});
-			if (resp.error === null) {
-				if (resp.data.user.phoneNumber === resp.data.user.name) {
-					setAuthState("register");
-					navigation.navigate("Registration");
-					return;
-				}
-				setAuthState("complete");
+		try {
+			await verifyOtpAsync(payload);
+			authClient.getSession();
+
+			const respData = await authClient.getSession();
+
+			if (isUndefined(respData.data?.user)) {
+				throw new Error("User Data can't be `undefined`");
 			}
+			// biome-ignore assist: Will Fix this Later
+			setAuthData({ user: respData.data.user });
+
+			restart();
+
+			navigate("MainTabs", { screen: "Home" });
+		} catch (error) {
+			console.log(error);
 			Burnt.toast({
-				title: resp.error?.message ?? "Something Went Wrong",
+				title: "Something Went Wrong",
 				preset: "error",
 			});
-			return;
 		}
-
-		await handleSubmit();
 	});
 
 	const changePhoneNumber = useCallback(() => {
+		resetSentOtp();
 		reset();
-	}, [reset]);
+	}, [reset, resetSentOtp]);
 
 	const isResendDisabled = useMemo(() => countdown !== 0, [countdown]);
 
@@ -109,9 +101,9 @@ export const LoginForm = () => {
 						autoCapitalize="none"
 						autoComplete="sms-otp"
 						autoCorrect={false}
+						keyboardType="number-pad"
 						labelTx="loginScreen:otpFieldLabel"
 						placeholderTx="loginScreen:otpFieldPlaceholder"
-						onSubmitEditing={login}
 					/>
 				)}
 			</FormProvider>
