@@ -1,3 +1,4 @@
+import { isNull } from "@safe-fin/ui/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useReactTable } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -16,7 +17,6 @@ import {
 import { useGetUsers } from "@/hooks/api/user";
 import { useDefaultTableOpts } from "@/hooks/table";
 import type { IUser } from "@/lib/auth";
-import { isNull } from "@/lib/type-utils";
 import { UserAvatar } from "../common/UserAvatar";
 import {
 	TableColCreatedAt,

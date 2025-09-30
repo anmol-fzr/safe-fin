@@ -7,11 +7,10 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth";
-import { isNull } from "@/lib/type-utils";
 import type { AddUserFormData } from "@/schema/user.schema";
 import { API } from "@/services";
 import type { ICreateLessonReq } from "@/services/api";
-import type { IReqParams, ResourceId } from "@/services/api/types";
+import type { ResourceId } from "@/services/api/types";
 import {
 	createToastMessages,
 	initialPageParam,
