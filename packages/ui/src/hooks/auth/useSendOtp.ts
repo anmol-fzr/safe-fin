@@ -1,8 +1,13 @@
-import { type QueryClient, useMutation } from "@tanstack/react-query";
+import {
+	type QueryClient,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { useResourceActionToast } from "../useResourceActionToast";
 import { useAuthClient } from "./useAuthClient";
 
 export const useSendOtp = (queryClient?: QueryClient) => {
+	queryClient ??= useQueryClient();
 	const authClient = useAuthClient();
 
 	const toast = useResourceActionToast();
