@@ -8,19 +8,19 @@ import {
 	BookOpenIcon,
 	CalculatorIcon,
 	HomeIcon,
+	type LucideIcon,
 	ShieldIcon,
 	UserIcon,
 } from "lucide-react-native";
 import type { TextStyle, ViewStyle } from "react-native";
-import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { translate } from "@/i18n";
 import { CalculatorListScreen } from "@/modules/Calculator/screens/CalculatorListScreen";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { LearningScreen } from "@/screens/lesson";
-import { spacing, type ThemedStyle } from "@/theme";
+import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { ProfileScreen, ScamsScreen, SettingScreen } from "../screens";
+import { ProfileScreen, ScamsScreen } from "../screens";
 import type { AppStackParamList, AppStackScreenProps } from "./AppNavigator";
 
 export type DemoTabParamList = {
@@ -76,10 +76,7 @@ export function MainTabNavigator() {
 					tabBarAccessibilityLabel: translate("navigator:homeTab"),
 					tabBarLabel: translate("navigator:homeTab"),
 					tabBarIcon: ({ focused }) => (
-						<HomeIcon
-							color={focused ? colors.tint : colors.tintInactive}
-							size={30}
-						/>
+						<TabIcon Icon={HomeIcon} focused={focused} />
 					),
 				}}
 			/>
@@ -90,18 +87,7 @@ export function MainTabNavigator() {
 				options={{
 					tabBarLabel: translate("navigator:calculatorListTab"),
 					tabBarIcon: ({ focused }) => (
-						<View
-							style={{
-								padding: spacing.md,
-								borderBottomLeftRadius: 12,
-								backgroundColor: colors.palette.primary100,
-							}}
-						>
-							<CalculatorIcon
-								color={focused ? colors.tint : colors.tintInactive}
-								size={30}
-							/>
-						</View>
+						<TabIcon Icon={CalculatorIcon} focused={focused} />
 					),
 				}}
 			/>
@@ -112,10 +98,7 @@ export function MainTabNavigator() {
 				options={{
 					tabBarLabel: translate("navigator:learnTab"),
 					tabBarIcon: ({ focused }) => (
-						<BookOpenIcon
-							color={focused ? colors.tint : colors.tintInactive}
-							size={30}
-						/>
+						<TabIcon Icon={BookOpenIcon} focused={focused} />
 					),
 				}}
 			/>
@@ -126,10 +109,7 @@ export function MainTabNavigator() {
 				options={{
 					tabBarLabel: translate("demoNavigator:scamTab"),
 					tabBarIcon: ({ focused }) => (
-						<ShieldIcon
-							color={focused ? colors.tint : colors.tintInactive}
-							size={30}
-						/>
+						<TabIcon Icon={ShieldIcon} focused={focused} />
 					),
 				}}
 			/>
@@ -140,10 +120,7 @@ export function MainTabNavigator() {
 				options={{
 					tabBarLabel: translate("navigator:profileTab"),
 					tabBarIcon: ({ focused }) => (
-						<UserIcon
-							color={focused ? colors.tint : colors.tintInactive}
-							size={30}
-						/>
+						<TabIcon Icon={UserIcon} focused={focused} />
 					),
 				}}
 			/>
@@ -186,3 +163,21 @@ const $tabBarLabel: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
 	lineHeight: 16,
 	color: colors.text,
 });
+
+interface TabIconProps {
+	focused: boolean;
+	Icon: LucideIcon;
+}
+
+const TabIcon = ({ focused, Icon }: TabIconProps) => {
+	const {
+		theme: { colors },
+	} = useAppTheme();
+
+	return (
+		<Icon
+			color={focused ? colors.tint : colors.tintInactive}
+			size={focused ? 30 : 24}
+		/>
+	);
+};

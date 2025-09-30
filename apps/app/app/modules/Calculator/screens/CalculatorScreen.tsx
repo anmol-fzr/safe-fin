@@ -1,28 +1,36 @@
-import type { ScreenProps } from "@/navigators";
-import { CalcScreenWrapper } from "./CalcScreenWrapper";
-import { CALCULATOR_CONFIG } from "@/utils/const";
+import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ListView, Text } from "@/components";
-import { SliderRow, sliderRowStyles } from "@/components/calculator/SliderRow";
-import { CalcPieChart } from "@/components/calculator/CalcPieChart";
-import { useMemo, useState } from "react";
+
+import {
+	CalculatorPieChart,
+	CalculatorResultItem,
+	CalculatorScreenWrapper,
+	CalculatorSlider,
+	sliderRowStyles,
+} from "@/modules/Calculator/components";
+import type { ScreenProps } from "@/navigators";
 import { colors, spacing } from "@/theme";
-import { ResultItem } from "@/components/calculator/ResultList";
+import { CALCULATOR_CONFIG } from "@/utils/const";
 
 type CalculatorScreenProps = ScreenProps<"Calculator">;
 
-export const CalculatorScreen = (props: CalculatorScreenProps) => {
+export function CalculatorScreen(props: CalculatorScreenProps) {
 	const { title, calculate, sliders, constants, resultKeys, pieChart } =
 		CALCULATOR_CONFIG[props.route.params.type];
 
 	const initialState = useMemo(() => {
 		const state: Record<string, number> = {};
-		sliders.forEach((s) => (state[s.key] = s.value));
+		sliders.forEach((s) => {
+			state[s.key] = s.value;
+		});
 		if (constants && constants?.length > 0) {
-			constants.forEach((s) => (state[s.key] = s.value));
+			constants.forEach((s) => {
+				state[s.key] = s.value;
+			});
 		}
 		return state;
-	}, [sliders]);
+	}, [sliders, constants]);
 
 	const [formState, setFormState] = useState(initialState);
 
@@ -33,15 +41,15 @@ export const CalculatorScreen = (props: CalculatorScreenProps) => {
 	const result = useMemo(() => calculate(formState), [formState, calculate]);
 
 	return (
-		<CalcScreenWrapper>
+		<CalculatorScreenWrapper>
 			<Text preset="heading" text={title} />
 
 			{pieChart && result.pieData ? (
-				<CalcPieChart data={result.pieData} />
+				<CalculatorPieChart data={result.pieData} />
 			) : null}
 
 			{sliders.map((slider) => (
-				<SliderRow
+				<CalculatorSlider
 					key={slider.key}
 					label={slider.label}
 					value={formState[slider.key]}
@@ -72,11 +80,11 @@ export const CalculatorScreen = (props: CalculatorScreenProps) => {
 					value: result[key[0]],
 				}))}
 				keyExtractor={(item) => item.label}
-				renderItem={({ item }) => <ResultItem {...item} />}
+				renderItem={({ item }) => <CalculatorResultItem {...item} />}
 			/>
-		</CalcScreenWrapper>
+		</CalculatorScreenWrapper>
 	);
-};
+}
 
 const styles = StyleSheet.create({
 	container: {

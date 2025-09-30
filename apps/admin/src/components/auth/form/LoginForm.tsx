@@ -1,4 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useSendOtp } from "@safe-fin/ui/hooks";
 import type React from "react";
 import { useCallback } from "react";
 import { toast } from "sonner";
@@ -17,7 +18,10 @@ import {
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
-import { useSendOtp, useVerifyOtp } from "@/hooks/api/auth";
+import {
+	//useSendOtp,
+	useVerifyOtp,
+} from "@/hooks/api/auth";
 import useOtpTimer from "@/hooks/useOtpTimer";
 import { authClient } from "@/lib/auth";
 import { getPhonePlaceholder } from "@/lib/faker";

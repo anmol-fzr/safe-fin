@@ -17,7 +17,6 @@ export const $styles = {
 	goBack: {
 		display: "flex",
 		flexDirection: "row",
-		gap: spacing.xs,
 		alignItems: "center",
 		marginBottom: spacing.sm,
 	} as ViewStyle,

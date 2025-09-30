@@ -1,17 +1,10 @@
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Image, type ImageStyle, View, type ViewStyle } from "react-native";
-import {
-	interpolateColor,
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming,
-} from "react-native-reanimated";
 import { $sizeStyles, Button, Screen, Text } from "@/components";
 import { $styles, spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-const balanceImage = require("assets/images/start/balance@3x.png");
+const balanceImage = require("assets/images/start/balance.png");
 const becomingRichImage = require("assets/images/start/becoming-rich.png");
 const unknownCallerImage = require("assets/images/start/unknown-caller.png");
 
@@ -54,9 +47,8 @@ export function WelcomeScreen({ navigation }) {
 		<Screen
 			preset="fixed"
 			safeAreaEdges={["top"]}
-			contentContainerStyle={[$styles.flex1, { backgroundColor: curr.bg }]}
+			contentContainerStyle={$styles.flex1}
 		>
-			<StatusBar backgroundColor={curr.bg} />
 			<View style={themed($topContainer)}>
 				<Text preset="bold" style={{ textAlign: "center", ...$sizeStyles.xxl }}>
 					SafeFin
@@ -68,10 +60,15 @@ export function WelcomeScreen({ navigation }) {
 				</Text>
 			</View>
 			<Button
-				style={{ margin: spacing.lg, borderRadius: spacing.xl }}
+				style={{
+					margin: spacing.lg,
+					borderRadius: spacing.xl,
+					backgroundColor: curr.bg,
+					borderWidth: 0,
+				}}
 				onPress={goNext}
 			>
-				Next
+				<Text preset="subheading">Next</Text>
 			</Button>
 		</Screen>
 	);

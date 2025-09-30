@@ -1,11 +1,12 @@
-import { useCallback, memo, useTransition, useMemo } from "react";
-import { Text, TextField } from "@/components";
-import { colors, spacing } from "@/theme";
 import Slider from "@react-native-community/slider";
-import { View, StyleSheet } from "react-native";
 import { debounce } from "lodash";
+import { memo, useCallback, useMemo, useTransition } from "react";
+import { StyleSheet, View } from "react-native";
+import { Text, TextField } from "@/components";
+import { spacing } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
-type SliderRowProps = {
+type CalculatorSliderProps = {
 	label: string;
 	value: number;
 	setValue: (val: number) => void;
@@ -14,8 +15,15 @@ type SliderRowProps = {
 	maxValue: number;
 };
 
-export const SliderRow = memo(
-	({ label, value, step, setValue, minValue, maxValue }: SliderRowProps) => {
+export const CalculatorSlider = memo(
+	({
+		label,
+		value,
+		step,
+		setValue,
+		minValue,
+		maxValue,
+	}: CalculatorSliderProps) => {
 		const [isPending, startTransition] = useTransition();
 
 		const onChange = useCallback(
@@ -47,6 +55,10 @@ export const SliderRow = memo(
 			[debouncedSetValue],
 		);
 
+		const {
+			theme: { colors },
+		} = useAppTheme();
+
 		return (
 			<View style={styles.sliderContainer}>
 				<View style={styles.labelRow}>
@@ -66,14 +78,15 @@ export const SliderRow = memo(
 					step={step}
 					minimumValue={minValue}
 					maximumValue={maxValue}
-					minimumTrackTintColor={colors.tint}
-					thumbTintColor={colors.textDim}
+					minimumTrackTintColor={colors.success}
+					thumbTintColor={colors.successBackground}
 					maximumTrackTintColor="#000000"
 				/>
 			</View>
 		);
 	},
 );
+
 const styles = StyleSheet.create({
 	sliderContainer: {
 		marginTop: spacing.xl,

@@ -23,12 +23,12 @@ export function useSIPCalculatorLogic(formState: Props) {
 		pieData: [
 			{
 				value: totalInvested / totalValue,
-				color: colors.palette.primary200,
+				color: colors.palette.success,
 				text: "Invested amount",
 			},
 			{
 				value: returns / totalValue,
-				color: colors.tint,
+				color: colors.palette.successBackground,
 				text: "Estimated returns",
 			},
 		],

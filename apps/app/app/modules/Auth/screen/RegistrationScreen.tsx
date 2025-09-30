@@ -1,11 +1,11 @@
 import { observer } from "mobx-react-lite";
 import type { TextStyle, ViewStyle } from "react-native";
 import { Screen, Text } from "@/components";
+import { RegisterForm } from "@/components/forms";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { RegisterForm } from "@/components/forms";
 
-export const RegistrationScreen = observer(function LoginScreen() {
+export const RegistrationScreen = observer(function Page() {
 	const { themed } = useAppTheme();
 
 	return (

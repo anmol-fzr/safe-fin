@@ -1,17 +1,19 @@
-import { useCallback, useMemo, useState } from "react";
-import type { ViewStyle } from "react-native";
-import { Button, Text } from "@/components";
-import { View } from "react-native";
-import { $styles, colors, type ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { authClient } from "@/utils/auth";
-import { useStores } from "@/models";
-import { FormProvider } from "react-hook-form";
-import { FormField } from "@/components/form/FormField";
-import { loginSchema } from "@/schema";
 import { useNavigation } from "@react-navigation/native";
-import { useYupForm, useCountdown } from "@/hooks";
+import { useSendOtp } from "@safe-fin/ui/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
+import { useCallback, useMemo, useState } from "react";
+import { FormProvider } from "react-hook-form";
+import type { ViewStyle } from "react-native";
+import { View } from "react-native";
+import { Button, Text } from "@/components";
+import { FormField } from "@/components/form/FormField";
+import { useCountdown, useYupForm } from "@/hooks";
+import { useStores } from "@/models";
+import { loginSchema } from "@/schema";
+import { $styles, colors, type ThemedStyle } from "@/theme";
+import { authClient } from "@/utils/auth";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export const LoginForm = () => {
 	const { countdown, reset, restart } = useCountdown(59);
@@ -19,9 +21,8 @@ export const LoginForm = () => {
 		schema: loginSchema,
 	});
 
-	const { handleSubmit, getValues, setError } = form;
-
-	const [isOtpSent, setIsOtpSent] = useState(false);
+	const queryClient = useQueryClient();
+	const { sendOtp, isOtpSent } = useSendOtp(queryClient);
 
 	const {
 		authenticationStore: { setAuthState },
@@ -30,21 +31,15 @@ export const LoginForm = () => {
 	const { themed } = useAppTheme();
 	const navigation = useNavigation();
 
-	const sendOtp = useCallback(async () => {
-		const vals = getValues();
-		const phoneNumber = vals.phoneNumber.toString();
-		if (
-			!phoneNumber ||
-			phoneNumber.length !== 10 ||
-			isNaN(Number(phoneNumber))
-		) {
-			setError(
-				"phoneNumber",
-				{ message: "Enter a Valid Phone Number" },
-				{ shouldFocus: true },
-			);
+	const handleSubmit = form.handleSubmit(async (data) => {
+		if (!isOtpSent) {
+			sendOtp(data.phoneNumber);
 			return;
 		}
+
+		return;
+		const vals = form.getValues();
+		const phoneNumber = vals.phoneNumber.toString();
 
 		const otpResp = await authClient.phoneNumber.sendOtp({ phoneNumber });
 		if (otpResp.error === null) {
@@ -52,14 +47,13 @@ export const LoginForm = () => {
 				title: "OTP Sent Successfully",
 			});
 			restart();
-			setIsOtpSent(true);
 		}
-	}, [getValues, setError]);
+	});
 
-	const login = handleSubmit(async (data) => {
+	const login = form.handleSubmit(async (data) => {
 		if (isOtpSent) {
 			if (!data.otp) {
-				setError(
+				form.setError(
 					"otp",
 					{ message: "Enter a Valid OTP" },
 					{ shouldFocus: true },
@@ -80,20 +74,20 @@ export const LoginForm = () => {
 				setAuthState("complete");
 			}
 			Burnt.toast({
-				title: resp.error?.message,
+				title: resp.error?.message ?? "Something Went Wrong",
 				preset: "error",
 			});
 			return;
 		}
-		await sendOtp();
+
+		await handleSubmit();
 	});
 
 	const changePhoneNumber = useCallback(() => {
 		reset();
-		setIsOtpSent(false);
 	}, [reset]);
 
-	const isResendDisabled = useMemo(() => countdown !== 0, [countdown === 0]);
+	const isResendDisabled = useMemo(() => countdown !== 0, [countdown]);
 
 	return (
 		<>
@@ -129,7 +123,7 @@ export const LoginForm = () => {
 					<Button
 						text="Resend OTP"
 						preset="text"
-						onPress={sendOtp}
+						//onPress={handleSubmit}
 						disabled={isResendDisabled}
 						textStyle={{
 							color: isResendDisabled
@@ -145,7 +139,7 @@ export const LoginForm = () => {
 				tx={isOtpSent ? "loginScreen:verifyOtp" : "loginScreen:sendOtp"}
 				style={themed($tapButton)}
 				preset="reversed"
-				onPress={login}
+				onPress={handleSubmit}
 			/>
 
 			{isOtpSent && (

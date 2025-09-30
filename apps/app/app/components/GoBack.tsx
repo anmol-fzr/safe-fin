@@ -1,12 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
+import type { TOptions } from "i18next";
+import { ChevronLeft } from "lucide-react-native";
 import { memo } from "react";
 import { Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { type TxKeyPath, translate } from "@/i18n";
 import { $styles } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Icon } from "./Icon";
 import { Text } from "./Text";
-import { type TxKeyPath, translate } from "@/i18n";
-import type { TOptions } from "i18next";
 
 type GoBackProps = {
 	/**
@@ -26,7 +27,9 @@ type GoBackProps = {
 
 export const GoBack = memo(({ tx, txOptions, goBackText }: GoBackProps) => {
 	const navigate = useNavigation();
-	const { theme } = useAppTheme();
+	const {
+		theme: { colors },
+	} = useAppTheme();
 
 	const i18nText = tx && translate(tx, txOptions);
 
@@ -34,7 +37,7 @@ export const GoBack = memo(({ tx, txOptions, goBackText }: GoBackProps) => {
 
 	return (
 		<Pressable onPress={navigate.goBack} style={$styles.goBack}>
-			<Icon icon="back" color={theme.colors.palette.primary500} size={20} />
+			<ChevronLeft color={colors.textDim} size={20} />
 			<Text>{content}</Text>
 		</Pressable>
 	);

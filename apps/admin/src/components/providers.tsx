@@ -6,10 +6,12 @@ import "../index.css";
 
 import { AuthQueryProvider } from "@daveyplate/better-auth-tanstack";
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
+import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+import { toast } from "sonner";
 import { authClient } from "@/lib/auth";
 import { queryClient } from "@/main";
 import { CmdK, CmdKProvider } from "./cmd-k";
@@ -68,16 +70,24 @@ export function Providers({ children }: { children: ReactElement }) {
 							storageKey="vite-ui-theme"
 						>
 							<QueryClientProvider client={queryClient}>
-								<AuthQueryProvider>
-									<AuthUIProviderTanstack
-										authClient={authClient}
-										navigate={(href) => router.navigate({ href })}
-										replace={(href) => router.navigate({ href, replace: true })}
-										Link={({ href, ...props }) => <Link to={href} {...props} />}
-									>
-										<NuqsAdapter>{children}</NuqsAdapter>
-									</AuthUIProviderTanstack>
-								</AuthQueryProvider>
+								<AuthProvider client={authClient}>
+									<NotifierProvider value={toast}>
+										<AuthQueryProvider>
+											<AuthUIProviderTanstack
+												authClient={authClient}
+												navigate={(href) => router.navigate({ href })}
+												replace={(href) =>
+													router.navigate({ href, replace: true })
+												}
+												Link={({ href, ...props }) => (
+													<Link to={href} {...props} />
+												)}
+											>
+												<NuqsAdapter>{children}</NuqsAdapter>
+											</AuthUIProviderTanstack>
+										</AuthQueryProvider>
+									</NotifierProvider>
+								</AuthProvider>
 							</QueryClientProvider>
 							<Toaster richColors />
 						</ThemeProvider>

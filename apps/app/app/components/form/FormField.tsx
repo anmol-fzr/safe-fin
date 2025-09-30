@@ -1,8 +1,8 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { TextField, type TextFieldProps } from "../TextField";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { View, type ViewStyle } from "react-native";
-import type { ThemedStyle } from "@/theme";
+import { spacing, type ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { TextField, type TextFieldProps } from "../TextField";
 
 type FormFieldProps = Omit<
 	TextFieldProps,
@@ -48,4 +48,5 @@ export const FormField = (props: FormFieldProps) => {
 
 const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	marginBottom: spacing.lg,
+	borderRadius: spacing.xxl,
 });

@@ -19,9 +19,9 @@ import { createTamagui, TamaguiProvider } from "@tamagui/core";
 import { PortalProvider } from "@tamagui/portal";
 import { observer } from "mobx-react-lite";
 import { type ComponentProps, useEffect } from "react";
-import { View } from "react-native";
-import { Text } from "@/components";
 import type { ResultRecord } from "@/components/quiz/QuizRender";
+import { LoginScreen, RegistrationScreen } from "@/modules/Auth/screen";
+import { CalculatorScreen } from "@/modules/Calculator/screens/CalculatorScreen";
 import * as Screens from "@/screens";
 import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
 import Config from "../config";
@@ -63,11 +63,6 @@ export type AppStackParamList = {
 
 	Calculator: { type: CalculatorType };
 
-	Calc_SIP: undefined;
-	Calc_SWP: undefined;
-	Calc_MF: undefined;
-	Calc_PPF: undefined;
-	Calc_EPF: undefined;
 	Scam: { scamId: number };
 	Lessons: undefined;
 	Lesson: { lessonId: number };
@@ -125,27 +120,19 @@ const AppStack = observer(function AppStack() {
 						component={Screens.QuizResultScreen}
 					/>
 
-					{/* Calculators */}
-					<RootStack.Screen name="Calc_SIP" component={Screens.SipCalcScreen} />
-					<RootStack.Screen name="Calc_SWP" component={Screens.SwpCalcScreen} />
-					<RootStack.Screen name="Calc_MF" component={Screens.MfCalcScreen} />
-					<RootStack.Screen name="Calc_PPF" component={Screens.PpfCalcScreen} />
-					<RootStack.Screen name="Calc_EPF" component={Screens.EpfCalcScreen} />
 					<RootStack.Screen name="Scam" component={Screens.ScamScreen} />
 					<RootStack.Screen name="Lessons" component={Screens.LessonsScreen} />
 					<RootStack.Screen name="Lesson" component={Screens.LessonScreen} />
 
-					<RootStack.Screen
-						name="Calculator"
-						component={Screens.CalculatorScreen}
-					/>
+					{/* Calculators */}
+					<RootStack.Screen name="Calculator" component={CalculatorScreen} />
 				</>
 			) : (
 				<>
-					<RootStack.Screen name="Login" component={Screens.LoginScreen} />
+					<RootStack.Screen name="Login" component={LoginScreen} />
 					<RootStack.Screen
 						name="Registration"
-						component={Screens.RegistrationScreen}
+						component={RegistrationScreen}
 					/>
 				</>
 			)}

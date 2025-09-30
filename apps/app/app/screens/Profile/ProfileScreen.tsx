@@ -1,8 +1,12 @@
-import { Screen, ScreenHeader } from "@/components";
-import { $styles } from "@/theme";
+import { Button, Screen, ScreenHeader } from "@/components";
 import { ProfileForm } from "@/components/forms";
+import { useStores } from "@/models";
+import { $styles } from "@/theme";
 
 export const ProfileScreen = () => {
+	const {
+		authenticationStore: { logout },
+	} = useStores();
 	return (
 		<Screen
 			preset="scroll"
@@ -15,6 +19,7 @@ export const ProfileScreen = () => {
 			/>
 
 			<ProfileForm />
+			<Button tx="common:logOut" onPress={logout} />
 		</Screen>
 	);
 };

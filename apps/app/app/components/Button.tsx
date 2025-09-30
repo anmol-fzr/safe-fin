@@ -8,9 +8,9 @@ import {
 	type ViewStyle,
 } from "react-native";
 import type { ThemedStyle, ThemedStyleArray } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { $styles } from "../theme";
 import { Text, type TextProps } from "./Text";
-import { useAppTheme } from "@/utils/useAppTheme";
 
 type Presets = "default" | "filled" | "reversed" | "text";
 
@@ -191,9 +191,9 @@ export function Button(props: ButtonProps) {
 	);
 }
 
-const $baseViewStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+const $baseViewStyle: ThemedStyle<ViewStyle> = ({ spacing, roundness }) => ({
 	minHeight: 56,
-	borderRadius: 4,
+	borderRadius: roundness * 1.5,
 	justifyContent: "center",
 	alignItems: "center",
 	paddingVertical: spacing.sm,

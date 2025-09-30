@@ -1,12 +1,8 @@
-import type { ReactNode } from "react";
-import { Screen, GoBack } from "@/components";
+import type { PropsWithChildren } from "react";
+import { GoBack, Screen } from "@/components";
 import { $styles } from "@/theme";
 
-type CalcScreenWrapperProps = {
-	children: ReactNode;
-};
-
-export function CalcScreenWrapper({ children }: CalcScreenWrapperProps) {
+export function CalculatorScreenWrapper({ children }: PropsWithChildren) {
 	return (
 		<Screen
 			preset="scroll"

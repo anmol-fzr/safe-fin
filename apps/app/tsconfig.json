@@ -1,4 +1,5 @@
 {
+	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
 		"allowJs": false,
 		"allowSyntheticDefaultImports": true,
@@ -18,11 +19,11 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./app/*"],
-			"assets/*": ["./assets/*"]
+			"assets/*": ["./assets/*"],
+			"@auth/*": ["./app/modules/Auth/*"]
 		},
 		"typeRoots": ["./node_modules/@types", "./types"]
 	},
-	"extends": "expo/tsconfig.base",
 	"ts-node": {
 		"compilerOptions": {
 			"module": "commonjs"

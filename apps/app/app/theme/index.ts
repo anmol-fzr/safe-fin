@@ -1,4 +1,5 @@
 import type { StyleProp } from "react-native";
+import { roundness } from "./borderRadius";
 import { colors as colorsLight } from "./colors";
 import { colors as colorsDark } from "./colorsDark";
 import { spacing as spacingLight } from "./spacing";
@@ -26,6 +27,7 @@ export interface Theme {
 	typography: Typography;
 	timing: Timing;
 	isDark: boolean;
+	roundness: number;
 }
 
 // Here we define our themes.
@@ -34,6 +36,7 @@ export const lightTheme: Theme = {
 	spacing: spacingLight,
 	typography,
 	timing,
+	roundness,
 	isDark: false,
 };
 export const darkTheme: Theme = {
@@ -41,6 +44,7 @@ export const darkTheme: Theme = {
 	spacing: spacingDark,
 	typography,
 	timing,
+	roundness,
 	isDark: true,
 };
 
@@ -75,6 +79,7 @@ export { colorsLight as colors };
 export { colorsDark };
 export { spacingLight as spacing };
 
+export * from "./borderRadius";
 export * from "./styles";
-export * from "./typography";
 export * from "./timing";
+export * from "./typography";

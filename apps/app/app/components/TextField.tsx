@@ -18,9 +18,9 @@ import {
 } from "react-native";
 import { isRTL, translate } from "@/i18n";
 import type { ThemedStyle, ThemedStyleArray } from "@/theme";
-import { $styles } from "../theme";
-import { Text, type TextProps } from "./Text";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { $styles, roundness } from "../theme";
+import { Text, type TextProps } from "./Text";
 
 export interface TextFieldAccessoryProps {
 	style: StyleProp<ViewStyle | TextStyle | ImageStyle>;
@@ -263,7 +263,7 @@ const $labelStyle: ThemedStyle<TextStyle> = ({ spacing }) => ({
 const $inputWrapperStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
 	alignItems: "flex-start",
 	borderWidth: 1,
-	borderRadius: 4,
+	borderRadius: roundness,
 	backgroundColor: colors.palette.neutral200,
 	borderColor: colors.palette.neutral400,
 	overflow: "hidden",

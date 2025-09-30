@@ -1,16 +1,16 @@
 import { memo } from "react";
+import { StyleSheet, View } from "react-native";
+import type { pieDataItem } from "react-native-gifted-charts";
+import { PieChart } from "react-native-gifted-charts";
 import { Text } from "@/components";
 import { colors, spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { View, StyleSheet } from "react-native";
-import { PieChart } from "react-native-gifted-charts";
-import type { pieDataItem } from "react-native-gifted-charts";
 
-type CalcPieChartProps = {
+type CalculatorPieChartProps = {
 	data: pieDataItem[];
 };
 
-export const CalcPieChart = memo(({ data }: CalcPieChartProps) => {
+export const CalculatorPieChart = memo(({ data }: CalculatorPieChartProps) => {
 	const { themeContext } = useAppTheme();
 	return (
 		<View style={styles.chartContainer}>

@@ -1,8 +1,7 @@
-import { authClient } from "@/lib/auth";
-import { useMutation } from "@tanstack/react-query";
 import { createAuthHooks } from "@daveyplate/better-auth-tanstack";
+import { useMutation } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth";
 import { useResourceActionToast } from "./defaults";
-import { errorMonitor } from "events";
 
 const useSendOtp = () => {
 	const toast = useResourceActionToast();
@@ -66,7 +65,7 @@ const useVerifyOtp = () => {
 			},
 			onError(data) {
 				console.log(data);
-				toast.error(data.message ?? errorMonitor);
+				toast.error(data.message ?? errorMsg);
 			},
 		});
 

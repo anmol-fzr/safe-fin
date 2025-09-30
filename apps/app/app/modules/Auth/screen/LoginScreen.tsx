@@ -1,8 +1,10 @@
+import savingMoneyImg from "assets/images/auth/login/saving-money.png";
 import type { TextStyle, ViewStyle } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { Screen, Text } from "@/components";
+import { LoginForm } from "@/modules/Auth/components";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { LoginForm } from "@/components/forms";
 
 export const LoginScreen = () => {
 	const { themed } = useAppTheme();
@@ -19,16 +21,21 @@ export const LoginScreen = () => {
 				preset="heading"
 				style={themed($logIn)}
 			/>
-			<Text
-				tx="loginScreen:enterDetails"
-				preset="subheading"
-				style={themed($enterDetails)}
-			/>
+
+			<Image source={savingMoneyImg} style={styles.image} />
 
 			<LoginForm />
 		</Screen>
 	);
 };
+const styles = StyleSheet.create({
+	image: {
+		width: "100%",
+		objectFit: "contain",
+		marginInline: "auto",
+		aspectRatio: 1,
+	},
+});
 
 const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	paddingVertical: spacing.xxl,
@@ -37,8 +44,4 @@ const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $logIn: ThemedStyle<TextStyle> = ({ spacing }) => ({
 	marginBottom: spacing.sm,
-});
-
-const $enterDetails: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.lg,
 });
