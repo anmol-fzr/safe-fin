@@ -1,10 +1,3 @@
-/**
- * The app navigator (formerly "AppNavigator" and "MainNavigator") is used for the primary
- * navigation flows of your app.
- * Generally speaking, it will contain an auth flow (registration, login, forgot password)
- * and a "main" flow which the user will use once logged in.
- */
-
 import {
 	NavigationContainer,
 	type NavigatorScreenParams,
@@ -26,7 +19,6 @@ import { CalculatorScreen } from "@/modules/Calculator/screens/CalculatorScreen"
 import * as Screens from "@/screens";
 import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
 import Config from "../config";
-import { useStores } from "../models";
 import { type DemoTabParamList, MainTabNavigator } from "./MainTabNavigator";
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities";
 

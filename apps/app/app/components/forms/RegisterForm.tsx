@@ -1,14 +1,14 @@
+import { useNavigation } from "@react-navigation/native";
+import { FormProvider } from "react-hook-form";
 import type { ViewStyle } from "react-native";
 import { Button } from "@/components";
-import type { ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { useStores } from "@/models";
-import { FormProvider } from "react-hook-form";
 import { FormField } from "@/components/form/FormField";
-import { registerSchema } from "@/schema";
 import { useYupForm } from "@/hooks";
-import { useNavigation } from "@react-navigation/native";
+import { registerSchema } from "@/modules/Auth/schema";
+import { useAuthStore } from "@/modules/Auth/store";
+import type { ThemedStyle } from "@/theme";
 import { authClient } from "@/utils/auth";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export const RegisterForm = () => {
 	const methods = useYupForm({
@@ -17,9 +17,7 @@ export const RegisterForm = () => {
 	const { handleSubmit } = methods;
 	const navigation = useNavigation();
 
-	const {
-		authenticationStore: { setAuthState },
-	} = useStores();
+	const setAuthState = useAuthStore((state) => state.setState);
 
 	const { themed } = useAppTheme();
 

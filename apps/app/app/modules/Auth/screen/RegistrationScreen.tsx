@@ -1,11 +1,10 @@
-import { observer } from "mobx-react-lite";
 import type { TextStyle, ViewStyle } from "react-native";
 import { Screen, Text } from "@/components";
 import { RegisterForm } from "@/components/forms";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-export const RegistrationScreen = observer(function Page() {
+export const RegistrationScreen = () => {
 	const { themed } = useAppTheme();
 
 	return (
@@ -29,7 +28,7 @@ export const RegistrationScreen = observer(function Page() {
 			<RegisterForm />
 		</Screen>
 	);
-});
+};
 
 const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	paddingVertical: spacing.xxl,

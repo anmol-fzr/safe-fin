@@ -1,10 +1,10 @@
+import { memo } from "react";
+import { FormProvider } from "react-hook-form";
 import { Button } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useYupForm } from "@/hooks";
-import { profileSchema } from "@/schema";
+import { profileSchema } from "@/modules/Auth/schema";
 import { authClient } from "@/utils/auth";
-import { memo } from "react";
-import { FormProvider } from "react-hook-form";
 
 export const ProfileForm = memo(() => {
 	//const [phoneOtpState, setPhoneOtpState] = useState<OtpState>("closed");

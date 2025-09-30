@@ -11,7 +11,7 @@ import { View } from "react-native";
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useCountdown } from "@/hooks";
-import { loginSchema } from "@/schema";
+import { loginSchema } from "@/modules/Auth/schema";
 import { $styles, colors, type ThemedStyle } from "@/theme";
 import { authClient } from "@/utils/auth";
 import { useAppTheme } from "@/utils/useAppTheme";

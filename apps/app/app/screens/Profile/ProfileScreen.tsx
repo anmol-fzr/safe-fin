@@ -1,12 +1,11 @@
 import { Button, Screen, ScreenHeader } from "@/components";
 import { ProfileForm } from "@/components/forms";
-import { useStores } from "@/models";
+import { useAuthStore } from "@/modules/Auth/store";
 import { $styles } from "@/theme";
 
 export const ProfileScreen = () => {
-	const {
-		authenticationStore: { logout },
-	} = useStores();
+	const logout = useAuthStore((state) => state.resetData);
+
 	return (
 		<Screen
 			preset="scroll"

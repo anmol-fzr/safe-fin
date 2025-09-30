@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { Provider } from "@/components/Provider";
 import { LoadingScreen } from "@/screens";
 import { initI18n } from "./i18n";
-import { useInitialRootStore } from "./models";
 import { AppNavigator, useNavigationPersistence } from "./navigators";
 import { customFontsToLoad } from "./theme";
 import { loadDateFnsLocale } from "./utils/formatDate";
@@ -47,20 +46,14 @@ export function App() {
 
 	useEffect(() => {
 		initI18n()
-			.then(() => setIsI18nInitialized(true))
+			.then(() => {
+				setIsI18nInitialized(true);
+				setTimeout(SplashScreen.hideAsync, 500);
+			})
 			.then(() => loadDateFnsLocale());
 	}, []);
 
-	const { rehydrated } = useInitialRootStore(() => {
-		// This runs after the root store has been initialized and rehydrated.
-
-		// If your initialization scripts run very fast, it's good to show the splash screen for just a bit longer to prevent flicker.
-		// Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
-		setTimeout(SplashScreen.hideAsync, 500);
-	});
-
 	if (
-		!rehydrated ||
 		!isNavigationStateRestored ||
 		!isI18nInitialized ||
 		(!areFontsLoaded && !fontLoadError)

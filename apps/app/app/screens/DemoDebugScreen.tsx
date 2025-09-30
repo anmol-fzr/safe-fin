@@ -1,5 +1,5 @@
-import { type FC, useCallback, useMemo } from "react";
 import * as Application from "expo-application";
+import { type FC, useCallback, useMemo } from "react";
 import {
 	LayoutAnimation,
 	Linking,
@@ -9,13 +9,13 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
+import { isRTL } from "@/i18n";
+import { useAuthStore } from "@/modules/Auth/store";
+import type { ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { Button, ListItem, Screen, Text } from "../components";
 import type { DemoTabScreenProps } from "../navigators/DemoNavigator";
-import type { ThemedStyle } from "@/theme";
 import { $styles } from "../theme";
-import { isRTL } from "@/i18n";
-import { useStores } from "../models";
-import { useAppTheme } from "@/utils/useAppTheme";
 
 /**
  * @param {string} url - The URL to open in the browser.
@@ -31,9 +31,7 @@ const usingHermes =
 export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> =
 	function DemoDebugScreen(_props) {
 		const { setThemeContextOverride, themeContext, themed } = useAppTheme();
-		const {
-			authenticationStore: { logout },
-		} = useStores();
+		const logout = useAuthStore((state) => state.resetData);
 
 		// @ts-expect-error
 		const usingFabric = global.nativeFabricUIManager != null;
