@@ -84,11 +84,11 @@ function AppStack() {
 		theme: { colors },
 	} = useAppTheme();
 
-	const navigation = useNavigation();
+	const { navigate } = useNavigation();
 
 	useEffect(() => {
-		navigation.navigate(authStateXScreenMap[currAuthState]);
-	}, [currAuthState]);
+		navigate(authStateXScreenMap[currAuthState]);
+	}, [navigate, currAuthState]);
 
 	return (
 		<RootStack.Navigator
