@@ -5,95 +5,119 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  deploy-preview:
+  preview_app1:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write # Required for commenting on the PR
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with: 
-          fetch-depth: 0
-
-      # 1. Setup Node,js (required for wrangler)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v2
+      - uses: shidil/cloudflare-workers-preview@v1
+        id: preview_step
         with:
-          node-version: 20
+          cf_token: ${{ secrets.CF_API_TOKEN }}
+          cf_account: ${{ secrets.CF_ACCOUNT_ID }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          domain: ainsa2279.workers.dev
+          project_path: apps/app1
+          build: |
+            bun install
+            bun run build
+      - name: Get the preview_url
+        run: echo "url => ${{ steps.preview_step.outputs.preview_url }}"
 
-      # 1. Setup Bun (for dependencies installation)
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-          fetch-depth: 0
-
-      # 2. Cache Bun installs
-      - name: Cache Bun
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.bun/install/cache
-            **/node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-
-      # 3. Install dependencies
-      - name: Install dependencies
-        run: bun install
-
-      # [NEW] Check Cloudflare API Token
-      - name: Check Cloudflare API Token
-        run: |
-          if [[ -z "${{ secrets.CF_API_TOKEN }}" ]]; then
-            echo "CLOUDFLARE_API_TOKEN is missing! Set it in repository secrets."
-            exit 1
-          fi
-
-      # [NEW] Print wrangler.toml for debugging
-      - name: Print wrangler.toml config
-        run: |
-          cat apps/server/wrangler.toml || echo "No wrangler.toml found in apps/server"
-
-      # 4. Deploy Hono Server with Wrangler Action
-      - name: Deploy Hono Server (Preview)
-        id: deploy-server
-        uses: cloudflare/wrangler-action@v3.12.0
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          workingDirectory: apps/server
-          command: deploy
-
-      # 5. Build Admin App (with dynamic server URL)
-      - name: Build Admin App
-        run: |
-          cd apps/admin
-          echo "VITE_PUBLIC_SERVER_URL=https://myapp-pr-${{ github.event.pull_request.number }}.workers.dev" > .env
-          bun run build
-
-      # 6. Deploy Admin to Netlify
-      - name: Deploy Admin to Netlify
-        id: deploy-admin
-        uses: nwtgck/actions-netlify@v2
-        with:
-          publish-dir: ./apps/admin/dist
-          production-deploy: false
-          deploy-message: "PR #${{ github.event.pull_request.number }} preview"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-
-      # 7. Comment PR with preview links
       - name: Comment PR with preview links
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
             🚀 **Preview for this PR is live!**
-            - **Admin Panel (React):** ${{ steps.deploy-admin.outputs.deploy-url }}
-            - **Hono Server (Worker):** https://myapp-pr-${{ github.event.pull_request.number }}.workers.dev
+            - **Hono Server (Worker):** ${{ steps.preview_step.outputs.preview_url }}"
+
+  # deploy-preview:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pull-requests: write # Required for commenting on the PR
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4
+  #       with: 
+  #         fetch-depth: 0
+  #
+  #     # 1. Setup Node,js (required for wrangler)
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #
+  #     # 1. Setup Bun (for dependencies installation)
+  #     - name: Setup Bun
+  #       uses: oven-sh/setup-bun@v2
+  #       with:
+  #         bun-version: latest
+  #         fetch-depth: 0
+  #
+  #     # 2. Cache Bun installs
+  #     - name: Cache Bun
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: |
+  #           ~/.bun/install/cache
+  #           **/node_modules
+  #         key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-bun-
+  #
+  #     # 3. Install dependencies
+  #     - name: Install dependencies
+  #       run: bun install
+  #
+  #     # [NEW] Check Cloudflare API Token
+  #     - name: Check Cloudflare API Token
+  #       run: |
+  #         if [[ -z "${{ secrets.CF_API_TOKEN }}" ]]; then
+  #           echo "CLOUDFLARE_API_TOKEN is missing! Set it in repository secrets."
+  #           exit 1
+  #         fi
+  #
+  #     # [NEW] Print wrangler.toml for debugging
+  #     - name: Print wrangler.toml config
+  #       run: |
+  #         cat apps/server/wrangler.toml || echo "No wrangler.toml found in apps/server"
+  #
+  #     # 4. Deploy Hono Server with Wrangler Action
+  #     - name: Deploy Hono Server (Preview)
+  #       id: deploy-server
+  #       uses: cloudflare/wrangler-action@v3.12.0
+  #       env:
+  #         CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  #         CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  #       with:
+  #         apiToken: ${{ secrets.CF_API_TOKEN }}
+  #         accountId: ${{ secrets.CF_ACCOUNT_ID }}
+  #         workingDirectory: apps/server
+  #         command: deploy
+  #
+  #     # 5. Build Admin App (with dynamic server URL)
+  #     - name: Build Admin App
+  #       run: |
+  #         cd apps/admin
+  #         echo "VITE_PUBLIC_SERVER_URL=https://myapp-pr-${{ github.event.pull_request.number }}.workers.dev" > .env
+  #         bun run build
+  #
+  #     # 6. Deploy Admin to Netlify
+  #     - name: Deploy Admin to Netlify
+  #       id: deploy-admin
+  #       uses: nwtgck/actions-netlify@v2
+  #       with:
+  #         publish-dir: ./apps/admin/dist
+  #         production-deploy: false
+  #         deploy-message: "PR #${{ github.event.pull_request.number }} preview"
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  #         netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+  #
+  #     # 7. Comment PR with preview links
+  #     - name: Comment PR with preview links
+  #       uses: marocchino/sticky-pull-request-comment@v2
+  #       with:
+  #         message: |
+  #           🚀 **Preview for this PR is live!**
+  #           - **Admin Panel (React):** ${{ steps.deploy-admin.outputs.deploy-url }}
+  #           - **Hono Server (Worker):** https://myapp-pr-${{ github.event.pull_request.number }}.workers.dev
