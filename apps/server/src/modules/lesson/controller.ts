@@ -1,18 +1,16 @@
-import { createFactory } from "hono/factory";
-
-import type { HonoAppProps } from "..";
+import { zValidator } from "@hono/zod-validator";
+import { count, eq } from "drizzle-orm";
+import { getDb, lesson, lessonQuiz } from "@/db";
 import { authenticate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
-import { zValidator } from "@hono/zod-validator";
+import { createTypedFactory } from "../../factory";
 import {
 	createLessonSchema,
-	updateLessonSchema,
 	lessonQuizLinkSchema,
-} from "@/schema/lesson.schema";
-import { lesson, lessonQuiz, getDb } from "@/db";
-import { eq, count } from "drizzle-orm";
+	updateLessonSchema,
+} from "./schema";
 
-const { createHandlers } = createFactory<HonoAppProps>();
+const { createHandlers } = createTypedFactory();
 
 const getLessons = createHandlers(authenticate, async (c) => {
 	const db = getDb(c.env);

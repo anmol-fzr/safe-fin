@@ -1,14 +1,11 @@
-import { createFactory } from "hono/factory";
 import { zValidator } from "@hono/zod-validator";
+import { getDb, quizQuestionResult, userQuizResult } from "@/db";
+import { createTypedFactory } from "../../factory";
+import { quizResultReqSchema } from "./schema";
 
-import type { HonoAppProps } from "..";
-import { getDb } from "@/db";
-import { quizQuestionResult, userQuizResult } from "@/db";
-import { quizResultReqSchema } from "@/schema";
+const { createHandlers } = createTypedFactory();
 
-const factory = createFactory<HonoAppProps>();
-
-const saveQuizResult = factory.createHandlers(
+const saveQuizResult = createHandlers(
 	zValidator("json", quizResultReqSchema),
 	async (c) => {
 		const body = c.req.valid("json");

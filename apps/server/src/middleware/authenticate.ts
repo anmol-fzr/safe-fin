@@ -1,10 +1,9 @@
-import { createFactory } from "hono/factory";
 import { auth } from "@/auth";
-import type { HonoAppProps } from "..";
+import { createTypedFactory } from "../factory";
 
-const factory = createFactory<HonoAppProps>();
+const { createMiddleware } = createTypedFactory();
 
-const authenticate = factory.createMiddleware(async (c, next) => {
+const authenticate = createMiddleware(async (c, next) => {
 	const session = await auth(c.env).api.getSession({
 		headers: c.req.raw.headers,
 	});

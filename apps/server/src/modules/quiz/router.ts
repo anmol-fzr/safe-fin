@@ -1,14 +1,13 @@
-import { Factory } from "hono/factory";
-import type { HonoAppProps } from "..";
+import { createTypedFactory } from "../../factory";
 import {
-	getQuizzes,
-	getQuizById,
 	createQuiz,
-	updateQuizById,
 	deleteQuizById,
-} from "@/controller";
+	getQuizById,
+	getQuizzes,
+	updateQuizById,
+} from "./controller";
 
-const { createApp } = new Factory<HonoAppProps>();
+const { createApp } = createTypedFactory();
 
 const quizRouter = createApp()
 	.get("/", ...getQuizzes)

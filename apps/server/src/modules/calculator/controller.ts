@@ -1,9 +1,8 @@
-import { createFactory } from "hono/factory";
-import type { HonoAppProps } from "../../index.ts";
+import { createTypedFactory } from "../../factory";
 
-const factory = createFactory<HonoAppProps>();
+const { createHandlers } = createTypedFactory();
 
-const getCalculatorConfig = factory.createHandlers(async (c) => {
+const getCalculatorConfig = createHandlers(async (c) => {
 	return c.json({
 		SIP: {
 			list: {

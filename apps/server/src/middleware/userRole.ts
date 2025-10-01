@@ -1,23 +1,17 @@
-import { createFactory } from "hono/factory";
-import type { HonoAppProps } from "..";
 import { MiddlewareOrderError } from "@/utils/error";
+import { createTypedFactory } from "../factory";
 
-const factory = createFactory<HonoAppProps>();
+const { createMiddleware } = createTypedFactory();
+
 const roles = ["user", "admin"] as const;
 type Role = (typeof roles)[number];
 
 const userRole = (allowedRoles: Role | Role[]) =>
-	factory.createMiddleware(async (c, next) => {
+	createMiddleware(async (c, next) => {
 		const user = c.get("user");
 		if (user === undefined || user === null) {
 			throw new MiddlewareOrderError(
 				"`userRole` middleware must be used after `authenticate` middleware",
-			);
-			return c.json(
-				{
-					message: "Something Went Wrong",
-				},
-				500,
 			);
 		}
 

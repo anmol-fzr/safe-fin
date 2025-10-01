@@ -1,16 +1,13 @@
-import { createFactory } from "hono/factory";
-import { eq, desc } from "drizzle-orm";
-
-import type { HonoAppProps } from "..";
-import { getDb } from "@/db";
-import { option, question, quiz } from "@/db";
 import { zValidator } from "@hono/zod-validator";
-import { fullQuizReqSchema } from "@/schema";
+import { desc, eq } from "drizzle-orm";
+import { getDb, option, question, quiz } from "@/db";
 import { authenticate } from "@/middleware";
+import { createTypedFactory } from "../../factory";
+import { fullQuizReqSchema } from "./schema";
 
-const factory = createFactory<HonoAppProps>();
+const { createHandlers } = createTypedFactory();
 
-const getQuizzes = factory.createHandlers(authenticate, async (c) => {
+const getQuizzes = createHandlers(authenticate, async (c) => {
 	const db = getDb(c.env);
 	const user = c.get("user");
 
@@ -25,7 +22,7 @@ const getQuizzes = factory.createHandlers(authenticate, async (c) => {
 	return c.json({ data: quizzes });
 });
 
-const getQuizById = factory.createHandlers(async (c) => {
+const getQuizById = createHandlers(async (c) => {
 	const db = getDb(c.env);
 	const quizId = c.req.param("quiz_id");
 
@@ -63,7 +60,7 @@ const getQuizById = factory.createHandlers(async (c) => {
 	return c.json({ data: quizs });
 });
 
-const updateQuizById = factory.createHandlers(async (c) => {
+const updateQuizById = createHandlers(async (c) => {
 	const quizId = c.req.param("quiz_id");
 	const db = getDb(c.env);
 
@@ -89,7 +86,7 @@ const updateQuizById = factory.createHandlers(async (c) => {
 	return c.json({ data: updatedQuiz[0], message: "Quiz Updated Successfully" });
 });
 
-const deleteQuizById = factory.createHandlers(async (c) => {
+const deleteQuizById = createHandlers(async (c) => {
 	const quizId = c.req.param("quiz_id");
 	const db = getDb(c.env);
 
@@ -102,7 +99,7 @@ const deleteQuizById = factory.createHandlers(async (c) => {
 	return c.json({ data: foundQuiz });
 });
 
-const createQuiz = factory.createHandlers(
+const createQuiz = createHandlers(
 	zValidator("json", fullQuizReqSchema),
 	async (c) => {
 		const { title, desc, isPublished = false, questions } = c.req.valid("json");

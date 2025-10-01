@@ -1,6 +1,5 @@
 import { z } from "zod";
-
-const dbIdSchema = z.number().int().positive().safe();
+import { dbIdSchema } from "@/schema";
 
 const optionSchema = z
 	.object({
@@ -34,14 +33,4 @@ const fullQuizReqSchema = z.object({
 	questions: questionsSchema,
 });
 
-const quizResultReqSchema = z.object({
-	quizId: dbIdSchema,
-	result: z.array(
-		z.object({
-			questionId: dbIdSchema,
-			answeredId: dbIdSchema,
-		}),
-	),
-});
-
-export { fullQuizReqSchema, quizResultReqSchema, dbIdSchema };
+export { fullQuizReqSchema, dbIdSchema };

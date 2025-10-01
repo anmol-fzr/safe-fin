@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { dbIdSchema } from "./quiz.schema.ts";
+import { dbIdSchema } from "@/schema";
 
 const lessonSchema = z.object({
 	title: z.string().describe("Title of the Lesson"),

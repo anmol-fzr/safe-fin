@@ -1,8 +1,8 @@
-import { Hono } from "hono";
+import { createTypedFactory } from "../../factory";
 import { getCalculatorConfig } from "./controller";
 
-const calculatorRouter = new Hono();
+const { createApp } = createTypedFactory();
 
-calculatorRouter.get("/", ...getCalculatorConfig);
+const calculatorRouter = createApp().get("/", ...getCalculatorConfig);
 
 export { calculatorRouter };

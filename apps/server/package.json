@@ -12,7 +12,12 @@
 		"dev": "wrangler dev",
 		"test": "vitest run ",
 		"test:watch": "vitest",
-		"test:ui": "vitest --ui"
+		"test:ui": "vitest --ui",
+
+		"check": "biome check",
+		"lint": "biome lint",
+		"lint:fix": "biome lint --write",
+		"format": "biome format --write"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.0",

@@ -1,5 +1,4 @@
 {
-	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"composite": true,
 		"target": "ESNext",
@@ -10,8 +9,11 @@
 		//"extends": "../../tsconfig.json",
 		"include": ["./src/**/*"],
 		"paths": {
-			"@/*": ["./src/*"],
-			"@calulator/*": ["./src/modules/calculator/*"]
+			"@calulator/*": ["./src/modules/calculator/*"],
+			"@lesson/*": ["./src/modules/lesson/*"],
+			"@quiz/*": ["./src/modules/quiz/*"],
+			"@quiz-result/*": ["./src/modules/quiz-result/*"],
+			"@/*": ["./src/*"]
 		},
 		"types": [
 			"@cloudflare/workers-types",

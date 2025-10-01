@@ -1,60 +1,31 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
+import { calculatorRouter } from "@calulator/router";
+import { lessonRouter } from "@lesson/router";
+import { quizRouter } from "@quiz/router";
+import { quizResultRouter } from "@quiz-result/router";
 import { etag } from "hono/etag";
 import { logger } from "hono/logger";
-import type { Session, User } from "@/auth";
 import { auth } from "@/auth";
-import { lessonRouter, quizRouter } from "@/router";
-import { calculatorRouter } from "./modules/calculator/router.ts";
-import { quizResultRouter } from "./router/quizResult.router";
+import { appCors } from "@/middleware";
+import { createTypedFactory } from "./factory";
 
-type HonoAppProps = {
-	Variables: {
-		user: User;
-		session: Session;
-	};
-	Bindings: CloudflareBindings;
-};
-
-const app = new Hono<HonoAppProps>();
+const { createApp } = createTypedFactory();
+const app = createApp();
 
 app.use(logger());
 
-app.use("*", async (c, next) => {
-	const corsMiddlewareHandler = cors({
-		origin: [c.env.CORS_ORIGIN_URL],
-		allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-		allowHeaders: ["Content-Type", "Authorization"],
-		credentials: true,
-	});
-	return corsMiddlewareHandler(c, next);
-});
-
 app.get("/health", (c) => c.text("Hello Hono!"));
-app.route("/calculator", calculatorRouter);
 
-// app.get(
-// 	"*",
-// 	cache({
-// 		cacheName: "my-app",
-// 		cacheControl: "max-age=3600",
-// 		vary: "Authorization, Cookie",
-// 	}),
-// );
-
+app.use("*", appCors);
 app.get("*", etag());
 
 app.on(["POST", "GET"], "/api/auth/*", async (c) => {
 	return auth(c.env).handler(c.req.raw);
 });
 
-//app.use(authenticate);
-const routes = app
+app
 	.route("/quiz", quizRouter)
 	.route("/lessons", lessonRouter)
-	.route("/result", quizResultRouter);
+	.route("/result", quizResultRouter)
+	.route("/calculator", calculatorRouter);
 
-type AppType = typeof routes;
-
-export type { HonoAppProps, AppType };
 export default app;

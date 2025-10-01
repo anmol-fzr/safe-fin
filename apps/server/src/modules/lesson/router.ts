@@ -1,15 +1,16 @@
-import { Hono } from "hono";
-import type { HonoAppProps } from "..";
+import { createTypedFactory } from "../../factory";
 import {
 	createLesson,
+	deleteLesson,
 	getLessonById,
 	getLessons,
-	deleteLesson,
-	updateLessonById,
 	linkLessonWithQuiz,
-} from "@/controller/lesson.controller";
+	updateLessonById,
+} from "./controller";
 
-const lessonRouter = new Hono<HonoAppProps>()
+const { createApp } = createTypedFactory();
+
+const lessonRouter = createApp()
 	.get("/", ...getLessons)
 	.get("/:lesson_id", ...getLessonById)
 	.patch("/:lesson_id", ...updateLessonById)
