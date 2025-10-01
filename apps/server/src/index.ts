@@ -19,14 +19,16 @@ type HonoAppProps = {
 const app = new Hono<HonoAppProps>();
 
 app.use(logger());
-app.use((c) =>
-	cors({
+
+app.use("*", async (c, next) => {
+	const corsMiddlewareHandler = cors({
 		origin: [c.env.CORS_ORIGIN_URL],
 		allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
 		allowHeaders: ["Content-Type", "Authorization"],
-		credentials: true, // if you need to send cookies or authorization headers
-	}),
-);
+		credentials: true,
+	});
+	return corsMiddlewareHandler(c, next);
+});
 
 app.get("/health", (c) => c.text("Hello Hono!"));
 app.route("/calculator", calculatorRouter);
