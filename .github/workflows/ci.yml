@@ -5,6 +5,10 @@ on:
     branches:
       - dev
 
+permissions:
+  pull-requests: read
+  statuses: write
+
 jobs:
   preview_server:
     runs-on: ubuntu-latest
