@@ -52,14 +52,7 @@ app.on(["POST", "GET"], "/api/auth/*", async (c) => {
 const routes = app
 	.route("/quiz", quizRouter)
 	.route("/lessons", lessonRouter)
-	.route("/result", quizResultRouter)
-	.get("/env-check", (c) => {
-		return c.json({
-			env: c.env,
-			// url: c.env.TURSO_DB_URL,
-			// token: c.env.TURSO_DB_AUTH_TOKEN,
-		});
-	});
+	.route("/result", quizResultRouter);
 
 type AppType = typeof routes;
 
