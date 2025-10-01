@@ -1,8 +1,8 @@
 import { relations, sql } from "drizzle-orm";
-import { integer, text, sqliteTable } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./auth";
-import { tag } from "./tag";
 import { category } from "./category";
+import { tag } from "./tag";
 
 export const scam = sqliteTable("scam", {
 	id: integer("id", { mode: "number" })

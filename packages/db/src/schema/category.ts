@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm";
 import {
-	integer,
-	text,
-	sqliteTable,
 	type AnySQLiteColumn,
+	integer,
+	sqliteTable,
+	text,
 } from "drizzle-orm/sqlite-core";
 
 const category = sqliteTable("category", {

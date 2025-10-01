@@ -1,6 +1,6 @@
+import { createClient } from "@libsql/client";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
 import * as schema from "@/schema";
 
 type GetDbParams = {
@@ -22,5 +22,5 @@ const getAuthDrizzleAdapter = (env: Parameters<typeof getDb>[0]) => {
 	return drizzleAdapter(db, { provider: "sqlite" });
 };
 
-export * from "@/schema";
+export * from "./schema";
 export { getAuthDrizzleAdapter, getDb };
