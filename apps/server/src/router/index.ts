@@ -1,2 +1,2 @@
-export * from "./quiz.router";
 export * from "./lesson.router";
+export * from "./quiz.router";

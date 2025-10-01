@@ -1,14 +1,12 @@
 import { Hono } from "hono";
-import { logger } from "hono/logger";
 import { cors } from "hono/cors";
-
-import { cache } from "hono/cache";
 import { etag } from "hono/etag";
-import { auth } from "@/auth";
-import { quizRouter, lessonRouter } from "@/router";
-import { quizResultRouter } from "./router/quizResult.router";
-
+import { logger } from "hono/logger";
 import type { Session, User } from "@/auth";
+import { auth } from "@/auth";
+import { lessonRouter, quizRouter } from "@/router";
+import { calculatorRouter } from "./modules/calculator/router.ts";
+import { quizResultRouter } from "./router/quizResult.router";
 
 type HonoAppProps = {
 	Variables: {
@@ -21,9 +19,9 @@ type HonoAppProps = {
 const app = new Hono<HonoAppProps>();
 
 app.use(logger());
-app.use(
+app.use((c) =>
 	cors({
-		origin: ["*", "http://localhost:5173", "http://192.168.29.57:5173"],
+		origin: [c.env.CORS_ORIGIN_URL],
 		allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
 		allowHeaders: ["Content-Type", "Authorization"],
 		credentials: true, // if you need to send cookies or authorization headers
@@ -31,6 +29,7 @@ app.use(
 );
 
 app.get("/health", (c) => c.text("Hello Hono!"));
+app.route("/calculator", calculatorRouter);
 
 // app.get(
 // 	"*",

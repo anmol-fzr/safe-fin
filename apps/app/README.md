@@ -1,1 +1,2 @@
-#### Navigation
+- use `expr-eval` to calculator string evaluation
+- add history to calculator

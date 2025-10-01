@@ -1,4 +1,5 @@
 {
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"composite": true,
 		"target": "ESNext",
@@ -7,9 +8,10 @@
 		"strict": true,
 		"skipLibCheck": true,
 		//"extends": "../../tsconfig.json",
-		"include": ["src/**/*"],
+		"include": ["./src/**/*"],
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@calulator/*": ["./src/modules/calculator/*"]
 		},
 		"types": [
 			"@cloudflare/workers-types",

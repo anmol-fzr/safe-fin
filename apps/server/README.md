@@ -9,3 +9,6 @@ bun run dev
 ```
 
 open http://localhost:3000
+
+Add
+- Calculator from Admin
