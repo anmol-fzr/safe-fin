@@ -12,6 +12,14 @@ export const betterAuthOptions: BetterAuthOptions = {
 	 * The name of the application.
 	 */
 	appName: "safe-fin-api",
+	user: {
+		additionalFields: {
+			isNew: {
+				type: "boolean",
+				defaultValue: true,
+			},
+		},
+	},
 	session: {
 		cookieCache: {
 			enabled: true,
