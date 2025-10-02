@@ -1,6 +1,6 @@
+import { act, renderHook } from "@testing-library/react-hooks";
+import { describe, expect, it } from "vitest";
 import { useAuthStore } from "../useAuthStore";
-import { describe, it, expect } from "vitest";
-import { renderHook, act } from "@testing-library/react-hooks";
 
 const dummyData = {
 	// session: {

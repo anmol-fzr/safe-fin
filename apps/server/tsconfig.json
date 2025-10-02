@@ -1,4 +1,5 @@
 {
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"composite": true,
 		"target": "ESNext",
@@ -6,7 +7,6 @@
 		"moduleResolution": "Bundler",
 		"strict": true,
 		"skipLibCheck": true,
-		//"extends": "../../tsconfig.json",
 		"include": ["./src/**/*"],
 		"paths": {
 			"@calulator/*": ["./src/modules/calculator/*"],
@@ -15,12 +15,7 @@
 			"@quiz-result/*": ["./src/modules/quiz-result/*"],
 			"@/*": ["./src/*"]
 		},
-		"types": [
-			"@cloudflare/workers-types",
-			"vitest-environment-miniflare/globals"
-		],
-		"lib": ["ESNext"],
-		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx"
+		"types": ["@cloudflare/workers-types"],
+		"lib": ["ESNext"]
 	}
 }

@@ -2,7 +2,11 @@
 	"root": false,
 	"extends": "//",
 	"linter": {
-		"includes": ["src/**/*", "!./src/routeTree.gen.ts"],
+		"includes": [
+			"!./src/routeTree.gen.ts",
+			"!src/routeTree.gen.ts",
+			"!**/*.gen.ts"
+		],
 		"domains": {
 			"react": "recommended",
 			"test": "recommended"
@@ -16,6 +20,10 @@
 		}
 	},
 	"formatter": {
-		"includes": ["src/**/*", "!./src/routeTree.gen.ts"]
+		"includes": [
+			"!./src/routeTree.gen.ts",
+			"!src/routeTree.gen.ts",
+			"!**/*.gen.ts"
+		]
 	}
 }

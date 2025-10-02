@@ -7,7 +7,7 @@
 	"scripts": {
 		"test": "echo 'No tests yet'",
 		"build": "tsup 'src/**/*.ts*' --outDir dist --format esm,cjs --dts --external react --splitting",
-		"format": "biome format",
+		"format": "biome format --write",
 		"format:fix": "biome format --fix",
 		"lint": "biome lint",
 		"lint:fix": "biome lint --fix"

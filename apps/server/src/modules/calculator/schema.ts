@@ -9,23 +9,25 @@ const slider = z.object({
 	maxValue: z.number(),
 });
 
+const calcList = z.object({
+	title: z
+		.string()
+		.describe("Title of the Calculator for List View. e.g - SIP"),
+	desc: z
+		.string()
+		.describe(
+			"Description of the Calculator. e.g - Systematic Investment Plan",
+		),
+	screen: z
+		.string()
+		.describe("Screen Key of the Uniquely Indentify Calculator. e.g - SIP"),
+});
+
 const calculatorMetadataSchema = z.object({
-	list: z.object({
-		title: z
-			.string()
-			.describe("Title of the Calculator for List View. e.g - SIP"),
-		desc: z
-			.string()
-			.describe(
-				"Description of the Calculator. e.g - Systematic Investment Plan",
-			),
-		screen: z
-			.string()
-			.describe("Screen Key of the Uniquely Indentify Calculator. e.g - SIP"),
-	}),
 	title: z
 		.string()
 		.describe("Title of the Calculator for Main View. e.g - SIP"),
+	list: calcList,
 	sliders: z
 		.array(slider)
 		.describe(
@@ -35,15 +37,10 @@ const calculatorMetadataSchema = z.object({
 	pieChart: z
 		.boolean()
 		.describe("Whether to Show Pie Chart or not. e.g - true | false"),
-	calculate: z
-		.object({
-			totalValue: z.string(),
-			totalInvested: z.string(),
-			returns: z.string(),
-		})
-		.describe(
-			"Object having math expression as value to Calculate. e.g - a * b",
-		),
+	calculate: z.record(z.string(), z.string()),
+	// .describe(
+	// 	"Object having math expression as value to Calculate. e.g - a * b",
+	// ),
 });
 
 export { calculatorMetadataSchema };

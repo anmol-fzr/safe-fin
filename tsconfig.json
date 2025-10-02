@@ -6,15 +6,6 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"lib": ["ESNext"],
-		"references": [{ "path": "apps/app" }, { "path": "packages/ui" }],
 		"types": ["worker-configuration.d.ts"]
 	}
-	// "references": [
-	//   { "path": "packages/api-client" },
-	//   { "path": "packages/auth" },
-	//   { "path": "packages/db" },
-	//   { "path": "apps/server" },
-	//   { "path": "apps/native" },
-	//   { "path": "apps/admin" }
-	// ]
 }

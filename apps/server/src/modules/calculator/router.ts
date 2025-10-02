@@ -1,8 +1,10 @@
 import { createTypedFactory } from "../../factory";
-import { getCalculatorConfig } from "./controller";
+import { getCalculatorConfig, createCalculatorMetadata } from "./controller";
 
 const { createApp } = createTypedFactory();
 
-const calculatorRouter = createApp().get("/", ...getCalculatorConfig);
+const calculatorRouter = createApp()
+	.get("/", ...getCalculatorConfig)
+	.post(...createCalculatorMetadata);
 
 export { calculatorRouter };

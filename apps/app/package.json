@@ -5,8 +5,8 @@
 	"main": "index.tsx",
 	"scripts": {
 		"compile": "tsc --noEmit -p . --pretty",
-		"format": "bunx biome format --write app/",
-		"lint": "biome lint --write app/",
+		"format": "biome format --write",
+		"lint": "biome lint app/",
 		"lint:check": "biome lint app/",
 		"test": "jest",
 		"test:watch": "jest --watch",
@@ -118,7 +118,6 @@
 		"@babel/core": "^7.28.0",
 		"@babel/preset-env": "^7.28.0",
 		"@babel/runtime": "^7.27.6",
-		"@biomejs/biome": "2.0.6",
 		"@testing-library/react-native": "13.2.2",
 		"@types/jest": "30.0.0",
 		"@types/react": "~19.0.0",
