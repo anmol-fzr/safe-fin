@@ -4,7 +4,7 @@ import { Button } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useYupForm } from "@/hooks";
 import { profileSchema } from "@/modules/Auth/schema";
-import { authClient } from "@/utils/auth";
+import { authClient } from "@/modules/Auth/utils";
 
 export const ProfileForm = memo(() => {
 	//const [phoneOtpState, setPhoneOtpState] = useState<OtpState>("closed");

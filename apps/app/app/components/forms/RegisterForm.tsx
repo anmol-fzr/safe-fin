@@ -6,9 +6,9 @@ import { useYupForm } from "@/hooks";
 import { registerSchema } from "@/modules/Auth/schema";
 import { useAuthStore } from "@/modules/Auth/store";
 import type { ThemedStyle } from "@/theme";
-import { authClient } from "@/utils/auth";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { authClient } from "@/modules/Auth/utils";
 
 export const RegisterForm = () => {
 	const methods = useYupForm({

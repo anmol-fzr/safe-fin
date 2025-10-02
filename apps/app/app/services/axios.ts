@@ -1,6 +1,6 @@
 import axios, { type AxiosError, type AxiosResponse } from "axios";
-import { authClient } from "@/utils/auth";
 import { envs } from "@/utils/envs";
+import { authClient } from "@/modules/Auth/utils";
 
 const axiosInstance = axios.create({
 	baseURL: envs.API_URL,
