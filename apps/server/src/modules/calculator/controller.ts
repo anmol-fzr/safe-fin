@@ -1,6 +1,17 @@
+import { zValidator } from "@hono/zod-validator";
 import { createTypedFactory } from "../../factory";
+import { calculatorMetadataSchema } from "./schema";
 
 const { createHandlers } = createTypedFactory();
+
+const createCalculatorMetadata = createHandlers(
+	zValidator("json", calculatorMetadataSchema),
+	async (c) => {
+		const body = c.req.valid("json");
+
+		return c.json(body);
+	},
+);
 
 const getCalculatorConfig = createHandlers(async (c) => {
 	return c.json({
@@ -37,11 +48,11 @@ const getCalculatorConfig = createHandlers(async (c) => {
 					maxValue: 40,
 				},
 			],
-			resultKeys: [
-				["totalInvested", "Total Invested"],
-				["returns", "Returns"],
-				["totalValue", "Total Value"],
-			],
+			resultKeys: {
+				totalInvested: "Total Invested",
+				returns: "Returns",
+				totalValue: "Total Value",
+			},
 			pieChart: true,
 			calculate: {
 				totalValue:
@@ -53,4 +64,4 @@ const getCalculatorConfig = createHandlers(async (c) => {
 	});
 });
 
-export { getCalculatorConfig };
+export { getCalculatorConfig, createCalculatorMetadata };
