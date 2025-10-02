@@ -19,7 +19,9 @@
 		"country-state-city": "^3.2.1",
 		"drizzle-orm": "^0.44.3",
 		"hono": "^4.8.4",
-		"zod": "3.25.76"
+		"zod": "3.25.76",
+		"@safe-fin/db": "workspace:*",
+		"@safe-fin/auth": "workspace:*"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250715.0",

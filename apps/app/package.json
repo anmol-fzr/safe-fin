@@ -43,6 +43,7 @@
 		"@react-navigation/native": "^7.1.17",
 		"@react-navigation/native-stack": "^7.3.21",
 		"@safe-fin/ui": "workspace:*",
+		"@safe-fin/auth": "workspace:*",
 		"@shopify/flash-list": "1.7.6",
 		"@tamagui/config": "^1.129.14",
 		"@tamagui/core": "^1.129.14",

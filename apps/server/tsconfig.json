@@ -15,7 +15,11 @@
 			"@quiz-result/*": ["./src/modules/quiz-result/*"],
 			"@/*": ["./src/*"]
 		},
-		"types": ["@cloudflare/workers-types"],
+		"types": ["@cloudflare/workers-types", "../../worker-configuration.d.ts"],
 		"lib": ["ESNext"]
-	}
+	},
+	"references": [
+		{ "path": "../../packages/db" },
+		{ "path": "../../packages/auth" }
+	]
 }

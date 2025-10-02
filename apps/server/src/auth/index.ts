@@ -1,1 +1,1 @@
-export * from "@safe-fin/auth";
+export * from "@safe-fin/auth/server";

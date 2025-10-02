@@ -1,20 +1,11 @@
-import { createAuthClient } from "better-auth/react";
-import { phoneNumberClient } from "better-auth/client/plugins";
-import { expoClient } from "@better-auth/expo/client";
+import { createAppAuthClient } from "@safe-fin/auth/app";
 import * as SecureStore from "expo-secure-store";
-import { envs } from "@/utils/envs";
 import { useAuthStore } from "@/modules/Auth/store";
+import { envs } from "@/utils/envs";
 
-export const authClient = createAuthClient({
+export const authClient = createAppAuthClient({
 	baseURL: envs.API_URL,
-	plugins: [
-		expoClient({
-			scheme: "safefin",
-			storagePrefix: "safefin",
-			storage: SecureStore,
-		}),
-		phoneNumberClient(),
-	],
+	storage: SecureStore,
 });
 
 export async function logout() {

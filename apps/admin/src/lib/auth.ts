@@ -1,15 +1,9 @@
-import { createAuthClient } from "better-auth/react";
-import {
-	phoneNumberClient,
-	adminClient,
-	multiSessionClient,
-} from "better-auth/client/plugins";
-import { envs } from "./envs";
+import { createAdminAuthClient } from "@safe-fin/auth/admin";
 import { useAuthStore } from "@/store/useAuthStore";
+import { envs } from "./envs";
 
-export const authClient = createAuthClient({
+export const authClient = createAdminAuthClient({
 	baseURL: envs.API_URL,
-	plugins: [phoneNumberClient(), adminClient(), multiSessionClient()],
 });
 
 export type AuthType = (typeof authClient)["$Infer"]["Session"];
