@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import { FormProvider } from "react-hook-form";
 import type { ViewStyle } from "react-native";
 import { Button } from "@/components";
@@ -9,13 +8,14 @@ import { useAuthStore } from "@/modules/Auth/store";
 import type { ThemedStyle } from "@/theme";
 import { authClient } from "@/utils/auth";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 
 export const RegisterForm = () => {
 	const methods = useYupForm({
 		schema: registerSchema,
 	});
 	const { handleSubmit } = methods;
-	const navigation = useNavigation();
+	const { navigate } = useSafeNavigation();
 
 	const setAuthState = useAuthStore((state) => state.setState);
 
@@ -29,7 +29,7 @@ export const RegisterForm = () => {
 
 		setAuthState("complete");
 
-		navigation.navigate("Welcome");
+		navigate("Welcome");
 	});
 
 	return (

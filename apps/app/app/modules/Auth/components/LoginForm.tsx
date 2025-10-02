@@ -13,9 +13,10 @@ import { FormField } from "@/components/form/FormField";
 import { useCountdown } from "@/hooks";
 import { loginSchema } from "@/modules/Auth/schema";
 import { $styles, colors, type ThemedStyle } from "@/theme";
-import { authClient } from "@/utils/auth";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useAuthStore } from "../store";
+import { AppStackParamList } from "@/navigators";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 
 export const LoginForm = () => {
 	const { countdown, reset, restart } = useCountdown(59);
@@ -25,11 +26,12 @@ export const LoginForm = () => {
 	});
 
 	const setAuthData = useAuthStore((state) => state.setData);
+	const setAuthState = useAuthStore((state) => state.setState);
 
 	const queryClient = useQueryClient();
 	const { sendOtp, isOtpSent, resetSentOtp } = useSendOtp(queryClient);
 	const { verifyOtpAsync } = useVerifyOtp(queryClient);
-	const { navigate } = useNavigation();
+	const { navigate } = useSafeNavigation();
 
 	const { themed } = useAppTheme();
 
@@ -51,20 +53,21 @@ export const LoginForm = () => {
 		};
 
 		try {
-			await verifyOtpAsync(payload);
-			authClient.getSession();
-
-			const respData = await authClient.getSession();
-
-			if (isUndefined(respData.data?.user)) {
-				throw new Error("User Data can't be `undefined`");
-			}
-			// biome-ignore assist: Will Fix this Later
-			setAuthData({ user: respData.data.user });
-
-			restart();
-
-			navigate("MainTabs", { screen: "Home" });
+			await verifyOtpAsync(payload, {
+				onSuccess(data) {
+					restart();
+					const user = data.data.user;
+					setAuthData({ user });
+					console.log(user);
+					console.log(user.name, user.phoneNumber);
+					if (user.name !== user.phoneNumber) {
+						setAuthState("complete");
+						navigate("MainTabs", { screen: "Home" });
+					}
+					setAuthState("register");
+					navigate("Auth", { screen: "Register" });
+				},
+			});
 		} catch (error) {
 			console.log(error);
 			Burnt.toast({

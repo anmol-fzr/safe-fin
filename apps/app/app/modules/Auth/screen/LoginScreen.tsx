@@ -4,7 +4,7 @@ import { Screen, ScreenHeader } from "@/components";
 import { LoginForm } from "@/modules/Auth/components";
 import { spacing } from "@/theme";
 
-export const LoginScreen = () => {
+export function LoginScreen() {
 	return (
 		<Screen
 			preset="auto"
@@ -18,7 +18,8 @@ export const LoginScreen = () => {
 			<LoginForm />
 		</Screen>
 	);
-};
+}
+
 const styles = StyleSheet.create({
 	root: {
 		paddingVertical: spacing.xxl,

@@ -4,7 +4,7 @@ import { RegisterForm } from "@/components/forms";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-export const RegistrationScreen = () => {
+export function RegisterScreen() {
 	const { themed } = useAppTheme();
 
 	return (
@@ -28,7 +28,7 @@ export const RegistrationScreen = () => {
 			<RegisterForm />
 		</Screen>
 	);
-};
+}
 
 const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	paddingVertical: spacing.xxl,

@@ -10,17 +10,13 @@ import {
 	type ViewStyle,
 } from "react-native";
 import { isRTL } from "@/i18n";
-import { useAuthStore } from "@/modules/Auth/store";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Button, ListItem, Screen, Text } from "../components";
-import type { DemoTabScreenProps } from "../navigators/DemoNavigator";
+import type { MainTabScreenProps } from "../navigators/MainTabNavigator";
 import { $styles } from "../theme";
+import { logout } from "@/utils/auth";
 
-/**
- * @param {string} url - The URL to open in the browser.
- * @returns {void} - No return value.
- */
 function openLinkInBrowser(url: string) {
 	Linking.canOpenURL(url).then((canOpen) => canOpen && Linking.openURL(url));
 }
@@ -28,10 +24,9 @@ function openLinkInBrowser(url: string) {
 const usingHermes =
 	typeof HermesInternal === "object" && HermesInternal !== null;
 
-export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> =
+export const DemoDebugScreen: FC<MainTabScreenProps<"DemoDebug">> =
 	function DemoDebugScreen(_props) {
 		const { setThemeContextOverride, themeContext, themed } = useAppTheme();
-		const logout = useAuthStore((state) => state.resetData);
 
 		// @ts-expect-error
 		const usingFabric = global.nativeFabricUIManager != null;

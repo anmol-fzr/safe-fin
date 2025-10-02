@@ -53,20 +53,12 @@ const en = {
 		emailFieldLabel: "Email",
 		emailFieldPlaceholder: "anmol@withanmol.com",
 	},
-	navigator: {
+	mainNavigator: {
 		homeTab: "Home",
-		calculatorListTab: "Calculate",
-		profileTab: "Profile",
-		learnTab: "Learnings",
-	},
-	demoNavigator: {
-		debugTab: "Debug",
-		profileTab: "Profile",
-		settingsTab: "Settings",
-		scamTab: "Scams",
-		lessonsTab: "Lessons",
-		learningTab: "Learnings",
 		calculatorListTab: "Calculator",
+		learnTab: "Learnings",
+		profileTab: "Profile",
+		scamTab: "Scams",
 	},
 	quizzesScreen: {
 		title: "Quizzes",

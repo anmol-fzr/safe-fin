@@ -52,7 +52,7 @@ const hi = {
 		emailFieldLabel: "ईमल",
 		emailFieldPlaceholder: "anmol@withanmol.com",
 	},
-	demoNavigator: {
+	mainNavigator: {
 		componentsTab: "कज",
 		debugTab: "डबग",
 		profileTab: "पफइल",

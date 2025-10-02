@@ -8,7 +8,6 @@ import {
 	BookOpenIcon,
 	CalculatorIcon,
 	HomeIcon,
-	type LucideIcon,
 	ShieldIcon,
 	UserIcon,
 } from "lucide-react-native";
@@ -22,34 +21,24 @@ import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { ProfileScreen, ScamsScreen } from "../screens";
 import type { AppStackParamList, AppStackScreenProps } from "./AppNavigator";
+import { TabIcon } from "@/components/navigation/TabIcon";
 
-export type DemoTabParamList = {
+export type MainTabParamList = {
+	Home: undefined;
 	Profile: undefined;
 	Scams: undefined;
 	Learning: undefined;
-	DemoDebug: undefined;
 	CalculatorList: undefined;
 };
 
-/**
- * Helper for automatically generating navigation prop types for each route.
- *
- * More info: https://reactnavigation.org/docs/typescript/#organizing-types
- */
-export type DemoTabScreenProps<T extends keyof DemoTabParamList> =
+export type MainTabScreenProps<T extends keyof MainTabParamList> =
 	CompositeScreenProps<
-		BottomTabScreenProps<DemoTabParamList, T>,
+		BottomTabScreenProps<MainTabParamList, T>,
 		AppStackScreenProps<keyof AppStackParamList>
 	>;
 
-const Tab = createBottomTabNavigator<DemoTabParamList>();
+const Tab = createBottomTabNavigator<MainTabParamList>();
 
-/**
- * This is the main navigator for the demo screens with a bottom tab bar.
- * Each tab is a stack navigator with its own set of screens.
- *
- * More info: https://reactnavigation.org/docs/bottom-tab-navigator/
- */
 export function MainTabNavigator() {
 	const { bottom } = useSafeAreaInsets();
 	const {
@@ -73,8 +62,8 @@ export function MainTabNavigator() {
 				name="Home"
 				component={HomeScreen}
 				options={{
-					tabBarAccessibilityLabel: translate("navigator:homeTab"),
-					tabBarLabel: translate("navigator:homeTab"),
+					tabBarAccessibilityLabel: translate("mainNavigator:homeTab"),
+					tabBarLabel: translate("mainNavigator:homeTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={HomeIcon} focused={focused} />
 					),
@@ -85,7 +74,10 @@ export function MainTabNavigator() {
 				name="CalculatorList"
 				component={CalculatorListScreen}
 				options={{
-					tabBarLabel: translate("navigator:calculatorListTab"),
+					tabBarAccessibilityLabel: translate(
+						"mainNavigator:calculatorListTab",
+					),
+					tabBarLabel: translate("mainNavigator:calculatorListTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={CalculatorIcon} focused={focused} />
 					),
@@ -96,7 +88,7 @@ export function MainTabNavigator() {
 				name="Learning"
 				component={LearningScreen}
 				options={{
-					tabBarLabel: translate("navigator:learnTab"),
+					tabBarLabel: translate("mainNavigator:learnTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={BookOpenIcon} focused={focused} />
 					),
@@ -107,7 +99,7 @@ export function MainTabNavigator() {
 				name="Scams"
 				component={ScamsScreen}
 				options={{
-					tabBarLabel: translate("demoNavigator:scamTab"),
+					tabBarLabel: translate("mainNavigator:scamTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={ShieldIcon} focused={focused} />
 					),
@@ -118,7 +110,7 @@ export function MainTabNavigator() {
 				name="Profile"
 				component={ProfileScreen}
 				options={{
-					tabBarLabel: translate("navigator:profileTab"),
+					tabBarLabel: translate("mainNavigator:profileTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={UserIcon} focused={focused} />
 					),
@@ -132,7 +124,7 @@ export function MainTabNavigator() {
 					name="DemoDebug"
 					component={DemoDebugScreen}
 					options={{
-						tabBarLabel: translate("demoNavigator:debugTab"),
+						tabBarLabel: translate("mainNavigator:debugTab"),
 						tabBarIcon: ({ focused }) => (
 							<Icon
 								icon="debug"
@@ -163,21 +155,3 @@ const $tabBarLabel: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
 	lineHeight: 16,
 	color: colors.text,
 });
-
-interface TabIconProps {
-	focused: boolean;
-	Icon: LucideIcon;
-}
-
-const TabIcon = ({ focused, Icon }: TabIconProps) => {
-	const {
-		theme: { colors },
-	} = useAppTheme();
-
-	return (
-		<Icon
-			color={focused ? colors.tint : colors.tintInactive}
-			size={focused ? 30 : 24}
-		/>
-	);
-};

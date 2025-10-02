@@ -1,7 +1,6 @@
 import {
 	NavigationContainer,
 	type NavigatorScreenParams,
-	useNavigation,
 } from "@react-navigation/native";
 import {
 	createNativeStackNavigator,
@@ -11,7 +10,7 @@ import { defaultConfig } from "@tamagui/config/v4";
 import { createTamagui, TamaguiProvider } from "@tamagui/core";
 import { PortalProvider } from "@tamagui/portal";
 import { observer } from "mobx-react-lite";
-import { type ComponentProps, useEffect } from "react";
+import { type ComponentProps } from "react";
 import type { ResultRecord } from "@/components/quiz/QuizRender";
 import { LoginScreen, RegistrationScreen } from "@/modules/Auth/screen";
 import { useAuthStore } from "@/modules/Auth/store";
@@ -19,14 +18,12 @@ import { CalculatorScreen } from "@/modules/Calculator/screens/CalculatorScreen"
 import * as Screens from "@/screens";
 import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
 import Config from "../config";
-import { type DemoTabParamList, MainTabNavigator } from "./MainTabNavigator";
+import { type MainTabParamList, MainTabNavigator } from "./MainTabNavigator";
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities";
-
-const authStateXScreenMap = {
-	login: "Login",
-	register: "Registration",
-	complete: "Welcome",
-} as const;
+import {
+	AuthNavigator,
+	type AuthStackParamList,
+} from "@/modules/Auth/navigator";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -44,10 +41,10 @@ const authStateXScreenMap = {
 export type CalculatorType = "SIP" | "SWP" | "MF" | "PPF";
 
 export type AppStackParamList = {
+	Auth: NavigatorScreenParams<AuthStackParamList>;
+
 	Welcome: undefined;
-	Login: undefined;
-	Registration: undefined;
-	MainTabs: NavigatorScreenParams<DemoTabParamList>;
+	MainTabs: NavigatorScreenParams<MainTabParamList>;
 	Quiz: { quizId: number };
 	QuizResult: {
 		answers: ResultRecord;
@@ -64,31 +61,19 @@ export type AppStackParamList = {
 export type ScreenProps<S extends keyof AppStackParamList> =
 	AppStackScreenProps<S>;
 
-/**
- * This is a list of all the route names that will exit the app if the back button
- * is pressed while in that screen. Only affects Android.
- */
 const exitRoutes = Config.exitRoutes;
 
 export type AppStackScreenProps<T extends keyof AppStackParamList> =
 	NativeStackScreenProps<AppStackParamList, T>;
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
 const RootStack = createNativeStackNavigator<AppStackParamList>();
 
 function AppStack() {
 	const isAuthenticated = useAuthStore((state) => state.isLogin);
-	const currAuthState = useAuthStore((state) => state.state);
 
 	const {
 		theme: { colors },
 	} = useAppTheme();
-
-	const { navigate } = useNavigation();
-
-	useEffect(() => {
-		navigate(authStateXScreenMap[currAuthState]);
-	}, [navigate, currAuthState]);
 
 	return (
 		<RootStack.Navigator
@@ -99,7 +84,7 @@ function AppStack() {
 					backgroundColor: colors.background,
 				},
 			}}
-			initialRouteName={isAuthenticated ? "Welcome" : "Login"}
+			initialRouteName={isAuthenticated ? "Welcome" : "Auth"}
 		>
 			{isAuthenticated ? (
 				<>
@@ -120,13 +105,7 @@ function AppStack() {
 					<RootStack.Screen name="Calculator" component={CalculatorScreen} />
 				</>
 			) : (
-				<>
-					<RootStack.Screen name="Login" component={LoginScreen} />
-					<RootStack.Screen
-						name="Registration"
-						component={RegistrationScreen}
-					/>
-				</>
+				<RootStack.Screen name="Auth" component={AuthNavigator} />
 			)}
 		</RootStack.Navigator>
 	);
