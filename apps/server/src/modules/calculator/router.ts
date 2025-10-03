@@ -1,5 +1,5 @@
 import { createTypedFactory } from "../../factory";
-import { getCalculatorConfig, createCalculatorMetadata } from "./controller";
+import { createCalculatorMetadata, getCalculatorConfig } from "./controller";
 
 const { createApp } = createTypedFactory();
 

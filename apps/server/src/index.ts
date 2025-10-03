@@ -12,6 +12,14 @@ const { createApp } = createTypedFactory();
 const app = createApp();
 
 app.use(logger());
+app.use((c) =>
+	cors({
+		origin: [c.env.CORS_ORIGIN_URL],
+		allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+		allowHeaders: ["Content-Type", "Authorization"],
+		credentials: true,
+	}),
+);
 
 app.get("/health", (c) => c.text("Hello Hono!"));
 
