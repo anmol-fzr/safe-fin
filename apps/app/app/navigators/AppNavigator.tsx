@@ -10,34 +10,23 @@ import { defaultConfig } from "@tamagui/config/v4";
 import { createTamagui, TamaguiProvider } from "@tamagui/core";
 import { PortalProvider } from "@tamagui/portal";
 import { observer } from "mobx-react-lite";
-import { type ComponentProps } from "react";
-import type { ResultRecord } from "@/components/quiz/QuizRender";
-import { LoginScreen, RegistrationScreen } from "@/modules/Auth/screen";
-import { useAuthStore } from "@/modules/Auth/store";
-import { CalculatorScreen } from "@/modules/Calculator/screens/CalculatorScreen";
-import * as Screens from "@/screens";
-import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
-import Config from "../config";
-import { type MainTabParamList, MainTabNavigator } from "./MainTabNavigator";
-import { navigationRef, useBackButtonHandler } from "./navigationUtilities";
+import type { ComponentProps } from "react";
 import {
 	AuthNavigator,
 	type AuthStackParamList,
-} from "@/modules/Auth/navigator";
+} from "@/modules/auth/navigator";
+import { useAuthStore } from "@/modules/auth/store";
+import { authClient } from "@/modules/auth/utils";
+import {
+	QuizNavigator,
+	type QuizStackParamList,
+} from "@/modules/quiz/navigator";
+import * as Screens from "@/screens";
+import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme";
+import Config from "../config";
+import { MainTabNavigator, type MainTabParamList } from "./MainTabNavigator";
+import { navigationRef, useBackButtonHandler } from "./navigationUtilities";
 
-/**
- * This type allows TypeScript to know what routes are defined in this navigator
- * as well as what properties (if any) they might take when navigating to them.
- *
- * If no params are allowed, pass through `undefined`. Generally speaking, we
- * recommend using your MobX-State-Tree store(s) to keep application state
- * rather than passing state through navigation params.
- *
- * For more information, see this documentation:
- *   https://reactnavigation.org/docs/params/
- *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
- *   https://reactnavigation.org/docs/typescript/#organizing-types
- */
 export type CalculatorType = "SIP" | "SWP" | "MF" | "PPF";
 
 export type AppStackParamList = {
@@ -45,17 +34,7 @@ export type AppStackParamList = {
 
 	Welcome: undefined;
 	MainTabs: NavigatorScreenParams<MainTabParamList>;
-	Quiz: { quizId: number };
-	QuizResult: {
-		answers: ResultRecord;
-		quizId: number;
-	};
-
-	Calculator: { type: CalculatorType };
-
-	Scam: { scamId: number };
-	Lessons: undefined;
-	Lesson: { lessonId: number };
+	Quiz: NavigatorScreenParams<QuizStackParamList>;
 };
 
 export type ScreenProps<S extends keyof AppStackParamList> =
@@ -69,7 +48,8 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> =
 const RootStack = createNativeStackNavigator<AppStackParamList>();
 
 function AppStack() {
-	const isAuthenticated = useAuthStore((state) => state.isLogin);
+	const isAuthenticated = !!authClient.getCookie();
+	// useAuthStore((state) => state.isLogin);
 
 	const {
 		theme: { colors },
@@ -90,19 +70,7 @@ function AppStack() {
 				<>
 					<RootStack.Screen name="Welcome" component={Screens.WelcomeScreen} />
 					<RootStack.Screen name="MainTabs" component={MainTabNavigator} />
-					<RootStack.Screen name="Quizzes" component={Screens.QuizzesScreen} />
-					<RootStack.Screen name="Quiz" component={Screens.QuizScreen} />
-					<RootStack.Screen
-						name="QuizResult"
-						component={Screens.QuizResultScreen}
-					/>
-
-					<RootStack.Screen name="Scam" component={Screens.ScamScreen} />
-					<RootStack.Screen name="Lessons" component={Screens.LessonsScreen} />
-					<RootStack.Screen name="Lesson" component={Screens.LessonScreen} />
-
-					{/* Calculators */}
-					<RootStack.Screen name="Calculator" component={CalculatorScreen} />
+					<RootStack.Screen name="Quiz" component={QuizNavigator} />
 				</>
 			) : (
 				<RootStack.Screen name="Auth" component={AuthNavigator} />
@@ -122,7 +90,7 @@ export const AppNavigator = observer(function AppNavigator(
 	props: NavigationProps,
 ) {
 	const {
-		themeScheme,
+		//themeScheme,
 		navigationTheme,
 		setThemeContextOverride,
 		ThemeProvider,
@@ -132,7 +100,7 @@ export const AppNavigator = observer(function AppNavigator(
 
 	return (
 		<TamaguiProvider config={config}>
-			<ThemeProvider value={{ themeScheme, setThemeContextOverride }}>
+			<ThemeProvider value={{ themeScheme: "light", setThemeContextOverride }}>
 				<NavigationContainer
 					ref={navigationRef}
 					theme={navigationTheme}

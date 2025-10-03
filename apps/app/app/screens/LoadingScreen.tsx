@@ -1,9 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
 export const LoadingScreen = () => {
 	return (
 		<View style={styles.view}>
-			<Text style={styles.text}>Loading...</Text>
+			<Text
+				style={{
+					fontSize: 36,
+					lineHeight: 44,
+					fontFamily: "spaceGroteskBold",
+				}}
+			>
+				SafeFin
+			</Text>
 		</View>
 	);
 };

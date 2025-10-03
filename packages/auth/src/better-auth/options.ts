@@ -1,6 +1,6 @@
-import type { BetterAuthOptions } from "better-auth";
-import { phoneNumber, admin, openAPI, multiSession } from "better-auth/plugins";
 import { expo } from "@better-auth/expo";
+import type { BetterAuthOptions } from "better-auth";
+import { admin, multiSession, openAPI, phoneNumber } from "better-auth/plugins";
 
 /**
  * Custom options for Better Auth
@@ -13,10 +13,23 @@ export const betterAuthOptions: BetterAuthOptions = {
 	 */
 	appName: "safe-fin-api",
 	user: {
+		changeEmail: {
+			enabled: true,
+		},
 		additionalFields: {
 			isNew: {
 				type: "boolean",
 				defaultValue: true,
+			},
+			dob: {
+				type: "date",
+				defaultValue: new Date(),
+				required: true,
+			},
+			gender: {
+				type: "date",
+				defaultValue: new Date(),
+				required: true,
 			},
 		},
 	},

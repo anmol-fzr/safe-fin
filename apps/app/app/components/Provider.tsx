@@ -8,7 +8,7 @@ import {
 	initialWindowMetrics,
 	SafeAreaProvider,
 } from "react-native-safe-area-context";
-import { authClient } from "@/utils/auth";
+import { authClient } from "@/modules/auth/utils";
 
 const queryClient = new QueryClient();
 

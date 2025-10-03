@@ -52,8 +52,7 @@
 			]
 		],
 		"experiments": {
-			"tsconfigPaths": true,
-			"reactCanary": true
+			"tsconfigPaths": true
 		},
 		"extra": {
 			"eas": {

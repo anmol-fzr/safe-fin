@@ -2,11 +2,11 @@ import { useCallback } from "react";
 import { Text, ListView } from "@/components";
 import { View, Pressable, StyleSheet } from "react-native";
 import { spacing } from "@/theme";
-import { useNavigation } from "@react-navigation/native";
 import { useSet } from "@/hooks";
 import type { Scam } from "@/services/api/scam";
 import { useScamList, ScamListProvider } from "@/context/ScamContext";
 import { useScams } from "@/hooks/query/scam";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 
 export function ScamList() {
 	const set = useSet<string>();
@@ -31,11 +31,15 @@ type ScamListItemProps = {
 function ScamListItem({ scam }: ScamListItemProps) {
 	const { set: activeTags, toggle: toggleTag } = useScamList();
 
-	const navigation = useNavigation();
+	const { navigate } = useSafeNavigation();
 
 	const handleScamPress = useCallback(() => {
-		navigation.navigate("Scam", {
-			scamId: scam.id,
+		navigate("MainTabs", {
+			screen: "Scams",
+			params: {
+				screen: "Scams",
+				scamId: scam.id,
+			},
 		});
 	}, []);
 

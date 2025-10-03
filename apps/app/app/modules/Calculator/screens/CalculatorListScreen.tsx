@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
 import { Pressable } from "react-native";
 import { ListView, Screen, ScreenHeader, Text } from "@/components";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { $styles, spacing } from "@/theme";
 import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -14,7 +14,7 @@ Object.keys(CALCULATOR_CONFIG).map((calcConfigKey) => {
 });
 
 export const CalculatorListScreen = () => {
-	const navigation = useNavigation();
+	const { navigate } = useSafeNavigation();
 
 	const { theme } = useAppTheme();
 
@@ -35,7 +35,13 @@ export const CalculatorListScreen = () => {
 				renderItem={({ item: calc }) => (
 					<Pressable
 						onPress={() =>
-							navigation.navigate("Calculator", { type: calc.screen })
+							navigate("MainTabs", {
+								screen: "Calculator",
+								params: {
+									screen: "Calculator",
+									params: { type: calc.screen },
+								},
+							})
 						}
 						style={{
 							padding: spacing.md,

@@ -2,6 +2,7 @@ import * as Localization from "expo-localization";
 import { I18nManager } from "react-native";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { TOptions } from "i18next";
 import "intl-pluralrules";
 
 // if English isn't your default language, move Translations to the appropriate language file.

@@ -11,7 +11,7 @@ export const $styles = {
 	container: {
 		paddingTop: spacing.md,
 		paddingBottom: spacing.lg,
-		paddingHorizontal: spacing.lg,
+		paddingHorizontal: spacing.md,
 	} as ViewStyle,
 
 	goBack: {

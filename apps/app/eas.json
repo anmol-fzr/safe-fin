@@ -16,6 +16,7 @@
 			}
 		},
 		"development:device": {
+			"developmentClient": "true",
 			"extends": "development",
 			"distribution": "internal",
 			"ios": {

@@ -21,7 +21,8 @@
 		"paths": {
 			"@/*": ["./app/*"],
 			"assets/*": ["./assets/*"],
-			"@auth/*": ["./app/modules/Auth/*"]
+			"@auth/*": ["./app/modules/auth/*"],
+			"@home/*": ["./app/modules/home/*"]
 		},
 		"typeRoots": ["./node_modules/@types", "./types"]
 	},

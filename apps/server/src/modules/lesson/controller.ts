@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { count, eq } from "drizzle-orm";
+import { count, eq, or } from "drizzle-orm";
 import { getDb, lesson, lessonQuiz } from "@/db";
 import { authenticate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
@@ -14,9 +14,14 @@ const { createHandlers } = createTypedFactory();
 
 const getLessons = createHandlers(authenticate, async (c) => {
 	const db = getDb(c.env);
+	const role = c.get("user").role;
 
 	const countPrms = db.select({ count: count() }).from(lesson);
 	const lessonsPrms = db.query.lesson.findMany({
+		where: (l) =>
+			role === "admin"
+				? or(eq(l.isPublished, true), eq(l.isPublished, false))
+				: eq(l.isPublished, true),
 		columns: {
 			id: true,
 			title: true,

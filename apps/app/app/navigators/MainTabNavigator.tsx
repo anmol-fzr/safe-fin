@@ -1,9 +1,9 @@
+import { HomeScreen } from "@home/screens";
 import {
 	type BottomTabScreenProps,
 	createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import type { CompositeScreenProps } from "@react-navigation/native";
-
 import {
 	BookOpenIcon,
 	CalculatorIcon,
@@ -13,23 +13,27 @@ import {
 } from "lucide-react-native";
 import type { TextStyle, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { translate } from "@/i18n";
-import { CalculatorListScreen } from "@/modules/Calculator/screens/CalculatorListScreen";
-import { HomeScreen } from "@/screens/HomeScreen";
-import { LearningScreen } from "@/screens/lesson";
+import { TabIcon } from "@/components/navigation/TabIcon";
+import { t } from "@/i18n";
+import { CalculatorNavigator } from "@/modules/Calculator/navigator";
+import { LessonNavigator } from "@/modules/lesson/navigator";
+import { ScamNavigator } from "@/modules/scam/navigator";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { ProfileScreen, ScamsScreen } from "../screens";
+import { ProfileScreen } from "../screens";
 import type { AppStackParamList, AppStackScreenProps } from "./AppNavigator";
-import { TabIcon } from "@/components/navigation/TabIcon";
 
 export type MainTabParamList = {
 	Home: undefined;
 	Profile: undefined;
 	Scams: undefined;
-	Learning: undefined;
-	CalculatorList: undefined;
+	Lesson: undefined;
+	Calculator: undefined;
 };
+
+const translate = t("mainNavigator").bind(null);
+const showTabBarLabel = false;
+const tabBarLabel = showTabBarLabel ? translate.bind(null) : () => "";
 
 export type MainTabScreenProps<T extends keyof MainTabParamList> =
 	CompositeScreenProps<
@@ -62,8 +66,8 @@ export function MainTabNavigator() {
 				name="Home"
 				component={HomeScreen}
 				options={{
-					tabBarAccessibilityLabel: translate("mainNavigator:homeTab"),
-					tabBarLabel: translate("mainNavigator:homeTab"),
+					tabBarAccessibilityLabel: translate("homeTab"),
+					tabBarLabel: tabBarLabel("homeTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={HomeIcon} focused={focused} />
 					),
@@ -71,13 +75,11 @@ export function MainTabNavigator() {
 			/>
 
 			<Tab.Screen
-				name="CalculatorList"
-				component={CalculatorListScreen}
+				name="Calculator"
+				component={CalculatorNavigator}
 				options={{
-					tabBarAccessibilityLabel: translate(
-						"mainNavigator:calculatorListTab",
-					),
-					tabBarLabel: translate("mainNavigator:calculatorListTab"),
+					tabBarAccessibilityLabel: translate("calculatorListTab"),
+					tabBarLabel: tabBarLabel("calculatorListTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={CalculatorIcon} focused={focused} />
 					),
@@ -85,10 +87,11 @@ export function MainTabNavigator() {
 			/>
 
 			<Tab.Screen
-				name="Learning"
-				component={LearningScreen}
+				name="Lesson"
+				component={LessonNavigator}
 				options={{
-					tabBarLabel: translate("mainNavigator:learnTab"),
+					tabBarAccessibilityLabel: translate("learnTab"),
+					tabBarLabel: tabBarLabel("learnTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={BookOpenIcon} focused={focused} />
 					),
@@ -97,9 +100,10 @@ export function MainTabNavigator() {
 
 			<Tab.Screen
 				name="Scams"
-				component={ScamsScreen}
+				component={ScamNavigator}
 				options={{
-					tabBarLabel: translate("mainNavigator:scamTab"),
+					tabBarAccessibilityLabel: translate("scamTab"),
+					tabBarLabel: tabBarLabel("scamTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={ShieldIcon} focused={focused} />
 					),
@@ -110,7 +114,8 @@ export function MainTabNavigator() {
 				name="Profile"
 				component={ProfileScreen}
 				options={{
-					tabBarLabel: translate("mainNavigator:profileTab"),
+					tabBarAccessibilityLabel: translate("profileTab"),
+					tabBarLabel: tabBarLabel("profileTab"),
 					tabBarIcon: ({ focused }) => (
 						<TabIcon Icon={UserIcon} focused={focused} />
 					),

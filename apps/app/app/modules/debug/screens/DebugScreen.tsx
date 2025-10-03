@@ -14,7 +14,7 @@ import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Button, ListItem, Screen, Text } from "@/components";
 import { $styles } from "@/theme";
-import { logout } from "@/modules/Auth/utils";
+import { logout } from "@/modules/auth/utils";
 
 function openLinkInBrowser(url: string) {
 	Linking.canOpenURL(url).then((canOpen) => canOpen && Linking.openURL(url));

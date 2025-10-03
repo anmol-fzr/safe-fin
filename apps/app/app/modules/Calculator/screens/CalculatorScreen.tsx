@@ -9,11 +9,11 @@ import {
 	CalculatorSlider,
 	sliderRowStyles,
 } from "@/modules/Calculator/components";
-import type { ScreenProps } from "@/navigators";
 import { colors, spacing } from "@/theme";
 import { CALCULATOR_CONFIG } from "@/utils/const";
+import type { CalculatorStackScreenProps } from "../navigator";
 
-type CalculatorScreenProps = ScreenProps<"Calculator">;
+type CalculatorScreenProps = CalculatorStackScreenProps<"Calculator">;
 
 export function CalculatorScreen(props: CalculatorScreenProps) {
 	const { title, calculate, sliders, constants, resultKeys, pieChart } =

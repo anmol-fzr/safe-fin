@@ -7,13 +7,13 @@ import { useAppTheme } from "@/utils/useAppTheme";
 import { useCountdown } from "@/hooks";
 import { Progress } from "tamagui";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { spacing } from "@/theme";
 import { QuestionProvider, useQuestion } from "./QuestionContext";
 import { Question } from "./Question";
 import { useMutation } from "@tanstack/react-query";
 import { API } from "@/services/api";
 import type { IQuizResult } from "@/services/api/quiz-result";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 
 export type ResultRecord = Record<string, number>;
 
@@ -45,12 +45,12 @@ export const QuizRender = () => {
 
 	const [userAnswers, setUserAnswers] = useState<ResultRecord>({});
 
-	const navigation = useNavigation();
+	const { navigate, goBack, push } = useSafeNavigation();
 
 	useEffect(() => {
 		if (countdown === 1) {
 			if (isLast) {
-				navigation.goBack();
+				goBack();
 				return;
 			}
 			onNext();
@@ -89,14 +89,17 @@ export const QuizRender = () => {
 				});
 			});
 
-			await mutate({
+			mutate({
 				answers: userAnswers,
 				quizId: quizId,
 			});
 
-			navigation.navigate("QuizResult", {
-				answers: userAnswers,
-				quizId: quizId,
+			push("Quiz", {
+				screen: "QuizResult",
+				// params: {
+				// 	answers: userAnswers,
+				// 	quizId: quizId,
+				// },
 			});
 		}
 	}, [handleNextQues, isLast, userAnswers, quizId]);

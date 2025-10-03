@@ -3,33 +3,40 @@ import type { ViewStyle } from "react-native";
 import { Button } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useYupForm } from "@/hooks";
-import { registerSchema } from "@/modules/Auth/schema";
-import { useAuthStore } from "@/modules/Auth/store";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { registerSchema } from "@/modules/auth/schema";
+import { useAuthStore } from "@/modules/auth/store";
+import { authClient } from "@/modules/auth/utils";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
-import { authClient } from "@/modules/Auth/utils";
 
 export const RegisterForm = () => {
 	const methods = useYupForm({
 		schema: registerSchema,
 	});
 	const { handleSubmit } = methods;
-	const { navigate } = useSafeNavigation();
+	const navigation = useSafeNavigation();
 
 	const setAuthState = useAuthStore((state) => state.setState);
 
 	const { themed } = useAppTheme();
 
 	const onSubmit = handleSubmit(async (data) => {
-		await authClient.updateUser({
-			name: data.name,
-			//email: data.email,
-		});
+		try {
+			await authClient.updateUser({
+				name: data.name,
+				email: data.email,
+				data: {
+					email: data.email,
+				},
+			});
+		} catch (error) {
+			console.log(error);
+		}
 
 		setAuthState("complete");
 
-		navigate("Welcome");
+		navigation.navigate("Welcome");
 	});
 
 	return (
@@ -44,7 +51,6 @@ export const RegisterForm = () => {
 					placeholderTx="registerScreen:nameFieldPlaceholder"
 				/>
 
-				{/*
 				<FormField
 					name="email"
 					autoCapitalize="none"
@@ -54,7 +60,6 @@ export const RegisterForm = () => {
 					labelTx="registerScreen:emailFieldLabel"
 					placeholderTx="registerScreen:emailFieldPlaceholder"
 				/>
-        */}
 			</FormProvider>
 
 			<Button

@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import type { TOptions } from "i18next";
 import { ChevronLeft } from "lucide-react-native";
 import { memo } from "react";
@@ -6,8 +5,8 @@ import { Pressable } from "react-native";
 import { type TxKeyPath, translate } from "@/i18n";
 import { $styles } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { Icon } from "./Icon";
 import { Text } from "./Text";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 
 type GoBackProps = {
 	/**
@@ -26,7 +25,7 @@ type GoBackProps = {
 };
 
 export const GoBack = memo(({ tx, txOptions, goBackText }: GoBackProps) => {
-	const navigate = useNavigation();
+	const navigate = useSafeNavigation();
 	const {
 		theme: { colors },
 	} = useAppTheme();
