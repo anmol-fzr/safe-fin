@@ -28,6 +28,10 @@
 		"auth:generate": "turbo run auth:generate --filter=@safe-fin/auth",
 		"prepare": "husky"
 	},
+	"overrides": {
+		"react": "19.0.0",
+		"react-dom": "19.0.0"
+	},
 	"workspaces": [
 		"apps/*",
 		"packages/*"
