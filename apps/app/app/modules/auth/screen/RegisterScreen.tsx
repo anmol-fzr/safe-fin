@@ -33,6 +33,7 @@ export function RegisterScreen() {
 const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	paddingVertical: spacing.xxl,
 	paddingHorizontal: spacing.lg,
+	height: "100%",
 });
 
 const $logIn: ThemedStyle<TextStyle> = ({ spacing }) => ({

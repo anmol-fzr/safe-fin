@@ -28,7 +28,8 @@ const loginSchema = object().shape({
 
 const registerSchema = object({
 	name: string().required().label("Name"),
-	email: string().email().required().label("Email"),
+	gender: string().required().label("Gender"),
+	//email: string().email().required().label("Email"),
 });
 
 const profileSchema = registerSchema.concat(loginSchema.pick(["phoneNumber"]));

@@ -1,18 +1,26 @@
-import { FormProvider } from "react-hook-form";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FormProvider, useForm } from "react-hook-form";
 import type { ViewStyle } from "react-native";
 import { Button } from "@/components";
 import { FormField } from "@/components/form/FormField";
-import { useYupForm } from "@/hooks";
+import { FormSelectField } from "@/components/form/FormSelectField";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 import { registerSchema } from "@/modules/auth/schema";
 import { useAuthStore } from "@/modules/auth/store";
-import { authClient } from "@/modules/auth/utils";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
+const genderOpts = [
+	{ label: "Male", value: "male" },
+	{ label: "Female", value: "female" },
+	{ label: "Other", value: "other" },
+];
+
 export const RegisterForm = () => {
-	const methods = useYupForm({
-		schema: registerSchema,
+	const methods = useForm({
+		resolver: yupResolver(registerSchema),
 	});
 	const { handleSubmit } = methods;
 	const navigation = useSafeNavigation();
@@ -20,22 +28,12 @@ export const RegisterForm = () => {
 	const setAuthState = useAuthStore((state) => state.setState);
 
 	const { themed } = useAppTheme();
+	const { updateUser } = useUpdateUser();
 
-	const onSubmit = handleSubmit(async (data) => {
-		try {
-			await authClient.updateUser({
-				name: data.name,
-				email: data.email,
-				data: {
-					email: data.email,
-				},
-			});
-		} catch (error) {
-			console.log(error);
-		}
+	const onSubmit = handleSubmit((data) => {
+		updateUser(data);
 
 		setAuthState("complete");
-
 		navigation.navigate("Welcome");
 	});
 
@@ -51,6 +49,16 @@ export const RegisterForm = () => {
 					placeholderTx="registerScreen:nameFieldPlaceholder"
 				/>
 
+				<BottomSheetModalProvider>
+					<FormSelectField
+						name="gender"
+						label="Gender"
+						placeholder="e.g. Male"
+						options={genderOpts}
+						multiple={false}
+					/>
+				</BottomSheetModalProvider>
+				{/*
 				<FormField
 					name="email"
 					autoCapitalize="none"
@@ -60,6 +68,7 @@ export const RegisterForm = () => {
 					labelTx="registerScreen:emailFieldLabel"
 					placeholderTx="registerScreen:emailFieldPlaceholder"
 				/>
+        */}
 			</FormProvider>
 
 			<Button

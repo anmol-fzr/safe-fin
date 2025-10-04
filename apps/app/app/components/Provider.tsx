@@ -3,6 +3,7 @@ import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as Burnt from "burnt";
 import type { PropsWithChildren } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import {
 	initialWindowMetrics,
@@ -34,9 +35,11 @@ export function Provider({ children }: PropsWithChildren) {
 		<QueryClientProvider client={queryClient}>
 			<SafeAreaProvider initialMetrics={initialWindowMetrics}>
 				<KeyboardProvider>
-					<AuthProvider client={authClient}>
-						<NotifierProvider value={notifier}>{children}</NotifierProvider>
-					</AuthProvider>
+					<GestureHandlerRootView>
+						<AuthProvider client={authClient}>
+							<NotifierProvider value={notifier}>{children}</NotifierProvider>
+						</AuthProvider>
+					</GestureHandlerRootView>
 				</KeyboardProvider>
 			</SafeAreaProvider>
 		</QueryClientProvider>
