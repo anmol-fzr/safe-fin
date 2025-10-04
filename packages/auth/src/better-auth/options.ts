@@ -1,6 +1,12 @@
 import { expo } from "@better-auth/expo";
 import type { BetterAuthOptions } from "better-auth";
-import { admin, multiSession, openAPI, phoneNumber } from "better-auth/plugins";
+import {
+	admin,
+	createAuthMiddleware,
+	multiSession,
+	openAPI,
+	phoneNumber,
+} from "better-auth/plugins";
 
 /**
  * Custom options for Better Auth
@@ -12,6 +18,21 @@ export const betterAuthOptions: BetterAuthOptions = {
 	 * The name of the application.
 	 */
 	appName: "safe-fin-api",
+	hooks: {
+		after: createAuthMiddleware(async (ctx) => {
+			if (ctx.path.endsWith("/update-user")) {
+				const userId = ctx.context.session?.user.id;
+				if (userId === undefined) {
+					throw new Error(
+						"[AUTH Package]: After Update User hook, userId must not be undefined",
+					);
+				}
+				ctx.context.internalAdapter.updateUser(userId, {
+					isNew: false,
+				});
+			}
+		}),
+	},
 	user: {
 		changeEmail: {
 			enabled: true,
@@ -23,13 +44,11 @@ export const betterAuthOptions: BetterAuthOptions = {
 			},
 			dob: {
 				type: "date",
-				defaultValue: new Date(),
-				required: true,
+				defaultValue: new Date(2000, 0, 1).toDateString(),
 			},
 			gender: {
-				type: "date",
-				defaultValue: new Date(),
-				required: true,
+				type: "string",
+				defaultValue: "male",
 			},
 		},
 	},

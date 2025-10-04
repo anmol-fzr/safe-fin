@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const user = sqliteTable("user", {
 	id: text("id").primaryKey(),
@@ -23,6 +23,8 @@ export const user = sqliteTable("user", {
 	phoneNumber: text("phone_number").unique(),
 	phoneNumberVerified: integer("phone_number_verified", { mode: "boolean" }),
 	isNew: integer("is_new", { mode: "boolean" }).default(true),
+	dob: integer("dob", { mode: "timestamp_ms" }).default(new Date(2000, 0, 1)),
+	gender: text("gender").default("male"),
 });
 
 export const session = sqliteTable("session", {
