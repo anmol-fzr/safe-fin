@@ -1,6 +1,6 @@
-import { useSettingsStore } from "@/store/useSettingsStore";
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useSettingsStore } from "@/store/useSettingsStore";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -29,8 +29,6 @@ export const formatOrdinals = (n: number) => {
 	const suffix = suffixes.get(rule);
 	return `${n}${suffix}`;
 };
-
-export const getEmptyArr = (length = 10) => Array.from({ length }, (_, i) => i);
 
 export const secsToClockTime = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);

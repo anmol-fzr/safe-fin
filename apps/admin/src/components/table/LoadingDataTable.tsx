@@ -1,3 +1,4 @@
+import { getEmptyArr } from "@safe-fin/ui/utils";
 import { useMemo } from "react";
 import {
 	Table,
@@ -8,7 +9,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { getEmptyArr } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 
 export function LoadingDataTable({ rows = 10, columns = 5 }) {
