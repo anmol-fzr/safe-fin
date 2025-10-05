@@ -1,6 +1,6 @@
 import type { createAuthClient } from "better-auth/react";
 import { createContext, type PropsWithChildren } from "react";
-import { useSafeContext } from "../useSafeContext";
+import { useSafeContext } from "./useSafeContext";
 
 type AuthContextType = ReturnType<typeof createAuthClient>;
 
