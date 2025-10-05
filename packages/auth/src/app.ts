@@ -6,13 +6,13 @@ import {
 import { createAuthClient } from "better-auth/react";
 import type { auth } from "./server";
 
-type CreateAppAuthClientOpts = {
+interface CreateAppAuthClientOpts {
 	baseURL: string;
 	storage: {
 		setItem: (key: string, value: string) => unknown;
 		getItem: (key: string) => string | null;
 	};
-};
+}
 
 const createAppAuthClient = (opts: CreateAppAuthClientOpts) => {
 	const { baseURL, storage } = opts;

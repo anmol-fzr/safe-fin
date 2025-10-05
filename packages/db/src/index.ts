@@ -3,12 +3,12 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "@/schema";
 
-type GetDbParams = {
+export interface GetDbOpts {
 	TURSO_DB_URL: string;
 	TURSO_DB_TOKEN: string;
-};
+}
 
-function getDb(envs: GetDbParams): ReturnType<typeof drizzle> {
+function getDb(envs: GetDbOpts): ReturnType<typeof drizzle> {
 	const turso = createClient({
 		url: envs.TURSO_DB_URL,
 		authToken: envs.TURSO_DB_TOKEN,
@@ -17,8 +17,9 @@ function getDb(envs: GetDbParams): ReturnType<typeof drizzle> {
 	return drizzle(turso, { schema });
 }
 
-const getAuthDrizzleAdapter = (env: Parameters<typeof getDb>[0]) => {
-	const db = getDb(env);
+const getAuthDrizzleAdapter = (creds: GetDbOpts) => {
+	const db = getDb(creds);
+
 	return drizzleAdapter(db, { provider: "sqlite" });
 };
 

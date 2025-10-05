@@ -7,9 +7,9 @@ import {
 import { createAuthClient } from "better-auth/react";
 import type { auth } from "./server";
 
-type CreateAdminAuthClientOpts = {
+interface CreateAdminAuthClientOpts {
 	baseURL: string;
-};
+}
 
 const createAdminAuthClient = (opts: CreateAdminAuthClientOpts) => {
 	const { baseURL } = opts;

@@ -1,15 +1,22 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
+		"composite": true,
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
 		"strict": true,
 		"skipLibCheck": true,
 		"lib": ["ESNext"],
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"references": [{ "path": "../types" }]
-	}
+		"outDir": "dist",
+		"rootDir": "src",
+		"declaration": true,
+		"declarationMap": true
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "dist"]
 }
