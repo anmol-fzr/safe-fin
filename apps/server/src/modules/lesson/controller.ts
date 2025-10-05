@@ -1,8 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
-import { count, eq, or } from "drizzle-orm";
+import { and, asc, count, desc, eq } from "drizzle-orm";
 import { getDb, lesson, lessonQuiz } from "@/db";
 import { authenticate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
+import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../../factory";
 import {
 	createLessonSchema,
@@ -12,35 +13,52 @@ import {
 
 const { createHandlers } = createTypedFactory();
 
-const getLessons = createHandlers(authenticate, async (c) => {
-	const db = getDb(c.env);
-	const role = c.get("user").role;
+const getLessons = createHandlers(
+	zValidator("query", queryParamSchema),
+	authenticate,
+	async (c) => {
+		const { sortBy, sortDirection, limit, offset } = c.req.valid("query");
 
-	const countPrms = db.select({ count: count() }).from(lesson);
-	const lessonsPrms = db.query.lesson.findMany({
-		where: (l) =>
-			role === "admin"
-				? or(eq(l.isPublished, true), eq(l.isPublished, false))
-				: eq(l.isPublished, true),
-		columns: {
-			id: true,
-			title: true,
-			desc: true,
-			isPublished: true,
-			content: false,
-			createdAt: true,
-			updatedAt: true,
-		},
-		orderBy: (lesson, { desc }) => [desc(lesson.createdAt)],
-	});
+		const db = getDb(c.env);
 
-	const [countVal, lessons] = await Promise.all([countPrms, lessonsPrms]);
+		const role = c.get("user").role;
+		const isAdmin = role === "admin";
 
-	return c.json({
-		data: lessons,
-		total: countVal[0].count,
-	});
-});
+		let where = undefined;
+		let fields = {};
+
+		if (isAdmin) {
+			where = and(eq(lesson.isPublished, true), eq(lesson.isPublished, false));
+		} else {
+			where = eq(lesson.isPublished, true);
+			fields = {
+				id: lesson.id,
+				title: lesson.title,
+				desc: lesson.desc,
+				isPublished: lesson.isPublished,
+				createdAt: lesson.createdAt,
+			};
+		}
+
+		const countPrms = db.select({ count: count() }).from(lesson).where(where);
+		const lessonsQuery = db
+			.select(fields)
+			.from(lesson)
+			.where(where)
+			.orderBy(
+				sortDirection === "desc" ? desc(lesson[sortBy]) : asc(lesson[sortBy]),
+			)
+			.limit(limit)
+			.offset(offset);
+
+		const [countVal, lessons] = await Promise.all([countPrms, lessonsQuery]);
+
+		return c.json({
+			data: lessons,
+			total: countVal[0].count,
+		});
+	},
+);
 
 const getLessonById = createHandlers(authenticate, async (c) => {
 	const lessonId = c.req.param("lesson_id");

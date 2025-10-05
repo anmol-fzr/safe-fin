@@ -1,9 +1,9 @@
 import type { Session, User } from "@/auth";
 
-export type HonoEnv = {
+export interface HonoEnv {
 	Variables: {
 		user: User;
 		session: Session;
 	};
 	Bindings: CloudflareBindings;
-};
+}

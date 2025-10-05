@@ -4,7 +4,7 @@ import { createTypedFactory } from "../factory";
 const { createMiddleware } = createTypedFactory();
 
 const roles = ["user", "admin"] as const;
-type Role = (typeof roles)[number];
+export type Role = (typeof roles)[number];
 
 const userRole = (allowedRoles: Role | Role[]) =>
 	createMiddleware(async (c, next) => {

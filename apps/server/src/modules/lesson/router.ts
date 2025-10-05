@@ -12,10 +12,10 @@ const { createApp } = createTypedFactory();
 
 const lessonRouter = createApp()
 	.get("/", ...getLessons)
+	.post("/", ...createLesson)
 	.get("/:lesson_id", ...getLessonById)
 	.patch("/:lesson_id", ...updateLessonById)
-	.post("/", ...createLesson)
-	.post("/link", ...linkLessonWithQuiz)
-	.delete("/:lesson_id", ...deleteLesson);
+	.delete("/:lesson_id", ...deleteLesson)
+	.post("/link", ...linkLessonWithQuiz);
 
 export { lessonRouter };

@@ -1,12 +1,13 @@
 {
 	"compilerOptions": {
-		"composite": true,
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
+		"target": "ESNext", // Use a modern target
+		"module": "ESNext", // Set module system to ESNext
+		"moduleResolution": "bundler", // *** CRITICAL FOR SPEED & PATHS ***
+		"verbatimModuleSyntax": true,
 		"strict": true,
+		"composite": true,
 		"skipLibCheck": true,
-		"include": ["./src/**/*"],
+		"baseUrl": ".",
 		"paths": {
 			"@calulator/*": ["./src/modules/calculator/*"],
 			"@lesson/*": ["./src/modules/lesson/*"],
@@ -14,11 +15,18 @@
 			"@quiz-result/*": ["./src/modules/quiz-result/*"],
 			"@/*": ["./src/*"]
 		},
-		"types": ["@cloudflare/workers-types", "../../worker-configuration.d.ts"],
-		"lib": ["ESNext"]
+		// Your environment specific settings (e.g., for Hono/Workers)
+		"types": [
+			"bun",
+			"@cloudflare/workers-types",
+			"../../worker-configuration.d.ts"
+		],
+		"lib": ["ES2022"]
 	},
-	"references": [
-		{ "path": "../../packages/db" },
-		{ "path": "../../packages/auth" }
-	]
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"]
+	// "references": [
+	// 	{ "path": "../../packages/db" },
+	// 	{ "path": "../../packages/auth" }
+	// ]
 }

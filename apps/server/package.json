@@ -8,7 +8,6 @@
 		"test": "vitest run ",
 		"test:watch": "vitest",
 		"test:ui": "vitest --ui",
-
 		"check": "biome check",
 		"lint": "biome lint",
 		"lint:fix": "biome lint --write",
@@ -16,12 +15,12 @@
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.0",
+		"@safe-fin/auth": "workspace:*",
+		"@safe-fin/db": "workspace:*",
 		"country-state-city": "^3.2.1",
 		"drizzle-orm": "^0.44.3",
-		"hono": "^4.8.4",
-		"zod": "3.25.76",
-		"@safe-fin/db": "workspace:*",
-		"@safe-fin/auth": "workspace:*"
+		"hono": "^4.9.9",
+		"zod": "3.25.76"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250715.0",
