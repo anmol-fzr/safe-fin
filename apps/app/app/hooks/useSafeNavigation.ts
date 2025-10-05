@@ -8,8 +8,8 @@ type NavigationProp = NativeStackNavigationProp<
 	keyof AppStackParamList
 >;
 
-export function useSafeNavigation() {
-	const navigation = useNavigation<NavigationProp>();
+export function useSafeNavigation<T = NavigationProp>() {
+	const navigation = useNavigation<T>();
 
 	return navigation;
 }

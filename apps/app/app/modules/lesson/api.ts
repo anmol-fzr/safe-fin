@@ -1,7 +1,7 @@
 import type { IResData } from "@/services/axios";
 import { axiosInstance } from "@/services/axios";
 
-type ILesson = {
+export type ILesson = {
 	id: number;
 	title: string;
 	desc: string;
@@ -40,6 +40,15 @@ const topics = [
 	},
 	{
 		title: "Credit",
+	},
+	{
+		title: "Tax Saving",
+	},
+	{
+		title: "GST",
+	},
+	{
+		title: "Laws",
 	},
 ] as const;
 

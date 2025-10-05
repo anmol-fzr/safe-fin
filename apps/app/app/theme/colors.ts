@@ -24,14 +24,17 @@ const palette = {
 	secondary400: "#626894",
 	secondary500: "#41476E",
 
-	accent100: "#FFEED4",
-	accent200: "#FFE1B2",
-	accent300: "#85D8FF",
-	accent400: "#FBC878",
-	accent500: "#0D8CFF",
+	accent100: "#eff6ff",
+	accent200: "#dbeafe",
+	accent300: "#bedbff",
+	accent400: "#8ec5ff",
+	accent500: "#51a2ff",
+	//accent500: "#2b7fff",
 
-	angry100: "#F2D6CD",
-	angry500: "#C03403",
+	//angry100: "#F2D6CD",
+	//angry500: "#C03403",
+	angry100: "#ffe2e2",
+	angry500: "#fb2c36",
 
 	success: "#2F855A",
 	successBackground: "#70FFAE",
@@ -108,7 +111,7 @@ export const colors = {
 	/**
 	 * The default color of the screen background.
 	 */
-	background: palette.neutral200,
+	background: palette.accent100,
 	/**
 	 * The default border color.
 	 */

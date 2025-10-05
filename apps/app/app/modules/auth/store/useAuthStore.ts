@@ -1,7 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { UserWithRole } from "better-auth/plugins/admin";
 import type { UserWithPhoneNumber } from "better-auth/plugins/phone-number";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 interface AuthStoreEmpty {
@@ -50,7 +51,7 @@ const useAuthStore = create<AuthStore>()(
 				});
 			},
 		})),
-		{ name: "auth-store" },
+		{ name: "auth-store", storage: createJSONStorage(() => AsyncStorage) },
 	),
 );
 

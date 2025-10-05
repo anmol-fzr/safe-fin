@@ -1,3 +1,4 @@
+import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense } from "react";
 import { ListView } from "@/components";
 import { useGetLessonTopics } from "../hooks/api";
@@ -13,6 +14,7 @@ export function TopicList() {
 
 function TopicListImpl() {
 	const { topics } = useGetLessonTopics();
+
 	return (
 		<ListView
 			horizontal
@@ -30,10 +32,12 @@ function TopicListImpl() {
 	);
 }
 
+const arr = getEmptyArr(5);
+
 TopicListImpl.Loading = (
 	<ListView
 		horizontal
-		data={[1, 2, 3]}
+		data={arr}
 		estimatedItemSize={105}
 		keyExtractor={(item) => item.toString()}
 		renderItem={TopicListItem.Loading}

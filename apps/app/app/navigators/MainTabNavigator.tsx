@@ -27,7 +27,7 @@ export type MainTabParamList = {
 	Home: undefined;
 	Profile: undefined;
 	Scams: undefined;
-	Lesson: undefined;
+	Learning: undefined;
 	Calculator: undefined;
 };
 
@@ -87,7 +87,7 @@ export function MainTabNavigator() {
 			/>
 
 			<Tab.Screen
-				name="Lesson"
+				name="Learning"
 				component={LessonNavigator}
 				options={{
 					tabBarAccessibilityLabel: translate("learnTab"),

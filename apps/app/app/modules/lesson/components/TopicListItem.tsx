@@ -53,7 +53,7 @@ const $topicListItem: ThemedStyle<ViewStyle> = ({
 	marginRight: spacing.xxs,
 	aspectRatio: 1.2,
 	height: 105,
-	backgroundColor: colors.palette.accent300,
+	backgroundColor: colors.palette.accent200,
 	borderRadius: roundness * leanMul,
 	padding: spacing.sm,
 	paddingVertical: spacing.md,

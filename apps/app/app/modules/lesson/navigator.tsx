@@ -16,6 +16,16 @@ export type LessonStackScreenProps<T extends keyof LessonStackParamList> =
 
 const Stack = createNativeStackNavigator<LessonStackParamList>();
 
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+
+type NavigationProp = NativeStackNavigationProp<
+	LessonStackParamList,
+	keyof LessonStackParamList
+>;
+
+export const useLessonNavigation = useSafeNavigation<NavigationProp>;
+
 export function LessonNavigator() {
 	return (
 		<Suspense fallback={<LoadingScreen />}>

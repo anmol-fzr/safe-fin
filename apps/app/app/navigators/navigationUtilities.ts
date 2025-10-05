@@ -86,12 +86,12 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
 			return false;
 		};
 
-		// Subscribe when we come to life
-		BackHandler.addEventListener("hardwareBackPress", onBackPress);
+		const listener = BackHandler.addEventListener(
+			"hardwareBackPress",
+			onBackPress,
+		);
 
-		// Unsubscribe when we're done
-		return () =>
-			BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+		return listener.remove;
 	}, []);
 }
 

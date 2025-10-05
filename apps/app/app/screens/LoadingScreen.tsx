@@ -1,4 +1,5 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { colors } from "@/theme";
 
 export const LoadingScreen = () => {
 	return (
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		height: "100%",
+		backgroundColor: colors.background,
 	},
 	text: {
 		fontSize: 24,
