@@ -1,6 +1,6 @@
 import axios, { type AxiosError, type AxiosResponse } from "axios";
-import { envs } from "@/utils/envs";
 import { authClient } from "@/modules/auth/utils";
+import { envs } from "@/utils/envs";
 
 const axiosInstance = axios.create({
 	baseURL: envs.API_URL,
@@ -33,14 +33,37 @@ axiosInstance.interceptors.response.use(
 		return Promise.reject({
 			data: null,
 			message: error.message || "Unknown error",
-		} as IResData);
+		} as IResData<null>);
 	},
 );
 
-type IResData<D = any> = {
+type PaginationInfo =
+	| {
+			hasMore: true;
+			nextPage: number;
+			total: number;
+	  }
+	| {
+			hasMore: false;
+			nextPage: null;
+			total: number;
+	  };
+
+type NonPaginatedRes<D> = {
 	data: D;
 	message: string;
+	paginate: undefined;
 };
+
+type PaginatedRes<D> = {
+	data: D;
+	message: string;
+	paginate: PaginationInfo;
+};
+
+type IResData<D, IsPaginated extends boolean = false> = IsPaginated extends true
+	? PaginatedRes<D>
+	: NonPaginatedRes<D>;
 
 export type { IResData };
 export { axiosInstance };

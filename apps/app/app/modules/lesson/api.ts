@@ -9,7 +9,7 @@ export type ILesson = {
 	createdAt: string;
 };
 
-interface ILessonQuizzes extends ILesson {
+export interface ILessonQuizzes extends ILesson {
 	isPublished: boolean;
 	content: string;
 	updatedAt: string;
@@ -23,14 +23,14 @@ interface Quiz {
 	quiz: { title: string };
 }
 
-type IResAllLessons = IResData<ILesson[]>;
+type IResAllLessons = IResData<ILesson[], true>;
 type IResLesson = IResData<ILessonQuizzes>;
 
 export const LESSON = {
 	ALL: (params: IReqParams) =>
-		axiosInstance.get<IResAllLessons>("/lessons", { params }),
+		axiosInstance.get<unknown, IResAllLessons>("/lessons", { params }),
 	ONE: (lessonId: number) =>
-		axiosInstance.get<IResAllLessons>(`/lessons/${lessonId}`),
+		axiosInstance.get<unknown, IResLesson>(`/lessons/${lessonId}`),
 } as const;
 
 const topics = [

@@ -1,5 +1,7 @@
 import { Suspense } from "react";
-import { ListView } from "@/components";
+import { View } from "react-native";
+import { ListView, Text } from "@/components";
+import { spacing } from "@/theme";
 import { useGetLessons } from "../hooks/api";
 import { LessonListItem } from "./LessonListItem";
 
@@ -24,34 +26,41 @@ const lessons = [
 
 export function LessonList() {
 	return (
-		<Suspense fallback={LessonListImpl.Loading}>
+		<Suspense fallback={<LessonListImpl.Loading />}>
 			<LessonListImpl />
 		</Suspense>
 	);
 }
 
 function LessonListImpl() {
-	const { lessons: data } = useGetLessons();
-	const lessons = data.pages[0].data;
+	const { lessons, isRefetching, isFetchingNextPage, fetchNextPage, refetch } =
+		useGetLessons();
+
 	return (
-		<ListView
-			data={lessons}
-			estimatedItemSize={105}
-			keyExtractor={(item) => item.id.toString()}
-			renderItem={({ item: lesson }) => (
-				<LessonListItem
-					title={lesson.title}
-					desc={lesson.desc}
-					id={lesson.id}
-				/>
-			)}
-		/>
+		<View>
+			<ListView
+				data={lessons}
+				refreshing={isRefetching}
+				onRefresh={refetch}
+				estimatedItemSize={105}
+				keyExtractor={(item) => item.id.toString()}
+				onEndReached={() => fetchNextPage()}
+				renderItem={({ item: lesson }) => (
+					<LessonListItem
+						title={lesson.title}
+						desc={lesson.desc}
+						id={lesson.id}
+					/>
+				)}
+			/>
+			{isFetchingNextPage && <LessonListImpl.Loading />}
+		</View>
 	);
 }
-LessonListImpl.Loading = (
+LessonListImpl.Loading = () => (
 	<ListView
 		data={lessons}
-		estimatedItemSize={105}
+		estimatedItemSize={96}
 		keyExtractor={(item) => item.id.toString()}
 		renderItem={() => <LessonListItem.Loading />}
 	/>

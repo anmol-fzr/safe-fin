@@ -1,32 +1,26 @@
-import { Pressable, View, type ViewStyle } from "react-native";
+import { Link } from "@react-navigation/native";
+import { View, type ViewStyle } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Text } from "@/components";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { ILesson } from "../api";
-import { useLessonNavigation } from "../navigator";
 
 type LessonListItemProps = Pick<ILesson, "id" | "title" | "desc">;
 
 export function LessonListItem(props: LessonListItemProps) {
 	const { id, title, desc } = props;
-	const navigation = useLessonNavigation();
-
-	const handleLessonPress = () => {
-		navigation.push("Lesson", {
-			lessonId: id,
-		});
-	};
 
 	const { themed } = useAppTheme();
 
 	return (
-		<Pressable onPress={handleLessonPress} style={themed($listItem)}>
+		<Link screen="Lesson" params={{ lessonId: id }} style={themed($listItem)}>
 			<Text preset="formLabel">{title}</Text>
+			{"\n"}
 			<Text size="xs" numberOfLines={1}>
 				{desc}
 			</Text>
-		</Pressable>
+		</Link>
 	);
 }
 

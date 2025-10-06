@@ -1,4 +1,8 @@
-export type IReqParams = {
+export interface IReqParams {
 	limit: number;
-	offset: number;
-};
+	page: number;
+	sortDirection?: "asc" | "desc";
+	sortBy?: "createdAt";
+}
+
+export type ResourceId = number;
