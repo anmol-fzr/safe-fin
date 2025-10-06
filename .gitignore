@@ -29,6 +29,7 @@ local.db
 dump.sql
 
 .dev.vars
+.secrets
 
 # Vercel
 .vercel

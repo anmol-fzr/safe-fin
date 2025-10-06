@@ -1,0 +1,35 @@
+name: Preview SafeFin Application
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_app:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Install EAS CLI Globally
+        run: bun install -g eas-cli
+        
+      - name: Login to EAS
+        uses: expo/expo-cli-action@v3
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+          eas-version: latest
+      
+      - name: Generate Build APK (Android Preview)
+        run: eas build --platform android --profile preview --non-interactive
+        working-directory: ./apps/app/
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

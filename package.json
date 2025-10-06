@@ -15,7 +15,7 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",
-		"dev": "turbo run dev",
+		"dev": "turbo run dev -F @safe-fin/server",
 		"test": "turbo run test -F @safe-fin/server",
 		"check": "biome check",
 		"lint": "biome lint",
@@ -26,7 +26,9 @@
 		"deps:fix": "syncpack fix-mismatches",
 		"deps:update": "syncpack update",
 		"auth:generate": "turbo run auth:generate --filter=@safe-fin/auth",
-		"prepare": "husky"
+		"prepare": "husky",
+
+		"build:android:preview": "turbo run build:android:preview -F @safe-fin/app"
 	},
 	"overrides": {
 		"react": "19.0.0",
