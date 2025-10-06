@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 type UseCounterProps = {
 	init?: number;
@@ -20,7 +20,7 @@ export const useCounter = ({ init = 0, min, max }: UseCounterProps) => {
 			}
 			return currCount;
 		});
-	}, []);
+	}, [max]);
 
 	const onPrev = useCallback(() => {
 		setCounter((currCount) => {
@@ -29,11 +29,11 @@ export const useCounter = ({ init = 0, min, max }: UseCounterProps) => {
 			}
 			return currCount;
 		});
-	}, []);
+	}, [min]);
 
 	const resetCounter = useCallback(() => {
 		setCounter(init);
-	}, []);
+	}, [init]);
 
 	const isFirst = useMemo(() => counter === init, [counter, init]);
 	const isLast = counter === max;

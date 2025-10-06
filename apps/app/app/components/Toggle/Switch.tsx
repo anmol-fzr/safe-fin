@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
 	Animated,
 	Image,
@@ -9,18 +9,17 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-
-import { $styles } from "@/theme";
 import { iconRegistry } from "@/components/Icon";
 import { isRTL } from "@/i18n";
+import type { ThemedStyle } from "@/theme";
+import { $styles } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import {
 	$inputOuterBase,
 	type BaseToggleInputProps,
 	Toggle,
 	type ToggleProps,
 } from "./Toggle";
-import { useAppTheme } from "@/utils/useAppTheme";
-import type { ThemedStyle } from "@/theme";
 
 export interface SwitchToggleProps
 	extends Omit<ToggleProps<SwitchInputProps>, "ToggleInput"> {
@@ -188,7 +187,9 @@ function SwitchInput(props: SwitchInputProps) {
 				]}
 			/>
 
+			{/* biome-ignore lint/a11y/useValidAriaRole: It's just a react prop not aria role*/}
 			<SwitchAccessibilityLabel {...props} role="on" />
+			{/* biome-ignore lint/a11y/useValidAriaRole: It's just a react prop not aria role*/}
 			<SwitchAccessibilityLabel {...props} role="off" />
 
 			<Animated.View

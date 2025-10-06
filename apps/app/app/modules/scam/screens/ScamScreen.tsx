@@ -1,19 +1,21 @@
-import { Text, Screen, GoBack } from "@/components";
+import { useGetScam } from "@scam/hooks/queries";
+import { type ScamStackScreenProps, useScamNavigation } from "@scam/navigator";
 import { View } from "react-native";
+import { GoBack, Screen, Text } from "@/components";
 import { $styles, spacing } from "@/theme";
-import { API } from "@/services/api";
-import { useQuery } from "@tanstack/react-query";
-import { ScamStackScreenProps } from "../navigator";
 
 type Props = ScamStackScreenProps<"Scam">;
 
 export function ScamScreen(props: Props) {
 	const { scamId } = props.route.params;
 
-	const { isPending, data: scam } = useQuery({
-		queryKey: ["SCAMS", scamId],
-		queryFn: () => API.SCAM.ONE(scamId),
-	});
+	const navigation = useScamNavigation();
+	const { scam } = useGetScam(Number(scamId));
+
+	if (scam === undefined) {
+		console.error("Got undefined Scam at ScamScreen, Navigaiting Back ...");
+		return navigation.goBack();
+	}
 
 	return (
 		<Screen
@@ -22,35 +24,29 @@ export function ScamScreen(props: Props) {
 			safeAreaEdges={["top"]}
 		>
 			<GoBack tx="scamScreen:title" />
-			{isPending ? (
-				<></>
-			) : (
-				<>
-					<Text preset="subheading" style={{ marginTop: 12 }}>
-						{scam.title}
-					</Text>
-					<Text>{scam?.desc}</Text>
-					<View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
-						{scam.tags.map((tag) => {
-							return (
-								<View
-									key={tag}
-									style={{
-										borderColor: "black",
-										backgroundColor: "white",
-										borderWidth: 1,
-										padding: 2,
-										paddingInline: 6,
-										borderRadius: spacing.xxs,
-									}}
-								>
-									<Text>{tag}</Text>
-								</View>
-							);
-						})}
-					</View>
-				</>
-			)}
+			<Text preset="subheading" style={{ marginTop: 12 }}>
+				{scam.title}
+			</Text>
+			<Text>{scam?.desc}</Text>
+			<View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
+				{scam.tags.map((tag) => {
+					return (
+						<View
+							key={tag}
+							style={{
+								borderColor: "black",
+								backgroundColor: "white",
+								borderWidth: 1,
+								padding: 2,
+								paddingInline: 6,
+								borderRadius: spacing.xxs,
+							}}
+						>
+							<Text>{tag}</Text>
+						</View>
+					);
+				})}
+			</View>
 		</Screen>
 	);
 }

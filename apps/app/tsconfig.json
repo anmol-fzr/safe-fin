@@ -22,7 +22,8 @@
 			"@/*": ["./app/*"],
 			"assets/*": ["./assets/*"],
 			"@auth/*": ["./app/modules/auth/*"],
-			"@home/*": ["./app/modules/home/*"]
+			"@home/*": ["./app/modules/home/*"],
+			"@scam/*": ["./app/modules/scam/*"]
 		},
 		"typeRoots": ["./node_modules/@types", "./types"]
 	},

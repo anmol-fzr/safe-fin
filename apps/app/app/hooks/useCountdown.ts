@@ -13,7 +13,7 @@ export const useCountdown = (secs = 30) => {
 
 	useEffect(() => {
 		return clear;
-	}, []);
+	}, [clear]);
 
 	const start = useCallback(() => {
 		clear();
@@ -27,12 +27,12 @@ export const useCountdown = (secs = 30) => {
 				return 0;
 			});
 		}, 1000);
-	}, []);
+	}, [clear]);
 
 	const reset = useCallback(() => {
 		clear();
 		setCountdown(secs);
-	}, [secs]);
+	}, [secs, clear]);
 
 	const restart = useCallback(() => {
 		reset();

@@ -1,19 +1,19 @@
-import { useCounter } from "@/hooks/useCounter";
-import { useQuizContext } from "./QuizContext";
-import { Text } from "../Text";
-import { Button } from "../Button";
-import { StyleSheet, View } from "react-native";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { useCountdown } from "@/hooks";
-import { Progress } from "tamagui";
-import { useCallback, useEffect, useState } from "react";
-import { spacing } from "@/theme";
-import { QuestionProvider, useQuestion } from "./QuestionContext";
-import { Question } from "./Question";
 import { useMutation } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Progress } from "tamagui";
+import { useCountdown } from "@/hooks";
+import { useCounter } from "@/hooks/useCounter";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { API } from "@/services/api";
 import type { IQuizResult } from "@/services/api/quiz-result";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { spacing } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { Button } from "../Button";
+import { Text } from "../Text";
+import { Question } from "./Question";
+import { QuestionProvider, useQuestion } from "./QuestionContext";
+import { useQuizContext } from "./QuizContext";
 
 export type ResultRecord = Record<string, number>;
 
@@ -35,7 +35,7 @@ export const QuizRender = () => {
 
 	useEffect(() => {
 		restart();
-	}, [counter]);
+	}, [restart]);
 
 	useEffect(() => {
 		if (countdown === 0) {
@@ -45,7 +45,7 @@ export const QuizRender = () => {
 
 	const [userAnswers, setUserAnswers] = useState<ResultRecord>({});
 
-	const { navigate, goBack, push } = useSafeNavigation();
+	const { goBack, push } = useSafeNavigation();
 
 	useEffect(() => {
 		if (countdown === 1) {
@@ -57,7 +57,7 @@ export const QuizRender = () => {
 			resetOptn();
 			reset();
 		}
-	}, [countdown, onNext]);
+	}, [countdown, onNext, resetOptn, reset]);
 
 	const goToNextQues = useCallback(() => {
 		resetOptn();

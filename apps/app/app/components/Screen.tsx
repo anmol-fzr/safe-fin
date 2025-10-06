@@ -307,7 +307,7 @@ export function Screen(props: ScreenProps) {
 				{...KeyboardAvoidingViewProps}
 				style={[$styles.flex1, KeyboardAvoidingViewProps?.style]}
 			>
-				{!isConnected ? (
+				{!isConnected && (
 					<View
 						style={{
 							backgroundColor: colors.errorBackground,
@@ -316,8 +316,6 @@ export function Screen(props: ScreenProps) {
 					>
 						<Text>Disconnected from Internet 🌐</Text>
 					</View>
-				) : (
-					<></>
 				)}
 				{isNonScrolling(props.preset) ? (
 					<ScreenWithoutScrolling {...props} />

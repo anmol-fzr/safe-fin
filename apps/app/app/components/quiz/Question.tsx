@@ -1,9 +1,8 @@
 import { memo } from "react";
+import type { StyleProp, TextStyle } from "react-native";
 import { Pressable, View } from "react-native";
-import type { TextStyle, StyleProp } from "react-native";
-import { Text } from "../Text";
 import { useAppTheme } from "@/utils/useAppTheme";
-import type { Option as IOption } from "@/services/api/quiz";
+import { Text } from "../Text";
 import { useQuestionContext } from "./QuestionContext";
 
 type QuestionProps = {

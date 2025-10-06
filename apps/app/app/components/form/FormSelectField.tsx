@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { View, type ViewStyle } from "react-native";
-import { spacing, type ThemedStyle } from "@/theme";
+import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { SelectField, type SelectFieldProps } from "../SelectField";
 

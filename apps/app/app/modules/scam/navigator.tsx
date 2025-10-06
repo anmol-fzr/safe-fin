@@ -1,7 +1,9 @@
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
 	createNativeStackNavigator,
-	NativeStackScreenProps,
+	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import * as Screens from "./screens";
 
 export type ScamStackParamList = {
@@ -13,6 +15,13 @@ export type ScamStackScreenProps<T extends keyof ScamStackParamList> =
 	NativeStackScreenProps<ScamStackParamList, T>;
 
 const Stack = createNativeStackNavigator<ScamStackParamList>();
+
+type NavigationProp = NativeStackNavigationProp<
+	ScamStackParamList,
+	keyof ScamStackParamList
+>;
+
+export const useScamNavigation = useSafeNavigation<NavigationProp>;
 
 export function ScamNavigator() {
 	return (

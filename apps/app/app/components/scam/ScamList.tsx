@@ -1,16 +1,16 @@
 import { useCallback } from "react";
-import { Text, ListView } from "@/components";
-import { View, Pressable, StyleSheet } from "react-native";
-import { spacing } from "@/theme";
+import { Pressable, StyleSheet, View } from "react-native";
+import { ListView, Text } from "@/components";
+import { ScamListProvider, useScamList } from "@/context/ScamContext";
 import { useSet } from "@/hooks";
-import type { Scam } from "@/services/api/scam";
-import { useScamList, ScamListProvider } from "@/context/ScamContext";
-import { useScams } from "@/hooks/query/scam";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import type { Scam } from "@/modules/scam/api";
+import { useGetScams } from "@/modules/scam/hooks/queries";
+import { useScamNavigation } from "@/modules/scam/navigator";
+import { spacing } from "@/theme";
 
 export function ScamList() {
 	const set = useSet<string>();
-	const { isPending, data: scams } = useScams();
+	const { scams } = useGetScams();
 
 	return (
 		<ScamListProvider value={set}>
@@ -31,17 +31,13 @@ type ScamListItemProps = {
 function ScamListItem({ scam }: ScamListItemProps) {
 	const { set: activeTags, toggle: toggleTag } = useScamList();
 
-	const { navigate } = useSafeNavigation();
+	const navigation = useScamNavigation();
 
 	const handleScamPress = useCallback(() => {
-		navigate("MainTabs", {
-			screen: "Scams",
-			params: {
-				screen: "Scams",
-				scamId: scam.id,
-			},
+		navigation.push("Scam", {
+			scamId: scam.id,
 		});
-	}, []);
+	}, [navigation, scam.id]);
 
 	return (
 		<Pressable onPress={handleScamPress} style={styles.scamListItem}>
