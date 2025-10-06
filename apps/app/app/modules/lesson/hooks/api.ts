@@ -24,8 +24,8 @@ const useGetLesson = (lessonId: number) => {
 function getLessonsOpts() {
 	return infiniteQueryOptions({
 		queryKey: [baseQueryKey],
-		queryFn: LESSON.ALL,
-		initialPageParam: { limit: 10, skip: 0 },
+		queryFn: ({ pageParam }) => LESSON.ALL(pageParam),
+		initialPageParam: { limit: 10, offset: 0 },
 		getNextPageParam: (lastPage, allPages, lastPageParam, allPagesParams) => {
 			return undefined;
 			const total = allPages[allPages.length - 1].total;
@@ -50,6 +50,7 @@ const useGetLessons = () => {
 		fetchNextPage: fetchNextLessonPage,
 		...rest
 	} = useSuspenseInfiniteQuery(opts);
+
 	return { lessons, fetchNextLessonPage, ...rest };
 };
 

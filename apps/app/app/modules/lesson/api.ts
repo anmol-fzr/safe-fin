@@ -1,5 +1,6 @@
 import type { IResData } from "@/services/axios";
 import { axiosInstance } from "@/services/axios";
+import type { IReqParams } from "@/types";
 
 export type ILesson = {
 	id: number;
@@ -26,9 +27,10 @@ type IResAllLessons = IResData<ILesson[]>;
 type IResLesson = IResData<ILessonQuizzes>;
 
 export const LESSON = {
-	ALL: () => axiosInstance.get<any, IResAllLessons>("/lessons"),
+	ALL: (params: IReqParams) =>
+		axiosInstance.get<IResAllLessons>("/lessons", { params }),
 	ONE: (lessonId: number) =>
-		axiosInstance.get<any, IResAllLessons>(`/lessons/${lessonId}`),
+		axiosInstance.get<IResAllLessons>(`/lessons/${lessonId}`),
 } as const;
 
 const topics = [
