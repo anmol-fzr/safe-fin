@@ -22,12 +22,12 @@ export const queryParamSchema = z.object({
 		.describe("The number of users to return")
 		.optional()
 		.default(10),
-	offset: z
+	page: z
 		.string()
-		.describe("The offset to start from")
+		.describe("The page to start from")
 		.or(z.number())
 		.optional()
-		.default(0),
+		.default(1),
 	sortBy: z.string().default("createdAt"),
 	sortDirection: z
 		.enum(["asc", "desc"])

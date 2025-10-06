@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { and, asc, count, desc, eq, or } from "drizzle-orm";
 import { getDb, lesson, lessonQuiz } from "@/db";
-import { authenticate } from "@/middleware";
+import { authenticate, getPaginateRes, paginate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
 import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../../factory";
@@ -15,13 +15,17 @@ const { createHandlers } = createTypedFactory();
 
 const getLessons = createHandlers(
 	zValidator("query", queryParamSchema),
+	paginate,
 	authenticate,
 	async (c) => {
-		const { sortBy, sortDirection, limit, offset } = c.req.valid("query");
+		const { sortBy, sortDirection, limit, page } = c.get("paginate");
+
+		const offset = (page - 1) * limit;
 
 		const db = getDb(c.env);
 
-		const role = c.get("user").role;
+		const role = "admin";
+		//const role = c.get("user").role;
 		const isAdmin = role === "admin";
 
 		let where = undefined;
@@ -60,9 +64,11 @@ const getLessons = createHandlers(
 
 		const [countVal, lessons] = await Promise.all([countPrms, lessonsQuery]);
 
+		const total = countVal[0].count;
+
 		return c.json({
 			data: lessons,
-			total: countVal[0].count,
+			paginate: getPaginateRes({ total, offset, limit }),
 		});
 	},
 );
