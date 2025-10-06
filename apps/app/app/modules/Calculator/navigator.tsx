@@ -1,7 +1,9 @@
 import {
 	createNativeStackNavigator,
-	NativeStackScreenProps,
+	type NativeStackNavigationProp,
+	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import * as Screens from "./screens";
 
 type CalculatorType = string;
@@ -16,6 +18,13 @@ export type CalculatorStackScreenProps<
 > = NativeStackScreenProps<CalculatorStackParamList, T>;
 
 const Stack = createNativeStackNavigator<CalculatorStackParamList>();
+
+type NavigationProp = NativeStackNavigationProp<
+	CalculatorStackParamList,
+	keyof CalculatorStackParamList
+>;
+
+export const useCalculatorNavigation = useSafeNavigation<NavigationProp>;
 
 export function CalculatorNavigator() {
 	return (
