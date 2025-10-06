@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { and, asc, count, desc, eq } from "drizzle-orm";
+import { and, asc, count, desc, eq, or } from "drizzle-orm";
 import { getDb, lesson, lessonQuiz } from "@/db";
 import { authenticate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
@@ -25,10 +25,10 @@ const getLessons = createHandlers(
 		const isAdmin = role === "admin";
 
 		let where = undefined;
-		let fields = {};
+		let fields = undefined;
 
 		if (isAdmin) {
-			where = and(eq(lesson.isPublished, true), eq(lesson.isPublished, false));
+			where = or(eq(lesson.isPublished, true), eq(lesson.isPublished, false));
 		} else {
 			where = eq(lesson.isPublished, true);
 			fields = {
@@ -40,6 +40,13 @@ const getLessons = createHandlers(
 			};
 		}
 
+		fields = {
+			id: lesson.id,
+			title: lesson.title,
+			desc: lesson.desc,
+			isPublished: lesson.isPublished,
+			createdAt: lesson.createdAt,
+		};
 		const countPrms = db.select({ count: count() }).from(lesson).where(where);
 		const lessonsQuery = db
 			.select(fields)
