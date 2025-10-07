@@ -1,4 +1,21 @@
-# SafeFin – Interactive Financial Literacy & Fraud Awareness Platform
+<p align="center">
+  <picture>
+    <source srcset="./banner-dark.png" media="(prefers-color-scheme: dark)">
+    <source srcset="./banner.png" media="(prefers-color-scheme: light)">
+    <img src="./banner.png" alt="Safe-Fin Logo">
+  </picture>
+  <h2 align="center">
+    Safe Fin
+  </h2>
+
+  <p align="center">
+    Interactive Financial Literacy & Fraud Awareness Platform
+    <br />
+    <a href="https://github.com/anmol-fzr/safe-fin/issues">Issues</a>
+  </p>
+</p>
+
+## About the project
 
 SafeFin is a modern full-stack platform designed to make **financial education and fraud awareness** interactive and accessible.  
 Built with cutting-edge technologies, it seamlessly integrates web, mobile, and serverless infrastructure for scalability and performance.
