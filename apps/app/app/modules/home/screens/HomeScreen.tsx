@@ -15,7 +15,7 @@ export function HomeScreen() {
 				paddingTop: spacing.md,
 				gap: spacing.xs,
 			}}
-			safeAreaEdges={["top"]}
+			safeAreaEdges={["top", "bottom"]}
 		>
 			<View style={themed($longCardStyles)}>
 				<Text preset="bold" size="xl">

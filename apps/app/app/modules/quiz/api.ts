@@ -1,6 +1,6 @@
-import { axiosInstance } from "../axios";
-import { RESULT } from "./quiz-result";
-import type { IResData } from "../axios";
+import { RESULT } from "../../services/api/quiz-result";
+import type { IResData } from "../../services/axios";
+import { axiosInstance } from "../../services/axios";
 
 export type IResQuizzes = IResData<Quizzes>;
 export type IResQuiz = IResData<QuizWQues>;
@@ -42,7 +42,8 @@ interface Answer {
 }
 
 export const QUIZ = {
-	ALL: () => axiosInstance.get<any, IResQuizzes>("/quiz"),
-	ONE: (quizId: number) => axiosInstance.get<any, IResQuiz>(`/quiz/${quizId}`),
+	ALL: () => axiosInstance.get<unknown, IResQuizzes>("/quiz"),
+	ONE: (quizId: number) =>
+		axiosInstance.get<unknown, IResQuiz>(`/quiz/${quizId}`),
 	RESULT,
 };

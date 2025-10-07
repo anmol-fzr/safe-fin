@@ -3,7 +3,10 @@ import {
 	type BottomTabScreenProps,
 	createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
-import type { CompositeScreenProps } from "@react-navigation/native";
+import {
+	type CompositeScreenProps,
+	useNavigationState,
+} from "@react-navigation/native";
 import {
 	BookOpenIcon,
 	CalculatorIcon,
@@ -15,12 +18,15 @@ import type { TextStyle, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TabIcon } from "@/components/navigation/TabIcon";
 import { t } from "@/i18n";
-import { CalculatorNavigator } from "@/modules/Calculator/navigator";
+import {
+	CalculatorNavigator,
+	calculatorTabHiddenScreens,
+} from "@/modules/Calculator/navigator";
 import { LessonNavigator } from "@/modules/lesson/navigator";
+import { ProfileNavigator } from "@/modules/profile/navigator";
 import { ScamNavigator } from "@/modules/scam/navigator";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { ProfileScreen } from "../screens";
 import type { AppStackParamList, AppStackScreenProps } from "./AppNavigator";
 
 export type MainTabParamList = {
@@ -50,16 +56,38 @@ export function MainTabNavigator() {
 		theme: { colors },
 	} = useAppTheme();
 
+	const navigationState = useNavigationState((state) => state);
+
+	const getNestedRouteName = (state: any): string | null => {
+		if (!state) return null;
+		const route = state.routes[state.index];
+		if (route.state) {
+			return getNestedRouteName(route.state);
+		}
+		return route.name;
+	};
+
+	const currentRouteName = getNestedRouteName(navigationState);
+
+	const hideTabBarScreens = [...calculatorTabHiddenScreens];
+
 	return (
 		<Tab.Navigator
 			screenOptions={{
 				headerShown: false,
 				tabBarHideOnKeyboard: true,
-				tabBarStyle: themed([$tabBar, { height: bottom + 70 }]),
 				tabBarActiveTintColor: colors.text,
 				tabBarInactiveTintColor: colors.text,
 				tabBarLabelStyle: themed($tabBarLabel),
 				tabBarItemStyle: themed($tabBarItem),
+				tabBarStyle: [
+					themed([$tabBar, { height: bottom + 70 }]),
+					{
+						display: hideTabBarScreens.includes(currentRouteName)
+							? "none"
+							: "flex",
+					},
+				],
 			}}
 		>
 			<Tab.Screen
@@ -112,7 +140,7 @@ export function MainTabNavigator() {
 
 			<Tab.Screen
 				name="Profile"
-				component={ProfileScreen}
+				component={ProfileNavigator}
 				options={{
 					tabBarAccessibilityLabel: translate("profileTab"),
 					tabBarLabel: tabBarLabel("profileTab"),

@@ -15,6 +15,7 @@ const createCalculatorMetadata = createHandlers(
 
 const calcs = [
 	{
+		id: 1,
 		title: "SIP Calculator",
 		list: {
 			title: "SIP",
@@ -57,12 +58,17 @@ const calcs = [
 			totalValue:
 				"investment * (((1 + rate/1200) ^ (duration*12) - 1) / (rate/1200)) * (1 + rate/1200)",
 			totalInvested: "investment * duration * 12",
-			returns: "totalValue - totalInvested",
+			returns:
+				"(investment * (((1 + rate/1200) ^ (duration*12) - 1) / (rate/1200)) * (1 + rate/1200)) - (investment * duration * 12)",
 		},
 	},
 ];
 
 const getCalculatorConfig = createHandlers(async (c) => {
+	return c.json(calcs);
+});
+
+const getCalculatorConfigById = createHandlers(async (c) => {
 	return c.json(calcs);
 });
 

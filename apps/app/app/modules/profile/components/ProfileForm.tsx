@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { FormProvider } from "react-hook-form";
 import { Button } from "@/components";
 import { FormField } from "@/components/form/FormField";
@@ -6,9 +5,7 @@ import { useYupForm } from "@/hooks";
 import { profileSchema } from "@/modules/auth/schema";
 import { authClient } from "@/modules/auth/utils";
 
-export const ProfileForm = memo(() => {
-	//const [phoneOtpState, setPhoneOtpState] = useState<OtpState>("closed");
-
+export const ProfileForm = () => {
 	const methods = useYupForm({
 		schema: profileSchema,
 		defaultValues: async () => {
@@ -103,4 +100,4 @@ export const ProfileForm = memo(() => {
 			</Button>
 		</FormProvider>
 	);
-});
+};

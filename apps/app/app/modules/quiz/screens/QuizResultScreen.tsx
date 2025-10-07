@@ -1,16 +1,16 @@
-import { Pressable, StyleSheet, View } from "react-native";
-import { Screen, Text, Button, ScreenHeader } from "@/components";
-import { $styles, spacing } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { useQuizById } from "@/hooks/useQuizById";
 import { useCallback, useEffect, useState } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
-import { Question } from "@/components/quiz/Question";
+import { Button, Screen, ScreenHeader, Text } from "@/components";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { $styles, spacing } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { Question } from "../components/Question";
+import { useGetQuiz } from "../hooks/queries";
 
 // const markans = {
 // 	"1": 1,
@@ -56,17 +56,17 @@ export function QuizResultScreen() {
 	if (!quizId) {
 		throw new Error("No QuizId array param passed on QuizScreen");
 	}
-	const { navigate } = useSafeNavigation();
+	const navigation = useSafeNavigation();
 
-	const { data, isPending } = useQuizById(quizId);
+	const { quiz, isPending } = useGetQuiz(quizId);
 
-	const activeQues = data?.data?.questions?.find(
+	const activeQues = quiz.questions?.find(
 		(ques) => ques.id.toString() === activeQuesId,
 	);
 
 	const goToQuizzes = useCallback(
-		() => navigate("Lesson", { screen: "Lessons" }),
-		[navigate],
+		() => navigation.navigate("MainTabs", { screen: "Learning" }),
+		[navigation],
 	);
 
 	return (
@@ -85,7 +85,7 @@ export function QuizResultScreen() {
 					{isPending ? (
 						<Text>Crunching Results ...</Text>
 					) : (
-						data?.data?.questions?.map((question, index) => {
+						quiz.questions?.map((question, index) => {
 							const isCorrect =
 								markedAnswers[question.id.toString()] === question.answerId;
 							return (
@@ -200,7 +200,13 @@ const styles = StyleSheet.create({
 	},
 });
 //() => setActiveQuesId(question.id.toString())
-const Square = ({ isActive, isCorrect, onPress, index }) => {
+type SquareProps = {
+	isActive: boolean;
+	isCorrect: boolean;
+	onPress: VoidFunction;
+	index: number;
+};
+const Square = ({ isActive, isCorrect, onPress, index }: SquareProps) => {
 	const {
 		theme: { colors },
 	} = useAppTheme();

@@ -1,9 +1,40 @@
-import { memo } from "react";
+import { createContext, memo, useCallback, useContext, useState } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { Pressable, View } from "react-native";
+import { Text } from "@/components";
+import { MissingContextError } from "@/utils/error";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { Text } from "../Text";
-import { useQuestionContext } from "./QuestionContext";
+import type { Question as IQuestion } from "../api";
+
+type QuestionContext = ReturnType<typeof useQuestion> & {
+	question: IQuestion;
+};
+
+const questionContext = createContext<QuestionContext | null>(null);
+
+const useQuestionContext = () => {
+	const ctx = useContext(questionContext);
+	if (ctx === null || ctx === undefined) {
+		throw new MissingContextError("useQuestionContext", "QuestionProvider");
+	}
+	return ctx;
+};
+
+const useQuestion = () => {
+	const [opIndx, setOpIndx] = useState(-1);
+
+	const resetOptn = useCallback(() => {
+		setOpIndx(-1);
+	}, []);
+
+	const handleOptnPress = useCallback((opt: number) => {
+		setOpIndx(opt);
+	}, []);
+
+	return { opIndx, handleOptnPress, resetOptn };
+};
+
+const QuestionProvider = questionContext.Provider;
 
 type QuestionProps = {
 	question: string;
@@ -88,4 +119,9 @@ const question = {
 	Options,
 };
 
-export { question as Question };
+export {
+	question as Question,
+	QuestionProvider,
+	useQuestionContext,
+	useQuestion,
+};

@@ -1,12 +1,27 @@
-import { useCallback } from "react";
+import { createContext, useCallback, useContext } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ListView, Text } from "@/components";
-import { ScamListProvider, useScamList } from "@/context/ScamContext";
 import { useSet } from "@/hooks";
 import type { Scam } from "@/modules/scam/api";
 import { useGetScams } from "@/modules/scam/hooks/queries";
 import { useScamNavigation } from "@/modules/scam/navigator";
 import { spacing } from "@/theme";
+import { MissingContextError } from "@/utils/error";
+
+type ScamListContext = ReturnType<typeof useSet<string>>;
+const scamListContext = createContext<ScamListContext | null>(null);
+
+const useScamList = () => {
+	const ctx = useContext(scamListContext);
+	if (ctx === null || ctx === undefined) {
+		throw new MissingContextError("useScamList", "ScamListProvider");
+	}
+	return ctx;
+};
+
+const ScamListProvider = scamListContext.Provider;
+
+export { ScamListProvider, useScamList };
 
 export function ScamList() {
 	const set = useSet<string>();

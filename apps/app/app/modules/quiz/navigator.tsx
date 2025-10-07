@@ -1,7 +1,9 @@
 import {
 	createNativeStackNavigator,
-	NativeStackScreenProps,
+	type NativeStackNavigationProp,
+	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import * as Screens from "./screens";
 
 export type QuizStackParamList = {
@@ -13,6 +15,13 @@ export type QuizStackScreenProps<T extends keyof QuizStackParamList> =
 	NativeStackScreenProps<QuizStackParamList, T>;
 
 const Stack = createNativeStackNavigator<QuizStackParamList>();
+
+type NavigationProp = NativeStackNavigationProp<
+	QuizStackParamList,
+	keyof QuizStackParamList
+>;
+
+export const useQuizNavigation = useSafeNavigation<NavigationProp>;
 
 export function QuizNavigator() {
 	return (

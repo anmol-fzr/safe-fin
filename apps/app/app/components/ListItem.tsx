@@ -1,4 +1,4 @@
-import { forwardRef, type ReactElement, type ComponentType } from "react";
+import { type ComponentType, forwardRef, type ReactElement } from "react";
 import {
 	type StyleProp,
 	type TextStyle,
@@ -7,11 +7,11 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
+import type { ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { $styles } from "../theme";
 import { Icon, type IconTypes } from "./Icon";
 import { Text, type TextProps } from "./Text";
-import type { ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 
 export interface ListItemProps extends TouchableOpacityProps {
 	/**

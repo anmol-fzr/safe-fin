@@ -2,17 +2,15 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Progress } from "tamagui";
+import { Button, Text } from "@/components";
 import { useCountdown } from "@/hooks";
 import { useCounter } from "@/hooks/useCounter";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
-import { API } from "@/services/api";
+import { QUIZ } from "@/modules/quiz/api";
 import type { IQuizResult } from "@/services/api/quiz-result";
 import { spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { Button } from "../Button";
-import { Text } from "../Text";
-import { Question } from "./Question";
-import { QuestionProvider, useQuestion } from "./QuestionContext";
+import { Question, QuestionProvider, useQuestion } from "./Question";
 import { useQuizContext } from "./QuizContext";
 
 export type ResultRecord = Record<string, number>;
@@ -30,7 +28,7 @@ export const QuizRender = () => {
 	});
 
 	const { mutate } = useMutation({
-		mutationFn: API.QUIZ.RESULT.SAVE,
+		mutationFn: QUIZ.RESULT.SAVE,
 	});
 
 	useEffect(() => {

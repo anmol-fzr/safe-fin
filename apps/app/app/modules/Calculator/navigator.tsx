@@ -25,6 +25,8 @@ type NavigationProp = NativeStackNavigationProp<
 >;
 
 export const useCalculatorNavigation = useSafeNavigation<NavigationProp>;
+export const calculatorTabHiddenScreens: Array<keyof CalculatorStackParamList> =
+	["Calculator"];
 
 export function CalculatorNavigator() {
 	return (

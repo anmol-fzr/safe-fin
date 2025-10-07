@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { View } from "react-native";
-import { ListView, Text } from "@/components";
-import { spacing } from "@/theme";
+import { ListView } from "@/components";
 import { useGetLessons } from "../hooks/api";
 import { LessonListItem } from "./LessonListItem";
 

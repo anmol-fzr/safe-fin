@@ -1,9 +1,9 @@
-import { Screen, ScreenHeader, TextField } from "@/components";
-import { View } from "react-native";
-import { spacing } from "@/theme";
-import { ScamList } from "@/components/scam/ScamList";
 import { Search } from "lucide-react-native";
 import { useState } from "react";
+import { View } from "react-native";
+import { Screen, ScreenHeader, TextField } from "@/components";
+import { spacing } from "@/theme";
+import { ScamList } from "../components";
 
 export function ScamListScreen() {
 	const [state, setState] = useState("");

@@ -8,7 +8,7 @@ type ConstantConfig = {
 	value: number;
 };
 
-type SliderConfig = ConstantConfig & {
+export type SliderConfig = ConstantConfig & {
 	step: number;
 	minValue: number;
 	maxValue: number;

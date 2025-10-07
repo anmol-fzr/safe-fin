@@ -1,8 +1,8 @@
 import type { TextStyle, ViewStyle } from "react-native";
 import { Screen, Text } from "@/components";
-import { RegisterForm } from "@/components/forms";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { RegisterForm } from "../components";
 
 export function RegisterScreen() {
 	const { themed } = useAppTheme();

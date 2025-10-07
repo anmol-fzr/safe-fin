@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Image, type ImageStyle, View, type ViewStyle } from "react-native";
+import type { ImageStyle, ViewStyle } from "react-native";
+import { Image, View } from "react-native";
 import { $sizeStyles, Button, Screen, Text } from "@/components";
 import { $styles, spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";

@@ -1,9 +1,9 @@
 import { memo } from "react";
 import type { TextStyle } from "react-native";
-import { Text } from "@/components";
 import type { TxKeyPath } from "@/i18n";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { Text } from "./Text";
 
 type ScreenHeaderProps = {
 	titleTx: TxKeyPath;

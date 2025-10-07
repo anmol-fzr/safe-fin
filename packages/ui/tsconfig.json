@@ -2,6 +2,7 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		// Environment setup & latest features
+		"composite": true,
 		"lib": ["ESNext"],
 		"target": "ESNext",
 		"module": "Preserve",
@@ -13,7 +14,7 @@
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
-		"noEmit": true,
+		//"noEmit": true,
 
 		// Best practices
 		"strict": true,

@@ -1,9 +1,7 @@
-import { Pressable } from "react-native";
-import { ListView, Screen, ScreenHeader, Text } from "@/components";
-import { $styles, spacing } from "@/theme";
+import { Screen, ScreenHeader } from "@/components";
+import { $styles } from "@/theme";
 import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { useCalculatorNavigation } from "../navigator";
+import { CalculatorList } from "../components/CalculatorList";
 
 const calcs: CalcListItem[] = [];
 
@@ -14,46 +12,17 @@ Object.keys(CALCULATOR_CONFIG).map((calcConfigKey) => {
 });
 
 export const CalculatorListScreen = () => {
-	const navigation = useCalculatorNavigation();
-
-	const { theme } = useAppTheme();
-
 	return (
 		<Screen
 			preset="scroll"
 			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
+			safeAreaEdges={["top", "bottom"]}
 		>
 			<ScreenHeader
 				titleTx="calculatorListScreen:title"
 				tagLineTx="calculatorListScreen:tagLine"
 			/>
-			<ListView
-				data={calcs}
-				estimatedItemSize={113}
-				keyExtractor={(item) => item.screen}
-				renderItem={({ item: calc }) => (
-					<Pressable
-						onPress={() =>
-							navigation.push("Calculator", {
-								type: calc.screen,
-							})
-						}
-						style={{
-							padding: spacing.md,
-							backgroundColor: theme.colors.successBackground,
-							borderRadius: spacing.md,
-							gap: spacing.xs,
-							marginBottom: spacing.sm,
-						}}
-					>
-						<Text preset="heading" size="xl">
-							{calc.title}
-						</Text>
-						<Text style={{ fontSize: 14 }}>{calc.desc}</Text>
-					</Pressable>
-				)}
-			/>
+			<CalculatorList />
 		</Screen>
 	);
 };

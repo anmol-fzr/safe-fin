@@ -1,11 +1,10 @@
-import { LegendList } from "@legendapp/list";
 import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense, useMemo } from "react";
 import { View, type ViewStyle } from "react-native";
 import Markdown from "react-native-markdown-display";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { $fontWeightStyles, $sizeStyles, Text } from "@/components";
+import { $fontWeightStyles, $sizeStyles, ListView, Text } from "@/components";
 import { useDimensions } from "@/hooks/useDimensions";
 import type { ThemedStyle } from "@/theme";
 import { spacing } from "@/theme";
@@ -81,7 +80,7 @@ function LessonRenderer({ content, quizzes }: LessonRendererProps) {
 		<>
 			<Markdown style={styles}>{content}</Markdown>
 
-			<LegendList
+			<ListView
 				recycleItems
 				data={quizzes}
 				keyExtractor={(item) => item.id.toString()}

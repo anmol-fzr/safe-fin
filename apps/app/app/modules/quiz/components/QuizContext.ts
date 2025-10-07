@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
-import type { Quiz } from "@/services/api/quiz";
 import { MissingContextError } from "@/utils/error";
+import type { Quiz } from "../api";
 
 const quizContext = createContext<Quiz | null>(null);
 

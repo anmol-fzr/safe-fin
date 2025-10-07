@@ -68,6 +68,19 @@ export const CalculatorSlider = memo(
 						status={isPending ? "disabled" : undefined}
 						onChangeText={onInputChange}
 						containerStyle={styles.inputContainer}
+						style={{
+							height: 20,
+							marginBottom: 0,
+							textAlign: "right",
+							color: colors.tint,
+						}}
+						inputWrapperStyle={{
+							backgroundColor: "transparent",
+							borderWidth: 0,
+							margin: 0,
+							padding: 0,
+							//borderWidth: 0,
+						}}
 					/>
 				</View>
 
@@ -97,7 +110,10 @@ const styles = StyleSheet.create({
 		alignItems: "flex-end",
 	},
 	inputContainer: {
+		padding: 0,
+		margin: 0,
 		minWidth: 100,
+		backgroundColor: "transparent",
 	},
 	slider: {
 		height: 40,

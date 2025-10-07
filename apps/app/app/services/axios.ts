@@ -52,7 +52,6 @@ type PaginationInfo =
 type NonPaginatedRes<D> = {
 	data: D;
 	message: string;
-	paginate: undefined;
 };
 
 type PaginatedRes<D> = {

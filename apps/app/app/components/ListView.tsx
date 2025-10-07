@@ -1,15 +1,15 @@
-import { forwardRef } from "react";
+import {
+	LegendList,
+	type LegendListProps,
+	type LegendListRef,
+} from "@legendapp/list";
 import type {
 	ForwardedRef,
 	PropsWithoutRef,
 	ReactElement,
 	RefObject,
 } from "react";
-import {
-	LegendList,
-	type LegendListProps,
-	type LegendListRef,
-} from "@legendapp/list";
+import { forwardRef } from "react";
 
 export type ListViewRef = LegendListRef;
 

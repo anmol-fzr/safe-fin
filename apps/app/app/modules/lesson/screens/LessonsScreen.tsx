@@ -9,7 +9,7 @@ export function LessonsScreen() {
 		<Screen
 			preset="scroll"
 			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
+			safeAreaEdges={["top", "bottom"]}
 		>
 			<ScreenHeader
 				titleTx="lessonScreen:title"

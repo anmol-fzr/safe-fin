@@ -1,14 +1,14 @@
 import { memo } from "react";
 import type { TextStyle } from "react-native";
-import { Screen, Text, GoBack, Button } from "@/components";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { Button, GoBack, Screen, Text } from "@/components";
+import { useToggle } from "@/hooks";
 import { $styles, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { QuizProvider } from "@/components/quiz/QuizContext";
-import { QuizRender } from "@/components/quiz/QuizRender";
-import { useQuizById } from "@/hooks/useQuizById";
-import { useToggle } from "@/hooks";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { QuizStackScreenProps } from "../navigator";
+import { QuizProvider } from "../components/QuizContext";
+import { QuizRender } from "../components/QuizRender";
+import { useGetQuiz } from "../hooks/queries";
+import type { QuizStackScreenProps } from "../navigator";
 
 type QuizScreenProps = QuizStackScreenProps<"Quiz">;
 
@@ -19,8 +19,7 @@ export function QuizScreen(props: QuizScreenProps) {
 
 	const { themed } = useAppTheme();
 
-	const { data, isPending } = useQuizById(quizId);
-	const quizData = data?.data;
+	const { quiz } = useGetQuiz(quizId);
 
 	//const toResults = () => props.navigation.navigate("QuizResult");
 
@@ -31,23 +30,17 @@ export function QuizScreen(props: QuizScreenProps) {
 			safeAreaEdges={["top"]}
 		>
 			<GoBack tx="quizzesScreen:title" />
-			{isPending ? (
-				<LoadingQuiz />
-			) : (
-				<>
-					<Text preset="heading" style={$title}>
-						{quizData?.title}
-					</Text>
-					<Text style={themed($tagline)}>{quizData?.desc}</Text>
+			<Text preset="heading" style={$title}>
+				{quiz?.title}
+			</Text>
+			<Text style={themed($tagline)}>{quiz?.desc}</Text>
 
-					{isStarted ? (
-						<QuizProvider value={quizData}>
-							<QuizRender />
-						</QuizProvider>
-					) : (
-						<Button text="Start Quiz" onPress={handleQuizStart} />
-					)}
-				</>
+			{isStarted ? (
+				<QuizProvider value={quizData}>
+					<QuizRender />
+				</QuizProvider>
+			) : (
+				<Button text="Start Quiz" onPress={handleQuizStart} />
 			)}
 			{/* <Button text="Results" onPress={toResults} /> */}
 		</Screen>

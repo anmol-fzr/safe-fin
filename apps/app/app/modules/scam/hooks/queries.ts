@@ -12,7 +12,7 @@ const baseQueryKey = "SCAMS";
 const getScamsOpts = () => {
 	return infiniteQueryOptions({
 		queryKey: [baseQueryKey],
-		queryFn: SCAM.GET,
+		queryFn: SCAM.ALL,
 		initialPageParam: {
 			limit: 10,
 			offset: 0,
