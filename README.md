@@ -129,10 +129,34 @@ This project showcases:
 ```
 3 applications, 3 packages
 
-![image](https://raw.githubusercontent.com/anmol-fzr/safe-fin/refs/heads/dev/monorepo_struct.png)
+```mermaid
+graph TD
+    %% Define a short ID for each package (e.g., db, auth, ui)
+    db["@safe-fin/db"]
+    auth["@safe-fin/auth"]
+    ui["@safe-fin/ui"]
+    server["@safe-fin/server"]
+    admin["@safe-fin/admin"]
+    app["@safe-fin/app"]
+    root["@safe-fin"]
+
+    %% Define dependencies using the short IDs
+    db --> auth
+    db --> server
+    auth --> server
+    auth --> admin
+    auth --> app
+    ui --> admin
+    ui --> app
+    server --> root
+    admin --> root
+    app --> root
+```
 
 
 ## Roadmap
+- [ ] Automatic **Lesson**, creation
+- [ ] Lesson **Recommendation**
 - [ ] Add **Gamification**, challange-based learning
 - [ ] Add **Regional Language Support** for financial literacy.  
 - [ ] **Push Notifications** for fraud alerts.  
