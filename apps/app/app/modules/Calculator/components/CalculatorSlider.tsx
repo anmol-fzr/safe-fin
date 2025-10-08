@@ -1,9 +1,9 @@
 import Slider from "@react-native-community/slider";
 import { debounce } from "lodash";
 import { memo, useCallback, useMemo, useTransition } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, type TextStyle, View } from "react-native";
 import { Text, TextField } from "@/components";
-import { spacing } from "@/theme";
+import { spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 type CalculatorSliderProps = {
@@ -11,94 +11,92 @@ type CalculatorSliderProps = {
 	value: number;
 	setValue: (val: number) => void;
 	step: number;
+	disabled?: boolean;
 	minValue: number;
 	maxValue: number;
 };
 
-export const CalculatorSlider = memo(
-	({
+export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
+	const {
 		label,
 		value,
 		step,
 		setValue,
 		minValue,
 		maxValue,
-	}: CalculatorSliderProps) => {
-		const [isPending, startTransition] = useTransition();
+		disabled = false,
+	} = props;
 
-		const onChange = useCallback(
-			(val: number) => {
+	const [isPending, startTransition] = useTransition();
+
+	const onValueChange = useCallback(
+		(val: number) => {
+			startTransition(() => {
+				setValue(val);
+			});
+		},
+		[setValue],
+	);
+
+	const debouncedSetValue = useMemo(
+		() =>
+			debounce((val: number) => {
 				startTransition(() => {
 					setValue(val);
 				});
-			},
-			[setValue],
-		);
+			}, 300),
+		[setValue],
+	);
 
-		const debouncedSetValue = useMemo(
-			() =>
-				debounce((val: number) => {
-					startTransition(() => {
-						setValue(val);
-					});
-				}, 300),
-			[setValue],
-		);
+	const onInputChange = useCallback(
+		(val: string) => {
+			const numeric = Number(val);
+			if (!Number.isNaN(numeric)) {
+				debouncedSetValue(numeric);
+			}
+		},
+		[debouncedSetValue],
+	);
 
-		const onInputChange = useCallback(
-			(val: string) => {
-				const numeric = Number(val);
-				if (!isNaN(numeric)) {
-					debouncedSetValue(numeric);
-				}
-			},
-			[debouncedSetValue],
-		);
+	const {
+		themed,
+		theme: { colors },
+	} = useAppTheme();
 
-		const {
-			theme: { colors },
-		} = useAppTheme();
-
-		return (
-			<View style={styles.sliderContainer}>
-				<View style={styles.labelRow}>
-					<Text>{label}</Text>
-					<TextField
-						value={value.toString()}
-						status={isPending ? "disabled" : undefined}
-						onChangeText={onInputChange}
-						containerStyle={styles.inputContainer}
-						style={{
-							height: 20,
-							marginBottom: 0,
-							textAlign: "right",
-							color: colors.tint,
-						}}
-						inputWrapperStyle={{
-							backgroundColor: "transparent",
-							borderWidth: 0,
-							margin: 0,
-							padding: 0,
-							//borderWidth: 0,
-						}}
-					/>
-				</View>
-
-				<Slider
-					style={styles.slider}
-					value={value}
-					onValueChange={onChange}
-					step={step}
-					minimumValue={minValue}
-					maximumValue={maxValue}
-					minimumTrackTintColor={colors.success}
-					thumbTintColor={colors.successBackground}
-					maximumTrackTintColor="#000000"
+	return (
+		<View style={styles.sliderContainer}>
+			<View style={styles.labelRow}>
+				<Text>{label}</Text>
+				<TextField
+					value={value.toString()}
+					status={isPending || disabled ? "disabled" : undefined}
+					onChangeText={onInputChange}
+					containerStyle={styles.inputContainer}
+					style={themed($textField)}
+					inputWrapperStyle={styles.inputWrapperStyle}
 				/>
 			</View>
-		);
-	},
-);
+
+			<Slider
+				style={styles.slider}
+				{...{ value, step, onValueChange }}
+				minimumValue={minValue}
+				maximumValue={maxValue}
+				minimumTrackTintColor={colors.success}
+				thumbTintColor={colors.successBackground}
+				disabled={disabled}
+				maximumTrackTintColor="#000000"
+			/>
+		</View>
+	);
+});
+
+const $textField: ThemedStyle<TextStyle> = ({ colors }) => ({
+	height: 20,
+	marginBottom: 0,
+	textAlign: "right",
+	color: colors.tint,
+});
 
 const styles = StyleSheet.create({
 	sliderContainer: {
@@ -117,6 +115,12 @@ const styles = StyleSheet.create({
 	},
 	slider: {
 		height: 40,
+	},
+	inputWrapperStyle: {
+		backgroundColor: "transparent",
+		borderWidth: 0,
+		margin: 0,
+		padding: 0,
 	},
 });
 

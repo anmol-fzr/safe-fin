@@ -1,13 +1,14 @@
 import { axiosInstance, type IResData } from "@/services/axios";
-import type { IReqParams, ResourceId } from "@/types";
+import type { ResourceId } from "@/types";
 
 interface ICalculator {
+	id: number;
 	title: string;
 	list: List;
 	sliders: Slider[];
-	resultKeys: ResultKeys;
+	resultKeys: ResultKeysObj;
 	pieChart: boolean;
-	calculate: Calculate;
+	calculate: CalculateObj;
 }
 
 interface List {
@@ -19,22 +20,19 @@ interface List {
 interface Slider {
 	label: string;
 	key: string;
+	disabled?: boolean;
 	value: number;
 	step: number;
 	minValue: number;
 	maxValue: number;
 }
 
-interface ResultKeys {
-	totalInvested: string;
-	returns: string;
-	totalValue: string;
+interface ResultKeysObj {
+	[key: string]: string;
 }
 
-export interface Calculate {
-	totalValue: string;
-	totalInvested: string;
-	returns: string;
+interface CalculateObj {
+	[key: string]: string;
 }
 
 const { get } = axiosInstance;

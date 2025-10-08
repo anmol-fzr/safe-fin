@@ -4,13 +4,12 @@ import {
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import type { ResourceId } from "@/types";
 import * as Screens from "./screens";
-
-type CalculatorType = string;
 
 export type CalculatorStackParamList = {
 	CalculatorList: undefined;
-	Calculator: { type: CalculatorType };
+	Calculator: { id: ResourceId };
 };
 
 export type CalculatorStackScreenProps<
@@ -26,7 +25,8 @@ type NavigationProp = NativeStackNavigationProp<
 
 export const useCalculatorNavigation = useSafeNavigation<NavigationProp>;
 export const calculatorTabHiddenScreens: Array<keyof CalculatorStackParamList> =
-	["Calculator"];
+	[];
+//["Calculator"];
 
 export function CalculatorNavigator() {
 	return (

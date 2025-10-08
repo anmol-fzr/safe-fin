@@ -1,57 +1,29 @@
 import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense } from "react";
+import type { ViewStyle } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListItem, ListView, Text } from "@/components";
-import { spacing } from "@/theme";
-import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
+import type { ThemedStyle } from "@/theme";
+//import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGetCalculators } from "../hooks/queries";
 
-const calcs: CalcListItem[] = [];
+//const calcs: CalcListItem[] = [];
 
-Object.keys(CALCULATOR_CONFIG).map((calcConfigKey) => {
-	const config =
-		CALCULATOR_CONFIG[calcConfigKey as keyof typeof CALCULATOR_CONFIG];
-	calcs.push(config.list);
-});
+// Object.keys(CALCULATOR_CONFIG).map((calcConfigKey) => {
+// 	const config =
+// 		CALCULATOR_CONFIG[calcConfigKey as keyof typeof CALCULATOR_CONFIG];
+// 	calcs.push(config.list);
+// });
 
 export const CalculatorList = () => {
 	//const { theme } = useAppTheme();
 
 	return (
-		<>
-			<Suspense fallback={<CalculatorListImpl.Loading />}>
-				<CalculatorListImpl />
-			</Suspense>
-			{/*
-		<ListView
-			data={calcs}
-			estimatedItemSize={113}
-			keyExtractor={(item) => item.screen}
-			renderItem={({ item: calc }) => (
-				<Link
-					screen="Calculator"
-					params={{
-						type: calc.screen,
-					}}
-					style={{
-						padding: spacing.md,
-						backgroundColor: theme.colors.successBackground,
-						borderRadius: spacing.md,
-						gap: spacing.xs,
-						marginBottom: spacing.sm,
-					}}
-				>
-					<Text preset="heading" size="xl">
-						{calc.title}
-					</Text>
-					<Text style={{ fontSize: 14 }}>{calc.desc}</Text>
-				</Link>
-			)}
-		/>
-      */}
-		</>
+		<Suspense fallback={CalculatorListImpl.Loading}>
+			<CalculatorListImpl />
+		</Suspense>
 	);
 };
 
@@ -64,7 +36,7 @@ function CalculatorListImpl() {
 			keyExtractor={(item) => item.title}
 			renderItem={({ item }) => (
 				<CalculatorListItem
-					screenType={item.list.screen}
+					id={item.id}
 					title={item.title}
 					desc={item.list.desc}
 				/>
@@ -74,29 +46,21 @@ function CalculatorListImpl() {
 }
 
 interface CalculatorListItemImplProps {
-	screenType: string;
+	id: number;
 	title: string;
 	desc: string;
 }
 
 function CalculatorListItem(props: CalculatorListItemImplProps) {
-	const { screenType, title, desc } = props;
-	const {
-		theme: { colors, spacing },
-	} = useAppTheme();
+	const { id, title, desc } = props;
+	const { themed } = useAppTheme();
 	return (
 		<Link
 			screen="Calculator"
 			params={{
-				type: screenType,
+				id,
 			}}
-			style={{
-				padding: spacing.md,
-				backgroundColor: colors.successBackground,
-				borderRadius: spacing.md,
-				gap: spacing.xs,
-				marginBottom: spacing.sm,
-			}}
+			style={themed($calculatorListItem)}
 		>
 			<Text preset="heading" size="xl">
 				{title}
@@ -107,37 +71,32 @@ function CalculatorListItem(props: CalculatorListItemImplProps) {
 	);
 }
 
-CalculatorListItem.Loading = () => {
-	const {
-		theme: { colors, spacing },
-	} = useAppTheme();
-	return (
-		<ListItem
-			style={{
-				padding: spacing.md,
-				backgroundColor: colors.successBackground,
-				borderRadius: spacing.md,
-				gap: spacing.xs,
-				marginBottom: spacing.sm,
-			}}
-		>
-			<SkeletonPlaceholder>
-				<SkeletonPlaceholder.Item height={32} width="90%" />
-				<SkeletonPlaceholder.Item height={24} width="80%" />
-			</SkeletonPlaceholder>
-		</ListItem>
-	);
-};
+CalculatorListItem.Loading = () => (
+	<SkeletonPlaceholder>
+		<SkeletonPlaceholder.Item
+			height={100}
+			width="100%"
+			borderRadius={24}
+			marginBottom={12}
+		/>
+	</SkeletonPlaceholder>
+);
+
+const $calculatorListItem: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+	padding: spacing.md,
+	backgroundColor: colors.successBackground,
+	borderRadius: spacing.md,
+	gap: spacing.xs,
+	marginBottom: spacing.sm,
+});
 
 const arr = getEmptyArr(6);
 
-CalculatorListImpl.Loading = () => {
-	return (
-		<ListView
-			data={arr}
-			estimatedItemSize={113}
-			keyExtractor={(item) => item.toString()}
-			renderItem={CalculatorListItem.Loading}
-		/>
-	);
-};
+CalculatorListImpl.Loading = (
+	<ListView
+		data={arr}
+		estimatedItemSize={113}
+		keyExtractor={(item) => item.toString()}
+		renderItem={CalculatorListItem.Loading}
+	/>
+);

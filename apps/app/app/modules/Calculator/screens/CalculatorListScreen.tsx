@@ -1,22 +1,13 @@
 import { Screen, ScreenHeader } from "@/components";
 import { $styles } from "@/theme";
-import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
-import { CalculatorList } from "../components/CalculatorList";
-
-const calcs: CalcListItem[] = [];
-
-Object.keys(CALCULATOR_CONFIG).map((calcConfigKey) => {
-	const config =
-		CALCULATOR_CONFIG[calcConfigKey as keyof typeof CALCULATOR_CONFIG];
-	calcs.push(config.list);
-});
+import { CalculatorList } from "../components";
 
 export const CalculatorListScreen = () => {
 	return (
 		<Screen
 			preset="scroll"
 			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top", "bottom"]}
+			safeAreaEdges={["top"]}
 		>
 			<ScreenHeader
 				titleTx="calculatorListScreen:title"

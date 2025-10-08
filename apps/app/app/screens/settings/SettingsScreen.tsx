@@ -1,9 +1,8 @@
-import { Screen, ScreenHeader, ListView, Text } from "@/components";
-import { $styles } from "@/theme";
+import { ChevronRight, Info, Mail, Share2, Star } from "lucide-react-native";
 import { TouchableHighlight, View } from "react-native";
-import { spacing } from "@/theme";
+import { ListView, Screen, ScreenHeader, Text } from "@/components";
+import { $styles, spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { Share2, Mail, ChevronRight, Star, Info } from "lucide-react-native";
 
 type SettingList = { title: string; icon: any }[];
 type SettingsList = SettingList[];

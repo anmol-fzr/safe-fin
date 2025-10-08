@@ -34,7 +34,7 @@ export type MainTabParamList = {
 	Profile: undefined;
 	Scams: undefined;
 	Learning: undefined;
-	Calculator: undefined;
+	CalculatorTab: undefined;
 };
 
 const translate = t("mainNavigator").bind(null);
@@ -103,7 +103,7 @@ export function MainTabNavigator() {
 			/>
 
 			<Tab.Screen
-				name="Calculator"
+				name="CalculatorTab"
 				component={CalculatorNavigator}
 				options={{
 					tabBarAccessibilityLabel: translate("calculatorListTab"),
