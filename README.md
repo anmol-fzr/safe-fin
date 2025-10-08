@@ -15,6 +15,8 @@
   </p>
 </p>
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/anmol-fzr/safe-fin)
+
 ## About the project
 
 SafeFin is a modern full-stack platform designed to make **financial education and fraud awareness** interactive and accessible.  
