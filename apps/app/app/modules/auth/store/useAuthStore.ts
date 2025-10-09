@@ -6,18 +6,17 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 interface AuthStoreEmpty {
-	isLogin: false;
 	user: null;
 	state: "login";
 }
 
 interface AuthStoreWithData {
-	isLogin: true;
 	user: UserWithRole & UserWithPhoneNumber;
 	state: "register" | "complete";
 }
 
 interface AuthStoreActions {
+	isLogin: boolean;
 	setData: (payload: Pick<AuthStoreWithData, "user">) => void;
 	setState: (payload: "register" | "complete") => void;
 	resetData: VoidFunction;
@@ -27,8 +26,7 @@ type AuthStore = (AuthStoreEmpty | AuthStoreWithData) & AuthStoreActions;
 
 const useAuthStore = create<AuthStore>()(
 	persist(
-		immer((set) => ({
-			isLogin: false,
+		immer((set, get) => ({
 			user: null,
 			state: "login",
 
@@ -39,15 +37,20 @@ const useAuthStore = create<AuthStore>()(
 			},
 			setData(payload) {
 				set((currState) => {
-					currState.isLogin = true;
 					currState.state = "complete";
 					currState.user = payload.user;
 				});
 			},
+			get isLogin() {
+				const state = get();
+				return state.user !== null;
+			},
+
 			resetData() {
+				console.log("reset data");
 				set({
-					isLogin: false,
 					user: null,
+					state: "login",
 				});
 			},
 		})),

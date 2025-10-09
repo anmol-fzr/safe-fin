@@ -15,9 +15,8 @@ import {
 	AuthNavigator,
 	type AuthStackParamList,
 } from "@/modules/auth/navigator";
-import { RegisterScreen } from "@/modules/auth/screen";
 import { useAuthStore } from "@/modules/auth/store";
-import { authClient } from "@/modules/auth/utils";
+import { DebugScreen } from "@/modules/debug/screens/DebugScreen";
 import {
 	QuizNavigator,
 	type QuizStackParamList,
@@ -36,7 +35,7 @@ export type AppStackParamList = {
 	Welcome: undefined;
 	MainTabs: NavigatorScreenParams<MainTabParamList>;
 	Quiz: NavigatorScreenParams<QuizStackParamList>;
-	Test: undefined;
+	Debug: undefined;
 };
 
 export type ScreenProps<S extends keyof AppStackParamList> =
@@ -50,8 +49,8 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> =
 const RootStack = createNativeStackNavigator<AppStackParamList>();
 
 function AppStack() {
-	const isAuthenticated = !!authClient.getCookie();
-	// useAuthStore((state) => state.isLogin);
+	const user = useAuthStore((state) => state.user);
+	const isAuthenticated = user !== null;
 
 	const {
 		theme: { colors },
@@ -69,12 +68,12 @@ function AppStack() {
 			initialRouteName={isAuthenticated ? "Welcome" : "Auth"}
 			//initialRouteName="Test"
 		>
-			<RootStack.Screen name="Test" component={RegisterScreen} />
-			<RootStack.Screen name="Welcome" component={Screens.WelcomeScreen} />
 			{isAuthenticated ? (
 				<>
+					<RootStack.Screen name="Welcome" component={Screens.WelcomeScreen} />
 					<RootStack.Screen name="MainTabs" component={MainTabNavigator} />
 					<RootStack.Screen name="Quiz" component={QuizNavigator} />
+					<RootStack.Screen name="Debug" component={DebugScreen} />
 				</>
 			) : (
 				<RootStack.Screen name="Auth" component={AuthNavigator} />

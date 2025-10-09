@@ -1,5 +1,4 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigation } from "@react-navigation/native";
 import { useSendOtp, useVerifyOtp } from "@safe-fin/ui/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
@@ -11,12 +10,11 @@ import { View } from "react-native";
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useCountdown } from "@/hooks";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { loginSchema } from "@/modules/auth/schema";
 import { $styles, colors, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useAuthStore } from "../store";
-import { AppStackParamList } from "@/navigators";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 
 export const LoginForm = () => {
 	const { countdown, reset, restart } = useCountdown(59);
@@ -29,6 +27,7 @@ export const LoginForm = () => {
 	const setAuthState = useAuthStore((state) => state.setState);
 
 	const queryClient = useQueryClient();
+
 	const { sendOtp, isOtpSent, resetSentOtp } = useSendOtp(queryClient);
 	const { verifyOtpAsync } = useVerifyOtp(queryClient);
 	const navigation = useSafeNavigation();
@@ -59,13 +58,13 @@ export const LoginForm = () => {
 					const user = data.data.user;
 					setAuthData({ user });
 					console.log(user);
-					console.log(user.name, user.phoneNumber);
-					if (user.name !== user.phoneNumber) {
-						setAuthState("complete");
-						navigation.navigate("MainTabs", { screen: "Home" });
+					if (user.name === user.phoneNumber) {
+						setAuthState("register");
+						navigation.push("Auth", { screen: "Register" });
+						return;
 					}
-					setAuthState("register");
-					navigation.push("Auth", { screen: "Register" });
+					setAuthState("complete");
+					navigation.navigate("MainTabs", { screen: "Home" });
 				},
 			});
 		} catch (error) {
