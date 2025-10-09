@@ -1,5 +1,5 @@
 import * as Application from "expo-application";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
 	LayoutAnimation,
 	Linking,
@@ -9,12 +9,13 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-import { isRTL } from "@/i18n";
-import type { ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { Button, ListItem, Screen, Text } from "@/components";
-import { $styles } from "@/theme";
+import { isRTL } from "@/i18n";
+import { useAuthStore } from "@/modules/auth/store";
 import { logout } from "@/modules/auth/utils";
+import type { ThemedStyle } from "@/theme";
+import { $styles } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 function openLinkInBrowser(url: string) {
 	Linking.canOpenURL(url).then((canOpen) => canOpen && Linking.openURL(url));
@@ -25,6 +26,7 @@ const usingHermes =
 
 export function DebugScreen() {
 	const { setThemeContextOverride, themeContext, themed } = useAppTheme();
+	const resetAuthData = useAuthStore((state) => state.resetData);
 
 	// @ts-expect-error
 	const usingFabric = global.nativeFabricUIManager != null;
@@ -82,6 +84,7 @@ export function DebugScreen() {
 			<Text preset="bold">Current system theme: {colorScheme}</Text>
 			<Text preset="bold">Current app theme: {themeContext}</Text>
 			<Button onPress={resetTheme} text={`Reset`} />
+			<Button onPress={resetAuthData} text="Reset Auth Store" />
 
 			<View style={themed($itemsContainer)}>
 				<Button onPress={toggleTheme} text={`Toggle Theme: ${themeContext}`} />

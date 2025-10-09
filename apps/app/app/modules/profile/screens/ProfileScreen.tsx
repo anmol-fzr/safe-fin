@@ -1,15 +1,29 @@
-import { logout } from "@auth/utils";
+import { authClient, logout } from "@auth/utils";
 import { Button, Screen, ScreenHeader } from "@/components";
-//import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { useAuthStore } from "@/modules/auth/store";
 import { $styles } from "@/theme";
+import { envs } from "@/utils/envs";
 import { ProfileForm } from "../components";
 
 export const ProfileScreen = () => {
-	//const navigation = useSafeNavigation();
+	const navigation = useSafeNavigation();
+	const resetAuthStore = useAuthStore((state) => state.resetData);
+
+	function goToDebug() {
+		navigation.navigate("Debug");
+	}
 
 	function handleLogout() {
-		logout();
-		//navigation.navigate("Auth", { screen: "Login" });
+		authClient.signOut(
+			{},
+			{
+				onSuccess() {
+					resetAuthStore();
+					navigation.navigate("Auth", { screen: "Login" });
+				},
+			},
+		);
 	}
 	return (
 		<Screen
@@ -24,6 +38,7 @@ export const ProfileScreen = () => {
 
 			<ProfileForm />
 			<Button tx="common:logOut" onPress={handleLogout} />
+			{envs.isDev && <Button text="Debug Screen" onPress={goToDebug} />}
 		</Screen>
 	);
 };
