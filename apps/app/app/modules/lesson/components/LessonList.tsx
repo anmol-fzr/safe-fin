@@ -44,11 +44,13 @@ function LessonListImpl() {
 				estimatedItemSize={105}
 				keyExtractor={(item) => item.id.toString()}
 				onEndReached={() => fetchNextPage()}
-				renderItem={({ item: lesson }) => (
+				renderItem={({ item, index, data }) => (
 					<LessonListItem
-						title={lesson.title}
-						desc={lesson.desc}
-						id={lesson.id}
+						isFirst={index === 0}
+						isLast={index === data.length - 1}
+						title={item.title}
+						desc={item.desc}
+						id={item.id}
 					/>
 				)}
 			/>

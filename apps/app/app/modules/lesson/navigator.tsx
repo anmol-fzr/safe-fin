@@ -31,7 +31,7 @@ export function LessonNavigator() {
 			}}
 			initialRouteName="Lessons"
 		>
-			<Stack.Screen name="Lessons" component={Screens.LessonsScreen} />
+			<Stack.Screen name="Lessons" component={Screens.LessonListScreen} />
 			<Stack.Screen name="Lesson" component={Screens.LessonScreen} />
 		</Stack.Navigator>
 	);

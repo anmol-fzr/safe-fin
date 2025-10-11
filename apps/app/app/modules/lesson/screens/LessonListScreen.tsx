@@ -1,24 +1,27 @@
-import { View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { Screen, ScreenHeader } from "@/components";
 import { $styles, spacing } from "@/theme";
 import { TopicList } from "../components";
 import { LessonList } from "../components/LessonList";
 
-export function LessonsScreen() {
+export function LessonListScreen() {
 	return (
 		<Screen
-			preset="scroll"
+			preset="fixed"
 			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top", "bottom"]}
+			safeAreaEdges={["top"]}
 		>
 			<ScreenHeader
 				titleTx="lessonScreen:title"
 				tagLineTx="lessonScreen:tagLine"
 			/>
-			<View style={{ gap: spacing.lg }}>
+			<ScrollView
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={{ gap: spacing.lg }}
+			>
 				<TopicList />
 				<LessonList />
-			</View>
+			</ScrollView>
 		</Screen>
 	);
 }

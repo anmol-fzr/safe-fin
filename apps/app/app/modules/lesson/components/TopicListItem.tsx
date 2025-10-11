@@ -18,10 +18,7 @@ const leanMul = 0.1;
 export function TopicListItem(props: TopicListItemProps) {
 	const { title, isFirst, isLast } = props;
 	const { themed } = useAppTheme();
-	const { getStyles } = useListRadius({
-		mainRadiusMultiplier: 1.5,
-		sideRadiusMultiplier: 0.1,
-	});
+	const { getStyles } = useListRadius({ horizontal: true });
 
 	const styles = getStyles({ isFirst, isLast });
 	return (

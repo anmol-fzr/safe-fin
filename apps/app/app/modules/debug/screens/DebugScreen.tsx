@@ -9,7 +9,7 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-import { Button, ListItem, Screen, Text } from "@/components";
+import { Button, ListItem, ListView, Screen, Text } from "@/components";
 import { isRTL } from "@/i18n";
 import { useAuthStore } from "@/modules/auth/store";
 import { logout } from "@/modules/auth/utils";
@@ -27,6 +27,7 @@ const usingHermes =
 export function DebugScreen() {
 	const { setThemeContextOverride, themeContext, themed } = useAppTheme();
 	const resetAuthData = useAuthStore((state) => state.resetData);
+	const user = useAuthStore((state) => state.user);
 
 	// @ts-expect-error
 	const usingFabric = global.nativeFabricUIManager != null;
@@ -62,6 +63,44 @@ export function DebugScreen() {
 		setThemeContextOverride(undefined);
 	}, [setThemeContextOverride]);
 
+	const appDataList = [
+		{
+			label: "App Id",
+			value: Application.applicationId,
+		},
+		{
+			label: "App Name",
+			value: Application.applicationName,
+		},
+		{
+			label: "App Version",
+			value: Application.nativeApplicationVersion,
+		},
+		{
+			label: "App Build Version",
+			value: Application.nativeBuildVersion,
+		},
+		{
+			label: "Hermes Enabled",
+			value: String(usingHermes),
+		},
+		{
+			label: "App Build Version",
+			value: String(usingFabric),
+		},
+	];
+
+	const userDataList = [
+		{
+			label: "User Id",
+			value: user?.id,
+		},
+		{
+			label: "User Email",
+			value: user?.email,
+		},
+	];
+
 	return (
 		<Screen
 			preset="scroll"
@@ -83,62 +122,48 @@ export function DebugScreen() {
 			/>
 			<Text preset="bold">Current system theme: {colorScheme}</Text>
 			<Text preset="bold">Current app theme: {themeContext}</Text>
-			<Button onPress={resetTheme} text={`Reset`} />
-			<Button onPress={resetAuthData} text="Reset Auth Store" />
 
 			<View style={themed($itemsContainer)}>
+				<Button onPress={resetTheme} text={`Reset`} />
+				<Button onPress={resetAuthData} text="Reset Auth Store" />
 				<Button onPress={toggleTheme} text={`Toggle Theme: ${themeContext}`} />
 			</View>
 			<View style={themed($itemsContainer)}>
-				<ListItem
-					LeftComponent={
-						<View style={themed($item)}>
-							<Text preset="bold">App Id</Text>
-							<Text>{Application.applicationId}</Text>
-						</View>
-					}
-				/>
-				<ListItem
-					LeftComponent={
-						<View style={themed($item)}>
-							<Text preset="bold">App Name</Text>
-							<Text>{Application.applicationName}</Text>
-						</View>
-					}
-				/>
-				<ListItem
-					LeftComponent={
-						<View style={themed($item)}>
-							<Text preset="bold">App Version</Text>
-							<Text>{Application.nativeApplicationVersion}</Text>
-						</View>
-					}
-				/>
-				<ListItem
-					LeftComponent={
-						<View style={themed($item)}>
-							<Text preset="bold">App Build Version</Text>
-							<Text>{Application.nativeBuildVersion}</Text>
-						</View>
-					}
-				/>
-				<ListItem
-					LeftComponent={
-						<View style={themed($item)}>
-							<Text preset="bold">Hermes Enabled</Text>
-							<Text>{String(usingHermes)}</Text>
-						</View>
-					}
-				/>
-				<ListItem
-					LeftComponent={
-						<View style={themed($item)}>
-							<Text preset="bold">Fabric Enabled</Text>
-							<Text>{String(usingFabric)}</Text>
-						</View>
-					}
+				<ListView
+					ListHeaderComponent={<Text preset="subheading" text="App Data" />}
+					data={appDataList}
+					keyExtractor={(item) => item.label}
+					renderItem={({ item }) => (
+						<ListItem
+							LeftComponent={
+								<View style={themed($item)}>
+									<Text preset="bold">{item.label}</Text>
+									<Text>{item.value}</Text>
+								</View>
+							}
+						/>
+					)}
 				/>
 			</View>
+
+			<View style={themed($itemsContainer)}>
+				<ListView
+					ListHeaderComponent={<Text preset="subheading" text="User Data" />}
+					data={userDataList}
+					keyExtractor={(item) => item.label}
+					renderItem={({ item }) => (
+						<ListItem
+							LeftComponent={
+								<View style={themed($item)}>
+									<Text preset="bold">{item.label}</Text>
+									<Text>{item.value}</Text>
+								</View>
+							}
+						/>
+					)}
+				/>
+			</View>
+
 			<View style={themed($buttonContainer)}>
 				<Button
 					style={themed($button)}
@@ -177,6 +202,7 @@ const $item: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $itemsContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	marginVertical: spacing.xl,
+	gap: spacing.md,
 });
 
 const $button: ThemedStyle<ViewStyle> = ({ spacing }) => ({

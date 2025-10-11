@@ -1,3 +1,4 @@
+import { Size } from "@testing-library/react-native/build/types";
 import type { TOptions } from "i18next";
 import { type ForwardedRef, forwardRef, type ReactNode } from "react";
 // eslint-disable-next-line no-restricted-imports
@@ -12,7 +13,7 @@ import { colors, type ThemedStyle, type ThemedStyleArray } from "@/theme";
 import { typography } from "@/theme/typography";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-type Sizes = keyof typeof $sizeStyles;
+export type Sizes = keyof typeof $sizeStyles;
 type Weights = keyof typeof typography.primary;
 type Presets =
 	| "default"
@@ -109,7 +110,7 @@ export const $sizeStyles = {
 	sm: { fontSize: 16, lineHeight: 24 } satisfies TextStyle,
 	xs: { fontSize: 14, lineHeight: 21 } satisfies TextStyle,
 	xxs: { fontSize: 12, lineHeight: 18 } satisfies TextStyle,
-};
+} as const;
 
 export const $fontWeightStyles = Object.entries(typography.primary).reduce(
 	(acc, [weight, fontFamily]) => {

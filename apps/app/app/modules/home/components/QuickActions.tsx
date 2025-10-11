@@ -1,9 +1,9 @@
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "@/components";
+import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import type { MainTabParamList } from "@/navigators/MainTabNavigator";
 import { colors, spacing } from "@/theme";
 import { HomeSection } from "./HomeSection";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
-import { MainTabParamList } from "@/navigators/MainTabNavigator";
 
 const learnActionImage = require("assets/icons/home/learn-action.png");
 const calculateActionImage = require("assets/icons/home/calculate-action.png");
@@ -21,13 +21,13 @@ const actions: Action[] = [
 	{
 		label: "Learn",
 		image: learnActionImage,
-		to: "Lesson",
+		to: "Learning",
 		bg: colors.palette.accent300,
 	},
 	{
 		label: "Calculator",
 		image: calculateActionImage,
-		to: "Calculator",
+		to: "CalculatorTab",
 		bg: colors.palette.successBackground,
 	},
 	{

@@ -1,13 +1,11 @@
 import { useCallback, useMemo } from "react";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-interface UseListRadiusOpts {
-	mainRadiusMultiplier: number;
-	sideRadiusMultiplier: number;
-}
-
-export const useListRadius = (props: UseListRadiusOpts) => {
-	const { mainRadiusMultiplier, sideRadiusMultiplier } = props;
+export const useListRadius = ({
+	mainRadiusMultiplier = 1.2,
+	sideRadiusMultiplier = 0.2,
+	horizontal = false,
+}) => {
 	const {
 		theme: { roundness },
 	} = useAppTheme();
@@ -16,6 +14,7 @@ export const useListRadius = (props: UseListRadiusOpts) => {
 		() => roundness * mainRadiusMultiplier,
 		[mainRadiusMultiplier, roundness],
 	);
+
 	const leanBorderRadius = useMemo(
 		() => roundness * sideRadiusMultiplier,
 		[sideRadiusMultiplier, roundness],
@@ -23,22 +22,22 @@ export const useListRadius = (props: UseListRadiusOpts) => {
 
 	const firstStyles = useMemo(
 		() => ({
-			borderBottomLeftRadius: borderRadius,
 			borderTopLeftRadius: borderRadius,
-			borderTopRightRadius: leanBorderRadius,
+			borderTopRightRadius: horizontal ? leanBorderRadius : borderRadius,
+			borderBottomLeftRadius: horizontal ? borderRadius : leanBorderRadius,
 			borderBottomRightRadius: leanBorderRadius,
 		}),
-		[borderRadius, leanBorderRadius],
+		[borderRadius, leanBorderRadius, horizontal],
 	);
 
 	const lastStyles = useMemo(
 		() => ({
-			borderTopRightRadius: borderRadius,
-			borderBottomRightRadius: borderRadius,
 			borderTopLeftRadius: leanBorderRadius,
-			borderBottomLeftRadius: leanBorderRadius,
+			borderTopRightRadius: horizontal ? borderRadius : leanBorderRadius,
+			borderBottomLeftRadius: horizontal ? leanBorderRadius : borderRadius,
+			borderBottomRightRadius: borderRadius,
 		}),
-		[borderRadius, leanBorderRadius],
+		[borderRadius, leanBorderRadius, horizontal],
 	);
 
 	const normalStyles = useMemo(
