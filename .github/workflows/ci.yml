@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+  workflow_dispatch:
 
 permissions:
   pull-requests: read
@@ -12,25 +13,33 @@ permissions:
 jobs:
   preview_server:
     runs-on: ubuntu-latest
+    name: Deploy Server
     steps:
-      - uses: actions/checkout@v2
-      - uses: shidil/cloudflare-workers-preview@v1
-        id: preview_step
+      - uses: actions/checkout@v4
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
         with:
-          cf_token: ${{ secrets.CF_API_TOKEN }}
-          cf_account: ${{ secrets.CF_ACCOUNT_ID }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          domain: ainsa2279.workers.dev
-          project_path: apps/app1
-          build: |
-            bun install
-            bun run build
-      - name: Get the preview_url
-        run: echo "url => ${{ steps.preview_step.outputs.preview_url }}"
+          apiToken: ${{ secrets.CF_API_TOKEN }}
 
-      - name: Comment PR with preview links
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          message: |
-            🚀 **Preview for this PR is live!**
-            - **Server (Worker):** ${{ steps.preview_step.outputs.preview_url }}"
+    # steps:
+    #   - uses: actions/checkout@v2
+    #   - uses: shidil/cloudflare-workers-preview@v1
+    #     id: preview_step
+    #     with:
+    #       cf_token: ${{ secrets.CF_API_TOKEN }}
+    #       cf_account: ${{ secrets.CF_ACCOUNT_ID }}
+    #       github_token: ${{ secrets.GITHUB_TOKEN }}
+    #       domain: ainsa2279.workers.dev
+    #       project_path: apps/app1
+    #       build: |
+    #         bun install
+    #         bun run build
+    #   - name: Get the preview_url
+    #     run: echo "url => ${{ steps.preview_step.outputs.preview_url }}"
+    #
+    #   - name: Comment PR with preview links
+    #     uses: marocchino/sticky-pull-request-comment@v2
+    #     with:
+    #       message: |
+    #         🚀 **Preview for this PR is live!**
+    #         - **Server (Worker):** ${{ steps.preview_step.outputs.preview_url }}"
