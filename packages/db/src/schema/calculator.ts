@@ -1,7 +1,7 @@
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 const calculator = sqliteTable("table", {
-	id: text("id").primaryKey(),
+	id: integer("id").primaryKey({ autoIncrement: true }).notNull(),
 	text: text({ mode: "json" }),
 });
 

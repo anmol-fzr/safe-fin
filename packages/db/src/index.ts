@@ -10,6 +10,7 @@ export interface GetDbOpts {
 
 function getDb(envs: GetDbOpts): ReturnType<typeof drizzle> {
 	const turso = createClient({
+		//url: "http://127.0.0.1:8080",
 		url: envs.TURSO_DB_URL,
 		authToken: envs.TURSO_DB_TOKEN,
 	});

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import type { ViewStyle } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListView, Text } from "@/components";
+import { useListRadius } from "@/hooks/useListRadius";
 import type { ThemedStyle } from "@/theme";
 //import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -36,8 +37,10 @@ function CalculatorListImpl() {
 			refreshing={isRefetching}
 			onRefresh={refetch}
 			keyExtractor={(item) => item.title}
-			renderItem={({ item }) => (
+			renderItem={({ item, data, index }) => (
 				<CalculatorListItem
+					isFirst={index === 0}
+					isLast={index === data.length - 1}
 					id={item.id}
 					title={item.title}
 					desc={item.list.desc}
@@ -51,18 +54,24 @@ interface CalculatorListItemImplProps {
 	id: number;
 	title: string;
 	desc: string;
+	isFirst: boolean;
+	isLast: boolean;
 }
 
 function CalculatorListItem(props: CalculatorListItemImplProps) {
-	const { id, title, desc } = props;
+	const { id, title, desc, isFirst, isLast } = props;
 	const { themed } = useAppTheme();
+
+	const { getStyles } = useListRadius({});
+
+	const styles = getStyles({ isFirst, isLast });
 	return (
 		<Link
 			screen="Calculator"
 			params={{
 				id,
 			}}
-			style={themed($calculatorListItem)}
+			style={[themed($calculatorListItem), styles]}
 		>
 			<Text preset="heading" size="xl">
 				{title}
@@ -87,9 +96,9 @@ CalculatorListItem.Loading = () => (
 const $calculatorListItem: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
 	padding: spacing.md,
 	backgroundColor: colors.successBackground,
-	borderRadius: spacing.md,
+	//borderRadius: spacing.md,
 	gap: spacing.xs,
-	marginBottom: spacing.sm,
+	marginBottom: 2,
 });
 
 const arr = getEmptyArr(6);

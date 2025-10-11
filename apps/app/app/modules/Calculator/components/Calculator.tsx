@@ -105,7 +105,7 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		<>
 			<Text preset="heading" text={title} />
 
-			{pieChart && (
+			{pieChart && pieData?.length > 0 && (
 				<CalculatorPieChart
 					data={pieData?.map((pieDataObj, index) => {
 						return {
