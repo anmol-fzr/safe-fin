@@ -10,6 +10,14 @@ type CalculatorPieChartProps = {
 	data: pieDataItem[];
 };
 
+export const pieColors = [
+	colors.palette.primary300,
+	colors.palette.secondary300,
+	colors.palette.neutral300,
+];
+
+export const getPieColor = (indx: number) => pieColors[indx % pieColors.length];
+
 export const CalculatorPieChart = memo(({ data }: CalculatorPieChartProps) => {
 	const { themeContext } = useAppTheme();
 	return (
@@ -53,8 +61,8 @@ const styles = StyleSheet.create({
 		gap: spacing.xs,
 	},
 	legendColorBox: {
-		width: 24,
 		height: 12,
-		borderRadius: 10,
+		aspectRatio: 2,
+		borderRadius: 12,
 	},
 });

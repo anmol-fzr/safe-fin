@@ -3,7 +3,7 @@ import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense } from "react";
 import type { ViewStyle } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { ListItem, ListView, Text } from "@/components";
+import { ListView, Text } from "@/components";
 import type { ThemedStyle } from "@/theme";
 //import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -28,11 +28,13 @@ export const CalculatorList = () => {
 };
 
 function CalculatorListImpl() {
-	const { calculators } = useGetCalculators();
+	const { calculators, isRefetching, refetch } = useGetCalculators();
 	return (
 		<ListView
 			data={calculators}
 			estimatedItemSize={113}
+			refreshing={isRefetching}
+			onRefresh={refetch}
 			keyExtractor={(item) => item.title}
 			renderItem={({ item }) => (
 				<CalculatorListItem

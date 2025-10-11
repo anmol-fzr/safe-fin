@@ -5,8 +5,11 @@ import { StyleSheet, View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListView, Text } from "@/components";
 import {
+	CalculatorPieChart,
 	CalculatorResultItem,
 	CalculatorSlider,
+	getPieColor,
+	pieColors,
 } from "@/modules/Calculator/components";
 import { colors, spacing } from "@/theme";
 import type { ResourceId } from "@/types";
@@ -22,6 +25,7 @@ type GetInitResultFromConfig = {
 
 const parser = new Parser();
 function calculateExpr(expression: string, input: Input) {
+	console.log(input);
 	return parser.parse(expression).evaluate(input);
 }
 
@@ -31,7 +35,7 @@ const getInitResultFromConfig = ({
 }: GetInitResultFromConfig) => {
 	const obj: Input = {};
 	Object.entries(calculate).forEach(([key, expression]) => {
-		obj[key] = calculateExpr(expression, input);
+		obj[key] = calculateExpr(expression, { ...input, ...obj });
 	});
 	return obj;
 };
@@ -41,11 +45,6 @@ const getInitStateFromSliders = (sliders: SliderConfig[]) => {
 	sliders.forEach((slider) => {
 		state[slider.key] = slider.value;
 	});
-	// if (constants && constants?.length > 0) {
-	// 	constants.forEach((s) => {
-	// 		state[s.key] = s.value;
-	// 	});
-	// }
 	return state;
 };
 
@@ -68,7 +67,8 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		sliders,
 		//constants,
 		resultKeys,
-		// pieChart,
+		pieData,
+		pieChart,
 	} = calculator;
 
 	const [formState, setFormState] = useState(() =>
@@ -79,10 +79,10 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		setFormState((prev) => ({ ...prev, [key]: val }));
 	};
 
-	const resultData = useMemo(() => {
-		const result = getInitResultFromConfig({ input: formState, calculate });
-		return result;
-	}, [formState, calculate]);
+	const resultData = useMemo(
+		() => getInitResultFromConfig({ input: formState, calculate }),
+		[formState, calculate],
+	);
 
 	type Option = {
 		label: string;
@@ -105,24 +105,17 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		<>
 			<Text preset="heading" text={title} />
 
-			{/*
 			{pieChart && (
 				<CalculatorPieChart
-					data={[
-						{
-							value: 10000,
-							color: colors.palette.success,
-							text: "Invested amount",
-						},
-						{
-							value: 1200,
-							color: colors.palette.successBackground,
-							text: "Estimated returns",
-						},
-					]}
+					data={pieData?.map((pieDataObj, index) => {
+						return {
+							...pieDataObj,
+							color: getPieColor(index),
+							value: resultData[pieDataObj.valueKey],
+						};
+					})}
 				/>
 			)}
-      */}
 
 			{sliders.map((slider) => (
 				<CalculatorSlider

@@ -8,7 +8,13 @@ interface ICalculator {
 	sliders: Slider[];
 	resultKeys: ResultKeysObj;
 	pieChart: boolean;
+	pieData?: PieDaum[];
 	calculate: CalculateObj;
+}
+
+export interface PieDaum {
+	valueKey: string;
+	text: string;
 }
 
 interface List {

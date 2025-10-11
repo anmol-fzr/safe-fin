@@ -19,6 +19,8 @@ type CalculatorSliderProps = {
 export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 	const {
 		label,
+		append,
+		prepend,
 		value,
 		step,
 		setValue,
@@ -69,6 +71,8 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 				<Text>{label}</Text>
 				<TextField
 					value={value.toString()}
+					LeftAccessory={() => <Text>{prepend}</Text>}
+					RightAccessory={() => <Text>{append}</Text>}
 					status={isPending || disabled ? "disabled" : undefined}
 					onChangeText={onInputChange}
 					containerStyle={styles.inputContainer}
@@ -77,16 +81,18 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 				/>
 			</View>
 
-			<Slider
-				style={styles.slider}
-				{...{ value, step, onValueChange }}
-				minimumValue={minValue}
-				maximumValue={maxValue}
-				minimumTrackTintColor={colors.success}
-				thumbTintColor={colors.successBackground}
-				disabled={disabled}
-				maximumTrackTintColor="#000000"
-			/>
+			{!disabled && (
+				<Slider
+					style={styles.slider}
+					{...{ value, step, onValueChange }}
+					minimumValue={minValue}
+					maximumValue={maxValue}
+					minimumTrackTintColor={colors.success}
+					thumbTintColor={colors.successBackground}
+					disabled={disabled}
+					maximumTrackTintColor="#000000"
+				/>
+			)}
 		</View>
 	);
 });
@@ -110,6 +116,7 @@ const styles = StyleSheet.create({
 	inputContainer: {
 		padding: 0,
 		margin: 0,
+		width: "auto",
 		minWidth: 100,
 		backgroundColor: "transparent",
 	},
@@ -119,6 +126,8 @@ const styles = StyleSheet.create({
 	inputWrapperStyle: {
 		backgroundColor: "transparent",
 		borderWidth: 0,
+		alignItems: "flex-end",
+		width: "auto",
 		margin: 0,
 		padding: 0,
 	},
