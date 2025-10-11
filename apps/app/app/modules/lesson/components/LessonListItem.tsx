@@ -21,20 +21,22 @@ export function LessonListItem(props: LessonListItemProps) {
 	const styles = getStyles({ isFirst, isLast });
 
 	return (
-		<View style={[themed($listItem), styles]}>
-			<Link screen="Lesson" params={{ lessonId: id }}>
-				<Text preset="formLabel">{title}</Text>
-				{"\n"}
-				<Text
-					size="xs"
-					numberOfLines={1}
-					ellipsizeMode="tail"
-					style={{ flex: 1 }}
-				>
+		<Link
+			screen="Lesson"
+			params={{ lessonId: id }}
+			style={{
+				marginBottom: 2,
+			}}
+		>
+			<View style={[themed($listItem), styles, { width: "100%" }]}>
+				<Text size="lg" numberOfLines={2}>
+					{title}
+				</Text>
+				<Text size="xs" numberOfLines={3}>
 					{desc}
 				</Text>
-			</Link>
-		</View>
+			</View>
+		</Link>
 	);
 }
 
@@ -64,5 +66,4 @@ const $listItem: ThemedStyle<ViewStyle> = ({ colors, spacing, roundness }) => ({
 	backgroundColor: colors.palette.accent200,
 	borderWidth: 0,
 	//elevation: 1,
-	gap: spacing.xs,
 });

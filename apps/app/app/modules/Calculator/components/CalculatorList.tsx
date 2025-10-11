@@ -2,8 +2,10 @@ import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense } from "react";
 import type { ViewStyle } from "react-native";
+import { View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListView, Text } from "@/components";
+import { CircularProgressIndicator } from "@/components/progress/CircularProgressIndicator";
 import { useListRadius } from "@/hooks/useListRadius";
 import type { ThemedStyle } from "@/theme";
 //import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
@@ -73,11 +75,10 @@ function CalculatorListItem(props: CalculatorListItemImplProps) {
 			}}
 			style={[themed($calculatorListItem), styles]}
 		>
-			<Text preset="heading" size="xl">
-				{title}
-			</Text>
-			{"\n"}
-			<Text size="xs">{desc}</Text>
+			<View>
+				<Text size="lg">{title}</Text>
+				<Text size="xs">{desc}</Text>
+			</View>
 		</Link>
 	);
 }

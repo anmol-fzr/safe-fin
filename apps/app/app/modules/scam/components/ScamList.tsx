@@ -18,19 +18,21 @@ export function ScamList() {
 }
 
 function ScamListImpl() {
-	const { scams } = useGetScams();
+	const { scams, isRefetching, refetch } = useGetScams();
 
 	return (
 		<ListView
 			showsVerticalScrollIndicator={false}
 			data={scams}
+			refreshing={isRefetching}
+			onRefresh={refetch}
 			estimatedItemSize={127}
 			keyExtractor={(item) => item.id.toString()}
-			renderItem={({ item, index }) => (
+			renderItem={({ item, data, index }) => (
 				<ScamListItem
 					scam={item}
 					isFirst={index === 0}
-					isLast={index === scams.length - 1}
+					isLast={index === data.length - 1}
 				/>
 			)}
 		/>
@@ -77,8 +79,10 @@ function ScamListItem({ scam, isLast, isFirst }: ScamListItemProps) {
 			}}
 		>
 			<View style={[styles.scamListItem, radiusStyles]}>
-				<Text style={{ fontSize: 24, fontWeight: "heavy" }}>{scam.title}</Text>
-				<Text style={{ fontSize: 14 }} numberOfLines={2}>
+				<Text size="lg" numberOfLines={2}>
+					{scam.title}
+				</Text>
+				<Text size="xs" numberOfLines={3}>
 					{scam.desc}
 				</Text>
 			</View>
@@ -122,7 +126,5 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		padding: spacing.md,
 		borderRadius: spacing.md,
-		gap: spacing.xs,
-		//marginBottom: spacing.md,
 	},
 });

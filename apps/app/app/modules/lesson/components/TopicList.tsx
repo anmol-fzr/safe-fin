@@ -21,10 +21,10 @@ function TopicListImpl() {
 			data={topics}
 			estimatedItemSize={105}
 			keyExtractor={(item) => item.title}
-			renderItem={({ item, index }) => (
+			renderItem={({ item, index, data }) => (
 				<TopicListItem
 					isFirst={index === 0}
-					isLast={index === topics.length - 1}
+					isLast={index === data.length - 1}
 					title={item.title}
 				/>
 			)}

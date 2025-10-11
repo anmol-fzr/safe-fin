@@ -1,5 +1,6 @@
 import { QuickActions } from "@home/components";
 import { Screen } from "@/components";
+import { CircularProgressIndicator } from "@/components/progress/CircularProgressIndicator";
 import { BackToLessonCard } from "@/modules/lesson/components/BackToLessonCard";
 import { $styles, spacing } from "@/theme";
 
@@ -11,8 +12,8 @@ export function HomeScreen() {
 			safeAreaEdges={["top", "bottom"]}
 		>
 			<BackToLessonCard />
-
 			<QuickActions />
+			<CircularProgressIndicator />
 		</Screen>
 	);
 }
