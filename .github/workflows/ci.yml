@@ -14,32 +14,27 @@ jobs:
   preview_server:
     runs-on: ubuntu-latest
     name: Deploy Server
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'Safe Fin Staging' }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Deploy
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with: 
+          bun-version: 1.2.23
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Deploy to Cloudflare (Preview)
         uses: cloudflare/wrangler-action@v3
         with:
+          packageManager: bun
+          wranglerVersion: "4.40.3"
+          workingDirectory: ./apps/server/ 
           apiToken: ${{ secrets.CF_API_TOKEN }}
-
-    # steps:
-    #   - uses: actions/checkout@v2
-    #   - uses: shidil/cloudflare-workers-preview@v1
-    #     id: preview_step
-    #     with:
-    #       cf_token: ${{ secrets.CF_API_TOKEN }}
-    #       cf_account: ${{ secrets.CF_ACCOUNT_ID }}
-    #       github_token: ${{ secrets.GITHUB_TOKEN }}
-    #       domain: ainsa2279.workers.dev
-    #       project_path: apps/app1
-    #       build: |
-    #         bun install
-    #         bun run build
-    #   - name: Get the preview_url
-    #     run: echo "url => ${{ steps.preview_step.outputs.preview_url }}"
-    #
-    #   - name: Comment PR with preview links
-    #     uses: marocchino/sticky-pull-request-comment@v2
-    #     with:
-    #       message: |
-    #         🚀 **Preview for this PR is live!**
-    #         - **Server (Worker):** ${{ steps.preview_step.outputs.preview_url }}"
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: deploy --name="safe-fin-pr-${{ github.event.pull_request.number }}" --env preview
