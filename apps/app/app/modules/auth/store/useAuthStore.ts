@@ -47,7 +47,6 @@ const useAuthStore = create<AuthStore>()(
 			},
 
 			resetData() {
-				console.log("reset data");
 				set({
 					user: null,
 					state: "login",

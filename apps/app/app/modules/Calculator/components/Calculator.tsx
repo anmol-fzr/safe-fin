@@ -25,7 +25,6 @@ type GetInitResultFromConfig = {
 
 const parser = new Parser();
 function calculateExpr(expression: string, input: Input) {
-	console.log(input);
 	return parser.parse(expression).evaluate(input);
 }
 

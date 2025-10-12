@@ -43,7 +43,6 @@ export const FormSelectField = (props: FormFieldProps) => {
 							return foundOption?.label;
 						}}
 						onSelect={(v) => {
-							console.log("onSelect");
 							if (props.multiple) {
 								if (Array.isArray(v)) {
 									onChange(v);
@@ -59,7 +58,6 @@ export const FormSelectField = (props: FormFieldProps) => {
 							}
 						}}
 						onChangeText={(val) => {
-							console.log("onChangeText");
 							console.log(val);
 							onChange(val);
 						}}

@@ -35,7 +35,6 @@ export const LoginForm = () => {
 	const { themed } = useAppTheme();
 
 	const handleSubmit = form.handleSubmit(async (data) => {
-		console.log(data);
 		if (!isOtpSent) {
 			sendOtp(data.phoneNumber.toString());
 			return;

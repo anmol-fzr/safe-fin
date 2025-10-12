@@ -6,8 +6,6 @@ import { spacing } from "@/theme";
 import { authClient } from "../utils";
 
 export function LoginScreen() {
-	const cookie = authClient.getCookie();
-	console.log(cookie);
 	return (
 		<Screen
 			preset="auto"
