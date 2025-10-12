@@ -11,30 +11,10 @@ permissions:
   statuses: write
 
 jobs:
-  preview_server:
+  run_ci:
     runs-on: ubuntu-latest
     name: Deploy Server
-    environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'Safe Fin Staging' }}
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with: 
-          bun-version: 1.2.23
-
-      - name: Install Dependencies
-        run: bun install
-
-      - name: Deploy to Cloudflare (Preview)
-        uses: cloudflare/wrangler-action@v3
-        with:
-          packageManager: bun
-          wranglerVersion: "4.40.3"
-          workingDirectory: ./apps/server/ 
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: deploy --name="safe-fin-pr-${{ github.event.pull_request.number }}" --env preview
+      - name: Create commit comment
+        run: echo "CI Workflow Action"
