@@ -1,23 +1,39 @@
 import { zValidator } from "@hono/zod-validator";
 import { calculator, getDb } from "@safe-fin/db";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
+import { getPaginateRes, paginate } from "@/middleware";
 import { createTypedFactory } from "../../factory";
 import { calculatorMetadataSchema } from "./schema";
+import { queryParamSchema } from "@/schema/params";
 
 const { createApp } = createTypedFactory();
 
 const calculatorRouter = createApp()
-	.get("/", async (c) => {
+	.get("/", zValidator("query", queryParamSchema), paginate, async (c) => {
+		const { limit, page } = c.get("paginate");
+
+		const offset = (page - 1) * limit;
+
 		const db = getDb(c.env);
-		const query = await db.select().from(calculator);
-		const calcs = query.map((calc) => {
+		const query = db.select().from(calculator).limit(limit).offset(offset);
+
+		const countPrms = db.select({ count: count() }).from(calculator);
+
+		const [countVal, calcs] = await Promise.all([countPrms, query]);
+
+		const calculators = calcs.map((calc) => {
 			return {
 				id: calc.id,
 				...JSON.parse(calc.text),
 			};
 		});
 
-		return c.json({ data: calcs });
+		const total = countVal[0].count;
+
+		return c.json({
+			data: calculators,
+			paginate: getPaginateRes({ total, offset, limit }),
+		});
 	})
 	.post("/", zValidator("json", calculatorMetadataSchema), async (c) => {
 		const body = c.req.valid("json");

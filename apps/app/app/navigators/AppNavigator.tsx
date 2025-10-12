@@ -9,7 +9,6 @@ import {
 import { defaultConfig } from "@tamagui/config/v4";
 import { createTamagui, TamaguiProvider } from "@tamagui/core";
 import { PortalProvider } from "@tamagui/portal";
-import { observer } from "mobx-react-lite";
 import type { ComponentProps } from "react";
 import {
 	AuthNavigator,
@@ -91,9 +90,7 @@ export interface NavigationProps
 
 const config = createTamagui(defaultConfig);
 
-export const AppNavigator = observer(function AppNavigator(
-	props: NavigationProps,
-) {
+export const AppNavigator = function AppNavigator(props: NavigationProps) {
 	const {
 		//themeScheme,
 		navigationTheme,
@@ -120,4 +117,4 @@ export const AppNavigator = observer(function AppNavigator(
 			</ThemeProvider>
 		</TamaguiProvider>
 	);
-});
+};
