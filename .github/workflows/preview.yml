@@ -27,7 +27,8 @@ jobs:
       - name: Install Dependencies
         run: bun install
 
-      - name: Deploy to Cloudflare (Preview)
+      - name: Deploy Server to Cloudflare Worker
+        id: deploy_server
         uses: cloudflare/wrangler-action@v3
         with:
           packageManager: bun
@@ -37,3 +38,28 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           command: versions upload --preview-alias ${{ github.event.pull_request.number }} --env preview
+
+      - name: Print Deployment URL
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy_server.outputs.deployment-url }}
+          run: echo $DEPLOYMENT_URL
+
+
+      - name: Deploy Admin to Netlify
+        working-directory: ./apps/admin
+        env:
+          VITE_PUBLIC_SERVER_URL: ${{ needs.preview_server.outputs.server_url }}
+        run: |
+          echo "Building admin app using API: $VITE_PUBLIC_SERVER_URL"
+          bun run build
+
+      - name: Deploy to Netlify (Preview)
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: ./apps/admin/dist
+          production-deploy: false
+          deploy-message: "PR #${{ github.event.pull_request.number }} Preview"
+          alias: pr-${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
