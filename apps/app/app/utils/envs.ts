@@ -1,7 +1,9 @@
 const env = process.env;
+const isDev = env.EXPO_PUBLIC_MODE === "DEV" || __DEV__;
 
 export const envs = Object.freeze({
-	isDev: __DEV__,
-	API_URL: env.EXPO_PUBLIC_API_URL,
+	isDev,
+	API_URL: env.EXPO_PUBLIC_API_PROD_URL,
+	//API_URL: isDev ? env.EXPO_PUBLIC_API_DEV_URL : env.EXPO_PUBLIC_API_PROD_URL,
 	DOCS_URI: env.EXPO_PUBLIC_DOCS_URL,
 });
