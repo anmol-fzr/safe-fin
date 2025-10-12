@@ -39,19 +39,15 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           command: versions upload --preview-alias ${{ github.event.pull_request.number }} --env preview
 
-      - name: Print Deployment URL
+      - name: Setting env for Admin
         env:
-          DEPLOYMENT_URL: ${{ steps.deploy_server.outputs.deployment-url }}
-          run: echo $DEPLOYMENT_URL
-
-
-      - name: Deploy Admin to Netlify
-        working-directory: ./apps/admin
-        env:
-          VITE_PUBLIC_SERVER_URL: ${{ needs.preview_server.outputs.server_url }}
+          SERVER_URL: ${{ steps.deploy_server.outputs.deployment-url }}
         run: |
-          echo "Building admin app using API: $VITE_PUBLIC_SERVER_URL"
-          bun run build
+          echo $DEPLOYMENT_URL
+          echo "$SERVER_URL" >> ./apps/admin/.env
+
+      - name: Build Admin
+        run: turbo run build:admin
 
       - name: Deploy to Netlify (Preview)
         uses: nwtgck/actions-netlify@v2
