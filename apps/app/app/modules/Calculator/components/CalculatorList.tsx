@@ -5,24 +5,14 @@ import type { ViewStyle } from "react-native";
 import { View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListView, Text } from "@/components";
-import { CircularProgressIndicator } from "@/components/progress/CircularProgressIndicator";
 import { useListRadius } from "@/hooks/useListRadius";
+import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
+import { getLessonOpts } from "@/modules/lesson/hooks/api";
 import type { ThemedStyle } from "@/theme";
-//import { CALCULATOR_CONFIG, type CalcListItem } from "@/utils/const";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGetCalculators } from "../hooks/queries";
 
-//const calcs: CalcListItem[] = [];
-
-// Object.keys(CALCULATOR_CONFIG).map((calcConfigKey) => {
-// 	const config =
-// 		CALCULATOR_CONFIG[calcConfigKey as keyof typeof CALCULATOR_CONFIG];
-// 	calcs.push(config.list);
-// });
-
 export const CalculatorList = () => {
-	//const { theme } = useAppTheme();
-
 	return (
 		<Suspense fallback={CalculatorListImpl.Loading}>
 			<CalculatorListImpl />
@@ -32,6 +22,11 @@ export const CalculatorList = () => {
 
 function CalculatorListImpl() {
 	const { calculators, isRefetching, refetch } = useGetCalculators();
+
+	const handleViewableItemsChanged = usePrefetchListItem({
+		prefetchQueryFn: getLessonOpts,
+	});
+
 	return (
 		<ListView
 			data={calculators}
@@ -39,6 +34,7 @@ function CalculatorListImpl() {
 			refreshing={isRefetching}
 			onRefresh={refetch}
 			keyExtractor={(item) => item.title}
+			onViewableItemsChanged={handleViewableItemsChanged}
 			renderItem={({ item, data, index }) => (
 				<CalculatorListItem
 					isFirst={index === 0}

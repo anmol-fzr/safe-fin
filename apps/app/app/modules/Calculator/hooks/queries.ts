@@ -1,30 +1,41 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import {
+	infiniteQueryOptions,
+	queryOptions,
+	useQueryClient,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useMemo } from "react";
 import type { ResourceId } from "@/types";
 import { CALCULATOR } from "../api";
 
 const baseQueryKey = "CALCULATOR";
 
 const getCalculatorsOpts = () => {
-	return queryOptions({
+	return infiniteQueryOptions({
 		queryKey: [baseQueryKey],
 		queryFn: CALCULATOR.ALL,
-		//queryFn: ({ pageParam }) => CALCULATOR.ALL(pageParam),
-		// initialPageParam: { limit: 10, page: 1 },
-		// getNextPageParam: ({ paginate }) => {
-		// 	if (!paginate.hasMore) return null;
-		// 	return {
-		// 		limit: 10,
-		// 		page: paginate.nextPage,
-		// 	};
-		// },
+		initialPageParam: { limit: 10, page: 1 },
+		getNextPageParam: ({ paginate }) => {
+			if (!paginate.hasMore) return null;
+			return {
+				limit: 10,
+				page: paginate.nextPage,
+			};
+		},
 	});
 };
 
 const useGetCalculators = () => {
 	const opts = getCalculatorsOpts();
-	const { data, ...rest } = useSuspenseQuery(opts);
+	const { data, ...rest } = useSuspenseInfiniteQuery(opts);
 
-	return { calculators: data.data, ...rest };
+	const calculators = useMemo(
+		() => data.pages.flatMap((page) => page.data),
+		[data],
+	);
+
+	return { calculators, ...rest };
 };
 
 const getCalculatorOpts = (calcId: ResourceId) => {
@@ -41,4 +52,5 @@ const useGetCalculator = (calcId: ResourceId) => {
 	return { calculator: data.data, ...rest };
 };
 
+export { getCalculatorsOpts };
 export { useGetCalculators, useGetCalculator };

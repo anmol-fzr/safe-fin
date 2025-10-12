@@ -1,27 +1,9 @@
-import { Suspense } from "react";
-import { View } from "react-native";
+import { getEmptyArr } from "@safe-fin/ui/utils";
+import { Suspense, useCallback } from "react";
 import { ListView } from "@/components";
-import { useGetLessons } from "../hooks/api";
+import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
+import { getLessonOpts, useGetLessons } from "../hooks/api";
 import { LessonListItem } from "./LessonListItem";
-
-const lessons = [
-	{
-		id: 15,
-		title: "Title Content",
-		desc: "Description Content",
-		isPublished: true,
-		createdAt: "2025-09-09T15:40:22.000Z",
-		updatedAt: "2025-09-09T15:40:22.000Z",
-	},
-	{
-		id: 9,
-		title: "Updated Lesson",
-		desc: "Why you need an emergency fund and how to build one to protect against unexpected expenses.",
-		isPublished: true,
-		createdAt: "2025-08-11T15:31:09.000Z",
-		updatedAt: "2025-08-11T15:31:09.000Z",
-	},
-];
 
 export function LessonList() {
 	return (
@@ -34,35 +16,44 @@ export function LessonList() {
 function LessonListImpl() {
 	const { lessons, isRefetching, isFetchingNextPage, fetchNextPage, refetch } =
 		useGetLessons();
+	const handleViewableItemsChanged = usePrefetchListItem({
+		prefetchQueryFn: getLessonOpts,
+	});
+
+	const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
 
 	return (
-		<View>
-			<ListView
-				data={lessons}
-				refreshing={isRefetching}
-				onRefresh={refetch}
-				estimatedItemSize={105}
-				keyExtractor={(item) => item.id.toString()}
-				onEndReached={() => fetchNextPage()}
-				renderItem={({ item, index, data }) => (
-					<LessonListItem
-						isFirst={index === 0}
-						isLast={index === data.length - 1}
-						title={item.title}
-						desc={item.desc}
-						id={item.id}
-					/>
-				)}
-			/>
-			{isFetchingNextPage && <LessonListImpl.Loading />}
-		</View>
+		<ListView
+			data={lessons}
+			refreshing={isRefetching}
+			onRefresh={refetch}
+			estimatedItemSize={105}
+			keyExtractor={(item) => item.id.toString()}
+			onEndReached={handleEndReached}
+			onViewableItemsChanged={handleViewableItemsChanged}
+			ListFooterComponent={
+				isFetchingNextPage ? <LessonListImpl.Loading /> : undefined
+			}
+			renderItem={({ item, index, data }) => (
+				<LessonListItem
+					isFirst={index === 0}
+					isLast={index === data.length - 1}
+					title={item.title}
+					desc={item.desc}
+					id={item.id}
+				/>
+			)}
+		/>
 	);
 }
+
+const arr = getEmptyArr(10);
+
 LessonListImpl.Loading = () => (
 	<ListView
-		data={lessons}
-		estimatedItemSize={96}
-		keyExtractor={(item) => item.id.toString()}
+		data={arr}
+		estimatedItemSize={125}
+		keyExtractor={(item) => item.toString()}
 		renderItem={() => <LessonListItem.Loading />}
 	/>
 );

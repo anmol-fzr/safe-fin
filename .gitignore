@@ -36,6 +36,7 @@ dump.sql
 
 # Build Outputs
 .next/
+.expo/
 out/
 build
 dist

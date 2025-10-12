@@ -5,8 +5,9 @@ import { StyleSheet, View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListView, Text } from "@/components";
 import { useListRadius } from "@/hooks/useListRadius";
+import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 import type { Scam } from "@/modules/scam/api";
-import { useGetScams } from "@/modules/scam/hooks/queries";
+import { getScamOpts, useGetScams } from "@/modules/scam/hooks/queries";
 import { spacing } from "@/theme";
 
 export function ScamList() {
@@ -19,11 +20,15 @@ export function ScamList() {
 
 function ScamListImpl() {
 	const { scams, isRefetching, refetch } = useGetScams();
+	const handleViewableItemsChanged = usePrefetchListItem({
+		prefetchQueryFn: getScamOpts,
+	});
 
 	return (
 		<ListView
 			showsVerticalScrollIndicator={false}
 			data={scams}
+			onViewableItemsChanged={handleViewableItemsChanged}
 			refreshing={isRefetching}
 			onRefresh={refetch}
 			estimatedItemSize={127}

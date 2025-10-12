@@ -45,7 +45,7 @@ const { get } = axiosInstance;
 
 type ICalculators = ICalculator[];
 type IResCalculator = IResData<ICalculator>;
-type IResCalculators = IResData<ICalculators>;
+type IResCalculators = IResData<ICalculators, true>;
 
 export const CALCULATOR = {
 	ALL: () => get<IResCalculators, IResCalculators>(`/calculator`),

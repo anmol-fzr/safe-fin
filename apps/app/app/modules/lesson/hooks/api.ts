@@ -5,18 +5,19 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useMemo } from "react";
+import type { ResourceId } from "@/types";
 import { LESSON, TOPIC } from "../api";
 
 const baseQueryKey = "LESSONS";
 
-function getLessonOpts(lessonId: number) {
+function getLessonOpts(lessonId: ResourceId) {
 	return queryOptions({
 		queryKey: [baseQueryKey, lessonId],
 		queryFn: () => LESSON.ONE(lessonId),
 	});
 }
 
-const useGetLesson = (lessonId: number) => {
+const useGetLesson = (lessonId: ResourceId) => {
 	const opts = getLessonOpts(lessonId);
 	const { data, ...rest } = useSuspenseQuery(opts);
 	return { lesson: data.data, ...rest };
@@ -62,4 +63,5 @@ const useGetLessonTopics = () => {
 	return { topics, ...rest };
 };
 
+export { getLessonsOpts, getLessonOpts };
 export { useGetLessons, useGetLesson, useGetLessonTopics };

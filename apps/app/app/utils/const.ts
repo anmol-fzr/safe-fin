@@ -1,4 +1,5 @@
 import { useSIPCalculatorLogic } from "@/hooks/useSip";
+import type { Scams } from "@/modules/scam/api";
 import type { CalculatorType } from "@/navigators";
 import { calcMF, calcPPF, calcSwp } from "./funcs";
 
@@ -208,7 +209,7 @@ export const CALCULATOR_CONFIG: CalculatorConfigs = {
 	},
 };
 
-export const scams = [
+export const scams: Scams = [
 	{
 		id: 1,
 		title: "Your PAN KYC is pending",
@@ -269,4 +270,4 @@ export const scams = [
 		desc: "You’re tricked into sharing a WhatsApp OTP, giving scammers control of your account.",
 		tags: ["whatsapp", "otp", "account takeover"],
 	},
-] as const;
+];

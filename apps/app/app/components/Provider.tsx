@@ -11,7 +11,14 @@ import {
 } from "react-native-safe-area-context";
 import { authClient } from "@/modules/auth/utils";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+			refetchOnMount: false,
+		},
+	},
+});
 
 const notifier: Notifier = {
 	loading: (msg) =>
