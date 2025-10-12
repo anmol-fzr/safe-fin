@@ -15,6 +15,7 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",
+		"build:admin": "turbo run build -F @safe-fin/admin",
 		"dev": "turbo run dev",
 		"test": "turbo run test -F @safe-fin/server",
 		"check": "biome check",
