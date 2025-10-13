@@ -42,14 +42,6 @@ export const betterAuthOptions: BetterAuthOptions = {
 				type: "boolean",
 				defaultValue: true,
 			},
-			dob: {
-				type: "date",
-				defaultValue: new Date(2000, 0, 1).toDateString(),
-			},
-			gender: {
-				type: "string",
-				defaultValue: "male",
-			},
 		},
 	},
 	session: {

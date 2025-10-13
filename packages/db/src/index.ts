@@ -1,7 +1,7 @@
 import { createClient } from "@libsql/client";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/libsql";
-import * as schema from "@/schema";
+import * as schema from "./schema";
 
 export interface GetDbOpts {
 	TURSO_DB_URL: string;
