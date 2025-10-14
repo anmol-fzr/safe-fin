@@ -11,6 +11,10 @@ const occupations = [
 const educationLevels = ["high-school", "graduate", "post-graduate"] as const;
 const genders = ["male", "female", "others"] as const;
 
+export type Occupation = (typeof occupations)[number];
+export type EducationLevel = (typeof educationLevels)[number];
+export type Gender = (typeof genders)[number];
+
 export const userDemographics = sqliteTable("user-demographics", {
 	id: text("id").primaryKey(),
 	userId: text("id")

@@ -6,3 +6,4 @@ export * from "./profile";
 export * from "./quiz";
 export * from "./scam";
 export * from "./tag";
+export * from "./user-demographics";
