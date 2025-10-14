@@ -1,11 +1,11 @@
-import NetInfo from "@react-native-community/netinfo";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useScrollToTop } from "@react-navigation/native";
 import {
 	StatusBar,
 	type StatusBarProps,
 	type StatusBarStyle,
 } from "expo-status-bar";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	type KeyboardAvoidingViewProps,
@@ -18,6 +18,7 @@ import {
 	type ViewStyle,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { useIsOnline } from "@/hooks/useIsOnline";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { $styles, spacing } from "../theme";
 import {
@@ -202,7 +203,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
 					contentContainerStyle,
 				]}
 			>
-				{children}
+				<BottomSheetModalProvider>{children}</BottomSheetModalProvider>
 			</View>
 		</View>
 	);
@@ -252,7 +253,7 @@ function ScreenWithScrolling(props: ScreenProps) {
 				contentContainerStyle,
 			]}
 		>
-			{children}
+			<BottomSheetModalProvider>{children}</BottomSheetModalProvider>
 		</KeyboardAwareScrollView>
 	);
 }
@@ -264,7 +265,7 @@ function ScreenWithScrolling(props: ScreenProps) {
  * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Screen/}
  */
 export function Screen(props: ScreenProps) {
-	const [isConnected, setIsConnected] = useState(true);
+	const isOnline = useIsOnline();
 	const {
 		theme: { colors },
 		themeContext,
@@ -279,14 +280,6 @@ export function Screen(props: ScreenProps) {
 	} = props;
 
 	const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges);
-
-	useEffect(() => {
-		const unsubscribe = NetInfo.addEventListener((state) => {
-			setIsConnected(state.isConnected ?? false);
-		});
-
-		return unsubscribe;
-	}, []);
 
 	return (
 		<View
@@ -307,7 +300,7 @@ export function Screen(props: ScreenProps) {
 				{...KeyboardAvoidingViewProps}
 				style={[$styles.flex1, KeyboardAvoidingViewProps?.style]}
 			>
-				{!isConnected && (
+				{!isOnline && (
 					<View
 						style={{
 							backgroundColor: colors.errorBackground,

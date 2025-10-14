@@ -8,7 +8,11 @@ import * as Screens from "./screens";
 
 export type ProfileStackParamList = {
 	Index: undefined;
+	UserProfile: undefined;
+	DemoGraphics: undefined;
 };
+
+export type ProfileScreenKey = keyof ProfileStackParamList;
 
 export type ProfileStackScreenProps<T extends keyof ProfileStackParamList> =
 	NativeStackScreenProps<ProfileStackParamList, T>;
@@ -30,7 +34,12 @@ export function ProfileNavigator() {
 			}}
 			initialRouteName="Index"
 		>
-			<Stack.Screen name="Index" component={Screens.ProfileScreen} />
+			<Stack.Screen name="Index" component={Screens.ProfileIndexScreen} />
+			<Stack.Screen name="UserProfile" component={Screens.UserProfileScreen} />
+			<Stack.Screen
+				name="DemoGraphics"
+				component={Screens.DemoGraphicsScreen}
+			/>
 		</Stack.Navigator>
 	);
 }

@@ -88,6 +88,10 @@ const en = {
 		title: "Profile",
 		tagLine: "Profile",
 	},
+	demoGraphicsScreen: {
+		title: "Demo Graphics",
+		tagLine: "Demo Graphics",
+	},
 	demoDebugScreen: {
 		howTo: "HOW TO",
 		title: "Debug",
