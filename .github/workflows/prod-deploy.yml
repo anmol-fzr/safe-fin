@@ -1,48 +1,101 @@
-name: Deploy Full App to Production
+name: Deploy to Production
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
 jobs:
-  deploy-production:
+  build_docs:
+    name: Build Documentation
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun (v1.2.23 required by action)
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.2.23 
+
+      - name: Install Monorepo Dependencies
+        run: bun install
+
+      - name: Install, build, and upload documentation artifact
+        uses: withastro/action@v4
+        with:
+          path: apps/docs
+          package-manager: bun@1.2.23
+
+  deploy_docs:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+    needs: build_docs
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  deploy_server:
+    name: Deploy API Server
+    runs-on: ubuntu-latest
+    outputs:
+      server_url: ${{ steps.set-server-url.outputs.server_url }}
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-
-      - name: Install dependencies
+      
+      - name: Install Monorepo Dependencies
         run: bun install
 
-      # 1. Deploy Hono Server (Production)
-      - name: Deploy Hono Server
-        id: deploy-server
+      - name: Deploy Hono Server (Cloudflare)
         run: |
           cd apps/server
-          npx wrangler publish --env production \
+          bunx wrangler publish --env production \
             --api-token ${{ secrets.CF_API_TOKEN }} \
             --account-id ${{ secrets.CF_ACCOUNT_ID }}
 
-      # Extract Production Server URL
-      - name: Set Server URL
+      - name: Set Production Server URL Output
         id: set-server-url
-        run: echo "SERVER_URL=https://api.myapp.com" >> $GITHUB_ENV
+        run: |
+          echo "server_url=https://api.myapp.com" >> $GITHUB_OUTPUT
 
-      # 2. Build and Deploy Admin React App to Netlify (Production)
-      - name: Build Admin App
+  deploy_admin:
+    name: Deploy Admin Panel
+    runs-on: ubuntu-latest
+    needs: [deploy_server, build_docs] 
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      
+      - name: Install Monorepo Dependencies
+        run: bun install
+
+      - name: Build Admin App with Environment Variables
         working-directory: apps/admin
         run: |
-          echo "VITE_PUBLIC_SERVER_URL=${{ env.SERVER_URL }}" > .env
+          echo "VITE_PUBLIC_SERVER_URL=${{ needs.deploy_server.outputs.server_url }}" > .env
           echo "VITE_PUBLIC_POSTHOG_KEY=${{ secrets.VITE_PUBLIC_POSTHOG_KEY }}" >> .env
           echo "VITE_PUBLIC_POSTHOG_HOST=${{ secrets.VITE_PUBLIC_POSTHOG_HOST }}" >> .env
           bun run build
-
+        
       - name: Deploy Admin to Netlify
         id: deploy-admin
         uses: nwtgck/actions-netlify@v2
@@ -54,11 +107,11 @@ jobs:
           netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
 
-      # 3. Release summary comment
-      - name: Comment Release URLs
+      - name: Comment Release URL Summary
         uses: softprops/action-gh-release@v2
         with:
           body: |
             🚀 Production Release ${{ github.event.release.tag_name }} deployed!
-            - Admin Panel: https://your-netlify-site.netlify.app
-            - API Server: https://api.myapp.com
+
+            - Admin Panel: ${{ steps.deploy-admin.outputs.deploy-url }}
+            - API Server: ${{ needs.deploy_server.outputs.server_url }}
