@@ -36,4 +36,9 @@ export default defineConfig({
 			],
 		}),
 	],
+	vite: {
+		ssr: {
+			noExternal: ["zod"],
+		},
+	},
 });

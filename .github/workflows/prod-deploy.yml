@@ -5,6 +5,11 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build_docs:
     name: Build Documentation
@@ -21,11 +26,16 @@ jobs:
       - name: Install Monorepo Dependencies
         run: bun install
 
-      - name: Install, build, and upload documentation artifact
+      - name: Build documentation
         uses: withastro/action@v4
         with:
           path: apps/docs
           package-manager: bun@1.2.23
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/docs/dist
 
   deploy_docs:
     name: Deploy Documentation
