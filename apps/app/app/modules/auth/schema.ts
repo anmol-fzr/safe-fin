@@ -28,7 +28,6 @@ const loginSchema = object().shape({
 
 const registerSchema = object({
 	name: string().required().label("Name"),
-	gender: string().required().label("Gender"),
 	//email: string().email().required().label("Email"),
 });
 

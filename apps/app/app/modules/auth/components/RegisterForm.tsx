@@ -9,14 +9,9 @@ import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 import { registerSchema } from "@/modules/auth/schema";
 import { useAuthStore } from "@/modules/auth/store";
+import { genderOpts } from "@/modules/profile/utils/options";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-
-const genderOpts = [
-	{ label: "Male", value: "male" },
-	{ label: "Female", value: "female" },
-	{ label: "Other", value: "other" },
-];
 
 export const RegisterForm = () => {
 	const methods = useForm({
