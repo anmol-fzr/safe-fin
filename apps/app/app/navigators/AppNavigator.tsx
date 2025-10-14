@@ -48,8 +48,7 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> =
 const RootStack = createNativeStackNavigator<AppStackParamList>();
 
 function AppStack() {
-	const user = useAuthStore((state) => state.user);
-	const isAuthenticated = user !== null;
+	const isAuthenticated = useAuthStore((state) => state.isLogin);
 
 	const {
 		theme: { colors },
@@ -67,16 +66,11 @@ function AppStack() {
 			initialRouteName={isAuthenticated ? "Welcome" : "Auth"}
 			//initialRouteName="Test"
 		>
-			{isAuthenticated ? (
-				<>
-					<RootStack.Screen name="Welcome" component={Screens.WelcomeScreen} />
-					<RootStack.Screen name="MainTabs" component={MainTabNavigator} />
-					<RootStack.Screen name="Quiz" component={QuizNavigator} />
-					<RootStack.Screen name="Debug" component={DebugScreen} />
-				</>
-			) : (
-				<RootStack.Screen name="Auth" component={AuthNavigator} />
-			)}
+			<RootStack.Screen name="Welcome" component={Screens.WelcomeScreen} />
+			<RootStack.Screen name="MainTabs" component={MainTabNavigator} />
+			<RootStack.Screen name="Quiz" component={QuizNavigator} />
+			<RootStack.Screen name="Debug" component={DebugScreen} />
+			<RootStack.Screen name="Auth" component={AuthNavigator} />
 			{/*
 			 */}
 		</RootStack.Navigator>
