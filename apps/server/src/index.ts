@@ -1,5 +1,7 @@
+import { addressRouter } from "@address/router";
 import { calculatorRouter } from "@calulator/router";
 import { lessonRouter } from "@lesson/router";
+import { profileRouter } from "@profile/router";
 import { quizRouter } from "@quiz/router";
 import { quizResultRouter } from "@quiz-result/router";
 import { etag } from "hono/etag";
@@ -27,6 +29,8 @@ app
 	.route("/quiz", quizRouter)
 	.route("/lessons", lessonRouter)
 	.route("/result", quizResultRouter)
-	.route("/calculator", calculatorRouter);
+	.route("/calculator", calculatorRouter)
+	.route("/address", addressRouter)
+	.route("/profile", profileRouter);
 
 export default app;
