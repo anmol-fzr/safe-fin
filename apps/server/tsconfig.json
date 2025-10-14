@@ -12,6 +12,7 @@
 			"@calulator/*": ["./src/modules/calculator/*"],
 			"@lesson/*": ["./src/modules/lesson/*"],
 			"@quiz/*": ["./src/modules/quiz/*"],
+			"@address/*": ["./src/modules/address/*"],
 			"@quiz-result/*": ["./src/modules/quiz-result/*"],
 			"@/*": ["./src/*"]
 		},
@@ -24,9 +25,9 @@
 		"lib": ["ES2022"]
 	},
 	"include": ["src/**/*"],
-	"exclude": ["node_modules"]
-	// "references": [
-	// 	{ "path": "../../packages/db" },
-	// 	{ "path": "../../packages/auth" }
-	// ]
+	"exclude": ["node_modules"],
+	"references": [
+		{ "path": "../../packages/db" },
+		{ "path": "../../packages/auth" }
+	]
 }
