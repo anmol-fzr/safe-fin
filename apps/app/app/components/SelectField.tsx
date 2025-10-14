@@ -6,7 +6,13 @@ import {
 } from "@gorhom/bottom-sheet";
 import type { ThemedStyle } from "app/theme";
 import { useAppTheme } from "app/utils/useAppTheme";
-import { forwardRef, type Ref, useImperativeHandle, useRef } from "react";
+import {
+	forwardRef,
+	type Ref,
+	useCallback,
+	useImperativeHandle,
+	useRef,
+} from "react";
 import { TouchableOpacity, View, type ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "./Button";
@@ -14,11 +20,18 @@ import { Icon } from "./Icon";
 import { ListItem } from "./ListItem";
 import { TextField, type TextFieldProps } from "./TextField";
 
+export interface Option {
+	label: string;
+	value: string;
+}
+
+export type Options = Option[];
+
 export interface SelectFieldProps
-	extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange" | "value"> {
-	value?: string[];
-	renderValue?: (value: string[]) => string;
-	onSelect?: (newValue: string[]) => void;
+	extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange"> {
+	value: string;
+	renderValue: (value: string) => string;
+	onSelect: (newValue: string) => void;
 	multiple?: boolean;
 	options: { label: string; value: string }[];
 }
@@ -27,22 +40,23 @@ export interface SelectFieldRef {
 	dismissOptions: () => void;
 }
 
-function without<T>(array: T[], value: T) {
-	return array.filter((v) => v !== value);
-}
+// function without<T>(array: T[], value: T) {
+// 	return array.filter((v) => v !== value);
+// }
 
 export const SelectField = forwardRef(function SelectField(
 	props: SelectFieldProps,
 	ref: Ref<SelectFieldRef>,
 ) {
 	const {
-		value = [],
+		value = "",
 		onSelect,
 		renderValue,
 		options = [],
-		multiple = true,
+		multiple = false,
 		...TextFieldProps
 	} = props;
+
 	const sheet = useRef<BottomSheetModal>(null);
 	const { bottom } = useSafeAreaInsets();
 	const {
@@ -55,30 +69,28 @@ export const SelectField = forwardRef(function SelectField(
 
 	useImperativeHandle(ref, () => ({ presentOptions, dismissOptions }));
 
-	const valueString =
-		renderValue?.(value) ??
-		value
-			.map((v) => options.find((o) => o.value === v)?.label)
-			.filter(Boolean)
-			.join(", ");
+	const valueString = renderValue(value);
 
-	function presentOptions() {
+	const presentOptions = useCallback(() => {
 		if (disabled) return;
 
 		sheet.current?.present();
-	}
+	}, [disabled]);
 
 	function dismissOptions() {
 		sheet.current?.dismiss();
 	}
 
 	function updateValue(optionValue: string) {
-		if (value.includes(optionValue)) {
-			onSelect?.(multiple ? without(value, optionValue) : []);
-		} else {
-			onSelect?.(multiple ? [...value, optionValue] : [optionValue]);
-			if (!multiple) dismissOptions();
-		}
+		onSelect(optionValue);
+		dismissOptions();
+		return;
+		// if (value.includes(optionValue)) {
+		// 	onSelect?.(multiple ? without(value, optionValue) : []);
+		// } else {
+		// 	onSelect?.(multiple ? [...value, optionValue] : [optionValue]);
+		// 	if (!multiple) dismissOptions();
+		// }
 	}
 
 	const {
@@ -141,7 +153,7 @@ export const SelectField = forwardRef(function SelectField(
 							topSeparator={index !== 0}
 							style={themed($listItem)}
 							rightIcon={value.includes(item.value) ? "check" : undefined}
-							rightIconColor={colors.palette.angry500}
+							rightIconColor={colors.success}
 							onPress={() => updateValue(item.value)}
 						/>
 					)}

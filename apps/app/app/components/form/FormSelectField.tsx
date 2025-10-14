@@ -6,12 +6,13 @@ import { SelectField, type SelectFieldProps } from "../SelectField";
 
 type FormFieldProps = Omit<
 	SelectFieldProps,
-	"value" | "onChangeText" | "onBlur"
+	"value" | "onChangeText" | "onBlur" | "renderValue" | "onSelect"
 > & {
 	name: string;
 };
 
 export const FormSelectField = (props: FormFieldProps) => {
+	const multiple = false;
 	const { control, formState } = useFormContext();
 	const { themed } = useAppTheme();
 
@@ -29,21 +30,25 @@ export const FormSelectField = (props: FormFieldProps) => {
 				render={({ field: { onChange, onBlur, value, disabled } }) => (
 					<SelectField
 						value={value}
+						onChangeText={(val) => {
+							console.log(val);
+							onChange(val);
+						}}
+						onBlur={onBlur}
+						containerStyle={themed($textField)}
+						status={disabled ? "disabled" : error ? "error" : undefined}
+						helper={props.helper || error}
+						multiple={multiple}
+						{...props}
 						renderValue={(value) => {
-							if (props.multiple) {
-								return value
-									.map((v) => props.options.find((o) => o.value === v)?.label)
-									.filter(Boolean)
-									.join(", ");
-							}
 							const foundOption = props.options.find(
 								(option) => option.value === value,
 							);
 
-							return foundOption?.label;
+							return foundOption?.label ?? props.placeholder;
 						}}
 						onSelect={(v) => {
-							if (props.multiple) {
+							if (multiple) {
 								if (Array.isArray(v)) {
 									onChange(v);
 								} else {
@@ -57,15 +62,6 @@ export const FormSelectField = (props: FormFieldProps) => {
 								}
 							}
 						}}
-						onChangeText={(val) => {
-							console.log(val);
-							onChange(val);
-						}}
-						onBlur={onBlur}
-						containerStyle={themed($textField)}
-						status={disabled ? "disabled" : error ? "error" : undefined}
-						helper={props.helper || error}
-						{...props}
 					/>
 				)}
 				name={props.name}
