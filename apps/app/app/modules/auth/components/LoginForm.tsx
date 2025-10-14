@@ -3,9 +3,9 @@ import { useSendOtp, useVerifyOtp } from "@safe-fin/ui/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
 import { isUndefined } from "lodash";
-import { useCallback, useMemo } from "react";
+import { Ref, useCallback, useMemo, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import type { ViewStyle } from "react-native";
+import type { TextInput, ViewStyle } from "react-native";
 import { View } from "react-native";
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
@@ -18,6 +18,7 @@ import { useAuthStore } from "../store";
 
 export const LoginForm = () => {
 	const { countdown, reset, restart } = useCountdown(59);
+	const otpInputRef = useRef<TextInput>(null);
 
 	const form = useForm({
 		resolver: yupResolver(loginSchema),
@@ -56,12 +57,7 @@ export const LoginForm = () => {
 					restart();
 					const user = data.data.user;
 					setAuthData({ user });
-					console.log(user);
-					if (user.name === user.phoneNumber) {
-						setAuthState("register");
-						navigation.push("Auth", { screen: "Register" });
-						return;
-					}
+
 					setAuthState("complete");
 					navigation.navigate("MainTabs", { screen: "Home" });
 				},
@@ -91,6 +87,7 @@ export const LoginForm = () => {
 					autoComplete="tel"
 					autoCorrect={false}
 					status={isOtpSent ? "disabled" : undefined}
+					onEndEditing={isOtpSent ? otpInputRef.current?.focus : handleSubmit}
 					keyboardType="phone-pad"
 					labelTx="loginScreen:phoneFieldLabel"
 					placeholderTx="loginScreen:phoneFieldPlaceholder"
@@ -99,6 +96,8 @@ export const LoginForm = () => {
 				{isOtpSent && (
 					<FormField
 						name="otp"
+						ref={otpInputRef}
+						onEndEditing={handleSubmit}
 						autoCapitalize="none"
 						autoComplete="sms-otp"
 						autoCorrect={false}
