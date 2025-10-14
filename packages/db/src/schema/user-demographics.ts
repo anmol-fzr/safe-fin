@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./auth";
 
 const occupations = [
@@ -15,32 +15,37 @@ export type Occupation = (typeof occupations)[number];
 export type EducationLevel = (typeof educationLevels)[number];
 export type Gender = (typeof genders)[number];
 
-export const userDemographics = sqliteTable("user-demographics", {
-	id: text("id").primaryKey(),
-	userId: text("id")
-		.unique()
-		.notNull()
-		.references(() => user.id),
+export const userDemographics = sqliteTable(
+	"user-demographics",
+	{
+		id: text("id").primaryKey(),
+		userId: text("id")
+			.unique()
+			.notNull()
+			.unique()
+			.references(() => user.id),
 
-	dob: integer("dob", { mode: "timestamp_ms" }).default(new Date(2000, 0, 1)),
+		dob: integer("dob", { mode: "timestamp_ms" }).default(new Date(2000, 0, 1)),
 
-	occupation: text("occupation", {
-		mode: "text",
-		enum: occupations,
-	}).notNull(),
-	country: text("country", { mode: "text" }).notNull(),
-	state: text("country", { mode: "text" }).notNull(),
-	city: text("country", { mode: "text" }).notNull(),
+		occupation: text("occupation", {
+			mode: "text",
+			enum: occupations,
+		}).notNull(),
+		country: text("country", { mode: "text" }).notNull(),
+		state: text("country", { mode: "text" }).notNull(),
+		city: text("country", { mode: "text" }).notNull(),
 
-	educationLevel: text("education-level", {
-		mode: "text",
-		enum: educationLevels,
-	}).notNull(),
+		educationLevel: text("education-level", {
+			mode: "text",
+			enum: educationLevels,
+		}).notNull(),
 
-	gender: text("gender", {
-		enum: genders,
-	}).default("male"),
-});
+		gender: text("gender", {
+			enum: genders,
+		}).default("male"),
+	},
+	(table) => [index("user_id_idx").on(table.userId)],
+);
 
 export const userDemographicsRelations = relations(
 	userDemographics,
