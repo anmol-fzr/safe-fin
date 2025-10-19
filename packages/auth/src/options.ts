@@ -44,6 +44,12 @@ export const betterAuthOptions: BetterAuthOptions = {
 			},
 		},
 	},
+	advanced: {
+		defaultCookieAttributes: {
+			httpOnly: true,
+			secure: true,
+		},
+	},
 	session: {
 		cookieCache: {
 			enabled: true,
