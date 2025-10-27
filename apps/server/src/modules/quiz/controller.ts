@@ -4,11 +4,12 @@ import { getDb, option, question, quiz } from "@/db";
 import { authenticate } from "@/middleware";
 import { createTypedFactory } from "../../factory";
 import { fullQuizReqSchema } from "./schema";
+import { env } from "hono/adapter";
 
 const { createHandlers } = createTypedFactory();
 
 const getQuizzes = createHandlers(authenticate, async (c) => {
-	const db = getDb(c.env);
+	const db = getDb(env(c));
 	const user = c.get("user");
 
 	const query = db.select().from(quiz).orderBy(desc(quiz.createdAt));
@@ -23,7 +24,7 @@ const getQuizzes = createHandlers(authenticate, async (c) => {
 });
 
 const getQuizById = createHandlers(async (c) => {
-	const db = getDb(c.env);
+	const db = getDb(env(c));
 	const quizId = c.req.param("quiz_id");
 
 	const quizs = await db.query.quiz.findFirst({
@@ -62,7 +63,7 @@ const getQuizById = createHandlers(async (c) => {
 
 const updateQuizById = createHandlers(async (c) => {
 	const quizId = c.req.param("quiz_id");
-	const db = getDb(c.env);
+	const db = getDb(env(c));
 
 	const updatedQuiz = await db
 		.update(quiz)
@@ -88,7 +89,7 @@ const updateQuizById = createHandlers(async (c) => {
 
 const deleteQuizById = createHandlers(async (c) => {
 	const quizId = c.req.param("quiz_id");
-	const db = getDb(c.env);
+	const db = getDb(env(c));
 
 	const foundQuiz = db.select().from(quiz).where(eq(quiz.id, quizId)).limit(1);
 
@@ -103,7 +104,7 @@ const createQuiz = createHandlers(
 	zValidator("json", fullQuizReqSchema),
 	async (c) => {
 		const { title, desc, isPublished = false, questions } = c.req.valid("json");
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 
 		try {
 			const newQuiz = await db.transaction(async (tx) => {

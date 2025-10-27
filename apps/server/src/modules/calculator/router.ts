@@ -5,6 +5,7 @@ import { getPaginateRes, paginate } from "@/middleware";
 import { createTypedFactory } from "../../factory";
 import { calculatorMetadataSchema } from "./schema";
 import { queryParamSchema } from "@/schema/params";
+import { env } from "hono/adapter";
 
 const { createApp } = createTypedFactory();
 
@@ -14,7 +15,7 @@ const calculatorRouter = createApp()
 
 		const offset = (page - 1) * limit;
 
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 		const query = db.select().from(calculator).limit(limit).offset(offset);
 
 		const countPrms = db.select({ count: count() }).from(calculator);
@@ -38,7 +39,7 @@ const calculatorRouter = createApp()
 	.post("/", zValidator("json", calculatorMetadataSchema), async (c) => {
 		const body = c.req.valid("json");
 
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 		const [newCalc] = await db
 			.insert(calculator)
 			.values({ text: JSON.stringify(body) })
@@ -50,7 +51,7 @@ const calculatorRouter = createApp()
 		});
 	})
 	.get("/:id", async (c) => {
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 		const calcId = c.req.param("id");
 
 		const [foundCalc] = await db
@@ -62,7 +63,7 @@ const calculatorRouter = createApp()
 		return c.json({ data: JSON.parse(foundCalc.text) });
 	})
 	.delete("/:id", async (c) => {
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 		const calcId = c.req.param("id");
 		const foundCalc = await db
 			.delete(calculator)

@@ -10,6 +10,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { auth } from "@/auth";
 import { appCors } from "@/middleware";
 import { createTypedFactory } from "./factory";
+import { env } from "hono/adapter";
 
 const { createApp } = createTypedFactory();
 const app = createApp();
@@ -30,7 +31,7 @@ app.get("/health", (c) => c.text("Hello Hono!"));
 app.get("*", etag());
 
 app.on(["POST", "GET"], "/api/auth/*", async (c) => {
-	return auth(c.env).handler(c.req.raw);
+	return auth(env(c)).handler(c.req.raw);
 });
 
 app

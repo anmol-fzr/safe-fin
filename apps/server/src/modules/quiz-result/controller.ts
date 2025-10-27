@@ -2,6 +2,7 @@ import { zValidator } from "@hono/zod-validator";
 import { getDb, quizQuestionResult, userQuizResult } from "@/db";
 import { createTypedFactory } from "../../factory";
 import { quizResultReqSchema } from "./schema";
+import { env } from "hono/adapter";
 
 const { createHandlers } = createTypedFactory();
 
@@ -10,7 +11,7 @@ const saveQuizResult = createHandlers(
 	async (c) => {
 		const body = c.req.valid("json");
 
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 		const user = c.get("user");
 
 		const savedQuizResult = await db

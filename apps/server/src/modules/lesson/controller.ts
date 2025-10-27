@@ -10,6 +10,7 @@ import {
 	lessonQuizLinkSchema,
 	updateLessonSchema,
 } from "./schema";
+import { env } from "hono/adapter";
 
 const { createHandlers } = createTypedFactory();
 
@@ -22,7 +23,7 @@ const getLessons = createHandlers(
 
 		const offset = (page - 1) * limit;
 
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 
 		const role = "admin";
 		//const role = c.get("user").role;
@@ -76,7 +77,7 @@ const getLessons = createHandlers(
 const getLessonById = createHandlers(authenticate, async (c) => {
 	const lessonId = c.req.param("lesson_id");
 
-	const db = getDb(c.env);
+	const db = getDb(env(c));
 
 	const foundLesson = await db.query.lesson.findFirst({
 		where: (lesson, { eq }) => eq(lesson.id, lessonId),
@@ -122,7 +123,7 @@ const createLesson = createHandlers(
 	async (c) => {
 		const body = c.req.valid("json");
 
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 
 		const [newLesson] = await db.insert(lesson).values(body).returning();
 
@@ -142,7 +143,7 @@ const deleteLesson = createHandlers(
 	async (c) => {
 		const lessonId = c.req.param("lesson_id");
 
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 
 		const foundLesson = await db.delete(lesson).where(eq(lesson.id, lessonId));
 
@@ -167,7 +168,7 @@ const linkLessonWithQuiz = createHandlers(
 	zValidator("json", lessonQuizLinkSchema),
 	async (c) => {
 		const { lessonId, quizId } = c.req.valid("json");
-		const db = getDb(c.env);
+		const db = getDb(env(c));
 
 		try {
 			await db.insert(lessonQuiz).values({ lessonId, quizId });
@@ -195,7 +196,7 @@ const updateLessonById = createHandlers(
 		const lessonData = c.req.valid("json");
 
 		try {
-			const db = getDb(c.env);
+			const db = getDb(env(c));
 
 			const foundLesson = await db
 				.update(lesson)
