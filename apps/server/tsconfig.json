@@ -12,6 +12,7 @@
 			"@calulator/*": ["./src/modules/calculator/*"],
 			"@lesson/*": ["./src/modules/lesson/*"],
 			"@quiz/*": ["./src/modules/quiz/*"],
+			"@profile/*": ["./src/modules/profile/*"],
 			"@address/*": ["./src/modules/address/*"],
 			"@quiz-result/*": ["./src/modules/quiz-result/*"],
 			"@/*": ["./src/*"]
