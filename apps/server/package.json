@@ -28,10 +28,8 @@
 		"@types/bun": "latest",
 		"@vitest/coverage-c8": "^0.33.0",
 		"@vitest/ui": "^3.2.4",
-		"concurrently": "^9.2.0",
 		"miniflare": "^4.20250829.0",
 		"supertest": "^7.1.4",
-		"tsx": "^4.20.3",
 		"vitest": "^3.2.4",
 		"vitest-environment-miniflare": "^2.14.4",
 		"wrangler": "^4.24.3"
