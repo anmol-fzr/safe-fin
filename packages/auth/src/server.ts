@@ -1,5 +1,6 @@
 import type { GetDbOpts } from "@safe-fin/db";
 import { getAuthDrizzleAdapter } from "@safe-fin/db";
+import type { BetterAuthOptions } from "better-auth";
 //import type { SecondaryStorage } from "better-auth";
 import { betterAuth } from "better-auth";
 import { betterAuthOptions } from "./options";
@@ -33,7 +34,7 @@ interface AuthOpts extends GetDbOpts {
 /**
  * Better Auth Instance
  */
-export const auth = (opts: AuthOpts): ReturnType<typeof betterAuth> => {
+export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
 	//const kv = env.SAFE_FIN_KV;
 
 	const database = getAuthDrizzleAdapter({
@@ -43,6 +44,7 @@ export const auth = (opts: AuthOpts): ReturnType<typeof betterAuth> => {
 
 	return betterAuth({
 		...betterAuthOptions,
+		...baOpts,
 		database,
 		baseURL: opts.BETTER_AUTH_URL,
 		secret: opts.BETTER_AUTH_SECRET,

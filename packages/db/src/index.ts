@@ -1,4 +1,4 @@
-import { createClient } from "@libsql/client";
+import { type Client, createClient } from "@libsql/client";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";
@@ -8,14 +8,22 @@ export interface GetDbOpts {
 	TURSO_DB_TOKEN: string;
 }
 
-function getDb(envs: GetDbOpts): ReturnType<typeof drizzle> {
+let dbInst: ReturnType<typeof drizzle<typeof schema, Client>> | null = null;
+
+function getDb(opts: GetDbOpts) {
+	if (dbInst !== null) {
+		return dbInst;
+	}
+
+	const { TURSO_DB_URL, TURSO_DB_TOKEN } = opts;
+
 	const turso = createClient({
-		//url: "http://127.0.0.1:8080",
-		url: envs.TURSO_DB_URL,
-		authToken: envs.TURSO_DB_TOKEN,
+		url: TURSO_DB_URL,
+		authToken: TURSO_DB_TOKEN,
 	});
 
-	return drizzle(turso, { schema });
+	dbInst = drizzle(turso, { schema });
+	return dbInst;
 }
 
 const getAuthDrizzleAdapter = (creds: GetDbOpts) => {
