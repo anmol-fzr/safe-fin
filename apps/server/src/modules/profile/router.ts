@@ -1,9 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
 import { getDb, userDemographics } from "@safe-fin/db";
+import { env } from "hono/adapter";
 import { createTypedFactory } from "@/factory";
 import { authenticate } from "@/middleware";
 import { insertDemoGraphicsSchema } from "./schema.ts";
-import { env } from "hono/adapter";
 
 const { createApp } = createTypedFactory();
 

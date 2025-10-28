@@ -1,5 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { and, asc, count, desc, eq, or } from "drizzle-orm";
+import { env } from "hono/adapter";
 import { getDb, lesson, lessonQuiz } from "@/db";
 import { authenticate, getPaginateRes, paginate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
@@ -10,7 +11,6 @@ import {
 	lessonQuizLinkSchema,
 	updateLessonSchema,
 } from "./schema";
-import { env } from "hono/adapter";
 
 const { createHandlers } = createTypedFactory();
 
