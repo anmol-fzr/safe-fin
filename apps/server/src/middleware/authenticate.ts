@@ -1,8 +1,14 @@
+import { env } from "hono/adapter";
+import type { Session, User } from "@/auth";
 import { auth } from "@/auth";
 import { createTypedFactory } from "../factory";
-import { env } from "hono/adapter";
 
-const { createMiddleware } = createTypedFactory();
+const { createMiddleware } = createTypedFactory<{
+	Variables: {
+		user: User;
+		session: Session;
+	};
+}>();
 
 const authenticate = createMiddleware(async (c, next) => {
 	const session = await auth(env(c)).api.getSession({
@@ -20,7 +26,7 @@ const authenticate = createMiddleware(async (c, next) => {
 
 	c.set("user", session.user);
 	c.set("session", session.session);
-	return next();
+	return await next();
 });
 
 export { authenticate };
