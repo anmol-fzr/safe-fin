@@ -1,8 +1,12 @@
+import type { Env } from "hono";
 import { createFactory } from "hono/factory";
-import type { HonoEnv } from "./types";
 
-const createTypedFactory = () => {
-	return createFactory<HonoEnv>();
+const createTypedFactory = <E extends Env = Env>() => {
+	return createFactory<
+		E & {
+			Bindings: CloudflareBindings;
+		}
+	>();
 };
 
 export { createTypedFactory };

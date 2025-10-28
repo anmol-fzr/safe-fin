@@ -18,11 +18,7 @@
 			"@/*": ["./src/*"]
 		},
 		// Your environment specific settings (e.g., for Hono/Workers)
-		"types": [
-			"bun",
-			"@cloudflare/workers-types",
-			"../../worker-configuration.d.ts"
-		],
+		"types": ["bun", "./worker-configuration.d.ts"],
 		"lib": ["ES2022"]
 	},
 	"include": ["src/**/*"],
