@@ -57,17 +57,17 @@ export const lessonQuizRelations = relations(lessonQuiz, ({ one }) => ({
 	}),
 }));
 
-export const lessonReads = sqliteTable(
-	"lesson_reads",
+export const lessonRead = sqliteTable(
+	"lesson_read",
 	{
 		userId: text("user_id")
 			.references(() => user.id)
 			.notNull(),
-		lessonId: text("lesson_id")
+		lessonId: integer("lesson_id")
 			.references(() => lesson.id)
 			.notNull(),
-		event: text("event", { enum: ["view", "seen"] })
-			.default("view")
+		event: text("event", { enum: ["seen", "red"] })
+			.default("seen")
 			.notNull(),
 
 		// for this table only, created_at will simple be seet_at timestamp
@@ -78,13 +78,13 @@ export const lessonReads = sqliteTable(
 	(table) => [primaryKey({ columns: [table.userId, table.lessonId] })],
 );
 
-export const lessonReadsRelations = relations(lessonReads, ({ one }) => ({
+export const lessonReadRelations = relations(lessonRead, ({ one }) => ({
 	user: one(user, {
-		fields: [lessonReads.userId],
+		fields: [lessonRead.userId],
 		references: [user.id],
 	}),
 	lesson: one(lesson, {
-		fields: [lessonReads.lessonId],
+		fields: [lessonRead.lessonId],
 		references: [lesson.id],
 	}),
 }));
