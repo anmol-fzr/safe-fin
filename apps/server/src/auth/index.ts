@@ -17,3 +17,5 @@ export function auth(envs: CloudflareBindings) {
 		TURSO_DB_TOKEN,
 	});
 }
+
+export type { Session, User } from "@safe-fin/auth/server";
