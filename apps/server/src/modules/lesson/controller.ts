@@ -1,7 +1,17 @@
 import { zValidator } from "@hono/zod-validator";
-import { and, asc, count, desc, eq, or } from "drizzle-orm";
+import {
+	and,
+	asc,
+	count,
+	desc,
+	eq,
+	isNull,
+	ne,
+	notInArray,
+	or,
+} from "drizzle-orm";
 import { env } from "hono/adapter";
-import { getDb, lesson, lessonQuiz } from "@/db";
+import { getDb, lesson, lessonQuiz, lessonRead } from "@/db";
 import { authenticate, getPaginateRes, paginate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
 import { queryParamSchema } from "@/schema/params";
@@ -20,42 +30,55 @@ const getLessons = createHandlers(
 	authenticate,
 	async (c) => {
 		const { sortBy, sortDirection, limit, page } = c.get("paginate");
-
 		const offset = (page - 1) * limit;
 
 		const db = getDb(env(c));
+		const user = c.get("user");
 
-		const role = "admin";
-		//const role = c.get("user").role;
+		const role = "user"; // or user.role
 		const isAdmin = role === "admin";
 
-		let where = undefined;
-		let fields = undefined;
-
-		if (isAdmin) {
-			where = or(eq(lesson.isPublished, true), eq(lesson.isPublished, false));
-		} else {
-			where = eq(lesson.isPublished, true);
-			fields = {
-				id: lesson.id,
-				title: lesson.title,
-				desc: lesson.desc,
-				isPublished: lesson.isPublished,
-				createdAt: lesson.createdAt,
-			};
-		}
-
-		fields = {
+		let where;
+		let fields = {
 			id: lesson.id,
 			title: lesson.title,
 			desc: lesson.desc,
 			isPublished: lesson.isPublished,
 			createdAt: lesson.createdAt,
 		};
-		const countPrms = db.select({ count: count() }).from(lesson).where(where);
-		const lessonsQuery = db
+
+		let query = db
 			.select(fields)
 			.from(lesson)
+			.leftJoin(
+				lessonRead,
+				and(eq(lessonRead.lessonId, lesson.id), eq(lessonRead.userId, user.id)),
+			);
+
+		if (isAdmin) {
+			where = or(eq(lesson.isPublished, true), eq(lesson.isPublished, false));
+		} else {
+			// user should see only published lessons that are NOT read or seen
+			where = and(
+				eq(lesson.isPublished, true),
+				or(
+					isNull(lessonRead.event), // user never interacted
+					notInArray(lessonRead.event, ["seen", "red"]), // user interacted, but not these events
+				),
+			);
+		}
+
+		// Count for pagination
+		const countPrms = db
+			.select({ count: count() })
+			.from(lesson)
+			.leftJoin(
+				lessonRead,
+				and(eq(lessonRead.lessonId, lesson.id), eq(lessonRead.userId, user.id)),
+			)
+			.where(where);
+
+		const lessonsQuery = query
 			.where(where)
 			.orderBy(
 				sortDirection === "desc" ? desc(lesson[sortBy]) : asc(lesson[sortBy]),
