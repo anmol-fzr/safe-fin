@@ -5,24 +5,20 @@ import {
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
-import { timestamp } from "./__utils";
+import { id, timestamp } from "./__utils";
 import { user } from "./auth";
 import { quiz } from "./quiz";
 
 const lesson = sqliteTable("lesson", {
-	id: integer("id").primaryKey({ autoIncrement: true }).notNull(),
+	id,
 	title: text("title", { length: 256 }).notNull(),
 	desc: text("description").notNull(),
 	isPublished: integer("is_published", { mode: "boolean" }).default(false),
 	content: text("content").notNull(),
 	contentJson: text("content_json"),
 
-	createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
-		() => new Date(),
-	),
-	updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(
-		() => new Date(),
-	),
+	createdAt: timestamp.createdAt,
+	updatedAt: timestamp.updatedAt,
 });
 
 const lessonQuiz = sqliteTable("lesson_quiz", {
@@ -33,6 +29,9 @@ const lessonQuiz = sqliteTable("lesson_quiz", {
 	quizId: integer("quiz_id")
 		.notNull()
 		.references(() => quiz.id),
+
+	createdAt: timestamp.createdAt,
+	updatedAt: timestamp.updatedAt,
 });
 
 // Relation for lesson → lessonQuiz
