@@ -62,6 +62,7 @@ const $listItem: ThemedStyle<ViewStyle> = ({ colors, spacing, roundness }) => ({
 	// borderTopLeftRadius: roundness,
 	// borderTopRightRadius: roundness,
 	padding: spacing.md,
+	paddingBottom: spacing.lg,
 	//borderColor: colors.palette.accent400,
 	backgroundColor: colors.palette.accent200,
 	borderWidth: 0,
