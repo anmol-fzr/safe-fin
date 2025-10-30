@@ -17,7 +17,7 @@ export const usePrefetchListItem = <TQueryFnData extends { id: ResourceId }>(
 
 	const queryClient = useQueryClient();
 
-	const prefetchScam = useCallback(
+	const prefetchResource = useCallback(
 		(scamId: ResourceId) => {
 			return queryClient.prefetchQuery(prefetchQueryFn(scamId));
 		},
@@ -29,15 +29,15 @@ export const usePrefetchListItem = <TQueryFnData extends { id: ResourceId }>(
 	>(
 		({ viewableItems }) => {
 			viewableItems.forEach((item) => {
-				const scamId = item.item.id;
+				const id = item.item.id;
 
-				if (!seenIds.current.has(scamId)) {
-					prefetchScam(scamId);
-					seenIds.current.add(scamId);
+				if (!seenIds.current.has(id)) {
+					prefetchResource(id);
+					seenIds.current.add(id);
 				}
 			});
 		},
-		[prefetchScam],
+		[prefetchResource],
 	);
 
 	return handleViewableItemsChanged;
