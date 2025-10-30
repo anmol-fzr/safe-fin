@@ -1,5 +1,5 @@
 import axios, { type AxiosError, type AxiosResponse } from "axios";
-import { authClient } from "@/lib/auth";
+import { logout } from "@/lib/auth";
 import { envs } from "@/lib/envs";
 import type { IResData } from "./types";
 
@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
 	(error: AxiosError<IResData>) => {
 		const status = error.response?.status;
 		if (status === 401) {
-			authClient.signOut();
+			logout();
 		}
 
 		if (error.response?.data) {
