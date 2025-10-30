@@ -49,9 +49,18 @@ export const useListRadius = ({
 
 	const getStyles = useCallback(
 		({ isFirst = false, isLast = false }) => {
-			return isFirst ? firstStyles : isLast ? lastStyles : normalStyles;
+			if (isFirst && isLast) {
+				return { borderRadius };
+			}
+			if (isFirst) {
+				return firstStyles;
+			}
+			if (isLast) {
+				return lastStyles;
+			}
+			return normalStyles;
 		},
-		[firstStyles, lastStyles, normalStyles],
+		[firstStyles, lastStyles, normalStyles, borderRadius],
 	);
 
 	return {
