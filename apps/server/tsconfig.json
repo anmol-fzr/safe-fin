@@ -17,14 +17,13 @@
 			"@quiz-result/*": ["./src/modules/quiz-result/*"],
 			"@/*": ["./src/*"]
 		},
-		// Your environment specific settings (e.g., for Hono/Workers)
 		"types": ["bun", "./worker-configuration.d.ts"],
 		"lib": ["ES2022"]
 	},
 	"include": ["src/**/*"],
-	"exclude": ["node_modules"],
-	"references": [
-		{ "path": "../../packages/db" },
-		{ "path": "../../packages/auth" }
-	]
+	"exclude": ["node_modules", ".turbo/"]
+	// "references": [
+	// 	{ "path": "../../packages/db" },
+	// 	{ "path": "../../packages/auth" }
+	// ]
 }

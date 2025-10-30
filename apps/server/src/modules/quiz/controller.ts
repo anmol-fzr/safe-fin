@@ -1,10 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
 import { desc, eq } from "drizzle-orm";
-import { getDb, option, question, quiz } from "@/db";
+import { env } from "hono/adapter";
+import { getDb, quizQuestionOption, quiz, quizQuestion } from "@/db";
 import { authenticate } from "@/middleware";
 import { createTypedFactory } from "../../factory";
 import { fullQuizReqSchema } from "./schema";
-import { env } from "hono/adapter";
 
 const { createHandlers } = createTypedFactory();
 
@@ -134,7 +134,7 @@ const createQuiz = createHandlers(
 					}));
 
 					const insertedOptions = await tx
-						.insert(option)
+						.insert(quizQuestionOption)
 						.values(optionsBody)
 						.returning();
 
@@ -149,9 +149,9 @@ const createQuiz = createHandlers(
 					}
 
 					await tx
-						.update(question)
+						.update(quizQuestion)
 						.set({ answerId: answerOption.id })
-						.where(eq(question.id, questionId));
+						.where(eq(quizQuestion.id, questionId));
 				}
 
 				return insertedQuiz; // return full quiz object

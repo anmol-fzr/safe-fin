@@ -1,4 +1,8 @@
 import { zValidator } from "@hono/zod-validator";
+import type {
+	LessonInsertSchema,
+	LessonUpdateSchema,
+} from "@safe-fin/schema/server";
 import {
 	and,
 	asc,
@@ -11,154 +15,73 @@ import {
 	or,
 } from "drizzle-orm";
 import { env } from "hono/adapter";
+import { Adapter } from "@/adapter";
+import type { DB } from "@/db";
 import { getDb, lesson, lessonQuiz, lessonRead } from "@/db";
-import { authenticate, getPaginateRes, paginate } from "@/middleware";
+import { authenticate, db, getPaginateRes, paginate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
 import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../../factory";
+import { LessonQuery } from "./lesson-repository";
 import {
-	createLessonSchema,
+	getLessonsQueryParamSchema,
 	lessonQuizLinkSchema,
 	updateLessonSchema,
 } from "./schema";
 
-const { createHandlers } = createTypedFactory();
+const { createHandlers, createMiddleware } = createTypedFactory();
 
-const getLessons = createHandlers(
-	zValidator("query", queryParamSchema),
-	paginate,
-	authenticate,
-	async (c) => {
-		const { sortBy, sortDirection, limit, page } = c.get("paginate");
-		const offset = (page - 1) * limit;
+interface GetLessons {
+	sortBy: string;
+	sortDirection: string;
+	limit: number;
+	page: number;
+	status: "seen" | "red";
+	user: {
+		id: string;
+		role: "admin" | "user";
+	};
+}
 
-		const db = getDb(env(c));
-		const user = c.get("user");
+export const getLessons = async (
+	db,
+	{ sortBy, sortDirection, limit, page, status, user }: GetLessons,
+) => {
+	const offset = (page - 1) * limit;
 
-		const role = "user"; // or user.role
-		const isAdmin = role === "admin";
+	const { id, role } = user;
 
-		let where;
-		let fields = {
-			id: lesson.id,
-			title: lesson.title,
-			desc: lesson.desc,
-			isPublished: lesson.isPublished,
-			createdAt: lesson.createdAt,
-		};
+	const isAdmin = role === "admin";
 
-		let query = db
-			.select(fields)
-			.from(lesson)
-			.leftJoin(
-				lessonRead,
-				and(eq(lessonRead.lessonId, lesson.id), eq(lessonRead.userId, user.id)),
-			);
+	const queryBuilder = new LessonQuery(db);
+	queryBuilder.paginate(page, limit);
 
-		if (isAdmin) {
-			where = or(eq(lesson.isPublished, true), eq(lesson.isPublished, false));
-		} else {
-			// user should see only published lessons that are NOT read or seen
-			where = and(
-				eq(lesson.isPublished, true),
-				or(
-					isNull(lessonRead.event), // user never interacted
-					notInArray(lessonRead.event, ["seen", "red"]), // user interacted, but not these events
-				),
-			);
-		}
-
-		// Count for pagination
-		const countPrms = db
-			.select({ count: count() })
-			.from(lesson)
-			.leftJoin(
-				lessonRead,
-				and(eq(lessonRead.lessonId, lesson.id), eq(lessonRead.userId, user.id)),
-			)
-			.where(where);
-
-		const lessonsQuery = query
-			.where(where)
-			.orderBy(
-				sortDirection === "desc" ? desc(lesson[sortBy]) : asc(lesson[sortBy]),
-			)
-			.limit(limit)
-			.offset(offset);
-
-		const [countVal, lessons] = await Promise.all([countPrms, lessonsQuery]);
-
-		const total = countVal[0].count;
-
-		return c.json({
-			data: lessons,
-			paginate: getPaginateRes({ total, offset, limit }),
-		});
-	},
-);
-
-const getLessonById = createHandlers(authenticate, async (c) => {
-	const lessonId = c.req.param("lesson_id");
-
-	const db = getDb(env(c));
-
-	const foundLesson = await db.query.lesson.findFirst({
-		where: (lesson, { eq }) => eq(lesson.id, lessonId),
-		columns: {
-			createdAt: false,
-		},
-		with: {
-			quizzes: {
-				with: {
-					quiz: {
-						columns: {
-							id: false,
-							desc: false,
-							createdAt: false,
-							updatedAt: false,
-							isPublished: false,
-						},
-					},
-				},
-			},
-		},
-	});
-
-	if (foundLesson === undefined) {
-		return c.json(
-			{
-				error: "Lesson Not Found",
-				message: "Lesson Not Found",
-			},
-			404,
-		);
+	if (status) {
+		queryBuilder.filterByStatus(id, status);
 	}
 
-	return c.json({
-		data: foundLesson,
-	});
-});
+	if (!isAdmin) {
+		queryBuilder.findPublishedOnly();
+	}
 
-const createLesson = createHandlers(
-	authenticate,
-	userRole("admin"),
-	zValidator("json", createLessonSchema),
-	async (c) => {
-		const body = c.req.valid("json");
+	const query = queryBuilder.build();
+	const countQuery = queryBuilder.countQuery();
 
-		const db = getDb(env(c));
+	const [countVal, lessons] = await Promise.all([countQuery, query]);
 
-		const [newLesson] = await db.insert(lesson).values(body).returning();
+	const total = countVal[0].count;
 
-		return c.json(
-			{
-				data: newLesson,
-				message: "Lesson Added Successfully",
-			},
-			201,
-		);
-	},
-);
+	return {
+		data: lessons,
+		paginate: getPaginateRes({ total, offset, limit }),
+	};
+};
+
+const createLesson = async (db: DB, data: LessonInsertSchema) => {
+	const [inserted] = await db.insert(lesson).values(data).returning();
+
+	return inserted;
+};
 
 const deleteLesson = createHandlers(
 	authenticate,
@@ -210,45 +133,84 @@ const linkLessonWithQuiz = createHandlers(
 	},
 );
 
-const updateLessonById = createHandlers(
-	authenticate,
-	userRole("admin"),
-	zValidator("json", updateLessonSchema),
-	async (c) => {
-		const lessonId = c.req.param("lesson_id");
-		const lessonData = c.req.valid("json");
+const updateLessonById = async (db) => {
+	const lessonId = c.req.param("lesson_id");
+	const lessonData = c.req.valid("json");
 
-		try {
-			const db = getDb(env(c));
+	try {
+		const db = getDb(env(c));
 
-			const foundLesson = await db
-				.update(lesson)
-				.set(lessonData)
-				.where(eq(lesson.id, lessonId));
+		const foundLesson = await db
+			.update(lesson)
+			.set(lessonData)
+			.where(eq(lesson.id, lessonId));
 
-			// Check If There is a Quiz with associated this Lesson
-			if (foundLesson.rowsAffected === 0) {
-				return c.json(
-					{
-						error: "Lesson Not Found",
-						message: "Lesson Not Found",
-					},
-					404,
-				);
-			}
-
-			return c.json({ message: "Lesson Updated Successfully" });
-		} catch (error) {
-			return c.json({ message: "Unable to Update Lesson", error });
+		// Check If There is a Quiz with associated this Lesson
+		if (foundLesson.rowsAffected === 0) {
+			return c.json(
+				{
+					error: "Lesson Not Found",
+					message: "Lesson Not Found",
+				},
+				404,
+			);
 		}
-	},
-);
 
-export {
-	getLessons,
-	getLessonById,
-	createLesson,
-	deleteLesson,
-	updateLessonById,
+		return c.json({ message: "Lesson Updated Successfully" });
+	} catch (error) {
+		return c.json({ message: "Unable to Update Lesson", error });
+	}
 };
+
+export class LessonAdapter extends Adapter {
+	db: DB;
+
+	constructor(db: DB) {
+		super();
+		this.db = db;
+	}
+
+	async getById(lessonId: number) {
+		const foundLesson = await this.db.query.lesson.findFirst({
+			where: (lesson, { eq }) => eq(lesson.id, lessonId),
+			columns: {
+				createdAt: false,
+			},
+			with: {
+				quizzes: {
+					with: {
+						quiz: {
+							columns: {
+								id: false,
+								desc: false,
+								createdAt: false,
+								updatedAt: false,
+								isPublished: false,
+							},
+						},
+					},
+				},
+			},
+		});
+
+		return foundLesson;
+	}
+
+	async create(data: LessonInsertSchema) {
+		const [inserted] = await this.db.insert(lesson).values(data).returning();
+
+		return inserted;
+	}
+
+	async updateById(lessonId: number, data: LessonUpdateSchema) {
+		const updatedLesson = await this.db
+			.update(lesson)
+			.set(data)
+			.where(eq(lesson.id, lessonId));
+
+		return updatedLesson;
+	}
+}
+
+export { createLesson, deleteLesson, updateLessonById };
 export { linkLessonWithQuiz };
