@@ -31,6 +31,11 @@ export const LESSON = {
 		axiosInstance.get<unknown, IResAllLessons>("/lessons", { params }),
 	ONE: (lessonId: ResourceId) =>
 		axiosInstance.get<unknown, IResLesson>(`/lessons/${lessonId}`),
+	// Might get replaced by something else in future ( like posthog etc. )
+	UPDATE_STATUS: (lessonId: ResourceId) =>
+		axiosInstance.post<unknown, null>(`/lessons/${lessonId}/status`, {
+			params: { status: "seen" },
+		}),
 } as const;
 
 const topics = [
