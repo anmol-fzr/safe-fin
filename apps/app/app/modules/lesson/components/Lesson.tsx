@@ -1,6 +1,9 @@
+import { VisibilitySensor } from "@futurejj/react-native-visibility-sensor";
 import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
-import { Suspense, useMemo } from "react";
+import { spacedChildren } from "@tamagui/core";
+import { Share2Icon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react-native";
+import { Suspense, useCallback, useMemo } from "react";
 import { View, type ViewStyle } from "react-native";
 import Markdown from "react-native-markdown-display";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
@@ -11,6 +14,7 @@ import { spacing } from "@/theme";
 import type { ResourceId } from "@/types";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGetLesson } from "../hooks/api";
+import { useUpdateLessonStatus } from "../hooks/mutations";
 
 const arr = getEmptyArr(15);
 
@@ -26,22 +30,35 @@ function Lesson({ id }: LessonProps) {
 
 function LessonImpl({ id }: LessonProps) {
 	const { lesson } = useGetLesson(id);
-	return <LessonRenderer content={lesson.content} quizzes={lesson.quizzes} />;
+	const {
+		theme: { spacing },
+	} = useAppTheme();
+
+	return (
+		<>
+			<LessonRenderer content={lesson.content} />
+			<View
+				style={{
+					padding: spacing.md,
+					flexDirection: "row",
+					gap: spacing.md,
+					marginInline: "auto",
+				}}
+			>
+				<Share2Icon accessibilityLabel="Share Lesson" />
+				<ThumbsUpIcon accessibilityLabel="Like Lesson" />
+				<ThumbsDownIcon accessibilityLabel="Dislike Lesson" />
+			</View>
+			<LessonQuizzes lessonId={id} quizzes={lesson.quizzes} />
+		</>
+	);
 }
 
 type LessonRendererProps = {
 	content: string;
-	quizzes: {
-		id: number;
-		lessonId: number;
-		quizId: number;
-		quiz: { title: string };
-	}[];
 };
 
-function LessonRenderer({ content, quizzes }: LessonRendererProps) {
-	const { themed } = useAppTheme();
-
+function LessonRenderer({ content }: LessonRendererProps) {
 	const styles = useMemo(
 		() => ({
 			paragraph: {
@@ -76,22 +93,49 @@ function LessonRenderer({ content, quizzes }: LessonRendererProps) {
 		[],
 	);
 
-	return (
-		<>
-			<Markdown style={styles}>{content}</Markdown>
+	return <Markdown style={styles}>{content}</Markdown>;
+}
 
+type LessonQuizzesProps = {
+	lessonId: ResourceId;
+	quizzes: {
+		id: number;
+		lessonId: number;
+		quizId: number;
+		quiz: { title: string };
+	}[];
+};
+
+function LessonQuizzes({ lessonId, quizzes }: LessonQuizzesProps) {
+	const { themed } = useAppTheme();
+
+	const { updateStatus } = useUpdateLessonStatus(lessonId);
+
+	const handleVisibility = useCallback(
+		(isVisible: boolean) => {
+			if (isVisible) {
+				updateStatus();
+			}
+		},
+		[updateStatus],
+	);
+
+	return (
+		<VisibilitySensor onChange={handleVisibility} triggerOnce delay={500}>
 			<ListView
 				recycleItems
 				data={quizzes}
 				keyExtractor={(item) => item.id.toString()}
 				ListHeaderComponent={
-					<Text preset="subheading" style={themed($quizRootTitle)}>
-						Test you knowledge with a Quiz
-					</Text>
+					quizzes.length > 0 ? undefined : (
+						<Text preset="subheading" style={themed($quizRootTitle)}>
+							Test you knowledge with a Quiz
+						</Text>
+					)
 				}
 				renderItem={({ item }) => <QuizLink quiz={item} />}
 			/>
-		</>
+		</VisibilitySensor>
 	);
 }
 
