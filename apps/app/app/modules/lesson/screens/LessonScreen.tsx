@@ -11,9 +11,6 @@ export function LessonScreen(props: LessonScreenProps) {
 	if (!lessonId) {
 		throw new MissingRouteParamError("lessonId", "LessonScreen");
 	}
-	// const { isPending, lessons } = useGetLesson(lessonId);
-	//
-	// const quizzes = lessons.pages[0]?.data ?? [];
 
 	return (
 		<Screen

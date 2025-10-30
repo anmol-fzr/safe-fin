@@ -66,10 +66,6 @@ export const DemoGraphicsForm = () => {
 	const form = useDemoGraphicsForm();
 	const { updateDemoGraphics } = useUpdateDemoGraphics();
 
-	useEffect(() => {
-		console.log(form.formState.errors);
-	}, [form.formState.errors]);
-
 	const onSubmit = form.handleSubmit((data) => {
 		updateDemoGraphics(data);
 	});
