@@ -1,0 +1,24 @@
+{
+	"name": "@safe-fin/schema",
+	"version": "1.0.0",
+	"private": true,
+	"sideEffects": false,
+	"type": "module",
+	"scripts": {
+		"test": "echo 'No tests yet'",
+		"build": "tsup 'src/**/*.ts*' --outDir dist --format esm,cjs --dts --external react --splitting",
+		"format": "biome format --write",
+		"format:fix": "biome format --fix",
+		"lint": "biome lint",
+		"lint:fix": "biome lint --fix"
+	},
+	"exports": {
+		"./server": "./src/server/index.ts",
+		"./app": "./src/app/index.ts"
+	},
+	"dependencies": {
+		"@safe-fin/db": "workspace:*",
+		"drizzle-zod": "^0.8.3",
+		"zod": "3.25.76"
+	}
+}
