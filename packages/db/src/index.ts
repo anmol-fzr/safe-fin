@@ -8,7 +8,8 @@ export interface GetDbOpts {
 	TURSO_DB_TOKEN: string;
 }
 
-let dbInst: ReturnType<typeof drizzle<typeof schema, Client>> | null = null;
+type DB = ReturnType<typeof drizzle<typeof schema, Client>>;
+let dbInst: DB | null = null;
 
 function getDb(opts: GetDbOpts) {
 	if (dbInst !== null) {
@@ -22,7 +23,7 @@ function getDb(opts: GetDbOpts) {
 		authToken: TURSO_DB_TOKEN,
 	});
 
-	dbInst = drizzle(turso, { schema });
+	dbInst = drizzle(turso, { schema, logger: true });
 	return dbInst;
 }
 
@@ -32,5 +33,7 @@ const getAuthDrizzleAdapter = (creds: GetDbOpts) => {
 	return drizzleAdapter(db, { provider: "sqlite" });
 };
 
+export * from "drizzle-orm";
 export * from "./schema";
 export { getAuthDrizzleAdapter, getDb };
+export type { DB };
