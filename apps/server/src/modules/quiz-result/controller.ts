@@ -1,8 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
-import { getDb, quizQuestionResult, userQuizResult } from "@/db";
+import { quizQuestionResult, userQuizResult } from "@safe-fin/db/schema";
+import { env } from "hono/adapter";
+import { getDb } from "@/db";
 import { createTypedFactory } from "../../factory";
 import { quizResultReqSchema } from "./schema";
-import { env } from "hono/adapter";
 
 const { createHandlers } = createTypedFactory();
 

@@ -1,7 +1,8 @@
 import { zValidator } from "@hono/zod-validator";
+import { getDb } from "@safe-fin/db";
+import { quiz, quizQuestion, quizQuestionOption } from "@safe-fin/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { env } from "hono/adapter";
-import { getDb, quizQuestionOption, quiz, quizQuestion } from "@/db";
 import { authenticate } from "@/middleware";
 import { createTypedFactory } from "../../factory";
 import { fullQuizReqSchema } from "./schema";

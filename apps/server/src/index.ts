@@ -1,9 +1,3 @@
-import { addressRouter } from "@address/router";
-import { calculatorRouter } from "@calulator/router";
-import { lessonRouter } from "@lesson/router";
-import { profileRouter } from "@profile/router";
-import { quizRouter } from "@quiz/router";
-import { quizResultRouter } from "@quiz-result/router";
 import { env } from "hono/adapter";
 import { etag } from "hono/etag";
 import { logger } from "hono/logger";
@@ -11,6 +5,12 @@ import { secureHeaders } from "hono/secure-headers";
 import { auth } from "@/auth";
 import { appCors } from "@/middleware";
 import { createTypedFactory } from "./factory";
+import { addressRouter } from "./modules/address/router";
+import { calculatorRouter } from "./modules/calculator/router";
+import { lessonRouter } from "./modules/lesson/router";
+import { profileRouter } from "./modules/profile/router";
+import { quizRouter } from "./modules/quiz/router";
+import { quizResultRouter } from "./modules/quiz-result/router";
 
 const { createApp } = createTypedFactory();
 const app = createApp();

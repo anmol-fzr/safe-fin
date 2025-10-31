@@ -1,6 +1,6 @@
+import { lesson, lessonRead } from "@safe-fin/db/schema";
 import { and, eq } from "drizzle-orm";
 import type { DB } from "@/db";
-import { lesson, lessonRead } from "@/db";
 import { TableQuery } from "@/utils/query";
 
 export class LessonQuery extends TableQuery<typeof lesson> {

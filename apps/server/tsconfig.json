@@ -7,18 +7,24 @@
 		"strict": true,
 		"composite": true,
 		"skipLibCheck": true,
+		"checkJs": false,
+		"allowUnreachableCode": true,
+		"allowUnusedLabels": true,
+		"noErrorTruncation": true,
 		"baseUrl": ".",
 		"paths": {
-			"@calulator/*": ["./src/modules/calculator/*"],
-			"@lesson/*": ["./src/modules/lesson/*"],
-			"@quiz/*": ["./src/modules/quiz/*"],
-			"@profile/*": ["./src/modules/profile/*"],
-			"@address/*": ["./src/modules/address/*"],
-			"@quiz-result/*": ["./src/modules/quiz-result/*"],
 			"@/*": ["./src/*"]
 		},
 		"types": ["bun", "./worker-configuration.d.ts"],
-		"lib": ["ES2022"]
+		"lib": ["ES2022"],
+		"isolatedModules": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"incremental": true,
+		"useDefineForClassFields": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"alwaysStrict": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", ".turbo/"]

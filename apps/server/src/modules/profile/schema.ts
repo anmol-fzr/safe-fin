@@ -1,4 +1,4 @@
-import { userDemographics } from "@safe-fin/db";
+import { userDemographics } from "@safe-fin/db/schema";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 

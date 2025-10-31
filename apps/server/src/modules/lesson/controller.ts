@@ -1,4 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
+import { lesson, lessonQuiz, lessonRead } from "@safe-fin/db/schema";
 import type {
 	LessonInsertSchema,
 	LessonUpdateSchema,
@@ -17,11 +18,12 @@ import {
 import { env } from "hono/adapter";
 import { Adapter } from "@/adapter";
 import type { DB } from "@/db";
-import { getDb, lesson, lessonQuiz, lessonRead } from "@/db";
+import { getDb } from "@/db";
 import { authenticate, db, getPaginateRes, paginate } from "@/middleware";
 import { userRole } from "@/middleware/userRole";
 import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../../factory";
+import { LESSON_ERROR_CODES } from "./errors.ts";
 import { LessonQuery } from "./lesson-repository";
 import {
 	getLessonsQueryParamSchema,
@@ -62,6 +64,15 @@ export const getLessons = async (
 
 	if (!isAdmin) {
 		queryBuilder.findPublishedOnly();
+		queryBuilder.select({
+			id: lesson.id,
+			title: lesson.title,
+			desc: lesson.desc,
+			content: lesson.content,
+			// contentJson: false,
+			// createdAt: false,
+			// updatedAt: false,
+		});
 	}
 
 	const query = queryBuilder.build();

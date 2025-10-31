@@ -1,11 +1,12 @@
 import { zValidator } from "@hono/zod-validator";
-import { calculator, getDb } from "@safe-fin/db";
+import { getDb } from "@safe-fin/db";
+import { calculator } from "@safe-fin/db/schema";
 import { count, eq } from "drizzle-orm";
+import { env } from "hono/adapter";
 import { getPaginateRes, paginate } from "@/middleware";
+import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../../factory";
 import { calculatorMetadataSchema } from "./schema";
-import { queryParamSchema } from "@/schema/params";
-import { env } from "hono/adapter";
 
 const { createApp } = createTypedFactory();
 

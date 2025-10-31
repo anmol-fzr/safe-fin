@@ -3,27 +3,19 @@ import {
 	lessonInsertSchema,
 	updateLessonSchema,
 } from "@safe-fin/schema/server";
-import { lesson } from "@/db";
-import {
-	authenticate,
-	db,
-	getPaginateRes,
-	paginate,
-	userRole,
-} from "@/middleware";
+import { authenticate, db, paginate, userRole } from "@/middleware";
 import { setAdapter } from "@/middleware/adapter";
 import { createTypedFactory } from "../../factory";
 import {
 	createLesson,
 	deleteLesson,
 	getLessons,
+	LessonAdapter,
 	linkLessonWithQuiz,
-	updateLessonById,
 } from "./controller";
-import { LessonAdapter } from "./controller.ts";
-import { LessonQuery, TableQuery } from "./lesson-repository.ts";
+import { LESSON_CODES, LessonErrors } from "./errors";
 import { getLessonsQueryParamSchema } from "./schema";
-import { lessonStatusRouter } from "./status/router.ts";
+import { lessonStatusRouter } from "./status/router";
 
 const { createApp } = createTypedFactory();
 
@@ -56,16 +48,10 @@ const lessonRouter = createApp()
 
 		const adapter = c.get("adapter");
 
-		const foundLesson = await adapter.getLessonById(lessonId);
+		const foundLesson = await adapter.getById(lessonId);
 
 		if (foundLesson === undefined) {
-			return c.json(
-				{
-					error: "Lesson Not Found",
-					message: "Lesson Not Found",
-				},
-				404,
-			);
+			return LessonErrors.NotFound();
 		}
 
 		return c.json({
@@ -86,13 +72,7 @@ const lessonRouter = createApp()
 				const foundLesson = await adapter.updateById(lessonId, lessonData);
 
 				if (foundLesson.rowsAffected === 0) {
-					return c.json(
-						{
-							error: "Lesson Not Found",
-							message: "Lesson Not Found",
-						},
-						404,
-					);
+					return LessonErrors.NotFound();
 				}
 
 				return c.json({ message: "Lesson Updated Successfully" });
@@ -115,7 +95,7 @@ const lessonRouter = createApp()
 			return c.json(
 				{
 					data: newLesson,
-					message: "Lesson Added Successfully",
+					message: LESSON_CODES.LESSON_ADDED,
 				},
 				201,
 			);

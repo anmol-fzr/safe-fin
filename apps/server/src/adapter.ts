@@ -6,4 +6,8 @@ export abstract class Adapter {
 	create<Resp, Payload>(payload: Payload): Resp {
 		throw new Error("Method not Implimented");
 	}
+
+	updateById<Resp, Payload>(lessonId: number, data: Payload): Resp {
+		throw new Error("Method not Implimented");
+	}
 }

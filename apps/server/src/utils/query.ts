@@ -1,7 +1,7 @@
-import { and, asc, count, desc, eq, getTableColumns, SQL } from "drizzle-orm";
+import { and, asc, count, desc, getTableColumns, SQL } from "drizzle-orm";
 import type { SQLiteColumn } from "drizzle-orm/sqlite-core";
 import type { DB } from "@/db";
-import { getDb, lesson, lessonRead } from "@/db";
+import { getDb } from "@/db";
 
 export class TableQuery<T extends Record<string, any>> {
 	private db: DB;
@@ -53,9 +53,7 @@ export class TableQuery<T extends Record<string, any>> {
 	}
 
 	select(fields: T) {
-		return this.clone((c) => {
-			c.fields = fields;
-		});
+		this.fields = fields;
 	}
 
 	protected getColumns() {
