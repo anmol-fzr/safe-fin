@@ -1,4 +1,4 @@
-import type { Table } from "@safe-fin/db";
+import type { Table } from "drizzle-orm";
 import {
 	createInsertSchema,
 	createSelectSchema,

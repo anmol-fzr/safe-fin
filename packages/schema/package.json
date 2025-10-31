@@ -6,19 +6,25 @@
 	"type": "module",
 	"scripts": {
 		"test": "echo 'No tests yet'",
-		"build": "tsup 'src/**/*.ts*' --outDir dist --format esm,cjs --dts --external react --splitting",
+		"dev": "bun run build --watch",
+		"build": "tsdown",
 		"format": "biome format --write",
 		"format:fix": "biome format --fix",
 		"lint": "biome lint",
 		"lint:fix": "biome lint --fix"
 	},
 	"exports": {
-		"./server": "./src/server/index.ts",
-		"./app": "./src/app/index.ts"
+		"./server": "./dist/server.js",
+		"./app": "./dist/app.js"
 	},
 	"dependencies": {
 		"@safe-fin/db": "workspace:*",
+		"drizzle-orm": "^0.44.7",
 		"drizzle-zod": "^0.8.3",
-		"zod": "3.25.76"
+		"tsdown": "^0.15.12",
+		"zod": "3.25.1"
+	},
+	"devDependencies": {
+		"tsdown": "^0.15.12"
 	}
 }

@@ -10,6 +10,10 @@
 		"jsx": "react-jsx",
 		"allowJs": true,
 
+		"outDir": "dist",
+		"rootDir": "src",
+		"declaration": true,
+		"declarationMap": true,
 		// Bundler mode
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
@@ -28,5 +32,7 @@
 		"noUnusedParameters": false,
 		"noPropertyAccessFromIndexSignature": false
 	},
+	"include": ["./src/**/*", "./src/**/*.ts", "src/**/*", "src/**/*.ts"],
+	"exclude": ["node_modules"],
 	"references": [{ "path": "../../packages/db" }]
 }
