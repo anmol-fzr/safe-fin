@@ -27,13 +27,14 @@ function getDb(opts: GetDbOpts) {
 	return dbInst;
 }
 
-const getAuthDrizzleAdapter = (creds: GetDbOpts) => {
+const getAuthDrizzleAdapter = (
+	creds: GetDbOpts,
+): ReturnType<typeof drizzleAdapter> => {
 	const db = getDb(creds);
 
-	return drizzleAdapter(db, { provider: "sqlite" });
+	return drizzleAdapter(db, { provider: "sqlite", debugLogs: true });
 };
 
 export * from "drizzle-orm";
-export * from "./schema";
 export { getAuthDrizzleAdapter, getDb };
 export type { DB };
