@@ -49,6 +49,14 @@
 					"configureAndroidBackup": true,
 					"faceIDPermission": "Allow SafeFin to access your Face ID biometric data."
 				}
+			],
+			[
+				"@sentry/react-native/expo",
+				{
+					"url": "https://sentry.io/",
+					"project": "srvc",
+					"organization": "anmol-ng"
+				}
 			]
 		],
 		"experiments": {

@@ -1,8 +1,10 @@
 import type { ErrorInfo } from "react";
+import { useEffect } from "react";
 import { ScrollView, type TextStyle, View, type ViewStyle } from "react-native";
-import { Button, Icon, Screen, Text } from "../../components";
 import type { ThemedStyle } from "@/theme";
+import { ErrorType, reportCrash } from "@/utils/crashReporting";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { Button, Icon, Screen, Text } from "../../components";
 
 export interface ErrorDetailsProps {
 	error: Error;
@@ -17,6 +19,11 @@ export interface ErrorDetailsProps {
  */
 export function ErrorDetails(props: ErrorDetailsProps) {
 	const { themed } = useAppTheme();
+
+	useEffect(() => {
+		reportCrash(props.error, ErrorType.FATAL);
+	}, [props.error]);
+
 	return (
 		<Screen
 			preset="fixed"

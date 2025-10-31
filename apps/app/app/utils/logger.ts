@@ -1,14 +1,10 @@
-import { logger } from "react-native-logs";
+import { logger } from "@sentry/react-native";
 
-const log = logger.createLogger({
-	transportOptions: {
-		colors: {
-			info: "blueBright",
-			warn: "yellowBright",
-			error: "redBright",
-			debug: "white",
-		},
+const ERROR_MESSAGES = {
+	API: {
+		VALIDATION_FAILED:
+			"[API] - API data integrity check failed: schema validation unsuccessful",
 	},
-});
+} as const;
 
-export { log };
+export { ERROR_MESSAGES, logger };

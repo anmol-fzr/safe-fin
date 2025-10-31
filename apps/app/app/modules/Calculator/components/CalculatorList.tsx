@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import type { ViewStyle } from "react-native";
 import { View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { ListView, Text } from "@/components";
+import { EmptyListView, ListView, Text } from "@/components";
 import { useListRadius } from "@/hooks/useListRadius";
 import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 import { getLessonOpts } from "@/modules/lesson/hooks/api";
@@ -34,6 +34,7 @@ function CalculatorListImpl() {
 			refreshing={isRefetching}
 			onRefresh={refetch}
 			keyExtractor={(item) => item.title}
+			ListEmptyComponent={EmptyListView}
 			onViewableItemsChanged={handleViewableItemsChanged}
 			renderItem={({ item, data, index }) => (
 				<CalculatorListItem
@@ -92,6 +93,7 @@ CalculatorListItem.Loading = () => (
 
 const $calculatorListItem: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
 	padding: spacing.md,
+	paddingBottom: spacing.lg,
 	backgroundColor: colors.successBackground,
 	//borderRadius: spacing.md,
 	gap: spacing.xs,

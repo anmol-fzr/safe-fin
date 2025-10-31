@@ -1,5 +1,7 @@
+import { calculatorsResSchema } from "@safe-fin/schema/app";
 import { axiosInstance, type IResData } from "@/services/axios";
 import type { ResourceId } from "@/types";
+import { fallbackData, safeApiParse } from "../lesson/api";
 
 interface ICalculator {
 	id: number;
@@ -48,7 +50,16 @@ type IResCalculator = IResData<ICalculator>;
 type IResCalculators = IResData<ICalculators, true>;
 
 export const CALCULATOR = {
-	ALL: () => get<IResCalculators, IResCalculators>(`/calculator`),
+	ALL: async (): Promise<IResCalculators> => {
+		const data = await get<IResCalculators, IResCalculators>(`/calculator`);
+
+		return safeApiParse({
+			schema: calculatorsResSchema,
+			data,
+			fallback: fallbackData,
+			endpoint: "GET /calculator",
+		});
+	},
 	ONE: (id: ResourceId) =>
 		get<IResCalculator, IResCalculator>(`/calculator/${id}`),
 	//ALL: (params: IReqParams) => get<IResCalculators, IResCalculators>(`/calculator`, { params }),

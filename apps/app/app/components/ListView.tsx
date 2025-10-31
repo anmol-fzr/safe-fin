@@ -10,6 +10,9 @@ import type {
 	RefObject,
 } from "react";
 import { forwardRef } from "react";
+import { View } from "react-native";
+import { Text } from "@/components";
+import { getGenericEmptyState } from "@/utils/faker/emptyState";
 
 export type ListViewRef = LegendListRef;
 
@@ -28,3 +31,14 @@ export const ListView = ListViewComponent as <T>(
 		ref?: RefObject<LegendListRef>;
 	},
 ) => ReactElement;
+
+export const EmptyListView = () => {
+	const { emoji, title, subtitle } = getGenericEmptyState();
+	return (
+		<View style={{ alignItems: "center", gap: 8, paddingBlock: 48 }}>
+			<Text preset="subheading">{emoji}</Text>
+			<Text preset="subheading">{title}</Text>
+			<Text>{subtitle}</Text>
+		</View>
+	);
+};

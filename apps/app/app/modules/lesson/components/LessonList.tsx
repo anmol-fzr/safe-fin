@@ -1,6 +1,6 @@
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense, useCallback } from "react";
-import { ListView } from "@/components";
+import { EmptyListView, ListView } from "@/components";
 import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 import { getLessonOpts, useGetLessons } from "../hooks/api";
 import { LessonListItem } from "./LessonListItem";
@@ -30,6 +30,7 @@ function LessonListImpl() {
 			estimatedItemSize={105}
 			keyExtractor={(item) => item.id.toString()}
 			onEndReached={handleEndReached}
+			ListEmptyComponent={EmptyListView}
 			onViewableItemsChanged={handleViewableItemsChanged}
 			ListFooterComponent={
 				isFetchingNextPage ? <LessonListImpl.Loading /> : undefined

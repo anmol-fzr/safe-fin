@@ -12,6 +12,7 @@ import { LoadingScreen } from "@/screens";
 import { initI18n } from "./i18n";
 import { AppNavigator, useNavigationPersistence } from "./navigators";
 import { customFontsToLoad } from "./theme";
+import { initCrashReporting } from "./utils/crashReporting";
 import { loadDateFnsLocale } from "./utils/formatDate";
 import * as storage from "./utils/storage";
 
@@ -45,6 +46,7 @@ export function App() {
 	const [isI18nInitialized, setIsI18nInitialized] = useState(false);
 
 	useEffect(() => {
+		initCrashReporting();
 		initI18n()
 			.then(() => {
 				setIsI18nInitialized(true);

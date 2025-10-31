@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@expo-google-fonts/space-grotesk": "0.4.0",
 		"@expo/metro-runtime": "~5.0.5",
+		"@faker-js/faker": "^10.1.0",
 		"@futurejj/react-native-visibility-sensor": "^1.4.4",
 		"@gorhom/bottom-sheet": "^5",
 		"@hookform/resolvers": "^5.1.1",
@@ -45,7 +46,9 @@
 		"@react-navigation/native": "^7.1.14",
 		"@react-navigation/native-stack": "^7.3.21",
 		"@safe-fin/auth": "workspace:*",
+		"@safe-fin/schema": "workspace:*",
 		"@safe-fin/ui": "workspace:*",
+		"@sentry/react-native": "^7.4.0",
 		"@tamagui/config": "^1.129.14",
 		"@tamagui/core": "^1.129.14",
 		"@tamagui/linear-gradient": "^1.129.14",
@@ -102,6 +105,7 @@
 		"react-native-svg": "15.11.2",
 		"tamagui": "^1.129.14",
 		"yup": "^1.6.1",
+		"zod": "^3.25.1",
 		"zustand": "^5.0.8"
 	},
 	"devDependencies": {
@@ -141,7 +145,8 @@
 				"enabled": true,
 				"exclude": [
 					"@safe-fin/ui",
-					"@safe-fin/auth"
+					"@safe-fin/auth",
+					"@safe-fin/schema"
 				],
 				"listUnknownPackages": false
 			}
