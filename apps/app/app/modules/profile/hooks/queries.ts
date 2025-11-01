@@ -1,4 +1,5 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
+import { authClient } from "@/modules/auth/utils";
 import { DEMO_GRAPHICS } from "../api";
 
 const getDemoGraphicsOpts = () => {
@@ -13,5 +14,36 @@ const useGetDemoGraphics = () => {
 	return useQuery(opts);
 };
 
-export { getDemoGraphicsOpts };
-export { useGetDemoGraphics };
+const getListSessionsOpts = () => {
+	return queryOptions({
+		queryKey: ["AUTH", "LIST", "SESSIONS"],
+		queryFn: () => authClient.listSessions(),
+	});
+};
+
+const useListSessions = () => {
+	const opts = getListSessionsOpts();
+	const { data, isRefetching, refetch, ...rest } = useQuery(opts);
+	const sessions = data?.data ?? [];
+
+	return {
+		sessions,
+		isRefetchingSessions: isRefetching,
+		refetchSessions: refetch,
+		...rest,
+	};
+};
+
+const useSession = () => {
+	const { data, ...rest } = useQuery({
+		queryKey: ["AUTH", "SESSION"],
+		queryFn: () => authClient.getSession(),
+	});
+	const currSession = data?.data?.session ?? {};
+	const currUser = data?.data?.user ?? {};
+
+	return { currSession, currUser, ...rest };
+};
+
+export { getDemoGraphicsOpts, getListSessionsOpts };
+export { useGetDemoGraphics, useListSessions, useSession };

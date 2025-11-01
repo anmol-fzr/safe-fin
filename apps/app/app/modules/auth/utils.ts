@@ -8,6 +8,8 @@ export const authClient = createAppAuthClient({
 	storage: SecureStore,
 });
 
+export type Session = (typeof authClient)["$Infer"]["Session"]["session"];
+
 export async function logout() {
 	useAuthStore.getState().resetData();
 	await authClient.signOut();

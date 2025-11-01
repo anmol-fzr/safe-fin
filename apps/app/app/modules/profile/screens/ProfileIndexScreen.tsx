@@ -1,5 +1,5 @@
 import { Link } from "@react-navigation/native";
-import { BookUserIcon, BugIcon, UserIcon } from "lucide-react-native";
+import { Account, BookUserIcon, BugIcon, UserIcon } from "lucide-react-native";
 import { View } from "react-native";
 import { ListView, Screen, ScreenHeader, Text } from "@/components";
 import { $styles, colors } from "@/theme";
@@ -19,6 +19,12 @@ const linkItems = [
 		Icon: BookUserIcon,
 		desc: "Address, Occupation etc.",
 		screen: "DemoGraphics",
+	},
+	{
+		title: "Account",
+		Icon: UserIcon,
+		desc: "Session, Phone Number etc...",
+		screen: "Account",
 	},
 ];
 
