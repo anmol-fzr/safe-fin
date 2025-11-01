@@ -1,11 +1,11 @@
 import { LaptopIcon, SmartphoneIcon } from "lucide-react-native";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { UAParser } from "ua-parser-js";
 import { Button, ListView, Text } from "@/components";
 import type { Session } from "@/modules/auth/utils";
 import { $styles, spacing } from "@/theme";
 import { isStrictlySameObj } from "@/utils/funcs";
-import { useRevokeSession } from "../hooks/mutations";
+import { useRevokeOtherSessions, useRevokeSession } from "../hooks/mutations";
 import { useListSessions, useSession } from "../hooks/queries";
 
 export function SessionsCard() {
@@ -34,6 +34,9 @@ export function SessionsCard() {
 				data={sessions}
 				keyExtractor={(item) => item.token}
 				refreshing={isRefetchingSessions}
+				ListHeaderComponent={
+					sessions.length > 1 ? RevokeOtherSessions : undefined
+				}
 				onRefresh={refetchSessions}
 				renderItem={({ item }) => (
 					<SessionCell
@@ -115,3 +118,39 @@ function SessionCell(session: SessionCellProps) {
 		</View>
 	);
 }
+
+function RevokeOtherSessions() {
+	const { revokeOtherSessions, isPending } = useRevokeOtherSessions();
+
+	return (
+		<View
+			style={{
+				display: "flex",
+				flexDirection: "row",
+				gap: 4,
+				alignItems: "flex-end",
+				marginBottom: spacing.md,
+			}}
+		>
+			<Button
+				preset="text"
+				onPress={revokeOtherSessions}
+				style={styles.sessionRevokerButton}
+				disabled={isPending}
+				textStyle={{
+					textDecorationLine: "underline",
+					color: isPending ? "gray" : "black",
+				}}
+			>
+				Revoke all Other
+			</Button>
+			<Text>Session except current</Text>
+		</View>
+	);
+}
+
+const styles = StyleSheet.create({
+	sessionRevokerButton: {
+		marginBottom: 2,
+	},
+});

@@ -41,4 +41,19 @@ const useRevokeSession = () => {
 	return { revokeSession: mutate, isRevokingSession: isPending, ...rest };
 };
 
-export { useUpdateDemoGraphics, useRevokeSession };
+const useRevokeOtherSessions = () => {
+	const queryClient = useQueryClient();
+
+	const { mutate, ...rest } = useMutation({
+		mutationKey: ["AUTH", "REVOKE", "OTHER", "SESSION"],
+		mutationFn: () => authClient.revokeOtherSessions(),
+		onSuccess: () => {
+			const opts = getListSessionsOpts();
+			queryClient.invalidateQueries(opts);
+		},
+	});
+
+	return { revokeOtherSessions: mutate, ...rest };
+};
+
+export { useUpdateDemoGraphics, useRevokeSession, useRevokeOtherSessions };
