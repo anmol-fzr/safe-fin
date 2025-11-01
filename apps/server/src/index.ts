@@ -20,7 +20,9 @@ app.use(
 	"*",
 	secureHeaders({
 		contentSecurityPolicy: {
-			defaultSrc: ["'self'"],
+			//defaultSrc: ["'self'"],
+			//scriptSrc: ["self", "https://cdn.jsdelivr.net/npm/@scalar/api-reference"],
+			//styleSrc: ["https://fonts.scalar.com"],
 		},
 	}),
 );

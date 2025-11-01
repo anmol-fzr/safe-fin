@@ -7,6 +7,7 @@ export function auth(envs: CloudflareBindings) {
 		CORS_ORIGIN_URL,
 		TURSO_DB_URL,
 		TURSO_DB_TOKEN,
+		KV,
 	} = envs;
 
 	return authOrg({
@@ -15,6 +16,7 @@ export function auth(envs: CloudflareBindings) {
 		CORS_ORIGIN_URL,
 		TURSO_DB_URL,
 		TURSO_DB_TOKEN,
+		KV,
 	});
 }
 
