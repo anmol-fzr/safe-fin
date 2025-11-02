@@ -5,10 +5,17 @@ import { SelectChips, type SelectChipsOptionsProps } from "../SelectChips";
 type FormFieldProps<T> = SelectChipsOptionsProps<T> & {
 	name: string;
 	label: string;
+	multiple?: boolean;
 };
 
 export const FormSelectChips = <J,>(props: FormFieldProps<J>) => {
-	const { label, options, optionRenderer, valueRenderer } = props;
+	const {
+		label,
+		options,
+		optionRenderer,
+		valueRenderer,
+		multiple = false,
+	} = props;
 	const { control, formState } = useFormContext();
 
 	type T = typeof formState.errors;
@@ -24,7 +31,7 @@ export const FormSelectChips = <J,>(props: FormFieldProps<J>) => {
 			<Controller
 				control={control}
 				render={({ field: { onChange, value, disabled } }) => (
-					<SelectChips.Root {...{ value, onChange, disabled }}>
+					<SelectChips.Root {...{ value, onChange, disabled, multiple }}>
 						<SelectChips>
 							<SelectChips.Label
 								label={label}

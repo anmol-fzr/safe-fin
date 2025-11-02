@@ -21,11 +21,18 @@ export type OptionRenderer<T> = (
 	option: CustomOption<T> & { isSelected: boolean },
 ) => JSX.Element;
 
+/* -------------------------------------------------------------------------- */
+/*                                Root Wrapper                                */
+/* -------------------------------------------------------------------------- */
+
 export function SelectChips(props: PropsWithChildren) {
 	const { children } = props;
-
-	return <View style={{ gap: spacing.xs }}> {children}</View>;
+	return <View style={{ gap: spacing.xs }}>{children}</View>;
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                   Label                                    */
+/* -------------------------------------------------------------------------- */
 
 export interface SelectChipsLabelProps extends FieldLabelProps {
 	label: string;
@@ -35,10 +42,14 @@ SelectChips.Label = (props: SelectChipsLabelProps) => {
 	return <Field.Label text={props.label} {...props} />;
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                  Context                                   */
+/* -------------------------------------------------------------------------- */
+
 const selectChipsContext = createContext<{
 	disabled: boolean;
-
-	selected: string | null;
+	multiple: boolean;
+	selected: string | Set<string> | null;
 	setSelected: (opt: string) => void;
 } | null>(null);
 
@@ -46,36 +57,76 @@ const SelectChipsProvider = selectChipsContext.Provider;
 
 const useSelectChipsContext = () => {
 	const ctx = useContext(selectChipsContext);
-	if (ctx === null || ctx === undefined) {
+	if (!ctx) {
 		throw new MissingContextError("SelectChips Components", "SelectChips.Root");
 	}
 	return ctx;
 };
 
-interface SelectChipsRootProps extends PropsWithChildren {
-	onChange?: (value: string) => void;
-	value?: string;
-	disabled?: boolean;
-}
+/* -------------------------------------------------------------------------- */
+/*                                   Root                                     */
+/* -------------------------------------------------------------------------- */
+
+export type SelectChipsRootProps =
+	| ({
+			onChange?: (value: string[]) => void;
+			value?: string[];
+			multiple: true;
+			disabled?: boolean;
+	  } & PropsWithChildren)
+	| ({
+			onChange?: (value: string) => void;
+			value?: string;
+			multiple?: false;
+			disabled?: boolean;
+	  } & PropsWithChildren);
 
 SelectChips.Root = (props: SelectChipsRootProps) => {
-	const { disabled = false } = props;
-	const [selected, setSelected] = useState<string | null>(props.value || null);
+	const { disabled = false, multiple = false } = props;
+
+	const [selected, setSelectedState] = useState<string | Set<string> | null>(
+		() => {
+			if (props.value) {
+				if (multiple && Array.isArray(props.value)) {
+					return new Set(props.value);
+				}
+				if (!multiple && typeof props.value === "string") {
+					return props.value;
+				}
+			}
+			return multiple ? new Set<string>() : null;
+		},
+	);
 
 	useEffect(() => {
-		if (props.value !== selected) {
-			setSelected(props.value || null);
+		if (props.value === undefined) return;
+		if (multiple && Array.isArray(props.value)) {
+			setSelectedState(new Set(props.value));
+		} else if (!multiple && typeof props.value === "string") {
+			setSelectedState(props.value);
 		}
-	}, [props.value]);
+	}, [props.value, multiple]);
 
 	const handleValueChange = useCallback(
 		(newValue: string) => {
-			if (props.onChange) {
-				props.onChange(newValue);
+			if (multiple) {
+				setSelectedState((prev) => {
+					const current =
+						prev instanceof Set ? new Set(prev) : new Set<string>();
+					if (current.has(newValue)) {
+						current.delete(newValue);
+					} else {
+						current.add(newValue);
+					}
+					props.onChange?.(Array.from(current));
+					return current;
+				});
+			} else {
+				setSelectedState(newValue);
+				props.onChange?.(newValue);
 			}
-			setSelected(() => newValue);
 		},
-		[props.onChange],
+		[multiple, props.onChange],
 	);
 
 	return (
@@ -84,12 +135,17 @@ SelectChips.Root = (props: SelectChipsRootProps) => {
 				selected,
 				setSelected: handleValueChange,
 				disabled,
+				multiple,
 			}}
 		>
 			{props.children}
 		</SelectChipsProvider>
 	);
 };
+
+/* -------------------------------------------------------------------------- */
+/*                                 Options                                    */
+/* -------------------------------------------------------------------------- */
 
 export interface SelectChipsOptionsProps<T> {
 	valueRenderer: ValueRenderer<T>;
@@ -99,7 +155,6 @@ export interface SelectChipsOptionsProps<T> {
 
 SelectChips.Options = <T,>(props: SelectChipsOptionsProps<T>) => {
 	const { options, valueRenderer, optionRenderer } = props;
-
 	const {
 		theme: { spacing },
 	} = useAppTheme();
@@ -111,7 +166,6 @@ SelectChips.Options = <T,>(props: SelectChipsOptionsProps<T>) => {
 				flex: 1,
 				gap: spacing.sm,
 				flexWrap: "wrap",
-				//width: "auto",
 			}}
 		>
 			{options.map((option) => (
@@ -124,6 +178,10 @@ SelectChips.Options = <T,>(props: SelectChipsOptionsProps<T>) => {
 	);
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                  Option                                    */
+/* -------------------------------------------------------------------------- */
+
 export interface SelectChipsOptionProps<T> {
 	valueRenderer: ValueRenderer<T>;
 	optionRenderer: OptionRenderer<T>;
@@ -132,14 +190,22 @@ export interface SelectChipsOptionProps<T> {
 
 SelectChips.Option = <T,>(props: SelectChipsOptionProps<T>) => {
 	const { option, optionRenderer, valueRenderer } = props;
+	const {
+		selected,
+		setSelected,
+		disabled = false,
+		multiple,
+	} = useSelectChipsContext();
 
-	const { selected, setSelected, disabled = false } = useSelectChipsContext();
-
-	const isSelected = valueRenderer(option) === selected;
+	const value = valueRenderer(option);
+	const isSelected =
+		multiple && selected instanceof Set
+			? selected.has(value)
+			: selected === value;
 
 	const handlePress = () => {
 		if (disabled) return;
-		setSelected(valueRenderer(props.option));
+		setSelected(value);
 	};
 
 	return (
@@ -149,12 +215,15 @@ SelectChips.Option = <T,>(props: SelectChipsOptionProps<T>) => {
 	);
 };
 
+/* -------------------------------------------------------------------------- */
+/*                           Built-in Option Renderers                        */
+/* -------------------------------------------------------------------------- */
+
 type OptionRendererProps<T> = PropsWithChildren &
 	CustomOption<T> & { isSelected: boolean };
 
 SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 	const { isSelected, label } = props;
-
 	const {
 		theme: { colors },
 	} = useAppTheme();
@@ -188,26 +257,42 @@ SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 type EmojiOptionRendererProps<T extends { emoji: string }> =
 	OptionRendererProps<T>;
 
-SelectChips.EmojiOptionRenderer = <T extends { emoji: string }>(
-	props: EmojiOptionRendererProps<T>,
-) => {
-	return (
-		<SelectChips.OptionRenderer {...props}>
-			<Text>{props.emoji}</Text>
-		</SelectChips.OptionRenderer>
-	);
-};
-
 type IconOptionRendererProps<T extends { Icon: LucideIcon }> =
 	OptionRendererProps<T>;
 
-SelectChips.IconOptionRenderer = <T extends { Icon: LucideIcon }>(
-	props: IconOptionRendererProps<T>,
+type CompType = <T>(props: OptionRendererProps<T>) => JSX.Element;
+
+export const createIconOptionRenderer = <T extends { Icon: LucideIcon }>(
+	Comp: CompType,
 ) => {
-	const { isSelected, Icon } = props;
-	return (
-		<SelectChips.OptionRenderer {...props}>
-			<Icon color={isSelected ? "white" : "black"} size={20} />
-		</SelectChips.OptionRenderer>
-	);
+	return (props: IconOptionRendererProps<T>) => {
+		const { Icon, isSelected } = props;
+		return (
+			<Comp {...props}>
+				<Icon color={isSelected ? "white" : "black"} size={20} />
+				{props.children}
+			</Comp>
+		);
+	};
 };
+
+export const createEmojiOptionRenderer = <T extends { emoji: string }>(
+	Comp: CompType,
+) => {
+	return (props: EmojiOptionRendererProps<T>) => {
+		const { emoji = "" } = props;
+		return (
+			<Comp {...props}>
+				{emoji && <Text>{emoji}</Text>}
+				{props.children}
+			</Comp>
+		);
+	};
+};
+
+SelectChips.IconOptionRenderer = createIconOptionRenderer(
+	SelectChips.OptionRenderer,
+);
+SelectChips.EmojiOptionRenderer = createEmojiOptionRenderer(
+	SelectChips.OptionRenderer,
+);
