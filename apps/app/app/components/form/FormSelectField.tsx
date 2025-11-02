@@ -1,7 +1,8 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { View, type ViewStyle } from "react-native";
+import type { ViewStyle } from "react-native";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { Field } from "../Field";
 import { SelectField, type SelectFieldProps } from "../SelectField";
 
 type FormFieldProps = Omit<
@@ -24,7 +25,7 @@ export const FormSelectField = (props: FormFieldProps) => {
 	const error = getValue(formState?.errors, props.name)?.message.toString();
 
 	return (
-		<View>
+		<Field>
 			<Controller
 				control={control}
 				render={({ field: { onChange, onBlur, value, disabled } }) => (
@@ -66,14 +67,11 @@ export const FormSelectField = (props: FormFieldProps) => {
 				)}
 				name={props.name}
 			/>
-			{/*
-      <Text preset="error" >{error}</Text>
-      */}
-		</View>
+		</Field>
 	);
 };
 
 const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	marginBottom: spacing.lg,
+	//marginBottom: spacing.lg,
 	borderRadius: spacing.xxl,
 });

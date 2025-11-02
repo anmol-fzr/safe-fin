@@ -19,8 +19,9 @@ import {
 import { isRTL, translate } from "@/i18n";
 import type { ThemedStyle, ThemedStyleArray } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { $styles, roundness } from "../theme";
-import { Text, type TextProps } from "./Text";
+import { $styles, roundness, spacing } from "../theme";
+import { Field } from "./Field";
+import type { TextProps } from "./Text";
 
 export interface TextFieldAccessoryProps {
 	style: StyleProp<ViewStyle | TextStyle | ImageStyle>;
@@ -120,7 +121,6 @@ export const TextField = forwardRef(function TextField(
 	const {
 		labelTx,
 		label,
-		labelTxOptions,
 		placeholderTx,
 		placeholder,
 		placeholderTxOptions,
@@ -150,13 +150,7 @@ export const TextField = forwardRef(function TextField(
 		? translate(placeholderTx, placeholderTxOptions)
 		: placeholder;
 
-	const $containerStyles = [$containerStyleOverride];
-
-	const $labelStyles = [
-		$labelStyle,
-		status === "error" && { color: colors.error },
-		LabelTextProps?.style,
-	];
+	const $containerStyles = [{ gap: spacing.xs }, $containerStyleOverride];
 
 	const $inputWrapperStyles = [
 		$styles.row,
@@ -176,15 +170,6 @@ export const TextField = forwardRef(function TextField(
 		$inputStyleOverride,
 	];
 
-	const $helperStyles = [
-		$helperStyle,
-		status === "error" && { color: colors.error, fontSize: 14, lineHeight: 21 },
-		HelperTextProps?.style,
-	];
-
-	/**
-	 *
-	 */
 	function focusInput() {
 		if (disabled) return;
 
@@ -200,16 +185,7 @@ export const TextField = forwardRef(function TextField(
 			onPress={focusInput}
 			accessibilityState={{ disabled }}
 		>
-			{!!(label || labelTx) && (
-				<Text
-					preset="formLabel"
-					text={label}
-					tx={labelTx}
-					txOptions={labelTxOptions}
-					{...LabelTextProps}
-					style={themed($labelStyles)}
-				/>
-			)}
+			{!!(label || labelTx) && <Field.Label text={label} {...LabelTextProps} />}
 
 			<View style={themed($inputWrapperStyles)}>
 				{!!LeftAccessory && (
@@ -242,22 +218,25 @@ export const TextField = forwardRef(function TextField(
 				)}
 			</View>
 
-			{!!(helper || helperTx) && (
-				<Text
-					preset="formHelper"
+			{(helper || helperTx) && status === "error" && (
+				<Field.Error
 					text={helper}
 					tx={helperTx}
 					txOptions={helperTxOptions}
 					{...HelperTextProps}
-					style={themed($helperStyles)}
+				/>
+			)}
+
+			{(helper || helperTx) && status !== "error" && (
+				<Field.Helper
+					text={helper}
+					tx={helperTx}
+					txOptions={helperTxOptions}
+					{...HelperTextProps}
 				/>
 			)}
 		</TouchableOpacity>
 	);
-});
-
-const $labelStyle: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.xs,
 });
 
 const $inputWrapperStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
@@ -285,10 +264,6 @@ const $inputStyle: ThemedStyle<ViewStyle> = ({
 	paddingHorizontal: 0,
 	marginVertical: spacing.xs,
 	marginHorizontal: spacing.sm,
-});
-
-const $helperStyle: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginTop: spacing.xs,
 });
 
 const $rightAccessoryStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
