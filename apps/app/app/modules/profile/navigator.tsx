@@ -11,6 +11,7 @@ export type ProfileStackParamList = {
 	UserProfile: undefined;
 	DemoGraphics: undefined;
 	Account: undefined;
+	FinancialDetails: undefined;
 };
 
 export type ProfileScreenKey = keyof ProfileStackParamList;
@@ -42,6 +43,10 @@ export function ProfileNavigator() {
 				component={Screens.DemoGraphicsScreen}
 			/>
 			<Stack.Screen name="Account" component={Screens.AccountScreen} />
+			<Stack.Screen
+				name="FinancialDetails"
+				component={Screens.FinancialDetailsScreen}
+			/>
 		</Stack.Navigator>
 	);
 }

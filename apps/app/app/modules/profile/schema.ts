@@ -9,7 +9,12 @@ const demoGraphicsSchema = object({
 	educationLevel: string().required().label("Education Level"),
 });
 
-type DemoGraphicsSchema = InferType<typeof demoGraphicsSchema>;
+const financialDetailsFormSchema = object({
+	city: string().required().label("Stability"),
+});
 
-export type { DemoGraphicsSchema };
-export { demoGraphicsSchema };
+type DemoGraphicsSchema = InferType<typeof demoGraphicsSchema>;
+type FinancialDetailsSchema = InferType<typeof financialDetailsFormSchema>;
+
+export type { DemoGraphicsSchema, FinancialDetailsSchema };
+export { demoGraphicsSchema, financialDetailsFormSchema };
