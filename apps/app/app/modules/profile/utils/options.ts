@@ -1,3 +1,4 @@
+import { MarsIcon, TransgenderIcon, VenusIcon } from "lucide-react-native";
 import type { Options } from "@/components/SelectField";
 
 const occupationOpts: Options = [
@@ -35,10 +36,10 @@ const educationLevels: Options = [
 ];
 // const genders = ["male", "female", "others"] as const;
 
-const genderOpts: Options = [
-	{ label: "Male", value: "male" },
-	{ label: "Female", value: "female" },
-	{ label: "Other", value: "other" },
-];
+const genderOpts = [
+	{ label: "Male", value: "male", Icon: MarsIcon },
+	{ label: "Female", value: "female", Icon: VenusIcon },
+	{ label: "Other", value: "other", Icon: TransgenderIcon },
+] as const;
 
 export { occupationOpts, educationLevels, genderOpts };

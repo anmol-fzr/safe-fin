@@ -1,14 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import {
 	FormProvider,
 	type UseFormReturn,
 	useForm,
 	useWatch,
 } from "react-hook-form";
-import { Button } from "@/components";
+import { View } from "react-native";
+import { Button, Text } from "@/components";
+import { FormSelectChips } from "@/components/form/FormSelectChips";
 import { FormSelectField } from "@/components/form/FormSelectField";
+import { SelectChips } from "@/components/SelectChips";
 import {
 	getCitiesOpts,
 	getCountriesOpts,
@@ -17,6 +19,7 @@ import {
 	useGetCoutriesOptions,
 	useGetStatesOptions,
 } from "@/hooks/queries";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { useUpdateDemoGraphics } from "../hooks/mutations";
 import { getDemoGraphicsOpts } from "../hooks/queries";
 import type { DemoGraphicsSchema } from "../schema";
@@ -99,24 +102,27 @@ function DemoGraphicsFormImpl(props: DemoGraphicsFormImplProps) {
 
 	return (
 		<FormProvider {...form}>
-			<FormSelectField
+			<FormSelectChips
 				name="gender"
 				label="Gender"
-				placeholder="e.g. Male"
+				valueRenderer={(option) => option.value}
+				optionRenderer={GenderOptionRender}
 				options={genderOpts}
 			/>
 
-			<FormSelectField
+			<FormSelectChips
 				name="occupation"
 				label="Occupation"
-				placeholder="e.g. Salaried"
+				valueRenderer={(option) => option.value}
+				optionRenderer={SelectChips.OptionRenderer}
 				options={occupationOpts}
 			/>
 
-			<FormSelectField
+			<FormSelectChips
 				name="educationLevel"
-				label="Education Levels"
-				placeholder="e.g. Graduate"
+				label="Education Level"
+				valueRenderer={(option) => option.value}
+				optionRenderer={SelectChips.OptionRenderer}
 				options={educationLevels}
 			/>
 
@@ -140,7 +146,6 @@ function DemoGraphicsFormImpl(props: DemoGraphicsFormImplProps) {
 				placeholder="e.g. Firozpur"
 				options={cities}
 			/>
-
 			<Button
 				preset="reversed"
 				disabled={isSubmitting}
@@ -152,3 +157,35 @@ function DemoGraphicsFormImpl(props: DemoGraphicsFormImplProps) {
 		</FormProvider>
 	);
 }
+
+const GenderOptionRender = (option) => {
+	const { isSelected, Icon } = option;
+	const {
+		theme: { colors },
+	} = useAppTheme();
+
+	return (
+		<View
+			style={{
+				paddingVertical: 8,
+				paddingHorizontal: 12,
+				borderWidth: 1,
+				borderColor: colors.palette.accent500,
+				backgroundColor: isSelected ? colors.palette.accent500 : undefined,
+				borderRadius: 24,
+				flexDirection: "row",
+				gap: 6,
+				alignItems: "flex-end",
+			}}
+		>
+			<Icon color={isSelected ? "white" : "black"} size={20} />
+			<Text
+				style={{
+					color: isSelected ? "white" : "black",
+				}}
+			>
+				{option.label}
+			</Text>
+		</View>
+	);
+};
