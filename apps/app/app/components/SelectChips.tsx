@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react-native";
 import {
 	createContext,
 	type JSX,
@@ -148,7 +149,8 @@ SelectChips.Option = <T,>(props: SelectChipsOptionProps<T>) => {
 	);
 };
 
-type OptionRendererProps<T> = CustomOption<T> & { isSelected: boolean };
+type OptionRendererProps<T> = PropsWithChildren &
+	CustomOption<T> & { isSelected: boolean };
 
 SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 	const { isSelected, label } = props;
@@ -171,6 +173,7 @@ SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 				alignItems: "flex-end",
 			}}
 		>
+			{props.children}
 			<Text
 				style={{
 					color: isSelected ? "white" : "black",
@@ -179,5 +182,32 @@ SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 				{label}
 			</Text>
 		</View>
+	);
+};
+
+type EmojiOptionRendererProps<T extends { emoji: string }> =
+	OptionRendererProps<T>;
+
+SelectChips.EmojiOptionRenderer = <T extends { emoji: string }>(
+	props: EmojiOptionRendererProps<T>,
+) => {
+	return (
+		<SelectChips.OptionRenderer {...props}>
+			<Text>{props.emoji}</Text>
+		</SelectChips.OptionRenderer>
+	);
+};
+
+type IconOptionRendererProps<T extends { Icon: LucideIcon }> =
+	OptionRendererProps<T>;
+
+SelectChips.IconOptionRenderer = <T extends { Icon: LucideIcon }>(
+	props: IconOptionRendererProps<T>,
+) => {
+	const { isSelected, Icon } = props;
+	return (
+		<SelectChips.OptionRenderer {...props}>
+			<Icon color={isSelected ? "white" : "black"} size={20} />
+		</SelectChips.OptionRenderer>
 	);
 };
