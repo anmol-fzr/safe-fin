@@ -1,5 +1,6 @@
 import {
 	adminClient,
+	anonymousClient,
 	inferAdditionalFields,
 	multiSessionClient,
 	phoneNumberClient,
@@ -17,6 +18,7 @@ const createAdminAuthClient = (opts: CreateAdminAuthClientOpts) => {
 	return createAuthClient({
 		baseURL,
 		plugins: [
+			anonymousClient(),
 			phoneNumberClient(),
 			adminClient(),
 			multiSessionClient(),

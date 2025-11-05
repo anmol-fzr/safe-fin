@@ -1,5 +1,6 @@
 import { expoClient } from "@better-auth/expo/client";
 import {
+	anonymousClient,
 	inferAdditionalFields,
 	phoneNumberClient,
 } from "better-auth/client/plugins";
@@ -27,6 +28,7 @@ const createAppAuthClient = (opts: CreateAppAuthClientOpts) => {
 			}),
 			phoneNumberClient(),
 			inferAdditionalFields<typeof auth>(),
+			anonymousClient(),
 		],
 	});
 };

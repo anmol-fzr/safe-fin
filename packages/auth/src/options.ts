@@ -2,6 +2,7 @@ import { expo } from "@better-auth/expo";
 import type { BetterAuthOptions } from "better-auth";
 import {
 	admin,
+	anonymous,
 	createAuthMiddleware,
 	multiSession,
 	openAPI,
@@ -62,6 +63,7 @@ export const betterAuthOptions: BetterAuthOptions = {
 			adminUserIds: ["F7EOrNtgbhOUA4FYvj0r7bN4eJykYGMb"],
 		}),
 		openAPI(),
+		anonymous(),
 		multiSession(),
 		phoneNumber({
 			allowedAttempts: 3,
