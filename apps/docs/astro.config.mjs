@@ -6,8 +6,7 @@ import starlightThemeObsidian from "starlight-theme-obsidian";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://anmol-fzr.github.io",
-	base: "/safe-fin",
+	site: "https://safe-fin-docs.vercel.app",
 	integrations: [
 		starlight({
 			plugins: [
