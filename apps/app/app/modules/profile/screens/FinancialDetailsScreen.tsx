@@ -1,16 +1,12 @@
-import { GoBack, Screen } from "@/components";
-import { $styles } from "@/theme";
+import { GoBack } from "@/components";
+import { MinimalNoScrollScreen } from "@/components/MinimalNoScrollScreen";
 import { FinancialDetailsForm } from "../components/FinancialDetailsForm";
 
 export const FinancialDetailsScreen = () => {
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
+		<MinimalNoScrollScreen>
 			<GoBack tx="demoGraphicsScreen:title" />
 			<FinancialDetailsForm />
-		</Screen>
+		</MinimalNoScrollScreen>
 	);
 };

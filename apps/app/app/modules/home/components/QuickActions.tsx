@@ -1,9 +1,9 @@
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "@/components";
+import { Section } from "@/components/Section";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import type { MainTabParamList } from "@/navigators/MainTabNavigator";
 import { colors, spacing } from "@/theme";
-import { HomeSection } from "./HomeSection";
 
 const learnActionImage = require("assets/icons/home/learn-action.png");
 const calculateActionImage = require("assets/icons/home/calculate-action.png");
@@ -46,13 +46,13 @@ const actions: Action[] = [
 
 export function QuickActions() {
 	return (
-		<HomeSection title="Quick Actions">
+		<Section title="Quick Actions">
 			<View style={styles.quickActionCard}>
 				{actions.map((action) => (
 					<QuickActionCard key={action.label} {...action} />
 				))}
 			</View>
-		</HomeSection>
+		</Section>
 	);
 }
 

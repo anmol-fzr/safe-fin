@@ -7,7 +7,7 @@ type HomeSectionProps = PropsWithChildren & {
 	title: string;
 };
 
-export function HomeSection({ children, title }: HomeSectionProps) {
+export function Section({ children, title }: HomeSectionProps) {
 	return (
 		<View style={styles.sectionRoot}>
 			<Text preset="heading" size="lg">
