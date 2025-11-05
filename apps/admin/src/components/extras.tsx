@@ -1,10 +1,11 @@
 import {
+	type PropsWithChildren,
 	startTransition,
-	unstable_ViewTransition as ViewTransition,
+	//unstable_ViewTransition as ViewTransition,
 } from "react";
 
-// const ViewTransition = ({ children }: { children: ReactNode }) => {
-// 	return children;
-// };
+const ViewTransition = ({ children }: PropsWithChildren) => {
+	return children;
+};
 
 export { ViewTransition, startTransition };
