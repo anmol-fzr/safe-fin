@@ -28,7 +28,6 @@
 		"deps:update": "syncpack update",
 		"auth:generate": "turbo run auth:generate --filter=@safe-fin/auth",
 		"prepare": "husky",
-
 		"build:android:preview": "turbo run build:android:preview -F @safe-fin/app"
 	},
 	"overrides": {

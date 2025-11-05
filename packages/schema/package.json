@@ -6,7 +6,6 @@
 	"type": "module",
 	"scripts": {
 		"test": "echo 'No tests yet'",
-		"dev": "bun run build --watch",
 		"build": "tsdown",
 		"format": "biome format --write",
 		"format:fix": "biome format --fix",
