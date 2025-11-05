@@ -19,7 +19,6 @@
 		"lint": "biome lint",
 		"lint:fix": "biome lint --write",
 		"format": "biome format --write",
-		"dev": "bun run build --watch",
 		"build": "tsdown",
 		"db:dev:generate": "bun run --env-file=.env.dev drizzle-kit generate --config=drizzle.config.dev.ts",
 		"db:prod:generate": "bun run --env-file=.env.prod drizzle-kit generate --config=drizzle.config.prod.ts",

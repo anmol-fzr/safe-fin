@@ -20,6 +20,7 @@ export const user = sqliteTable("user", {
 	banned: integer("banned", { mode: "boolean" }).default(false),
 	banReason: text("ban_reason"),
 	banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
+	isAnonymous: integer("is_anonymous", { mode: "boolean" }),
 	phoneNumber: text("phone_number").unique(),
 	phoneNumberVerified: integer("phone_number_verified", { mode: "boolean" }),
 	isNew: integer("is_new", { mode: "boolean" }).default(true),

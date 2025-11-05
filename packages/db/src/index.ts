@@ -32,7 +32,7 @@ const getAuthDrizzleAdapter = (
 ): ReturnType<typeof drizzleAdapter> => {
 	const db = getDb(creds);
 
-	return drizzleAdapter(db, { provider: "sqlite", debugLogs: true });
+	return drizzleAdapter(db, { provider: "sqlite", debugLogs: false });
 };
 
 export * from "drizzle-orm";
