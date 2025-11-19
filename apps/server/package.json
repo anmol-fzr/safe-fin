@@ -4,6 +4,7 @@
 	"scripts": {
 		"cf:typegen": "wrangler types --env-interface CloudflareBindings",
 		"deploy": "wrangler deploy",
+		"deploy:demo": "bunx wrangler deploy -e demo --name demo-safe-fin && bunx wrangler secret bulk .env --name demo-safe-fin",
 		"dev": "wrangler dev",
 		"test": "vitest run ",
 		"test:watch": "vitest",

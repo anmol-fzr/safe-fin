@@ -1,0 +1,35 @@
+{
+	"name": "safe-fin",
+	"main": "./src/index.ts",
+	"compatibility_date": "2022-07-12",
+	"compatibility_flags": ["export_commonjs_default", "nodejs_compat"],
+	"preview_urls": true,
+	"dev": {
+		//"ip": "10.10.46.110",
+		"ip": "192.168.29.57",
+		"port": 3000
+	},
+	"env": {
+		"demo": {
+			"kv_namespaces": [
+				{
+					"binding": "KV",
+					"id": "2e03d7a48e124a6992fce8146dcbf91c"
+				}
+			]
+		}
+	},
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1
+	},
+	"placement": {
+		"mode": "smart"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "2e03d7a48e124a6992fce8146dcbf91c"
+		}
+	]
+}

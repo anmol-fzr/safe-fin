@@ -13,6 +13,10 @@
 	},
 	"packageManager": "bun@1.2.23",
 	"private": true,
+	"catalog": {
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	},
 	"scripts": {
 		"build": "turbo run build",
 		"build:admin": "turbo run build -F @safe-fin/admin",
@@ -29,10 +33,6 @@
 		"auth:generate": "turbo run auth:generate --filter=@safe-fin/auth",
 		"prepare": "husky",
 		"build:android:preview": "turbo run build:android:preview -F @safe-fin/app"
-	},
-	"overrides": {
-		"react": "19.0.0",
-		"react-dom": "19.0.0"
 	},
 	"workspaces": [
 		"apps/*",
