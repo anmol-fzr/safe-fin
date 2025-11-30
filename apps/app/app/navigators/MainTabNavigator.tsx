@@ -8,15 +8,16 @@ import {
 	useNavigationState,
 } from "@react-navigation/native";
 import {
-	BookOpenIcon,
-	CalculatorIcon,
-	HomeIcon,
-	ShieldIcon,
-	UserIcon,
-} from "lucide-react-native";
+	Book,
+	Calculator,
+	Home2,
+	Security,
+	User,
+} from "iconsax-react-nativejs";
 import type { TextStyle, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TabIcon } from "@/components/navigation/TabIcon";
+import { TabLabel } from "@/components/navigation/TabLabel";
 import { t } from "@/i18n";
 import {
 	CalculatorNavigator,
@@ -38,7 +39,7 @@ export type MainTabParamList = {
 };
 
 const translate = t("mainNavigator").bind(null);
-const showTabBarLabel = false;
+const showTabBarLabel = true;
 const tabBarLabel = showTabBarLabel ? translate.bind(null) : () => "";
 
 export type MainTabScreenProps<T extends keyof MainTabParamList> =
@@ -81,7 +82,7 @@ export function MainTabNavigator() {
 				tabBarLabelStyle: themed($tabBarLabel),
 				tabBarItemStyle: themed($tabBarItem),
 				tabBarStyle: [
-					themed([$tabBar, { height: bottom + 70 }]),
+					themed([$tabBar, { height: bottom + 80 }]),
 					{
 						display: hideTabBarScreens.includes(currentRouteName)
 							? "none"
@@ -95,9 +96,11 @@ export function MainTabNavigator() {
 				component={HomeScreen}
 				options={{
 					tabBarAccessibilityLabel: translate("homeTab"),
-					tabBarLabel: tabBarLabel("homeTab"),
+					tabBarLabel: (props) => (
+						<TabLabel {...props}>{tabBarLabel("homeTab")}</TabLabel>
+					),
 					tabBarIcon: ({ focused }) => (
-						<TabIcon Icon={HomeIcon} focused={focused} />
+						<TabIcon Icon={Home2} focused={focused} />
 					),
 				}}
 			/>
@@ -107,9 +110,11 @@ export function MainTabNavigator() {
 				component={CalculatorNavigator}
 				options={{
 					tabBarAccessibilityLabel: translate("calculatorListTab"),
-					tabBarLabel: tabBarLabel("calculatorListTab"),
+					tabBarLabel: (props) => (
+						<TabLabel {...props}>{tabBarLabel("calculatorListTab")}</TabLabel>
+					),
 					tabBarIcon: ({ focused }) => (
-						<TabIcon Icon={CalculatorIcon} focused={focused} />
+						<TabIcon Icon={Calculator} focused={focused} />
 					),
 				}}
 			/>
@@ -119,9 +124,11 @@ export function MainTabNavigator() {
 				component={LessonNavigator}
 				options={{
 					tabBarAccessibilityLabel: translate("learnTab"),
-					tabBarLabel: tabBarLabel("learnTab"),
+					tabBarLabel: (props) => (
+						<TabLabel {...props}>{tabBarLabel("learnTab")}</TabLabel>
+					),
 					tabBarIcon: ({ focused }) => (
-						<TabIcon Icon={BookOpenIcon} focused={focused} />
+						<TabIcon Icon={Book} focused={focused} />
 					),
 				}}
 			/>
@@ -131,9 +138,11 @@ export function MainTabNavigator() {
 				component={ScamNavigator}
 				options={{
 					tabBarAccessibilityLabel: translate("scamTab"),
-					tabBarLabel: tabBarLabel("scamTab"),
+					tabBarLabel: (props) => (
+						<TabLabel {...props}>{tabBarLabel("scamTab")}</TabLabel>
+					),
 					tabBarIcon: ({ focused }) => (
-						<TabIcon Icon={ShieldIcon} focused={focused} />
+						<TabIcon Icon={Security} focused={focused} />
 					),
 				}}
 			/>
@@ -143,32 +152,14 @@ export function MainTabNavigator() {
 				component={ProfileNavigator}
 				options={{
 					tabBarAccessibilityLabel: translate("profileTab"),
-					tabBarLabel: tabBarLabel("profileTab"),
+					tabBarLabel: (props) => (
+						<TabLabel {...props}>{tabBarLabel("profileTab")}</TabLabel>
+					),
 					tabBarIcon: ({ focused }) => (
-						<TabIcon Icon={UserIcon} focused={focused} />
+						<TabIcon Icon={User} focused={focused} />
 					),
 				}}
 			/>
-
-			{/* TODO: Move this Debug Screen to Settings or Profile Screen */}
-			{/*
-			{envs.isDev && (
-				<Tab.Screen
-					name="DemoDebug"
-					component={DemoDebugScreen}
-					options={{
-						tabBarLabel: translate("mainNavigator:debugTab"),
-						tabBarIcon: ({ focused }) => (
-							<Icon
-								icon="debug"
-								color={focused ? colors.tint : colors.tintInactive}
-								size={30}
-							/>
-						),
-					}}
-				/>
-			)}
-      */}
 		</Tab.Navigator>
 	);
 }
@@ -179,12 +170,18 @@ const $tabBar: ThemedStyle<ViewStyle> = ({ colors }) => ({
 });
 
 const $tabBarItem: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	paddingTop: spacing.md,
+	paddingTop: spacing.sm,
+	paddingBottom: spacing.sm,
 });
 
-const $tabBarLabel: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
+const $tabBarLabel: ThemedStyle<TextStyle> = ({
+	colors,
+	typography,
+	spacing,
+}) => ({
 	fontSize: 12,
 	fontFamily: typography.primary.medium,
 	lineHeight: 16,
-	color: colors.text,
+	marginTop: spacing.xxs,
+	color: colors.tintInactive,
 });

@@ -19,6 +19,7 @@ export const $styles = {
 		flexDirection: "row",
 		alignItems: "center",
 		marginBottom: spacing.sm,
+		gap: 2,
 	} as ViewStyle,
 
 	toggleInner: {

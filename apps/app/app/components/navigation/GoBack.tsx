@@ -1,5 +1,6 @@
 import type { TOptions } from "i18next";
-import { ChevronLeft } from "lucide-react-native";
+import { ArrowLeft2 as ChevronLeft } from "iconsax-react-nativejs";
+//import { ChevronLeft } from "lucide-react-native";
 import { memo } from "react";
 import { Pressable } from "react-native";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
@@ -36,7 +37,7 @@ export const GoBack = memo(({ tx, txOptions, goBackText }: GoBackProps) => {
 
 	return (
 		<Pressable onPress={navigate.goBack} style={$styles.goBack}>
-			<ChevronLeft color={colors.textDim} size={20} />
+			<ChevronLeft color={colors.textDim} size={18} />
 			<Text>{content}</Text>
 		</Pressable>
 	);

@@ -1,17 +1,16 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 export const useToggle = (initVal = false) => {
 	const [isOpen, setIsOpen] = useState(initVal);
 
 	const onOpen = useCallback(() => setIsOpen(true), []);
 	const onClose = useCallback(() => setIsOpen(false), []);
+	const onToggle = useCallback(() => setIsOpen((curr) => !curr), []);
 
-	return useMemo(
-		() => ({
-			isOpen,
-			onOpen,
-			onClose,
-		}),
-		[isOpen, onOpen, onClose],
-	);
+	return {
+		isOpen,
+		onOpen,
+		onClose,
+		onToggle,
+	};
 };

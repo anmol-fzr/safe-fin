@@ -84,6 +84,9 @@ export interface NavigationProps
 
 const config = createTamagui(defaultConfig);
 
+import { ToastProviderWithViewport } from "@/components/toast";
+import { IconProvider } from "@/context/IconContext";
+
 export const AppNavigator = function AppNavigator(props: NavigationProps) {
 	const {
 		//themeScheme,
@@ -104,7 +107,11 @@ export const AppNavigator = function AppNavigator(props: NavigationProps) {
 				>
 					<Screens.ErrorBoundary catchErrors={Config.catchErrors}>
 						<PortalProvider shouldAddRootHost>
-							<AppStack />
+							<ToastProviderWithViewport>
+								<IconProvider>
+									<AppStack />
+								</IconProvider>
+							</ToastProviderWithViewport>
 						</PortalProvider>
 					</Screens.ErrorBoundary>
 				</NavigationContainer>

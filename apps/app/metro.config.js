@@ -24,4 +24,9 @@ config.resolver.unstable_enablePackageExports = true;
 // 4. Add 'cjs' extension for third-party packages.
 config.resolver.sourceExts.push("cjs");
 
+// config.transformer = {
+// 	...config.transformer,
+// 	unstable_transformProfile: "hermes-stable", // required
+// };
+
 module.exports = config;

@@ -1,10 +1,17 @@
-import { LaptopIcon, SmartphoneIcon } from "lucide-react-native";
+import { getEmptyArr } from "@safe-fin/ui/utils";
+import {
+	Monitor as LaptopIcon,
+	Mobile as SmartphoneIcon,
+} from "iconsax-react-nativejs";
+import { Suspense } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { UAParser } from "ua-parser-js";
 import { Button, ListView, Text } from "@/components";
 import type { Session } from "@/modules/auth/utils";
 import { $styles, spacing } from "@/theme";
 import { isStrictlySameObj } from "@/utils/funcs";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { useRevokeOtherSessions, useRevokeSession } from "../hooks/mutations";
 import { useListSessions, useSession } from "../hooks/queries";
 
@@ -30,24 +37,29 @@ export function SessionsCard() {
 				<Text>Manage your active sessions and revoke access</Text>
 			</View>
 
-			<ListView
-				data={sessions}
-				keyExtractor={(item) => item.token}
-				refreshing={isRefetchingSessions}
-				ListHeaderComponent={
-					sessions.length > 1 ? RevokeOtherSessions : undefined
-				}
-				onRefresh={refetchSessions}
-				renderItem={({ item }) => (
-					<SessionCell
-						{...item}
-						isCurrentSession={isStrictlySameObj(currSession, item)}
-					/>
-				)}
-			/>
+			<Suspense fallback={<SessionsCard.Loading />}>
+				<ListView
+					data={sessions}
+					keyExtractor={(item) => item.token}
+					refreshing={isRefetchingSessions}
+					ListHeaderComponent={
+						sessions.length > 1 ? RevokeOtherSessions : undefined
+					}
+					onRefresh={refetchSessions}
+					renderItem={({ item }) => (
+						<SessionCell
+							{...item}
+							isCurrentSession={isStrictlySameObj(currSession, item)}
+						/>
+					)}
+				/>
+			</Suspense>
 		</View>
 	);
 }
+const arr = getEmptyArr(3);
+
+SessionsCard.Loading = () => arr.map((i) => <SessionCell.Loading key={i} />);
 
 type SessionCellProps = Session & {
 	isCurrentSession: boolean;
@@ -118,6 +130,17 @@ function SessionCell(session: SessionCellProps) {
 		</View>
 	);
 }
+
+SessionCell.Loading = () => {
+	const {
+		theme: { spacing },
+	} = useAppTheme();
+	return (
+		<SkeletonPlaceholder>
+			<SkeletonPlaceholder.Item height={45} borderRadius={spacing.sm} />
+		</SkeletonPlaceholder>
+	);
+};
 
 function RevokeOtherSessions() {
 	const { revokeOtherSessions, isPending } = useRevokeOtherSessions();

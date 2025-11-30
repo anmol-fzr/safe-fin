@@ -1,3 +1,4 @@
+import { useOptimistic, useTransition } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { ViewStyle } from "react-native";
 import type { ThemedStyle } from "@/theme";
@@ -13,9 +14,9 @@ type FormFieldProps = Omit<
 };
 
 export const FormSelectField = (props: FormFieldProps) => {
-	const multiple = false;
 	const { control, formState } = useFormContext();
 	const { themed } = useAppTheme();
+	const [isPending, startTransition] = useTransition();
 
 	type T = typeof formState.errors;
 
@@ -31,15 +32,13 @@ export const FormSelectField = (props: FormFieldProps) => {
 				render={({ field: { onChange, onBlur, value, disabled } }) => (
 					<SelectField
 						value={value}
-						onChangeText={(val) => {
-							console.log(val);
-							onChange(val);
-						}}
+						onChangeText={onChange}
 						onBlur={onBlur}
 						containerStyle={themed($textField)}
-						status={disabled ? "disabled" : error ? "error" : undefined}
+						status={
+							disabled || isPending ? "disabled" : error ? "error" : undefined
+						}
 						helper={props.helper || error}
-						multiple={multiple}
 						{...props}
 						renderValue={(value) => {
 							const foundOption = props.options.find(
@@ -49,19 +48,9 @@ export const FormSelectField = (props: FormFieldProps) => {
 							return foundOption?.label ?? props.placeholder;
 						}}
 						onSelect={(v) => {
-							if (multiple) {
-								if (Array.isArray(v)) {
-									onChange(v);
-								} else {
-									onChange([v]);
-								}
-							} else {
-								if (Array.isArray(v)) {
-									onChange(v[0]);
-								} else {
-									onChange(v);
-								}
-							}
+							startTransition(() => {
+								onChange(v);
+							});
 						}}
 					/>
 				)}

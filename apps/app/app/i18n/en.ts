@@ -7,6 +7,7 @@ const en = {
 		back: "Back",
 		submit: "Submit",
 		logOut: "Log Out",
+		logOutAsGuest: "Log Out as Guest",
 	},
 	welcomeScreen: {
 		postscript:
@@ -36,6 +37,7 @@ const en = {
 	},
 	loginScreen: {
 		logIn: "Log In",
+		guestLogIn: "Log In as Guest",
 		enterDetails:
 			"Enter your details below to unlock top secret info. You'll never guess what we've got waiting. Or maybe you will; it's not rocket science here.",
 		phoneFieldLabel: "Phone Number",

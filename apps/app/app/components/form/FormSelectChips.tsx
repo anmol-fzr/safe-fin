@@ -2,13 +2,13 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Field } from "../Field";
 import { SelectChips, type SelectChipsOptionsProps } from "../SelectChips";
 
-type FormFieldProps<T> = SelectChipsOptionsProps<T> & {
+export type FormSelectChipsProps<T> = SelectChipsOptionsProps<T> & {
 	name: string;
 	label: string;
 	multiple?: boolean;
 };
 
-export const FormSelectChips = <J,>(props: FormFieldProps<J>) => {
+export const FormSelectChips = <J,>(props: FormSelectChipsProps<J>) => {
 	const {
 		label,
 		options,
@@ -18,9 +18,7 @@ export const FormSelectChips = <J,>(props: FormFieldProps<J>) => {
 	} = props;
 	const { control, formState } = useFormContext();
 
-	type T = typeof formState.errors;
-
-	const getValue = (obj: T, path: string) =>
+	const getValue = (obj: any, path: string) =>
 		path.split(".").reduce((acc, key) => acc && acc[key], obj);
 
 	const error =

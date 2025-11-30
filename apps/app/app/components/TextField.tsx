@@ -16,6 +16,7 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
+import { useToggle } from "@/hooks";
 import { isRTL, translate } from "@/i18n";
 import type { ThemedStyle, ThemedStyleArray } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -143,6 +144,11 @@ export const TextField = forwardRef(function TextField(
 		themed,
 		theme: { colors },
 	} = useAppTheme();
+	const {
+		isOpen: isFocused,
+		onOpen: handleFocus,
+		onClose: handleBlur,
+	} = useToggle();
 
 	const disabled = TextInputProps.editable === false || status === "disabled";
 
@@ -156,6 +162,7 @@ export const TextField = forwardRef(function TextField(
 		$styles.row,
 		$inputWrapperStyle,
 		status === "error" && { borderColor: colors.error },
+		isFocused && { borderColor: colors.palette.accent400 },
 		TextInputProps.multiline && { minHeight: 112 },
 		LeftAccessory && { paddingStart: 0 },
 		RightAccessory && { paddingEnd: 0 },
@@ -199,6 +206,8 @@ export const TextField = forwardRef(function TextField(
 
 				<TextInput
 					ref={input}
+					onFocus={handleFocus}
+					onBlur={handleBlur}
 					underlineColorAndroid={colors.transparent}
 					textAlignVertical="top"
 					placeholder={placeholderContent}
@@ -243,8 +252,8 @@ const $inputWrapperStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
 	alignItems: "flex-start",
 	borderWidth: 1,
 	borderRadius: roundness,
-	backgroundColor: colors.palette.accent200,
-	borderColor: colors.palette.accent500,
+	//backgroundColor: colors.palette.accent200,
+	borderColor: colors.palette.neutral300,
 	overflow: "hidden",
 });
 

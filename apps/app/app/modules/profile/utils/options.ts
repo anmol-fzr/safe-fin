@@ -1,4 +1,9 @@
-import { MarsIcon, TransgenderIcon, VenusIcon } from "lucide-react-native";
+import { Man as MarsIcon, Woman as VenusIcon } from "iconsax-react-nativejs";
+import {
+	// MarsIcon,
+	TransgenderIcon,
+	//VenusIcon,
+} from "lucide-react-native";
 import type { Options } from "@/components/SelectField";
 
 const occupationOpts: Options = [

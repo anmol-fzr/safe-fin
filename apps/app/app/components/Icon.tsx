@@ -1,3 +1,5 @@
+import { useSafeContext } from "@safe-fin/ui/hooks";
+import type { Icon as IconType } from "iconsax-react-nativejs";
 import {
 	Image,
 	type ImageStyle,
@@ -8,15 +10,25 @@ import {
 	type ViewProps,
 	type ViewStyle,
 } from "react-native";
+import { useIcon } from "@/context/IconContext";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 export type IconTypes = keyof typeof iconRegistry;
+
+// export function Icon(props: IconCompProps) {
+// 	const { icon, ...rest } = props;
+// 	const ctxProps = useSafeContext<BaseIconProps>(IconContext, "Icon Component");
+//
+// 	const Comp = icon;
+//
+// 	return <Comp {...ctxProps} {...rest} />;
+// }
 
 type BaseIconProps = {
 	/**
 	 * The name of the icon
 	 */
-	icon: IconTypes;
+	icon: IconTypes | IconType;
 
 	/**
 	 * An optional tint color for the icon
@@ -59,6 +71,14 @@ export function PressableIcon(props: PressableIconProps) {
 		...pressableProps
 	} = props;
 
+	const ctxProps = useIcon();
+
+	if (typeof icon !== "string") {
+		const Comp = icon;
+
+		return <Comp {...ctxProps} {...props} />;
+	}
+
 	const { theme } = useAppTheme();
 
 	const $imageStyle: StyleProp<ImageStyle> = [
@@ -91,6 +111,14 @@ export function Icon(props: IconProps) {
 		containerStyle: $containerStyleOverride,
 		...viewProps
 	} = props;
+
+	const ctxProps = useIcon();
+
+	if (typeof icon !== "string") {
+		const Comp = icon;
+
+		return <Comp {...ctxProps} {...props} />;
+	}
 
 	const { theme } = useAppTheme();
 

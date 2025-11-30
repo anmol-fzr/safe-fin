@@ -28,6 +28,7 @@ export const betterAuthOptions: BetterAuthOptions = {
 						"[AUTH Package]: After Update User hook, userId must not be undefined",
 					);
 				}
+
 				ctx.context.internalAdapter.updateUser(userId, {
 					isNew: false,
 				});
@@ -48,7 +49,7 @@ export const betterAuthOptions: BetterAuthOptions = {
 	advanced: {
 		defaultCookieAttributes: {
 			httpOnly: true,
-			secure: true,
+			//secure: true,
 		},
 	},
 	session: {

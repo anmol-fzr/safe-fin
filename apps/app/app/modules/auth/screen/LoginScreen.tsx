@@ -3,7 +3,6 @@ import { Image, StyleSheet } from "react-native";
 import { Screen, ScreenHeader } from "@/components";
 import { LoginForm } from "@/modules/auth/components";
 import { spacing } from "@/theme";
-import { authClient } from "../utils";
 
 export function LoginScreen() {
 	return (

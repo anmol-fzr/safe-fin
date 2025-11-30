@@ -3,22 +3,33 @@ import { useSendOtp, useVerifyOtp } from "@safe-fin/ui/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
 import { isUndefined } from "lodash";
-import { Ref, useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import type { TextInput, ViewStyle } from "react-native";
+import type { ViewStyle } from "react-native";
 import { View } from "react-native";
+import type { OtpInputRef } from "react-native-otp-entry";
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useCountdown } from "@/hooks";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { loginSchema } from "@/modules/auth/schema";
-import { $styles, colors, type ThemedStyle } from "@/theme";
+import { $styles, type ThemedStyle } from "@/theme";
+import { getFakePhoneNumber } from "@/utils/faker/fields";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { useGuestLogin } from "../hooks/use-guest-login";
 import { useAuthStore } from "../store";
+import { FormOtpField } from "./FormOtpField";
 
-export const LoginForm = () => {
+interface LoginFormProps {
+	hideGuestLogin?: boolean;
+}
+
+export const LoginForm = (props: LoginFormProps) => {
+	const { hideGuestLogin } = props;
 	const { countdown, reset, restart } = useCountdown(59);
-	const otpInputRef = useRef<TextInput>(null);
+	const otpInputRef = useRef<OtpInputRef>(null);
+
+	const { handleGuestLogin } = useGuestLogin();
 
 	const form = useForm({
 		resolver: yupResolver(loginSchema),
@@ -33,7 +44,41 @@ export const LoginForm = () => {
 	const { verifyOtpAsync } = useVerifyOtp(queryClient);
 	const navigation = useSafeNavigation();
 
-	const { themed } = useAppTheme();
+	const {
+		themed,
+		theme: { colors },
+	} = useAppTheme();
+
+	type HandleVerifyOtpPayload = {
+		phoneNumber: string;
+		code: string;
+	};
+
+	const handleVerifyOtp = async (payload: HandleVerifyOtpPayload) => {
+		try {
+			await verifyOtpAsync(payload, {
+				onSuccess(data) {
+					if (data.error) {
+						console.log(data.error);
+						return;
+					}
+					restart();
+					const { id, email, name } = data.data.user;
+
+					setAuthData({ user: { id, email, name, isAnonymous: false } });
+
+					setAuthState("complete");
+					navigation.navigate("MainTabs", { screen: "Home" });
+				},
+			});
+		} catch (error) {
+			console.log(error);
+			Burnt.toast({
+				title: "Something Went Wrong",
+				preset: "error",
+			});
+		}
+	};
 
 	const handleSubmit = form.handleSubmit(async (data) => {
 		if (!isOtpSent) {
@@ -51,24 +96,7 @@ export const LoginForm = () => {
 			code: data.otp.toString(),
 		};
 
-		try {
-			await verifyOtpAsync(payload, {
-				onSuccess(data) {
-					restart();
-					const user = data.data.user;
-					setAuthData({ user });
-
-					setAuthState("complete");
-					navigation.navigate("MainTabs", { screen: "Home" });
-				},
-			});
-		} catch (error) {
-			console.log(error);
-			Burnt.toast({
-				title: "Something Went Wrong",
-				preset: "error",
-			});
-		}
+		handleVerifyOtp(payload);
 	});
 
 	const changePhoneNumber = useCallback(() => {
@@ -90,20 +118,14 @@ export const LoginForm = () => {
 					onEndEditing={isOtpSent ? otpInputRef.current?.focus : handleSubmit}
 					keyboardType="phone-pad"
 					labelTx="loginScreen:phoneFieldLabel"
-					placeholderTx="loginScreen:phoneFieldPlaceholder"
+					placeholder={getFakePhoneNumber()}
 				/>
 
 				{isOtpSent && (
-					<FormField
-						name="otp"
+					<FormOtpField
 						ref={otpInputRef}
-						onEndEditing={handleSubmit}
-						autoCapitalize="none"
-						autoComplete="sms-otp"
-						autoCorrect={false}
-						keyboardType="number-pad"
-						labelTx="loginScreen:otpFieldLabel"
-						placeholderTx="loginScreen:otpFieldPlaceholder"
+						name="otp"
+						onFilled={() => handleSubmit()}
 					/>
 				)}
 			</FormProvider>
@@ -126,21 +148,43 @@ export const LoginForm = () => {
 				</View>
 			)}
 
-			<Button
-				testID="login-button"
-				tx={isOtpSent ? "loginScreen:verifyOtp" : "loginScreen:sendOtp"}
-				style={themed($tapButton)}
-				preset="reversed"
-				onPress={handleSubmit}
-			/>
+			{isOtpSent ? (
+				<>
+					<Button
+						testID="verify-otp-button"
+						tx="loginScreen:verifyOtp"
+						style={themed($tapButton)}
+						preset="reversed"
+						onPress={handleSubmit}
+					/>
 
-			{isOtpSent && (
-				<Button
-					text="Change Phone Number"
-					style={themed($tapButton)}
-					preset="text"
-					onPress={changePhoneNumber}
-				/>
+					<Button
+						text="Change Phone Number"
+						style={themed($tapButton)}
+						preset="text"
+						onPress={changePhoneNumber}
+					/>
+				</>
+			) : (
+				<>
+					<Button
+						testID="send-otp-button"
+						tx={isOtpSent ? "loginScreen:verifyOtp" : "loginScreen:sendOtp"}
+						style={themed($tapButton)}
+						preset="reversed"
+						onPress={handleSubmit}
+					/>
+
+					{!hideGuestLogin && (
+						<Button
+							testID="guest-login-button"
+							tx="loginScreen:guestLogIn"
+							style={themed($tapButton)}
+							preset="default"
+							onPress={handleGuestLogin}
+						/>
+					)}
+				</>
 			)}
 		</>
 	);

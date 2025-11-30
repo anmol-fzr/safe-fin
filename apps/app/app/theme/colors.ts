@@ -1,5 +1,3 @@
-import { stylePropsAll } from "tamagui";
-
 const palette = {
 	neutral100: "#FFFFFF",
 	neutral200: "#F4F2F1",
@@ -123,6 +121,7 @@ export const colors = {
 	/**
 	 * The inactive tinting color.
 	 */
+	//tintInactive: "#EFEFEF",
 	tintInactive: palette.neutral300,
 	/**
 	 * A subtle color used for lines.

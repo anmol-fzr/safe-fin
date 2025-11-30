@@ -84,13 +84,6 @@ export const SelectField = forwardRef(function SelectField(
 	function updateValue(optionValue: string) {
 		onSelect(optionValue);
 		dismissOptions();
-		return;
-		// if (value.includes(optionValue)) {
-		// 	onSelect?.(multiple ? without(value, optionValue) : []);
-		// } else {
-		// 	onSelect?.(multiple ? [...value, optionValue] : [optionValue]);
-		// 	if (!multiple) dismissOptions();
-		// }
 	}
 
 	const {

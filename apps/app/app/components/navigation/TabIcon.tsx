@@ -1,11 +1,11 @@
-import type { LucideIcon } from "lucide-react-native";
+import type { Icon } from "iconsax-react-nativejs";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 interface TabIconProps {
 	focused: boolean;
 	color?: string;
 	size?: number;
-	Icon: LucideIcon;
+	Icon: Icon;
 }
 
 export function TabIcon(props: TabIconProps) {

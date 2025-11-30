@@ -46,12 +46,11 @@ const useDemoGraphicsForm = () => {
 				if (data.data === null || data.isNew) {
 					return emptyFormState;
 				}
+				const { country = "", state = "" } = data.data;
 
 				queryClient.ensureQueryData(getCountriesOpts());
-				queryClient.ensureQueryData(getStatesOpts(data.data.country));
-				queryClient.ensureQueryData(
-					getCitiesOpts(data.data.state, data.data.country),
-				);
+				queryClient.ensureQueryData(getStatesOpts(country));
+				queryClient.ensureQueryData(getCitiesOpts(state, country));
 				return data.data;
 			} catch (error) {
 				console.error("Get User Demo Graphics Data Failed", { cause: error });
@@ -144,6 +143,7 @@ function DemoGraphicsFormImpl(props: DemoGraphicsFormImplProps) {
 				placeholder="e.g. Firozpur"
 				options={cities}
 			/>
+
 			<Button
 				preset="reversed"
 				disabled={isSubmitting}

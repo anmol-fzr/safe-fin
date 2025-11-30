@@ -50,7 +50,6 @@ export const RegisterForm = () => {
 						label="Gender"
 						placeholder="e.g. Male"
 						options={genderOpts}
-						multiple={false}
 					/>
 				</BottomSheetModalProvider>
 				{/*

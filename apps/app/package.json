@@ -78,6 +78,7 @@
 		"expo-splash-screen": "~0.30.9",
 		"expo-status-bar": "~2.2.3",
 		"expo-system-ui": "~5.0.10",
+		"expo-web-browser": "~15.0.9",
 		"expr-eval": "^2.0.2",
 		"i18next": "25.3.4",
 		"iconsax-react-nativejs": "^0.0.8",

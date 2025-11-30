@@ -1,15 +1,16 @@
-import type { PropsWithChildren } from "react";
+import type { ViewProps } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { Text } from "@/components";
 import { spacing } from "@/theme";
 
-type HomeSectionProps = PropsWithChildren & {
+export type SectionProps = ViewProps & {
 	title: string;
 };
 
-export function Section({ children, title }: HomeSectionProps) {
+export function Section(props: SectionProps) {
+	const { title, children, ...rest } = props;
 	return (
-		<View style={styles.sectionRoot}>
+		<View {...rest} style={[styles.sectionRoot, rest.style]}>
 			<Text preset="heading" size="lg">
 				{title}
 			</Text>

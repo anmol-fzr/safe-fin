@@ -1,4 +1,5 @@
 import { GoBack, Screen } from "@/components";
+import { GuestSafe } from "@/components/guest/GuestSafe";
 import { $styles } from "@/theme";
 import { DemoGraphicsForm } from "../components";
 
@@ -10,7 +11,9 @@ export const DemoGraphicsScreen = () => {
 			safeAreaEdges={["top"]}
 		>
 			<GoBack tx="demoGraphicsScreen:title" />
-			<DemoGraphicsForm />
+			<GuestSafe>
+				<DemoGraphicsForm />
+			</GuestSafe>
 		</Screen>
 	);
 };

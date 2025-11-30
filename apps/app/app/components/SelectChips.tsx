@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react-native";
+import type { Icon as IconType } from "iconsax-react-nativejs";
 import {
 	createContext,
 	type JSX,
@@ -6,6 +6,7 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useRef,
 	useState,
 } from "react";
 import { Pressable, View } from "react-native";
@@ -15,7 +16,7 @@ import { MissingContextError } from "@/utils/error";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Field, type FieldLabelProps } from "./Field";
 
-export type CustomOption<T> = { label: string } & T;
+export type CustomOption<T> = { label: string; value: string } & T;
 export type ValueRenderer<T> = (option: CustomOption<T>) => string;
 export type OptionRenderer<T> = (
 	option: CustomOption<T> & { isSelected: boolean },
@@ -148,13 +149,28 @@ SelectChips.Root = (props: SelectChipsRootProps) => {
 /* -------------------------------------------------------------------------- */
 
 export interface SelectChipsOptionsProps<T> {
-	valueRenderer: ValueRenderer<T>;
-	optionRenderer: OptionRenderer<T>;
+	valueRenderer?: ValueRenderer<T>;
+	optionRenderer?: OptionRenderer<T>;
 	options: CustomOption<T>[] | Readonly<CustomOption<T>[]>;
 }
 
 SelectChips.Options = <T,>(props: SelectChipsOptionsProps<T>) => {
-	const { options, valueRenderer, optionRenderer } = props;
+	const {
+		options,
+		valueRenderer = (option) => option.value,
+		optionRenderer = SelectChips.OptionRenderer,
+	} = props;
+	const optionRendererRef = useRef(optionRenderer);
+	const valueRendererRef = useRef(valueRenderer);
+
+	useEffect(() => {
+		optionRendererRef.current = optionRenderer;
+	}, [optionRenderer]);
+
+	useEffect(() => {
+		valueRendererRef.current = valueRenderer;
+	}, [valueRenderer]);
+
 	const {
 		theme: { spacing },
 	} = useAppTheme();
@@ -171,7 +187,9 @@ SelectChips.Options = <T,>(props: SelectChipsOptionsProps<T>) => {
 			{options.map((option) => (
 				<SelectChips.Option
 					key={option.label}
-					{...{ valueRenderer, optionRenderer, option }}
+					optionRenderer={optionRendererRef.current}
+					valueRenderer={valueRendererRef.current}
+					{...{ option }}
 				/>
 			))}
 		</View>
@@ -257,12 +275,12 @@ SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 type EmojiOptionRendererProps<T extends { emoji: string }> =
 	OptionRendererProps<T>;
 
-type IconOptionRendererProps<T extends { Icon: LucideIcon }> =
+type IconOptionRendererProps<T extends { Icon: IconType }> =
 	OptionRendererProps<T>;
 
 type CompType = <T>(props: OptionRendererProps<T>) => JSX.Element;
 
-export const createIconOptionRenderer = <T extends { Icon: LucideIcon }>(
+export const createIconOptionRenderer = <T extends { Icon: IconType }>(
 	Comp: CompType,
 ) => {
 	return (props: IconOptionRendererProps<T>) => {
@@ -293,6 +311,7 @@ export const createEmojiOptionRenderer = <T extends { emoji: string }>(
 SelectChips.IconOptionRenderer = createIconOptionRenderer(
 	SelectChips.OptionRenderer,
 );
+
 SelectChips.EmojiOptionRenderer = createEmojiOptionRenderer(
 	SelectChips.OptionRenderer,
 );

@@ -1,13 +1,17 @@
 import { Link } from "@react-navigation/native";
 import {
-	BookUserIcon,
-	BugIcon,
-	UserIcon,
-	WalletIcon,
-} from "lucide-react-native";
+	Bank as BookUserIcon,
+	Logout as LogOutIcon,
+	User as UserIcon,
+	WalletMoney as WalletIcon,
+} from "iconsax-react-nativejs";
+import { BugIcon } from "lucide-react-native";
 import { View } from "react-native";
-import { ListView, Screen, ScreenHeader, Text } from "@/components";
-import { $styles, colors } from "@/theme";
+import { Button, Icon, ListView, ScreenHeader, Text } from "@/components";
+import { MinimalNoScrollScreen } from "@/components/MinimalNoScrollScreen";
+import { useIsGuestUser } from "@/modules/auth/hooks/use-guest-login";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { colors } from "@/theme";
 import { envs } from "@/utils/envs";
 
 //: { title: string; screen: ProfileScreenKey }[]
@@ -49,17 +53,16 @@ if (envs.isDev) {
 }
 
 export const ProfileIndexScreen = () => {
+	const isGuest = useIsGuestUser();
+	const { handleLogout } = useAuth();
+
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
+		<MinimalNoScrollScreen>
 			<ScreenHeader
 				titleTx="profileScreen:title"
 				tagLineTx="profileScreen:tagLine"
 			/>
-			<View>
+			<View style={{ flex: 1 }}>
 				<ListView
 					data={linkItems}
 					keyExtractor={(item) => item.title}
@@ -99,6 +102,17 @@ export const ProfileIndexScreen = () => {
 					}}
 				/>
 			</View>
-		</Screen>
+			{isGuest && (
+				<Button
+					tx="common:logOutAsGuest"
+					onPress={handleLogout}
+					preset="reversed"
+					style={{ marginTop: 24 }}
+					RightAccessory={() => (
+						<LogOutIcon style={{ marginLeft: 12 }} size={20} color="#fff" />
+					)}
+				/>
+			)}
+		</MinimalNoScrollScreen>
 	);
 };

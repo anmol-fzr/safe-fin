@@ -1,7 +1,6 @@
 import { VisibilitySensor } from "@futurejj/react-native-visibility-sensor";
 import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
-import { spacedChildren } from "@tamagui/core";
 import { Share2Icon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react-native";
 import { Suspense, useCallback, useMemo } from "react";
 import { View, type ViewStyle } from "react-native";
@@ -49,7 +48,9 @@ function LessonImpl({ id }: LessonProps) {
 				<ThumbsUpIcon accessibilityLabel="Like Lesson" />
 				<ThumbsDownIcon accessibilityLabel="Dislike Lesson" />
 			</View>
+			{/*
 			<LessonQuizzes lessonId={id} quizzes={lesson.quizzes} />
+      */}
 		</>
 	);
 }
