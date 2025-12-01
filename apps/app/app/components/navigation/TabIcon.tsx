@@ -15,5 +15,11 @@ export function TabIcon(props: TabIconProps) {
 		theme: { colors },
 	} = useAppTheme();
 
-	return <Icon color={focused ? colors.tint : colors.tintInactive} size={30} />;
+	return (
+		<Icon
+			variant={focused ? "Bold" : "Linear"}
+			color={focused ? colors.tint : colors.tintInactive}
+			size={30}
+		/>
+	);
 }

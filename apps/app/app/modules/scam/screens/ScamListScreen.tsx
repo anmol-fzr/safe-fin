@@ -1,15 +1,10 @@
-import { Screen, ScreenHeader } from "@/components";
+import { Screen } from "@/components";
 import { $styles } from "@/theme";
 import { ScamList } from "../components";
 
 export function ScamListScreen() {
 	return (
-		<Screen
-			preset="fixed"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
-			<ScreenHeader titleTx="scamScreen:title" tagLineTx="scamScreen:tagLine" />
+		<Screen preset="fixed" contentContainerStyle={$styles.container}>
 			<ScamList />
 		</Screen>
 	);

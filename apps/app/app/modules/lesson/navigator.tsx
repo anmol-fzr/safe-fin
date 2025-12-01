@@ -3,6 +3,7 @@ import {
 	createNativeStackNavigator,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { ScreenHeader } from "@/components";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import * as Screens from "./screens";
 
@@ -31,7 +32,22 @@ export function LessonNavigator() {
 			}}
 			initialRouteName="Lessons"
 		>
-			<Stack.Screen name="Lessons" component={Screens.LessonListScreen} />
+			<Stack.Screen
+				name="Lessons"
+				component={Screens.LessonListScreen}
+				options={{
+					headerShown: true,
+					header: (props) => {
+						return (
+							<ScreenHeader
+								titleTx="lessonScreen:title"
+								tagLineTx="lessonScreen:tagLine"
+								{...props}
+							/>
+						);
+					},
+				}}
+			/>
 			<Stack.Screen name="Lesson" component={Screens.LessonScreen} />
 		</Stack.Navigator>
 	);

@@ -1,8 +1,13 @@
-import { ChevronRight, Info, Mail, Share2, Star } from "lucide-react-native";
-import { TouchableHighlight, View } from "react-native";
-import { ListView, Screen, ScreenHeader, Text } from "@/components";
-import { $styles, spacing } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
+import { Link } from "@react-navigation/native";
+import {
+	DocumentText1,
+	InfoCircle as Info,
+	Message as Mail,
+	Share as Share2,
+	Star1 as Star,
+} from "iconsax-react-nativejs";
+import { View } from "react-native";
+import { ListView, Text } from "@/components";
 
 type SettingList = { title: string; icon: any }[];
 type SettingsList = SettingList[];
@@ -33,76 +38,48 @@ const lists: SettingsList = [
 	[
 		{
 			title: "Terms of Service",
-			icon: Mail,
+			icon: DocumentText1,
 		},
 		{
 			title: "Privacy Policy",
-			icon: Share2,
+			icon: DocumentText1,
 		},
 	],
 ];
 
-export const SettingScreen = () => {
-	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
-			<ScreenHeader
-				titleTx="settingScreen:title"
-				tagLineTx="settingScreen:tagLine"
-			/>
-			<View style={{ gap: spacing.md }}>
-				{lists.map((list, index) => (
-					<SettingList list={list} key={index} />
-				))}
-			</View>
-		</Screen>
-	);
+export const MoreLinks = () => {
+	return lists.map((list, index) => <SettingList list={list} key={index} />);
 };
 
 const SettingList = ({ list }: { list: SettingList }) => {
-	const { theme } = useAppTheme();
-
 	return (
 		<ListView
 			data={list}
+			estimatedItemSize={29}
 			renderItem={({ item }) => {
 				const Icon = item.icon;
 				return (
-					<TouchableHighlight
-						key={item.title}
+					<Link
 						style={{
-							marginBottom: spacing.xs,
+							marginBottom: 16,
+							paddingBottom: 12,
 						}}
 					>
 						<View
 							style={{
-								backgroundColor: theme.colors.palette.neutral100,
-								padding: spacing.md,
-								borderRadius: spacing.sm,
-								display: "flex",
 								flexDirection: "row",
-								justifyContent: "space-between",
-								alignContent: "center",
+								gap: 12,
+								alignItems: "center",
 							}}
 						>
-							<View
-								style={{
-									display: "flex",
-									gap: spacing.md,
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignContent: "center",
-								}}
-							>
-								<Icon size={22} color={theme.colors.tint} />
-								<Text preset="bold">{item.title}</Text>
+							<Icon />
+							<View>
+								<Text size="lg" weight="medium">
+									{item.title}
+								</Text>
 							</View>
-							<ChevronRight size={22} />
 						</View>
-					</TouchableHighlight>
+					</Link>
 				);
 			}}
 		/>

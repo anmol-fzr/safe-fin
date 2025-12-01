@@ -3,6 +3,7 @@ import {
 	createNativeStackNavigator,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { ScreenHeader } from "@/components";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import * as Screens from "./screens";
 
@@ -31,7 +32,22 @@ export function ScamNavigator() {
 			}}
 			initialRouteName="ScamList"
 		>
-			<Stack.Screen name="ScamList" component={Screens.ScamListScreen} />
+			<Stack.Screen
+				name="ScamList"
+				component={Screens.ScamListScreen}
+				options={{
+					headerShown: true,
+					header: (props) => {
+						return (
+							<ScreenHeader
+								titleTx="scamScreen:title"
+								tagLineTx="scamScreen:tagLine"
+								{...props}
+							/>
+						);
+					},
+				}}
+			/>
 			<Stack.Screen name="Scam" component={Screens.ScamScreen} />
 		</Stack.Navigator>
 	);

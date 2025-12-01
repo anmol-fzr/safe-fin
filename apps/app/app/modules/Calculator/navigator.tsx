@@ -3,6 +3,7 @@ import {
 	type NativeStackNavigationProp,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { ScreenHeader } from "@/components";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import type { ResourceId } from "@/types";
 import * as Screens from "./screens";
@@ -38,6 +39,18 @@ export function CalculatorNavigator() {
 		>
 			<Stack.Screen
 				name="CalculatorList"
+				options={{
+					headerShown: true,
+					header: (props) => {
+						return (
+							<ScreenHeader
+								titleTx="calculatorListScreen:title"
+								tagLineTx="calculatorListScreen:tagLine"
+								{...props}
+							/>
+						);
+					},
+				}}
 				component={Screens.CalculatorListScreen}
 			/>
 			<Stack.Screen name="Calculator" component={Screens.CalculatorScreen} />

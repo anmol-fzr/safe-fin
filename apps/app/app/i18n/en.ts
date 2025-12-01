@@ -88,7 +88,7 @@ const en = {
 	},
 	profileScreen: {
 		title: "Profile",
-		tagLine: "Profile",
+		tagLine: "Manage User Profile & App Settings",
 	},
 	demoGraphicsScreen: {
 		title: "Demo Graphics",

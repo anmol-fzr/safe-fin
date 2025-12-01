@@ -291,6 +291,7 @@ export function Screen(props: ScreenProps) {
 		>
 			<StatusBar
 				style={statusBarStyle || (themeContext === "dark" ? "light" : "dark")}
+				backgroundColor={colors.background}
 				{...StatusBarProps}
 			/>
 

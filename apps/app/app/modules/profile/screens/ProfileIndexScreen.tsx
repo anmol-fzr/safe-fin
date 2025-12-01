@@ -5,13 +5,12 @@ import {
 	User as UserIcon,
 	WalletMoney as WalletIcon,
 } from "iconsax-react-nativejs";
-import { BugIcon } from "lucide-react-native";
-import { View } from "react-native";
-import { Button, Icon, ListView, ScreenHeader, Text } from "@/components";
-import { MinimalNoScrollScreen } from "@/components/MinimalNoScrollScreen";
+import { ScrollView, View } from "react-native";
+import { Button, Icon, ListView, Screen, Text } from "@/components";
 import { useIsGuestUser } from "@/modules/auth/hooks/use-guest-login";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { colors } from "@/theme";
+import { MoreLinks } from "@/screens";
+import { colors, spacing } from "@/theme";
 import { envs } from "@/utils/envs";
 
 //: { title: string; screen: ProfileScreenKey }[]
@@ -46,7 +45,7 @@ const linkItems = [
 if (envs.isDev) {
 	linkItems.push({
 		title: "Debug Screen",
-		Icon: BugIcon,
+		Icon: () => <Icon icon="debug" />,
 		desc: "App Id, Build Id, Versions",
 		screen: "Debug",
 	});
@@ -57,12 +56,8 @@ export const ProfileIndexScreen = () => {
 	const { handleLogout } = useAuth();
 
 	return (
-		<MinimalNoScrollScreen>
-			<ScreenHeader
-				titleTx="profileScreen:title"
-				tagLineTx="profileScreen:tagLine"
-			/>
-			<View style={{ flex: 1 }}>
+		<Screen preset="scroll" style={{ paddingTop: spacing.md }}>
+			<View style={{ flex: 1, paddingInline: spacing.sm }}>
 				<ListView
 					data={linkItems}
 					keyExtractor={(item) => item.title}
@@ -101,6 +96,7 @@ export const ProfileIndexScreen = () => {
 						);
 					}}
 				/>
+				<MoreLinks />
 			</View>
 			{isGuest && (
 				<Button
@@ -113,6 +109,6 @@ export const ProfileIndexScreen = () => {
 					)}
 				/>
 			)}
-		</MinimalNoScrollScreen>
+		</Screen>
 	);
 };

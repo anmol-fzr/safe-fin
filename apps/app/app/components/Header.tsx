@@ -8,6 +8,8 @@ import {
 	type ViewStyle,
 } from "react-native";
 import { isRTL, translate } from "@/i18n";
+import type { ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { $styles } from "../theme";
 import {
 	type ExtendedEdge,
@@ -15,8 +17,6 @@ import {
 } from "../utils/useSafeAreaInsetsStyle";
 import { type IconTypes, PressableIcon } from "./Icon";
 import { Text, type TextProps } from "./Text";
-import { useAppTheme } from "@/utils/useAppTheme";
-import type { ThemedStyle } from "@/theme";
 
 export interface HeaderProps {
 	/**

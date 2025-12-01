@@ -1,6 +1,5 @@
 import type { TOptions } from "i18next";
 import { ArrowLeft2 as ChevronLeft } from "iconsax-react-nativejs";
-//import { ChevronLeft } from "lucide-react-native";
 import { memo } from "react";
 import { Pressable } from "react-native";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";

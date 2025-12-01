@@ -4,15 +4,7 @@ import { CalculatorList } from "../components";
 
 export const CalculatorListScreen = () => {
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
-			<ScreenHeader
-				titleTx="calculatorListScreen:title"
-				tagLineTx="calculatorListScreen:tagLine"
-			/>
+		<Screen preset="scroll" contentContainerStyle={$styles.container}>
 			<CalculatorList />
 		</Screen>
 	);

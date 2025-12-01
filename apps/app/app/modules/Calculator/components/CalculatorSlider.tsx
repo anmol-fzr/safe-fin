@@ -1,9 +1,9 @@
 import Slider from "@react-native-community/slider";
-import { debounce } from "lodash";
 import { memo, useCallback, useMemo, useTransition } from "react";
 import { StyleSheet, type TextStyle, View } from "react-native";
 import { Text, TextField } from "@/components";
 import { spacing, type ThemedStyle } from "@/theme";
+import { debounce } from "@/utils/funcs";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 type CalculatorSliderProps = {
@@ -11,6 +11,8 @@ type CalculatorSliderProps = {
 	value: number;
 	setValue: (val: number) => void;
 	step: number;
+	append?: string;
+	prepend?: string;
 	disabled?: boolean;
 	minValue: number;
 	maxValue: number;
@@ -19,8 +21,8 @@ type CalculatorSliderProps = {
 export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 	const {
 		label,
-		append,
-		prepend,
+		append = "",
+		prepend = "",
 		value,
 		step,
 		setValue,

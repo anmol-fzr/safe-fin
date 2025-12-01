@@ -3,6 +3,7 @@ import {
 	createNativeStackNavigator,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { ScreenHeader } from "@/components";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import * as Screens from "./screens";
 
@@ -36,7 +37,23 @@ export function ProfileNavigator() {
 			}}
 			initialRouteName="Index"
 		>
-			<Stack.Screen name="Index" component={Screens.ProfileIndexScreen} />
+			<Stack.Screen
+				name="Index"
+				component={Screens.ProfileIndexScreen}
+				options={{
+					headerShown: true,
+					header: (props) => {
+						return (
+							<ScreenHeader
+								titleTx="profileScreen:title"
+								tagLineTx="profileScreen:tagLine"
+								{...props}
+							/>
+						);
+					},
+				}}
+			/>
+
 			<Stack.Screen name="UserProfile" component={Screens.UserProfileScreen} />
 			<Stack.Screen
 				name="DemoGraphics"

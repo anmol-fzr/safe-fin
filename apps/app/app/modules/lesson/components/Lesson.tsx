@@ -1,7 +1,11 @@
 import { VisibilitySensor } from "@futurejj/react-native-visibility-sensor";
 import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
-import { Share2Icon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react-native";
+import {
+	Share as Share2Icon,
+	Dislike as ThumbsDownIcon,
+	Like1 as ThumbsUpIcon,
+} from "iconsax-react-nativejs";
 import { Suspense, useCallback, useMemo } from "react";
 import { View, type ViewStyle } from "react-native";
 import Markdown from "react-native-markdown-display";
