@@ -29,7 +29,8 @@
 		"db:dev:push": "bun run --env-file=.env.dev drizzle-kit push --config=drizzle.config.dev.ts",
 		"db:prod:push": "bun run --env-file=.env.prod drizzle-kit push --config=drizzle.config.prod.ts",
 		"db:dev:studio": "bun run --env-file=.env.dev drizzle-kit studio --config=drizzle.config.dev.ts",
-		"db:prod:studio": "bun run --env-file=.env.prod drizzle-kit studio --config=drizzle.config.prod.ts"
+		"db:prod:studio": "bun run --env-file=.env.prod drizzle-kit studio --config=drizzle.config.prod.ts",
+		"db:gen:dbml": "bun run ./dbml.ts"
 	},
 	"dependencies": {
 		"@libsql/client": "^0.15.10",
