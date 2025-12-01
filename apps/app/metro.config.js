@@ -1,5 +1,6 @@
 const path = require("path");
 const { getSentryExpoConfig } = require("@sentry/react-native/metro");
+const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 
 // Find the project and workspace directories
 const projectRoot = __dirname;
@@ -29,4 +30,4 @@ config.resolver.sourceExts.push("cjs");
 // 	unstable_transformProfile: "hermes-stable", // required
 // };
 
-module.exports = config;
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
