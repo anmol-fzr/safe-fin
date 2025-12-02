@@ -100,7 +100,3 @@ Continued use of the service after updates means you accept the revised terms.
 
 If you have questions regarding these Terms & Conditions, contact us at:
 **[anmoljan2005@gmail.com](mailto:anmoljan2005@gmail.com)**
-
----
-
-Let me know if you want a **Privacy Policy**, **Refund Policy**, or **App Store/Play Store compliant version** as well.
