@@ -2,3 +2,5 @@ node_modules/
 .expo/
 
 .env.local
+.env.development
+.env.production

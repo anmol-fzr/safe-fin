@@ -1,4 +1,4 @@
-import { lessonsResSchema } from "@safe-fin/schema/app";
+//import { lessonsResSchema } from "@safe-fin/schema/app";
 import type { ZodTypeAny } from "zod";
 import type { IResData } from "@/services/axios";
 import { axiosInstance } from "@/services/axios";
@@ -70,13 +70,14 @@ export const LESSON = {
 		const data = await axiosInstance.get("/lessons", {
 			params,
 		});
+		return data;
 
-		return safeApiParse({
-			endpoint: "GET /lessons",
-			schema: lessonsResSchema,
-			data,
-			fallback: fallbackData,
-		});
+		// return safeApiParse({
+		// 	endpoint: "GET /lessons",
+		// 	schema: lessonsResSchema,
+		// 	data,
+		// 	fallback: fallbackData,
+		// });
 	},
 	ONE: (lessonId: ResourceId) =>
 		axiosInstance.get<unknown, IResLesson>(`/lessons/${lessonId}`),
