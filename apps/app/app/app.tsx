@@ -13,7 +13,7 @@ import { initI18n } from "./i18n";
 import { AppNavigator, useNavigationPersistence } from "./navigators";
 import { customFontsToLoad } from "./theme";
 import { initCrashReporting } from "./utils/crashReporting";
-import { loadDateFnsLocale } from "./utils/formatDate";
+//import { loadDateFnsLocale } from "./utils/formatDate";
 import * as storage from "./utils/storage";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
@@ -47,12 +47,11 @@ export function App() {
 
 	useEffect(() => {
 		initCrashReporting();
-		initI18n()
-			.then(() => {
-				setIsI18nInitialized(true);
-				setTimeout(SplashScreen.hideAsync, 500);
-			})
-			.then(() => loadDateFnsLocale());
+		initI18n().then(() => {
+			setIsI18nInitialized(true);
+			setTimeout(SplashScreen.hideAsync, 500);
+		});
+		// .then(() => loadDateFnsLocale());
 	}, []);
 
 	if (

@@ -39,6 +39,7 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
 			...existingPlugins,
 			require("./plugins/withSplashScreen").withSplashScreen,
 			"expo-web-browser",
+			"expo-build-properties",
 		],
 	};
 };

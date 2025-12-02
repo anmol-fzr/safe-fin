@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Progress } from "tamagui";
+//import { Progress } from "tamagui";
 import { Button, Text } from "@/components";
 import { useCountdown } from "@/hooks";
 import { useCounter } from "@/hooks/useCounter";
@@ -9,7 +9,6 @@ import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { QUIZ } from "@/modules/quiz/api";
 import type { IQuizResult } from "@/services/api/quiz-result";
 import { spacing } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { Question, QuestionProvider, useQuestion } from "./Question";
 import { useQuizContext } from "./QuizContext";
 
@@ -120,7 +119,9 @@ export const QuizRender = () => {
 						<Question.Question question={currQuestion.question} />
 						<Text>{countdown}</Text>
 					</View>
+					{/*
 					<QuizTimeProgress countdown={countdown} />
+          */}
 					<Question.Options />
 				</QuestionProvider>
 
@@ -146,21 +147,21 @@ export const QuizRender = () => {
 	);
 };
 
-const QuizTimeProgress = ({ countdown }: { countdown: number }) => {
-	const { theme } = useAppTheme();
-	return (
-		<Progress
-			value={Math.min(100, Math.max(0, Math.round((countdown * 10) / 3)))}
-			height={4}
-			backgroundColor={theme.colors.tintInactive}
-		>
-			<Progress.Indicator
-				animation="lazy"
-				backgroundColor={theme.colors.tint}
-			/>
-		</Progress>
-	);
-};
+// const QuizTimeProgress = ({ countdown }: { countdown: number }) => {
+// 	const { theme } = useAppTheme();
+// 	return (
+// 		<Progress
+// 			value={Math.min(100, Math.max(0, Math.round((countdown * 10) / 3)))}
+// 			height={4}
+// 			backgroundColor={theme.colors.tintInactive}
+// 		>
+// 			<Progress.Indicator
+// 				animation="lazy"
+// 				backgroundColor={theme.colors.tint}
+// 			/>
+// 		</Progress>
+// 	);
+// };
 
 const styles = StyleSheet.create({
 	buttonWrapper: {

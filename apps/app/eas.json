@@ -34,7 +34,9 @@
 			"extends": "preview",
 			"ios": { "simulator": false }
 		},
-		"production": {}
+		"production": {
+			"bun": "1.3.3"
+		}
 	},
 	"submit": {
 		"production": {}

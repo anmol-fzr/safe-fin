@@ -4,7 +4,7 @@ import { ScamList } from "../components";
 
 export function ScamListScreen() {
 	return (
-		<Screen preset="fixed" contentContainerStyle={$styles.container}>
+		<Screen preset="auto" contentContainerStyle={$styles.container}>
 			<ScamList />
 		</Screen>
 	);

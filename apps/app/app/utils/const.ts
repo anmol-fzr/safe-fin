@@ -1,5 +1,10 @@
 import type { Scams } from "@/modules/scam/api";
 
+export const APP = {
+	NAME: "My Fin Mitra",
+	DESC: "Your Friend for Financial Learnings",
+} as const;
+
 type ConstantConfig = {
 	label: string;
 	key: string;

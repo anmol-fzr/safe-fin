@@ -6,9 +6,9 @@ import {
 	createNativeStackNavigator,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import { defaultConfig } from "@tamagui/config/v4";
-import { createTamagui, TamaguiProvider } from "@tamagui/core";
-import { PortalProvider } from "@tamagui/portal";
+//import { defaultConfig } from "@tamagui/config/v4";
+//import { createTamagui, TamaguiProvider } from "@tamagui/core";
+//import { PortalProvider } from "@tamagui/portal";
 import type { ComponentProps } from "react";
 import {
 	AuthNavigator,
@@ -82,7 +82,7 @@ export interface NavigationProps
 		ComponentProps<typeof NavigationContainer<AppStackParamList>>
 	> {}
 
-const config = createTamagui(defaultConfig);
+//const config = createTamagui(defaultConfig);
 
 import { ToastProviderWithViewport } from "@/components/toast";
 import { IconProvider } from "@/context/IconContext";
@@ -98,24 +98,20 @@ export const AppNavigator = function AppNavigator(props: NavigationProps) {
 	useBackButtonHandler((routeName) => exitRoutes.includes(routeName));
 
 	return (
-		<TamaguiProvider config={config}>
-			<ThemeProvider value={{ themeScheme: "light", setThemeContextOverride }}>
-				<NavigationContainer
-					ref={navigationRef}
-					theme={navigationTheme}
-					{...props}
-				>
-					<Screens.ErrorBoundary catchErrors={Config.catchErrors}>
-						<PortalProvider shouldAddRootHost>
-							<ToastProviderWithViewport>
-								<IconProvider>
-									<AppStack />
-								</IconProvider>
-							</ToastProviderWithViewport>
-						</PortalProvider>
-					</Screens.ErrorBoundary>
-				</NavigationContainer>
-			</ThemeProvider>
-		</TamaguiProvider>
+		<ThemeProvider value={{ themeScheme: "light", setThemeContextOverride }}>
+			<NavigationContainer
+				ref={navigationRef}
+				theme={navigationTheme}
+				{...props}
+			>
+				<Screens.ErrorBoundary catchErrors={Config.catchErrors}>
+					<ToastProviderWithViewport>
+						<IconProvider>
+							<AppStack />
+						</IconProvider>
+					</ToastProviderWithViewport>
+				</Screens.ErrorBoundary>
+			</NavigationContainer>
+		</ThemeProvider>
 	);
 };
