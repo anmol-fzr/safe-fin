@@ -59,7 +59,9 @@ export const betterAuthOptions: BetterAuthOptions = {
 		},
 	},
 	plugins: [
-		expo(),
+		expo({
+			disableOriginOverride: true,
+		}),
 		admin({
 			adminUserIds: ["F7EOrNtgbhOUA4FYvj0r7bN4eJykYGMb"],
 		}),

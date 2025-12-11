@@ -5,9 +5,6 @@ import { LessonList } from "../components/LessonList";
 export function LessonListScreen() {
 	return (
 		<Screen preset="scroll" contentContainerStyle={$styles.container}>
-			{/*
-				<TopicList />
-        */}
 			<LessonList />
 		</Screen>
 	);

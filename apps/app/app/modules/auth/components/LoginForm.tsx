@@ -2,6 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useSendOtp, useVerifyOtp } from "@safe-fin/ui/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
+import { useRouter } from "expo-router";
 import { useCallback, useMemo, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import type { ViewStyle } from "react-native";
@@ -10,7 +11,6 @@ import type { OtpInputRef } from "react-native-otp-entry";
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useCountdown } from "@/hooks";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { loginSchema } from "@/modules/auth/schema";
 import { $styles, type ThemedStyle } from "@/theme";
 import { getFakePhoneNumber } from "@/utils/faker/fields";
@@ -29,7 +29,7 @@ export const LoginForm = (props: LoginFormProps) => {
 	const { countdown, reset, restart } = useCountdown(59);
 	const otpInputRef = useRef<OtpInputRef>(null);
 
-	const { handleGuestLogin } = useGuestLogin();
+	const { isGuestLoginPending, handleGuestLogin } = useGuestLogin();
 
 	const form = useForm({
 		resolver: yupResolver(loginSchema),
@@ -42,7 +42,8 @@ export const LoginForm = (props: LoginFormProps) => {
 
 	const { sendOtp, isOtpSent, resetSentOtp } = useSendOtp(queryClient);
 	const { verifyOtpAsync } = useVerifyOtp(queryClient);
-	const navigation = useSafeNavigation();
+
+	const router = useRouter();
 
 	const {
 		themed,
@@ -68,7 +69,7 @@ export const LoginForm = (props: LoginFormProps) => {
 					setAuthData({ user: { id, email, name, isAnonymous: false } });
 
 					setAuthState("complete");
-					navigation.navigate("MainTabs", { screen: "Home" });
+					router.navigate("/tabs");
 				},
 			});
 		} catch (error) {
@@ -138,7 +139,7 @@ export const LoginForm = (props: LoginFormProps) => {
 						text="Resend OTP"
 						preset="text"
 						//onPress={handleSubmit}
-						disabled={isResendDisabled}
+						status={isResendDisabled ? "disabled" : undefined}
 						textStyle={{
 							color: isResendDisabled
 								? colors.palette.neutral500
@@ -172,6 +173,7 @@ export const LoginForm = (props: LoginFormProps) => {
 						tx={isOtpSent ? "loginScreen:verifyOtp" : "loginScreen:sendOtp"}
 						style={themed($tapButton)}
 						preset="reversed"
+						status={isGuestLoginPending ? "disabled" : undefined}
 						onPress={handleSubmit}
 					/>
 
@@ -181,6 +183,8 @@ export const LoginForm = (props: LoginFormProps) => {
 							tx="loginScreen:guestLogIn"
 							style={themed($tapButton)}
 							preset="default"
+							loadingTx={"loginScreen:guestLogInPending"}
+							status={isGuestLoginPending ? "loading" : undefined}
 							onPress={handleGuestLogin}
 						/>
 					)}

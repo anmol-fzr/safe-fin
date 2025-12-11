@@ -13,10 +13,11 @@ export const IconProvider = (props: IconProviderProps) => {
 	const {
 		theme: { colors },
 	} = useAppTheme();
+
 	const {
 		variant = "Linear",
-		color = colors.palette.accent500,
-		size = 15,
+		color = colors.palette.neutral900,
+		size = 24,
 	} = props;
 
 	return (
@@ -29,6 +30,13 @@ export const IconProvider = (props: IconProviderProps) => {
 export interface IconCompProps extends IconProps {
 	icon: BaseIcon;
 }
+
+export const IconSax = (props: IconCompProps) => {
+	const { icon: Icon, ...rest } = props;
+	const iconOpts = useIcon();
+
+	return <Icon {...iconOpts} {...rest} />;
+};
 
 export const useIcon = () =>
 	useSafeContext<BaseIconProps>(IconContext, "Icon Component");

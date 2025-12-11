@@ -1,22 +1,16 @@
 import savingMoneyImg from "assets/images/auth/login/saving-money.png";
 import { Image, StyleSheet } from "react-native";
-import { Screen, ScreenHeader } from "@/components";
+import { MinimalNoScrollScreen } from "@/components/MinimalNoScrollScreen";
 import { LoginForm } from "@/modules/auth/components";
 import { spacing } from "@/theme";
 
-export function LoginScreen() {
+export default function LoginScreen() {
 	return (
-		<Screen
-			preset="auto"
-			contentContainerStyle={styles.root}
-			safeAreaEdges={["top", "bottom"]}
-		>
-			<ScreenHeader titleTx="loginScreen:logIn" tagLineTx="loginScreen:logIn" />
-
+		<MinimalNoScrollScreen>
 			<Image source={savingMoneyImg} style={styles.image} />
 
 			<LoginForm />
-		</Screen>
+		</MinimalNoScrollScreen>
 	);
 }
 

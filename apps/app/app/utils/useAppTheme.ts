@@ -1,17 +1,8 @@
 import {
-	DarkTheme,
-	DefaultTheme,
+	type DefaultTheme,
 	useTheme as useNavTheme,
 } from "@react-navigation/native";
-import * as SystemUI from "expo-system-ui";
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useState,
-} from "react";
+import { useCallback, useMemo } from "react";
 import { type StyleProp, useColorScheme } from "react-native";
 import {
 	darkTheme,
@@ -21,58 +12,14 @@ import {
 	type ThemedStyle,
 	type ThemedStyleArray,
 } from "@/theme";
-import { MissingContextError } from "./error";
-
-type ThemeContextType = {
-	themeScheme: ThemeContexts;
-	setThemeContextOverride: (newTheme: ThemeContexts) => void;
-};
-
-// create a React context and provider for the current theme
-export const ThemeContext = createContext<ThemeContextType>({
-	themeScheme: undefined, // default to the system theme
-	setThemeContextOverride: (_newTheme: ThemeContexts) => {
-		console.error(
-			"Tried to call setThemeContextOverride before the ThemeProvider was initialized",
-		);
-	},
-});
 
 const themeContextToTheme = (themeContext: ThemeContexts): Theme =>
 	themeContext === "dark" ? darkTheme : lightTheme;
-
-const setImperativeTheming = (theme: Theme) => {
-	SystemUI.setBackgroundColorAsync(theme.colors.background);
-};
-
-export const useThemeProvider = (initialTheme: ThemeContexts = undefined) => {
-	const colorScheme = useColorScheme();
-	const [overrideTheme, setTheme] = useState<ThemeContexts>(initialTheme);
-
-	const setThemeContextOverride = useCallback((newTheme: ThemeContexts) => {
-		setTheme(newTheme);
-	}, []);
-
-	const themeScheme = overrideTheme || colorScheme || "light";
-	const navigationTheme = themeScheme === "dark" ? DarkTheme : DefaultTheme;
-
-	useEffect(() => {
-		setImperativeTheming(themeContextToTheme(themeScheme));
-	}, [themeScheme]);
-
-	return {
-		themeScheme,
-		navigationTheme,
-		setThemeContextOverride,
-		ThemeProvider: ThemeContext.Provider,
-	};
-};
 
 interface UseAppThemeValue {
 	// The theme object from react-navigation
 	navTheme: typeof DefaultTheme;
 	// A function to set the theme context override (for switching modes)
-	setThemeContextOverride: (newTheme: ThemeContexts) => void;
 	// The current theme object
 	theme: Theme;
 	// The current theme context "light" | "dark"
@@ -93,17 +40,12 @@ interface UseAppThemeValue {
  */
 export const useAppTheme = (): UseAppThemeValue => {
 	const navTheme = useNavTheme();
-	const context = useContext(ThemeContext);
-	if (!context) {
-		throw new MissingContextError("useTheme", " ThemeProvider");
-	}
+	const colorScheme = useColorScheme();
 
-	const { themeScheme: overrideTheme, setThemeContextOverride } = context;
-
-	const themeContext: ThemeContexts = useMemo(
-		() => overrideTheme || (navTheme.dark ? "dark" : "light"),
-		[overrideTheme, navTheme],
-	);
+	const themeContext: ThemeContexts = useMemo(() => {
+		return "light";
+		return colorScheme || (navTheme.dark ? "dark" : "light");
+	}, [navTheme, colorScheme]);
 
 	const themeVariant: Theme = useMemo(
 		() => themeContextToTheme(themeContext),
@@ -131,7 +73,6 @@ export const useAppTheme = (): UseAppThemeValue => {
 
 	return {
 		navTheme,
-		setThemeContextOverride,
 		theme: themeVariant,
 		themeContext,
 		themed,

@@ -5,8 +5,9 @@ import {
 	User as UserIcon,
 	WalletMoney as WalletIcon,
 } from "iconsax-react-nativejs";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import { Button, Icon, ListView, Screen, Text } from "@/components";
+import { IconSax } from "@/context/IconContext";
 import { useIsGuestUser } from "@/modules/auth/hooks/use-guest-login";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { MoreLinks } from "@/screens";
@@ -56,8 +57,12 @@ export const ProfileIndexScreen = () => {
 	const { handleLogout } = useAuth();
 
 	return (
-		<Screen preset="scroll" style={{ paddingTop: spacing.md }}>
-			<View style={{ flex: 1, paddingInline: spacing.sm }}>
+		<Screen
+			preset="scroll"
+			style={{ paddingTop: spacing.md }}
+			safeAreaEdges={["bottom"]}
+		>
+			<View style={{ flex: 1, paddingInline: spacing.sm, paddingBottom: 64 }}>
 				<ListView
 					data={linkItems}
 					keyExtractor={(item) => item.title}
@@ -79,7 +84,7 @@ export const ProfileIndexScreen = () => {
 										alignItems: "center",
 									}}
 								>
-									<Icon />
+									<IconSax icon={Icon} />
 									<View>
 										<Text size="lg" weight="medium">
 											{title}
@@ -97,18 +102,20 @@ export const ProfileIndexScreen = () => {
 					}}
 				/>
 				<MoreLinks />
+				{isGuest && (
+					<Button
+						tx="common:logOutAsGuest"
+						onPress={handleLogout}
+						preset="reversed"
+						style={{
+							marginBlock: 24,
+						}}
+						RightAccessory={() => (
+							<LogOutIcon style={{ marginLeft: 12 }} size={20} color="#fff" />
+						)}
+					/>
+				)}
 			</View>
-			{isGuest && (
-				<Button
-					tx="common:logOutAsGuest"
-					onPress={handleLogout}
-					preset="reversed"
-					style={{ marginTop: 24 }}
-					RightAccessory={() => (
-						<LogOutIcon style={{ marginLeft: 12 }} size={20} color="#fff" />
-					)}
-				/>
-			)}
 		</Screen>
 	);
 };

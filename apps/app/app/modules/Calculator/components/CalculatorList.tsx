@@ -1,5 +1,5 @@
-import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
+import { Link } from "expo-router";
 import { Suspense } from "react";
 import type { ViewStyle } from "react-native";
 import { View } from "react-native";
@@ -37,7 +37,7 @@ function CalculatorListImpl() {
 			ListEmptyComponent={EmptyListView}
 			onViewableItemsChanged={handleViewableItemsChanged}
 			renderItem={({ item, data, index }) => (
-				<CalculatorListItem
+				<CalculatorListItemIml
 					isFirst={index === 0}
 					isLast={index === data.length - 1}
 					id={item.id}
@@ -57,7 +57,7 @@ interface CalculatorListItemImplProps {
 	isLast: boolean;
 }
 
-function CalculatorListItem(props: CalculatorListItemImplProps) {
+function CalculatorListItemIml(props: CalculatorListItemImplProps) {
 	const { id, title, desc, isFirst, isLast } = props;
 	const { themed } = useAppTheme();
 
@@ -66,9 +66,9 @@ function CalculatorListItem(props: CalculatorListItemImplProps) {
 	const styles = getStyles({ isFirst, isLast });
 	return (
 		<Link
-			screen="Calculator"
-			params={{
-				id,
+			href={{
+				pathname: `/tabs/calculators`,
+				params: { id },
 			}}
 			style={[themed($calculatorListItem), styles]}
 		>
@@ -80,7 +80,7 @@ function CalculatorListItem(props: CalculatorListItemImplProps) {
 	);
 }
 
-CalculatorListItem.Loading = () => (
+CalculatorListItemIml.Loading = () => (
 	<SkeletonPlaceholder>
 		<SkeletonPlaceholder.Item
 			height={100}
@@ -107,6 +107,6 @@ CalculatorListImpl.Loading = (
 		data={arr}
 		estimatedItemSize={113}
 		keyExtractor={(item) => item.toString()}
-		renderItem={CalculatorListItem.Loading}
+		renderItem={CalculatorListItemIml.Loading}
 	/>
 );

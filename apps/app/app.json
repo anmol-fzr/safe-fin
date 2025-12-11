@@ -57,10 +57,17 @@
 					"project": "srvc",
 					"organization": "anmol-ng"
 				}
+			],
+			[
+				"expo-router",
+				{
+					"root": "./app/routes"
+				}
 			]
 		],
 		"experiments": {
-			"tsconfigPaths": true
+			"tsconfigPaths": true,
+			"typedRoutes": true
 		},
 		"extra": {
 			"eas": {

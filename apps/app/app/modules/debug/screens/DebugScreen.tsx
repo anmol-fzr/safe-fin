@@ -25,7 +25,7 @@ const usingHermes =
 	typeof HermesInternal === "object" && HermesInternal !== null;
 
 export function DebugScreen() {
-	const { setThemeContextOverride, themeContext, themed } = useAppTheme();
+	const { themeContext, themed } = useAppTheme();
 	const resetAuthData = useAuthStore((state) => state.resetData);
 	const user = useAuthStore((state) => state.user);
 
@@ -53,15 +53,13 @@ export function DebugScreen() {
 
 	const toggleTheme = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); // Animate the transition
-		setThemeContextOverride(themeContext === "dark" ? "light" : "dark");
-	}, [themeContext, setThemeContextOverride]);
+	}, []);
 
 	// Resets the theme to the system theme
 	const colorScheme = useColorScheme();
 	const resetTheme = useCallback(() => {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-		setThemeContextOverride(undefined);
-	}, [setThemeContextOverride]);
+	}, []);
 
 	const appDataList = [
 		{

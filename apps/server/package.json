@@ -15,25 +15,21 @@
 		"format": "biome format"
 	},
 	"dependencies": {
-		"@hono/zod-validator": "^0.7.4",
+		"@hono/zod-validator": "^0.7.5",
 		"@safe-fin/auth": "workspace:*",
 		"@safe-fin/db": "workspace:*",
 		"@safe-fin/schema": "workspace:*",
 		"country-state-city": "^3.2.1",
 		"drizzle-orm": "^0.44.3",
 		"drizzle-zod": "^0.8.3",
-		"hono": "^4.9.12",
+		"hono": "^4.10.7",
 		"zod": "3.25.76"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250715.0",
 		"@types/bun": "latest",
-		"@vitest/coverage-c8": "^0.33.0",
-		"@vitest/ui": "^3.2.4",
 		"miniflare": "^4.20250829.0",
 		"supertest": "^7.1.4",
-		"vitest": "^3.2.4",
-		"vitest-environment-miniflare": "^2.14.4",
 		"wrangler": "^4.24.3"
 	}
 }

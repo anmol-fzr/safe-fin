@@ -1,14 +1,16 @@
 import { useResourceActionToast } from "@safe-fin/ui/hooks";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { useRouter } from "expo-router";
+import { useCallback } from "react";
 import { useAuthStore } from "../store";
 import { authClient } from "../utils";
 
 export const useAuth = () => {
 	const resetAuthStore = useAuthStore((state) => state.resetData);
-	const navigation = useSafeNavigation();
+	const isLogin = useAuthStore((state) => state.user !== null);
+	const { navigate } = useRouter();
 	const toast = useResourceActionToast();
 
-	function handleLogout() {
+	const handleLogout = useCallback(() => {
 		authClient.signOut(
 			{},
 			{
@@ -18,17 +20,17 @@ export const useAuth = () => {
 				onSuccess() {
 					resetAuthStore();
 					//navigation.popToTop();
-					navigation.navigate("Auth", { screen: "Login" });
+					navigate("/auth");
 					toast.success("Logged Out");
 				},
 				onError(err) {
 					console.log(err);
-					navigation.navigate("Auth", { screen: "Login" });
+					navigate("/auth");
 					toast.loading("Unable to Log Out");
 				},
 			},
 		);
-	}
+	}, [toast, navigate, resetAuthStore]);
 
-	return { handleLogout };
+	return { handleLogout, isLogin };
 };

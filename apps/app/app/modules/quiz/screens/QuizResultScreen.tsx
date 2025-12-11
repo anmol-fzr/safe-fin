@@ -75,11 +75,6 @@ export function QuizResultScreen() {
 			contentContainerStyle={$styles.container}
 			safeAreaEdges={["top"]}
 		>
-			<ScreenHeader
-				titleTx="resultsScreen:title"
-				tagLineTx="resultsScreen:tagLine"
-			/>
-
 			<View style={styles.screen}>
 				<View style={styles.wrapper}>
 					{isPending ? (

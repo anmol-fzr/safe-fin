@@ -2,6 +2,7 @@ import {
 	createNativeStackNavigator,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { ScreenHeader } from "@/components";
 import * as Screens from "./screen";
 
 export type AuthStackParamList = {
@@ -22,7 +23,22 @@ export function AuthNavigator() {
 			}}
 			initialRouteName="Login"
 		>
-			<Stack.Screen name="Login" component={Screens.LoginScreen} />
+			<Stack.Screen
+				name="Login"
+				component={Screens.LoginScreen}
+				options={{
+					headerShown: true,
+					header: (props) => {
+						return (
+							<ScreenHeader
+								titleTx="loginScreen:logIn"
+								tagLineTx="loginScreen:logIn"
+								{...props}
+							/>
+						);
+					},
+				}}
+			/>
 			<Stack.Screen name="Register" component={Screens.RegisterScreen} />
 		</Stack.Navigator>
 	);

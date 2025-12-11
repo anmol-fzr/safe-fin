@@ -3,6 +3,7 @@ import {
 	type NativeStackNavigationProp,
 	type NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import { ScreenHeader } from "@/components";
 import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import * as Screens from "./screens";
 
@@ -32,7 +33,22 @@ export function QuizNavigator() {
 			initialRouteName="Quiz"
 		>
 			<Stack.Screen name="Quiz" component={Screens.QuizScreen} />
-			<Stack.Screen name="QuizResult" component={Screens.QuizResultScreen} />
+			<Stack.Screen
+				name="QuizResult"
+				component={Screens.QuizResultScreen}
+				options={{
+					headerShown: true,
+					header: (props) => {
+						return (
+							<ScreenHeader
+								titleTx="resultsScreen:title"
+								tagLineTx="resultsScreen:tagLine"
+								{...props}
+							/>
+						);
+					},
+				}}
+			/>
 		</Stack.Navigator>
 	);
 }

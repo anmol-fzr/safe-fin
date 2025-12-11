@@ -1,4 +1,4 @@
-import { createAdminAuthClient } from "@safe-fin/auth/admin";
+import type { createAdminAuthClient } from "@safe-fin/auth/admin";
 import { createContext, type PropsWithChildren } from "react";
 import { useSafeContext } from "./useSafeContext";
 

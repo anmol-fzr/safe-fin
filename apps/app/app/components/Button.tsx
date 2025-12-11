@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import {
+	ActivityIndicator,
 	Pressable,
 	type PressableProps,
 	type PressableStateCallbackType,
@@ -73,6 +74,7 @@ export interface ButtonProps extends PressableProps {
 	 */
 	children?: React.ReactNode;
 	/**
+	 * @deprecated Use `status="disabled"` instead. This prop will be removed sooner
 	 * disabled prop, accessed directly for declarative styling reasons.
 	 * https://reactnative.dev/docs/pressable#disabled
 	 */
@@ -81,6 +83,23 @@ export interface ButtonProps extends PressableProps {
 	 * An optional style override for the disabled state
 	 */
 	disabledStyle?: StyleProp<ViewStyle>;
+	/**
+	 * Current Status of the Button e.g. Loading | Disabled
+	 */
+	status?: "loading" | "disabled";
+	/**
+	 * Text which is looked up via i18n.
+	 */
+	loadingTx?: TextProps["tx"];
+	/**
+	 * The text to display if not using `tx` or nested components.
+	 */
+	loadingText?: TextProps["text"];
+	/**
+	 * Optional options to pass to i18n. Useful for interpolation
+	 * as well as explicitly setting locale or translation fallbacks.
+	 */
+	loadingTxOptions?: TextProps["txOptions"];
 }
 
 /**
@@ -111,9 +130,21 @@ export function Button(props: ButtonProps) {
 		RightAccessory,
 		LeftAccessory,
 		disabled,
+		status,
 		disabledStyle: $disabledViewStyleOverride,
+		loadingText = "Loading ...",
+		loadingTx,
+		loadingTxOptions,
 		...rest
 	} = props;
+
+	if (disabled !== undefined) {
+		console.warn(`disabled prop is deprecated Use status="disabled" instead.`);
+	}
+
+	const isLoading = status === "loading";
+
+	const isDisabled = disabled ?? status === "disabled";
 
 	const { themed } = useAppTheme();
 
@@ -131,7 +162,7 @@ export function Button(props: ButtonProps) {
 			$viewStyleOverride,
 			!!pressed &&
 				themed([$pressedViewPresets[preset], $pressedViewStyleOverride]),
-			!!disabled && $disabledViewStyleOverride,
+			!!isDisabled && $disabledViewStyleOverride,
 		];
 	}
 	/**
@@ -147,7 +178,7 @@ export function Button(props: ButtonProps) {
 			$textStyleOverride,
 			!!pressed &&
 				themed([$pressedTextPresets[preset], $pressedTextStyleOverride]),
-			!!disabled && $disabledTextStyleOverride,
+			!!isDisabled && $disabledTextStyleOverride,
 		];
 	}
 
@@ -155,37 +186,51 @@ export function Button(props: ButtonProps) {
 		<Pressable
 			style={$viewStyle}
 			accessibilityRole="button"
-			accessibilityState={{ disabled: !!disabled }}
+			accessibilityState={{ disabled: !!isDisabled }}
 			{...rest}
-			disabled={disabled}
+			disabled={isDisabled}
 		>
-			{(state) => (
+			{isLoading ? (
 				<>
-					{!!LeftAccessory && (
-						<LeftAccessory
-							style={$leftAccessoryStyle}
-							pressableState={state}
-							disabled={disabled}
-						/>
-					)}
-
+					<ActivityIndicator />
 					<Text
-						tx={tx}
-						text={text}
-						txOptions={txOptions}
-						style={$textStyle(state)}
+						tx={loadingTx}
+						text={loadingText}
+						txOptions={loadingTxOptions}
+						style={[$textStyle({ pressed: false }), { marginLeft: 12 }]}
 					>
 						{children}
 					</Text>
-
-					{!!RightAccessory && (
-						<RightAccessory
-							style={$rightAccessoryStyle}
-							pressableState={state}
-							disabled={disabled}
-						/>
-					)}
 				</>
+			) : (
+				(state) => (
+					<>
+						{!!LeftAccessory && (
+							<LeftAccessory
+								style={$leftAccessoryStyle}
+								pressableState={state}
+								disabled={isDisabled}
+							/>
+						)}
+
+						<Text
+							tx={tx}
+							text={text}
+							txOptions={txOptions}
+							style={$textStyle(state)}
+						>
+							{children}
+						</Text>
+
+						{!!RightAccessory && (
+							<RightAccessory
+								style={$rightAccessoryStyle}
+								pressableState={state}
+								disabled={isDisabled}
+							/>
+						)}
+					</>
+				)
 			)}
 		</Pressable>
 	);

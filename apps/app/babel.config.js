@@ -1,8 +1,7 @@
-/** @type {import('@babel/core').TransformOptions} */
-module.exports = (api) => {
+module.exports = function (api) {
 	api.cache(true);
 	return {
 		presets: ["babel-preset-expo"],
-		plugins: ["react-compiler"],
+		plugins: ["react-native-worklets/plugin"],
 	};
 };

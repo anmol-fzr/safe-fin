@@ -8,6 +8,7 @@ import {
 import { Linking, Pressable, Share, View } from "react-native";
 //import * as RateApp from "react-native-rate-app";
 import { ListView, Text } from "@/components";
+import { IconSax } from "@/context/IconContext";
 import { APP } from "@/utils/const";
 import { envs } from "@/utils/envs";
 
@@ -92,7 +93,6 @@ const SettingList = ({ list }: { list: SettingList }) => {
 			data={list}
 			estimatedItemSize={29}
 			renderItem={({ item }) => {
-				const Icon = item.icon;
 				const handlePress = () => {
 					if (item.url) {
 						Linking.openURL(item.url);
@@ -116,7 +116,7 @@ const SettingList = ({ list }: { list: SettingList }) => {
 								alignItems: "center",
 							}}
 						>
-							<Icon />
+							<IconSax icon={item.icon} />
 							<View>
 								<Text size="lg" weight="medium">
 									{item.title}

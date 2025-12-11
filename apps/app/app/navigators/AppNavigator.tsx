@@ -48,7 +48,7 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> =
 const RootStack = createNativeStackNavigator<AppStackParamList>();
 
 function AppStack() {
-	const isAuthenticated = useAuthStore((state) => state.isLogin);
+	const { isLogin } = useAuth();
 
 	const {
 		theme: { colors },
@@ -63,7 +63,7 @@ function AppStack() {
 					backgroundColor: colors.background,
 				},
 			}}
-			initialRouteName={isAuthenticated ? "Welcome" : "Auth"}
+			initialRouteName={isLogin ? "Welcome" : "Auth"}
 			//initialRouteName="Test"
 		>
 			<RootStack.Screen name="Welcome" component={Screens.WelcomeScreen} />
@@ -86,6 +86,7 @@ export interface NavigationProps
 
 import { ToastProviderWithViewport } from "@/components/toast";
 import { IconProvider } from "@/context/IconContext";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export const AppNavigator = function AppNavigator(props: NavigationProps) {
 	const {
@@ -93,12 +94,12 @@ export const AppNavigator = function AppNavigator(props: NavigationProps) {
 		navigationTheme,
 		setThemeContextOverride,
 		ThemeProvider,
-	} = useThemeProvider();
+	} = useThemeProvider("dark");
 
 	useBackButtonHandler((routeName) => exitRoutes.includes(routeName));
 
 	return (
-		<ThemeProvider value={{ themeScheme: "light", setThemeContextOverride }}>
+		<ThemeProvider value={{ themeScheme: "dark", setThemeContextOverride }}>
 			<NavigationContainer
 				ref={navigationRef}
 				theme={navigationTheme}

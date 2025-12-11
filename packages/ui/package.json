@@ -23,7 +23,7 @@
 		"@tanstack/react-query": "^5.80.2",
 		"@types/react": "~19.1.10",
 		"@types/react-dom": "^19.0.4",
-		"better-auth": "catalog:",
+		"better-auth": "1.4.0",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"tsdown": "^0.16.0",

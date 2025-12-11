@@ -1,4 +1,4 @@
-import { Screen, ScreenHeader } from "@/components";
+import { Screen } from "@/components";
 import { $styles } from "@/theme";
 import { CalculatorList } from "../components";
 

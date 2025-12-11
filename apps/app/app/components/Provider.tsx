@@ -2,14 +2,17 @@ import type { Notifier } from "@safe-fin/ui/hooks";
 import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as Burnt from "burnt";
+import { StatusBar } from "expo-status-bar";
 import type { PropsWithChildren } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import {
-	initialWindowMetrics,
-	SafeAreaProvider,
-} from "react-native-safe-area-context";
+import { IconProvider } from "@/context/IconContext";
+// import {
+// 	initialWindowMetrics,
+// 	SafeAreaProvider,
+// } from "react-native-safe-area-context";
 import { authClient } from "@/modules/auth/utils";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export const queryClient = new QueryClient({
 	defaultOptions: {
@@ -38,17 +41,28 @@ const notifier: Notifier = {
 };
 
 export function Provider({ children }: PropsWithChildren) {
+	const {
+		theme: { colors },
+		themeContext,
+	} = useAppTheme();
+
 	return (
-		<QueryClientProvider client={queryClient}>
-			<SafeAreaProvider initialMetrics={initialWindowMetrics}>
+		<>
+			<StatusBar
+				//style={themeContext === "dark" ? "light" : "dark"}
+				backgroundColor={colors.background}
+			/>
+			<QueryClientProvider client={queryClient}>
 				<KeyboardProvider>
 					<GestureHandlerRootView>
 						<AuthProvider client={authClient}>
-							<NotifierProvider value={notifier}>{children}</NotifierProvider>
+							<NotifierProvider value={notifier}>
+								<IconProvider>{children}</IconProvider>
+							</NotifierProvider>
 						</AuthProvider>
 					</GestureHandlerRootView>
 				</KeyboardProvider>
-			</SafeAreaProvider>
-		</QueryClientProvider>
+			</QueryClientProvider>
+		</>
 	);
 }

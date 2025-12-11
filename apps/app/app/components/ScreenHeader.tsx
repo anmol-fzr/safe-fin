@@ -3,7 +3,7 @@ import { memo } from "react";
 import { type TextStyle, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { TxKeyPath } from "@/i18n";
-import { colors, spacing, type ThemedStyle } from "@/theme";
+import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Text } from "./Text";
 
@@ -21,19 +21,22 @@ export const ScreenHeader = memo((props: ScreenHeaderProps) => {
 		isInNativeHeader = false;
 	}
 
-	const { themed } = useAppTheme();
+	const {
+		themed,
+		theme: { colors, spacing },
+	} = useAppTheme();
 	const { top } = useSafeAreaInsets();
 
 	return (
 		<View
 			style={{
+				elevation: 1,
 				marginTop: isInNativeHeader ? top : 0,
 				paddingInline: spacing.sm,
 				paddingBottom: spacing.sm,
-				//marginBottom: spacing.sm,
-				backgroundColor: colors.palette.accent100,
-				borderBottomWidth: 0.5,
-				borderBottomColor: "#c9c9c9",
+				backgroundColor: colors.background,
+				// borderBottomWidth: 0.5,
+				// borderBottomColor: "#c9c9c9",
 			}}
 		>
 			<Text preset="heading" tx={titleTx} style={themed($title)} />
