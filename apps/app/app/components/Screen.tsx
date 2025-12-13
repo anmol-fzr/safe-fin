@@ -20,7 +20,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useIsOnline } from "@/hooks/useIsOnline";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { $styles, spacing } from "../theme";
+import { $styles } from "../theme";
 import {
 	type ExtendedEdge,
 	useSafeAreaInsetsStyle,
@@ -267,8 +267,8 @@ function ScreenWithScrolling(props: ScreenProps) {
 export function Screen(props: ScreenProps) {
 	const isOnline = useIsOnline();
 	const {
-		theme: { colors },
-		themeContext,
+		theme: { colors, spacing },
+		actualTheme,
 	} = useAppTheme();
 	const {
 		backgroundColor,
@@ -290,7 +290,7 @@ export function Screen(props: ScreenProps) {
 			]}
 		>
 			<StatusBar
-				style={statusBarStyle || (themeContext === "dark" ? "light" : "dark")}
+				style={statusBarStyle || (actualTheme === "dark" ? "light" : "dark")}
 				backgroundColor={colors.background}
 				{...StatusBarProps}
 			/>

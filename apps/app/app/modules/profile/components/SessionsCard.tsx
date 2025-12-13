@@ -9,7 +9,7 @@ import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { UAParser } from "ua-parser-js";
 import { Button, ListView, Text } from "@/components";
 import type { Session } from "@/modules/auth/utils";
-import { $styles, spacing } from "@/theme";
+import { $styles, colors, spacing } from "@/theme";
 import { isStrictlySameObj } from "@/utils/funcs";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useRevokeOtherSessions, useRevokeSession } from "../hooks/mutations";
@@ -74,7 +74,9 @@ function SessionCell(session: SessionCellProps) {
 
 	const handleRevoke = () => revokeSession(session.token);
 
-	const color = isRevokingSession ? "gray" : "black";
+	const color = isRevokingSession
+		? colors.textDisabled
+		: colors.palette.neutral300;
 
 	return (
 		<View
@@ -145,6 +147,10 @@ SessionCell.Loading = () => {
 function RevokeOtherSessions() {
 	const { revokeOtherSessions, isPending } = useRevokeOtherSessions();
 
+	const {
+		theme: { colors },
+	} = useAppTheme();
+
 	return (
 		<View
 			style={{
@@ -159,10 +165,10 @@ function RevokeOtherSessions() {
 				preset="text"
 				onPress={revokeOtherSessions}
 				style={styles.sessionRevokerButton}
-				disabled={isPending}
+				status={isPending ? "disabled" : undefined}
 				textStyle={{
 					textDecorationLine: "underline",
-					color: isPending ? "gray" : "black",
+					color: isPending ? colors.textDisabled : colors.palette.neutral900,
 				}}
 			>
 				Revoke all Other

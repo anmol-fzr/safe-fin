@@ -12,13 +12,7 @@ export const UserProfileScreen = () => {
 	const { handleLogout } = useAuth();
 
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
-			<GoBack tx="profileScreen:title" />
-
+		<Screen preset="scroll" contentContainerStyle={$styles.container}>
 			<GuestSafe>
 				<ProfileForm />
 			</GuestSafe>

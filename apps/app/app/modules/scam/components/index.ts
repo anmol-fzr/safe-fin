@@ -1,1 +1,1 @@
-export * from "./ScamList";
+export * from "./scam-list/scam-list";

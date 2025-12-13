@@ -1,16 +1,11 @@
-import { GoBack, Screen } from "@/components";
+import { Screen } from "@/components";
 import { GuestSafe } from "@/components/guest/GuestSafe";
 import { $styles } from "@/theme";
 import { DemoGraphicsForm } from "../components";
 
 export const DemoGraphicsScreen = () => {
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
-			<GoBack tx="demoGraphicsScreen:title" />
+		<Screen preset="scroll" contentContainerStyle={$styles.container}>
 			<GuestSafe>
 				<DemoGraphicsForm />
 			</GuestSafe>

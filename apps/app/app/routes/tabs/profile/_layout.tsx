@@ -1,13 +1,14 @@
+import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { Stack } from "expo-router";
-import { ScreenHeader } from "@/components";
-import { useAppTheme } from "@/utils/useAppTheme";
+import { GoBack, ScreenHeader } from "@/components";
+
+const ProfileScreenHeader = (props: NativeStackHeaderProps) => {
+	return <GoBack tx="profileScreen:title" {...props} />;
+};
 
 export default function ProfileLayout() {
-	const {
-		theme: { colors },
-	} = useAppTheme();
 	return (
-		<Stack>
+		<Stack screenOptions={{ header: ProfileScreenHeader }}>
 			<Stack.Screen
 				name="index"
 				options={{
@@ -18,12 +19,11 @@ export default function ProfileLayout() {
 							{...props}
 						/>
 					),
-					// headerTitle: "Profile",
-					// headerStyle: {
-					// 	backgroundColor: colors.background,
-					// },
 				}}
 			/>
+
+			<Stack.Screen name="user-profile" />
+			<Stack.Screen name="demographics" />
 		</Stack>
 	);
 }

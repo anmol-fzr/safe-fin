@@ -16,9 +16,7 @@ export default function TabsLayout() {
 
 	const {
 		theme: { colors },
-		themeContext,
 	} = useAppTheme();
-	console.log({ themeContext });
 
 	return (
 		<NativeTabs

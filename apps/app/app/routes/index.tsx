@@ -4,8 +4,7 @@ import type { ImageStyle, ViewStyle } from "react-native";
 import { Image, View } from "react-native";
 import { $sizeStyles, Button, Screen, Text } from "@/components";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { setAuthData, useAuthStore } from "@/modules/auth/store";
-import { authClient } from "@/modules/auth/utils";
+import { setAuthData } from "@/modules/auth/store";
 import { $styles, spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -75,7 +74,7 @@ export default function WelcomeScreen() {
 			</View>
 
 			{isLogin ? (
-				<Link href="/tabs" asChild>
+				<Link href="/tabs" asChild prefetch>
 					<Link.Trigger>
 						<Button
 							style={{

@@ -1,5 +1,5 @@
 import * as Application from "expo-application";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
 	LayoutAnimation,
 	Linking,

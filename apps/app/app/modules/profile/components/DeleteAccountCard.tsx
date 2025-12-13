@@ -1,8 +1,13 @@
 import { View } from "react-native";
 import { Button, Text } from "@/components";
-import { $styles, colors, spacing } from "@/theme";
+import { $styles } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export function DeleteAccountCard() {
+	const {
+		theme: { colors, spacing },
+	} = useAppTheme();
+
 	return (
 		<View
 			style={{

@@ -1,39 +1,70 @@
 {
-	"extends": "./tsconfig.base.json",
-	"compilerOptions": {
-		"allowJs": false,
-		"allowSyntheticDefaultImports": true,
-		"experimentalDecorators": true,
-		"jsx": "react-native",
-		"module": "es2015",
-		"moduleResolution": "bundler",
-		"strict": true,
-		"strictNullChecks": true,
-		"noImplicitAny": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"sourceMap": true,
-		"target": "esnext",
-		"lib": ["esnext", "dom"],
-		"skipLibCheck": true,
-		"resolveJsonModule": true,
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./app/*"],
-			"assets/*": ["./assets/*"],
-			"@auth/*": ["./app/modules/auth/*"],
-			"@home/*": ["./app/modules/home/*"],
-			"@scam/*": ["./app/modules/scam/*"]
-		},
-		"typeRoots": ["./node_modules/@types", "./types"]
-	},
-	"ts-node": {
-		"compilerOptions": {
-			"module": "commonjs"
-		}
-	},
-	"types": ["react-native"],
-	"include": ["./index.tsx", "**/*.ts", "**/*.tsx"],
-	"exclude": ["node_modules", "test/**/*"],
-	"references": [{ "path": "../../packages/ui" }]
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "jsx": "react-native",
+    "module": "es2015",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "sourceMap": true,
+    "target": "esnext",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./app/*"
+      ],
+      "assets/*": [
+        "./assets/*"
+      ],
+      "@auth/*": [
+        "./app/modules/auth/*"
+      ],
+      "@home/*": [
+        "./app/modules/home/*"
+      ],
+      "@scam/*": [
+        "./app/modules/scam/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
+  "types": [
+    "react-native"
+  ],
+  "include": [
+    "./index.tsx",
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "test/**/*"
+  ],
+  "references": [
+    {
+      "path": "../../packages/ui"
+    }
+  ]
 }

@@ -8,7 +8,7 @@ import { timing } from "./timing";
 import { typography } from "./typography";
 
 // This supports "light" and "dark" themes by default. If undefined, it'll use the system theme
-export type ThemeContexts = "light" | "dark" | undefined;
+export type ThemeContexts = "light" | "dark" | "system";
 
 // Because we have two themes, we need to define the types for each of them.
 // colorsLight and colorsDark should have the same keys, but different values.

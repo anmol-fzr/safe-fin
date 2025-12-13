@@ -1,90 +1,101 @@
 import {
+	Bank as BookUserIcon,
 	DocumentText1,
+	type Icon as IconType,
 	InfoCircle as Info,
 	Message as Mail,
 	Share as Share2,
 	Star1 as Star,
+	User as UserIcon,
+	WalletMoney as WalletIcon,
 } from "iconsax-react-nativejs";
-import { Linking, Pressable, Share, View } from "react-native";
+import { Linking, Platform, Pressable, Share, View } from "react-native";
 //import * as RateApp from "react-native-rate-app";
 import { ListView, Text } from "@/components";
 import { IconSax } from "@/context/IconContext";
 import { APP } from "@/utils/const";
 import { envs } from "@/utils/envs";
 
-type SettingList =
-	| { title: string; icon: any; url: string }[]
-	| { title: string; icon: any; action: VoidFunction }[];
+interface LinkItem {
+	title: string;
+	Icon: IconType;
+	desc: string;
+	href: Href;
+}
 
-type SettingsList = SettingList[];
+type SettingList =
+	| { title: string; icon: IconType; url: string }[]
+	| { title: string; icon: IconType; action: VoidFunction | Promise<void> }[];
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE, GITHUB } =
 	envs.META_URLS;
 
-const lists: SettingsList = [
-	[
-		{
-			title: "About Us",
-			icon: Info,
-			url: ABOUT,
-		},
-	],
-	[
-		{
-			title: "Share the app",
-			icon: Share2,
-			action: async () => {
-				try {
-					await Share.share(
-						{
-							message: `✨ Try Our App!
+async function handleShareApp() {
+	try {
+		await Share.share(
+			{
+				message: `✨ Try Our App!
 Discover amazing things! Download it now for free:
 
 Android: ${PLAYSTORE}
 iOS: ${APPSTORE}
 Github: ${GITHUB}
 `,
-						},
-						{
-							dialogTitle: `${APP.NAME} | ${APP.DESC}`,
-						},
-					);
-				} catch (error: any) {
-					console.error(error);
-				}
 			},
-		},
-		{
-			title: "Rate the app",
-			icon: Star,
-			action: () => {
-				//RateApp.requestReview();
+			{
+				dialogTitle: `${APP.NAME} | ${APP.DESC}`,
 			},
-		},
-	],
-	[
-		{
-			title: "Support",
-			icon: Mail,
-			url: SUPPORT,
-		},
-	],
-	[
-		{
-			title: "Terms of Service",
-			icon: DocumentText1,
-			url: TERMS,
-		},
-		{
-			title: "Privacy Policy",
-			icon: DocumentText1,
-			url: POLICY,
-		},
-	],
+		);
+	} catch (error: any) {
+		console.error(error);
+	}
+}
+
+async function handleRateApp() {
+	const url = Platform.select({
+		ios: APPSTORE,
+		android: PLAYSTORE,
+		default: PLAYSTORE,
+	});
+
+	Linking.openURL(url);
+}
+
+const lists: SettingList = [
+	{
+		title: "About Us",
+		icon: Info,
+		url: ABOUT,
+	},
+	{
+		title: "Share the app",
+		icon: Share2,
+		action: handleShareApp,
+	},
+	{
+		title: "Rate the app",
+		icon: Star,
+		action: handleRateApp,
+	},
+	{
+		title: "Support",
+		icon: Mail,
+		url: SUPPORT,
+	},
+	{
+		title: "Terms of Service",
+		icon: DocumentText1,
+		url: TERMS,
+	},
+	{
+		title: "Privacy Policy",
+		icon: DocumentText1,
+		url: POLICY,
+	},
 ];
 
 export const MoreLinks = () => {
-	return lists.map((list, index) => <SettingList list={list} key={index} />);
+	return <SettingList list={lists} />;
 };
 
 const SettingList = ({ list }: { list: SettingList }) => {
@@ -129,3 +140,87 @@ const SettingList = ({ list }: { list: SettingList }) => {
 		/>
 	);
 };
+
+type Item =
+	| { title: string; desc?: string; icon: IconType; href: Href & string }
+	| {
+			title: string;
+			desc?: string;
+			icon: IconType;
+			action: VoidFunction | Promise<void>;
+	  };
+
+type Items = {
+	meta: boolean;
+	title: string;
+	list: Item[];
+};
+
+const items: Items[] = [
+	{
+		meta: false,
+		title: "Account",
+		list: [
+			{
+				title: "User Profile",
+				icon: UserIcon,
+				desc: "Name, Phone number ...",
+				href: "/tabs/profile/user-profile",
+			},
+			{
+				title: "Demographics",
+				icon: WalletIcon,
+				desc: "Address, Occupation etc.",
+				href: "/tabs/profile/demographics",
+			},
+			{
+				title: "Financial Details",
+				icon: BookUserIcon,
+				desc: "Income, Spending Habits etc.",
+				href: "/tabs/profile/financials",
+			},
+			{
+				title: "Account",
+				icon: UserIcon,
+				desc: "Session, Delete Account etc...",
+				href: "/tabs/profile/account",
+			},
+		],
+	},
+	{
+		meta: true,
+		title: "App Info",
+		list: [
+			{
+				title: "About Us",
+				icon: Info,
+				href: ABOUT,
+			},
+			{
+				title: "Share the app",
+				icon: Share2,
+				action: handleShareApp,
+			},
+			{
+				title: "Rate the app",
+				icon: Star,
+				action: handleRateApp,
+			},
+			{
+				title: "Support",
+				icon: Mail,
+				href: SUPPORT,
+			},
+			{
+				title: "Terms of Service",
+				icon: DocumentText1,
+				href: TERMS,
+			},
+			{
+				title: "Privacy Policy",
+				icon: DocumentText1,
+				href: POLICY,
+			},
+		],
+	},
+];

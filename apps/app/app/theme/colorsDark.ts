@@ -1,6 +1,6 @@
 const palette = {
 	// Inverted Neutrals for Dark Mode
-	neutral100: "#151515", // Darkest background
+	neutral100: "#121212", // Darkest background
 	neutral200: "#1E1E1E", // Card/Elevated surface
 	neutral300: "#303030", // Border/Separator
 	neutral400: "#4F4F4F",

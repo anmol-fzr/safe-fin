@@ -3,7 +3,8 @@ import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as Burnt from "burnt";
 import { StatusBar } from "expo-status-bar";
-import type { PropsWithChildren } from "react";
+import { ac } from "node_modules/@faker-js/faker/dist/airline-DF6RqYmq";
+import { act, type PropsWithChildren } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { IconProvider } from "@/context/IconContext";
@@ -43,13 +44,15 @@ const notifier: Notifier = {
 export function Provider({ children }: PropsWithChildren) {
 	const {
 		theme: { colors },
-		themeContext,
+		actualTheme,
 	} = useAppTheme();
+
+	console.log({ actualTheme, bg: colors.background });
 
 	return (
 		<>
 			<StatusBar
-				//style={themeContext === "dark" ? "light" : "dark"}
+				style={actualTheme === "dark" ? "light" : "dark"}
 				backgroundColor={colors.background}
 			/>
 			<QueryClientProvider client={queryClient}>

@@ -1,13 +1,14 @@
 import { useFonts } from "@expo-google-fonts/space-grotesk";
-import { ThemeProvider } from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useMMKVString } from "react-native-mmkv";
 import { Provider } from "@/components/Provider";
 import { initI18n } from "@/i18n";
 import { LoadingScreen } from "@/screens";
 import { customFontsToLoad } from "@/theme";
 import { initCrashReporting } from "@/utils/crashReporting";
+import { storage } from "@/utils/storage";
+import { ThemeProvider, useThemePersister } from "@/utils/useAppTheme";
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -17,6 +18,9 @@ export {
 export default function RootLayout() {
 	const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad);
 	const [isI18nInitialized, setIsI18nInitialized] = useState(false);
+
+	const { THEME_KEY } = useThemePersister();
+	const [theme, setTheme] = useMMKVString(THEME_KEY, storage);
 
 	useEffect(() => {
 		initCrashReporting();
@@ -31,10 +35,14 @@ export default function RootLayout() {
 	}
 
 	return (
-		<Provider>
-			<Stack screenOptions={{ headerShown: false }}>
-				<Stack.Screen name="index" />
-			</Stack>
-		</Provider>
+		<ThemeProvider value={{ theme: theme ?? "system", setTheme }}>
+			<Suspense>
+				<Provider>
+					<Stack screenOptions={{ headerShown: false }}>
+						<Stack.Screen name="index" />
+					</Stack>
+				</Provider>
+			</Suspense>
+		</ThemeProvider>
 	);
 }

@@ -92,7 +92,7 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 					minimumTrackTintColor={colors.success}
 					thumbTintColor={colors.successBackground}
 					disabled={disabled}
-					maximumTrackTintColor="#000000"
+					maximumTrackTintColor={colors.palette.neutral900}
 				/>
 			)}
 		</View>
