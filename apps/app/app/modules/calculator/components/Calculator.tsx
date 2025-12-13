@@ -9,7 +9,7 @@ import {
 	CalculatorResultItem,
 	CalculatorSlider,
 	getPieColor,
-} from "@/modules/Calculator/components";
+} from "@/modules/calculator/components";
 import { colors, spacing } from "@/theme";
 import type { ResourceId } from "@/types";
 import type { SliderConfig } from "@/utils/const";

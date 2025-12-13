@@ -1,4 +1,4 @@
-import { Link } from "@react-navigation/native";
+import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Text } from "@/components";
@@ -24,8 +24,10 @@ export function ScamListItemImpl({ scam, isLast, isFirst }: ScamListItemProps) {
 	const radiusStyles = getStyles({ isFirst, isLast });
 	return (
 		<Link
-			screen="Scam"
-			params={{ scamId: scam.id }}
+			href={{
+				pathname: "/tabs/scams/[scamId]",
+				params: { scamId: scam.id },
+			}}
 			style={{
 				marginBottom: 2,
 			}}

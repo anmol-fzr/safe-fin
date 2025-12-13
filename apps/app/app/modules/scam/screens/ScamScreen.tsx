@@ -1,29 +1,24 @@
 import { useGetScam } from "@scam/hooks/queries";
-import { type ScamStackScreenProps, useScamNavigation } from "@scam/navigator";
+import { useRouter } from "expo-router";
 import { View } from "react-native";
-import { GoBack, Screen, Text } from "@/components";
+import { Screen, Text } from "@/components";
 import { $styles, spacing } from "@/theme";
 
-type Props = ScamStackScreenProps<"Scam">;
+type ScamScreenProps = { scamId: number };
 
-export function ScamScreen(props: Props) {
-	const { scamId } = props.route.params;
+export function ScamScreen(props: ScamScreenProps) {
+	const { scamId } = props;
 
-	const navigation = useScamNavigation();
+	const router = useRouter();
 	const { scam } = useGetScam(Number(scamId));
 
 	if (scam === undefined) {
-		console.error("Got undefined Scam at ScamScreen, Navigaiting Back ...");
-		return navigation.goBack();
+		console.warn("Got undefined Scam at ScamScreen, Navigaiting Back ...");
+		return router.back();
 	}
 
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={$styles.container}
-			safeAreaEdges={["top"]}
-		>
-			<GoBack tx="scamScreen:title" />
+		<Screen preset="scroll" contentContainerStyle={$styles.container}>
 			<Text preset="subheading" style={{ marginTop: 12 }}>
 				{scam.title}
 			</Text>

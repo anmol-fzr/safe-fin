@@ -10,6 +10,7 @@ export const $styles = {
 
 	container: {
 		paddingTop: spacing.xs,
+		paddingBottom: 60,
 		//paddingBottom: spacing.lg,
 		paddingHorizontal: spacing.xs,
 	} as ViewStyle,

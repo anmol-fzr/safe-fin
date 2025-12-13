@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { ScreenHeader } from "@/components";
+import { GoBack, ScreenHeader } from "@/components";
 
 export default function ScamsLayout() {
 	return (
@@ -14,6 +14,12 @@ export default function ScamsLayout() {
 							{...props}
 						/>
 					),
+				}}
+			/>
+			<Stack.Screen
+				name="[scamId]"
+				options={{
+					header: (props) => <GoBack tx="scamScreen:title" {...props} />,
 				}}
 			/>
 		</Stack>

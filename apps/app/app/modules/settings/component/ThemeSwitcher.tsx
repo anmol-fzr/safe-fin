@@ -1,6 +1,5 @@
-import { Moon, Settings, Sun } from "iconsax-react-nativejs";
+import { Moon, Settings, Sun1 } from "iconsax-react-nativejs";
 import { LayoutAnimation, Platform, UIManager } from "react-native";
-import { MMKV } from "react-native-mmkv";
 import { SelectChips } from "@/components/SelectChips";
 import type { ThemeContexts } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -15,7 +14,7 @@ export const ThemeSwitcher = () => {
 	const { themeContext, setThemeContextOverride } = useAppTheme();
 
 	const themeOptions = [
-		{ label: "Light", value: "light", Icon: Sun },
+		{ label: "Light", value: "light", Icon: Sun1 },
 		{ label: "Dark", value: "dark", Icon: Moon },
 		{ label: "System", value: "system", Icon: Settings },
 	];

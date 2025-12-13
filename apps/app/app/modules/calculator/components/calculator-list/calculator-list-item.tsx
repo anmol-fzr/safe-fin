@@ -24,8 +24,10 @@ export function CalculatorListItemImpl(props: CalculatorListItemImplProps) {
 	const styles = getStyles({ isFirst, isLast });
 	return (
 		<Link
+			key={id}
+			//href="/tabs/calculators/124"
 			href={{
-				pathname: `/tabs/calculators`,
+				pathname: "/tabs/calculators/[id]",
 				params: { id },
 			}}
 			style={[themed($calculatorListItem), styles]}

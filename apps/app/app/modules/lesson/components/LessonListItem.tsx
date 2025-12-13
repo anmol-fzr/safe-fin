@@ -1,4 +1,4 @@
-import { Link } from "@react-navigation/native";
+import { Link } from "expo-router";
 import { View, type ViewStyle } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Text } from "@/components";
@@ -20,15 +20,21 @@ export function LessonListItem(props: LessonListItemProps) {
 
 	const styles = getStyles({ isFirst, isLast });
 
+	console.log({ id });
+
 	return (
 		<Link
-			screen="Lesson"
-			params={{ lessonId: id }}
+			href={{
+				pathname: "/tabs/learnings/[lessonId]",
+				params: {
+					lessonId: id,
+				},
+			}}
 			style={{
 				marginBottom: 2,
 			}}
 		>
-			<View style={[themed($listItem), styles, { width: "100%" }]}>
+			<View style={[themed($listItem), styles]}>
 				<Text size="lg" numberOfLines={2}>
 					{title}
 				</Text>
@@ -56,7 +62,8 @@ LessonListItem.Loading = () => {
 	);
 };
 
-const $listItem: ThemedStyle<ViewStyle> = ({ colors, spacing, roundness }) => ({
+const $listItem: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+	width: "100%",
 	marginBottom: 3,
 	//borderRadius: roundness,
 	// borderTopLeftRadius: roundness,

@@ -22,7 +22,7 @@ import { t } from "@/i18n";
 import {
 	CalculatorNavigator,
 	calculatorTabHiddenScreens,
-} from "@/modules/Calculator/navigator";
+} from "@/modules/calculator/navigator";
 import { LessonNavigator } from "@/modules/lesson/navigator";
 import { ProfileNavigator } from "@/modules/profile/navigator";
 import { ScamNavigator } from "@/modules/scam/navigator";
