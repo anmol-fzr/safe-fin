@@ -20,8 +20,6 @@ export function LessonListItem(props: LessonListItemProps) {
 
 	const styles = getStyles({ isFirst, isLast });
 
-	console.log({ id });
-
 	return (
 		<Link
 			href={{

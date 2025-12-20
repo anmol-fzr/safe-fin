@@ -5,6 +5,7 @@ export const initCrashReporting = () => {
 	Sentry.init({
 		dsn: envs.SENTRY.DSN,
 		debug: true,
+		enableLogs: true,
 		integrations: [Sentry.consoleLoggingIntegration()],
 	});
 };

@@ -11,7 +11,7 @@ import type {
 } from "react";
 import { forwardRef } from "react";
 import { View } from "react-native";
-import { Text } from "@/components";
+import { Text } from "@/components/Text";
 import { getGenericEmptyState } from "@/utils/faker/emptyState";
 
 export type ListViewRef = LegendListRef;

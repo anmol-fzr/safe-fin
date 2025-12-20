@@ -1,28 +1,15 @@
 import type { Notifier } from "@safe-fin/ui/hooks";
 import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import * as Burnt from "burnt";
 import { StatusBar } from "expo-status-bar";
-import { ac } from "node_modules/@faker-js/faker/dist/airline-DF6RqYmq";
-import { act, type PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { IconProvider } from "@/context/IconContext";
-// import {
-// 	initialWindowMetrics,
-// 	SafeAreaProvider,
-// } from "react-native-safe-area-context";
 import { authClient } from "@/modules/auth/utils";
+import { queryClient } from "@/utils/lib/query";
 import { useAppTheme } from "@/utils/useAppTheme";
-
-export const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			refetchOnWindowFocus: false,
-			refetchOnMount: false,
-		},
-	},
-});
 
 const notifier: Notifier = {
 	loading: (msg) =>
@@ -46,8 +33,6 @@ export function Provider({ children }: PropsWithChildren) {
 		theme: { colors },
 		actualTheme,
 	} = useAppTheme();
-
-	console.log({ actualTheme, bg: colors.background });
 
 	return (
 		<>
