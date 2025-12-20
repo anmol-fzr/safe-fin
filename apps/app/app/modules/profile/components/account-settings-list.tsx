@@ -6,12 +6,11 @@ import {
 	User as UserIcon,
 	WalletMoney as WalletIcon,
 } from "iconsax-react-nativejs";
-import { Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import { Icon } from "@/components";
 import type { TxKeyPath } from "@/i18n";
-import { spacing } from "@/theme";
 import { envs } from "@/utils/envs";
-import { ItemContent, SectionHeader } from "../screens";
+import { ProfileList } from "./profile-list";
 
 export interface BaseItem {
 	titleTx: TxKeyPath;
@@ -67,17 +66,17 @@ if (envs.isDev) {
 
 export function AccountSettingsList() {
 	return (
-		<View>
-			<SectionHeader title="Account" />
-			<View style={{ gap: spacing.sm }}>
+		<ProfileList>
+			<ProfileList.SectionHeader title="App Info" />
+			<ProfileList.List>
 				{accountItems.map((item) => (
 					<Link key={item.titleTx} href={item.href} asChild>
 						<Pressable>
-							<ItemContent {...item} />
+							<ProfileList.ListItem {...item} />
 						</Pressable>
 					</Link>
 				))}
-			</View>
-		</View>
+			</ProfileList.List>
+		</ProfileList>
 	);
 }

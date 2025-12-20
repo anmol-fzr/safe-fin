@@ -5,12 +5,11 @@ import {
 	Share as Share2,
 	Star1 as Star,
 } from "iconsax-react-nativejs";
-import { Linking, Platform, Pressable, Share, View } from "react-native";
-import { spacing } from "@/theme";
+import { Linking, Platform, Pressable, Share } from "react-native";
 import { APP } from "@/utils/const";
 import { envs } from "@/utils/envs";
-import { ItemContent, SectionHeader } from "../screens";
 import type { BaseItem } from "./account-settings-list";
+import { ProfileList } from "./profile-list";
 
 type ActionItem = BaseItem & {
 	href?: string;
@@ -93,18 +92,18 @@ export const AppInfoList = () => {
 	};
 
 	return (
-		<View>
-			<SectionHeader title="App Info" />
-			<View style={{ gap: spacing.sm }}>
+		<ProfileList>
+			<ProfileList.SectionHeader title="App Info" />
+			<ProfileList.List>
 				{appInfoItems.map((item) => (
 					<Pressable
 						key={item.titleTx}
 						onPress={() => handleExternalPress(item)}
 					>
-						<ItemContent {...item} />
+						<ProfileList.ListItem {...item} />
 					</Pressable>
 				))}
-			</View>
-		</View>
+			</ProfileList.List>
+		</ProfileList>
 	);
 };
