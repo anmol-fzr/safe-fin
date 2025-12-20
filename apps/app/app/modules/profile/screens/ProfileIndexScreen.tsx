@@ -5,10 +5,13 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { AccountSettingsList } from "../components/account-settings-list";
 import { AppInfoList } from "../components/app-info-list";
+import { usePrefetchUserDemographics } from "../hooks/queries";
 
 export const ProfileIndexScreen = () => {
 	const isGuest = useIsGuestUser();
 	const { handleLogout } = useAuth();
+
+	usePrefetchUserDemographics();
 
 	const {
 		theme: { spacing },

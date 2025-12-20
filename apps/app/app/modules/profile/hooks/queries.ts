@@ -1,4 +1,8 @@
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import {
+	queryOptions,
+	usePrefetchQuery,
+	useQuery,
+} from "@tanstack/react-query";
 import { authClient } from "@/modules/auth/utils";
 import { DEMO_GRAPHICS } from "../api";
 
@@ -12,6 +16,11 @@ const getDemoGraphicsOpts = () => {
 const useGetDemoGraphics = () => {
 	const opts = getDemoGraphicsOpts();
 	return useQuery(opts);
+};
+
+const usePrefetchUserDemographics = () => {
+	const opts = getDemoGraphicsOpts();
+	return usePrefetchQuery(opts);
 };
 
 const getListSessionsOpts = () => {
@@ -46,4 +55,9 @@ const useSession = () => {
 };
 
 export { getDemoGraphicsOpts, getListSessionsOpts };
-export { useGetDemoGraphics, useListSessions, useSession };
+export {
+	useGetDemoGraphics,
+	useListSessions,
+	useSession,
+	usePrefetchUserDemographics,
+};
