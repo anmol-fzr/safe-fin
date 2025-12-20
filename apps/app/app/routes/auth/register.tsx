@@ -1,45 +1,71 @@
-import type { TextStyle, ViewStyle } from "react-native";
+import { View, type ViewStyle } from "react-native";
+import Animated from "react-native-reanimated";
 import { Screen, Text } from "@/components";
 import { RegisterForm } from "@/modules/auth/components";
-import type { ThemedStyle } from "@/theme";
+import { $styles, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-export function RegisterScreen() {
-	const { themed } = useAppTheme();
+export default function RegisterScreen() {
+	const {
+		themed,
+		theme: { spacing },
+	} = useAppTheme();
 
 	return (
 		<Screen
-			preset="auto"
-			contentContainerStyle={themed($screenContentContainer)}
-			safeAreaEdges={["top", "bottom"]}
+			preset="fixed"
+			safeAreaEdges={["top"]}
+			contentContainerStyle={$styles.flex1}
 		>
-			<Text
-				testID="login-heading"
-				tx="registerScreen:register"
-				preset="heading"
-				style={themed($logIn)}
-			/>
-			<Text
-				tx="registerScreen:enterDetails"
-				preset="subheading"
-				style={themed($enterDetails)}
-			/>
+			<Animated.View style={themed($topContainer)}>
+				<Text
+					tx="registerScreen:register"
+					preset="bold"
+					size="xxl"
+					style={{
+						textAlign: "center",
+					}}
+				/>
+				<Text
+					tx="registerScreen:enterDetails"
+					preset="subheading"
+					style={{
+						textAlign: "center",
+					}}
+				/>
+			</Animated.View>
 
-			<RegisterForm />
+			<View
+				style={{
+					flex: 1,
+					marginBottom: spacing.lg,
+					marginInline: spacing.lg,
+				}}
+			>
+				<RegisterForm.Root>
+					<View
+						style={{
+							flex: 1,
+						}}
+					>
+						<RegisterForm.Name />
+						<RegisterForm.Gender />
+					</View>
+
+					<View
+						style={{
+							gap: spacing.md,
+						}}
+					>
+						<RegisterForm.Submit />
+					</View>
+				</RegisterForm.Root>
+			</View>
 		</Screen>
 	);
 }
 
-const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	paddingVertical: spacing.xxl,
+const $topContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	paddingHorizontal: spacing.lg,
-	height: "100%",
-});
-
-const $logIn: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.sm,
-});
-
-const $enterDetails: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.lg,
+	paddingTop: spacing.xl,
 });

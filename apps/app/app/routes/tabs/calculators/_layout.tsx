@@ -9,8 +9,8 @@ export default function CalculatorLayout() {
 				options={{
 					header: (props) => (
 						<ScreenHeader
-							titleTx="calculatorListScreen:title"
-							tagLineTx="calculatorListScreen:tagLine"
+							titleTx="screens:calculatorList.title"
+							tagLineTx="screens:calculatorList.tagLine"
 							{...props}
 						/>
 					),
@@ -20,7 +20,7 @@ export default function CalculatorLayout() {
 				name="[id]"
 				options={{
 					header: (props) => (
-						<GoBack tx="calculatorListScreen:title" {...props} />
+						<GoBack tx="screens:calculatorList.title" {...props} />
 					),
 				}}
 			/>

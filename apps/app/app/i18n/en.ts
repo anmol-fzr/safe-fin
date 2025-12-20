@@ -1,8 +1,68 @@
-import demoEn from "./demo-en";
+import { base } from "./base";
 
 const en = {
+	tabs: {
+		home: "Home",
+		calculator: "Calculator",
+		learnings: "Learnings",
+		scams: "Scams",
+		profile: "Profile",
+	},
+	screens: {
+		homeScreen: {
+			actions: {
+				learn: "Learn",
+				calculator: "Calculator",
+				scams: "Scams",
+				more: "More",
+			},
+		},
+		calculatorList: {
+			title: "Calculators",
+			tagLine: "Explore All Financial Calculators",
+		},
+		learningList: {
+			title: "Learning",
+			tagLine: "Latest Lessons on Finance",
+		},
+		scamList: {
+			title: "Scams",
+			tagLine: "Latest Scam on Finance",
+		},
+		profileList: {
+			accountList: {
+				userProfile: { title: "User Profile", desc: "Name, Phone number ..." },
+				demographics: {
+					title: "Demographics",
+					desc: "Address, Occupation etc.",
+				},
+				financialDetails: {
+					title: "Financial Details",
+					desc: "Income, Spending Habits etc.",
+				},
+				account: { title: "Account", desc: "Session, Delete Account etc..." },
+				appSettings: {
+					title: "App Settings",
+					desc: "Theme, Language, Accessibility etc...",
+				},
+				debug: {
+					title: "Debug",
+					desc: "App Id, Build Id, Versions",
+				},
+			},
+			appInfoList: {
+				aboutUs: "About Us",
+				shareApp: "Share the app",
+				rateApp: "Rate the app",
+				support: "Support",
+				terms: "Terms of Service",
+				privacyPolicy: "Privacy Policy",
+			},
+		},
+	},
 	common: {
 		ok: "OK!",
+		next: "Next",
 		cancel: "Cancel",
 		back: "Back",
 		submit: "Submit",
@@ -69,16 +129,8 @@ const en = {
 		title: "Quizzes",
 		tagLine: "Latest Quiz on Finance",
 	},
-	scamScreen: {
-		title: "Scams",
-		tagLine: "Latest Scam on Finance",
-	},
 	lessonScreen: {
 		title: "Lessons",
-		tagLine: "Latest Lessons on Finance",
-	},
-	learningScreen: {
-		title: "Learning",
 		tagLine: "Latest Lessons on Finance",
 	},
 	resultsScreen: {
@@ -117,10 +169,6 @@ const en = {
 		windowsReactotronHint:
 			"If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
 	},
-	calculatorListScreen: {
-		title: "Calculators",
-		tagLine: "Explore All Financial Calculators",
-	},
 	sipScreen: {
 		title: "SIP Calculator",
 		tagLine: "Calculators",
@@ -141,7 +189,7 @@ const en = {
 		title: "EPF Calculator",
 		tagLine: "Calculators",
 	},
-	...demoEn,
+	...base,
 } as const;
 
 export default en;

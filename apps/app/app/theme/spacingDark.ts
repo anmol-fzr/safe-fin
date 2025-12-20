@@ -11,4 +11,5 @@ export const spacing = {
 	xl: 32 * SPACING_MULTIPLIER,
 	xxl: 48 * SPACING_MULTIPLIER,
 	xxxl: 64 * SPACING_MULTIPLIER,
+	bottom: 96,
 } as const;

@@ -1,6 +1,8 @@
+import { useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
 import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { memo } from "react";
-import { type TextStyle, View } from "react-native";
+import { memo, useCallback, useState } from "react"; // Import useState and useCallback
+import type { TextStyle } from "react-native";
+import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { TxKeyPath } from "@/i18n";
 import type { ThemedStyle } from "@/theme";
@@ -27,21 +29,40 @@ export const ScreenHeader = memo((props: ScreenHeaderProps) => {
 	} = useAppTheme();
 	const { top } = useSafeAreaInsets();
 
+	const [animationTrigger, setAnimationTrigger] = useState(0);
+
+	useFocusEffect(
+		useCallback(() => {
+			setAnimationTrigger((prev) => prev + 1);
+		}, []),
+	);
+
 	return (
-		<View
+		<Animated.View
+			key={`${titleTx}-${animationTrigger}`}
 			style={{
 				elevation: 1,
 				marginTop: isInNativeHeader ? top : 0,
 				paddingInline: spacing.sm,
 				paddingBottom: spacing.sm,
 				backgroundColor: colors.background,
-				// borderBottomWidth: 0.5,
-				// borderBottomColor: "#c9c9c9",
 			}}
 		>
-			<Text preset="heading" tx={titleTx} style={themed($title)} />
-			<Text tx={tagLineTx} />
-		</View>
+			<Text
+				key={`title-${titleTx}`}
+				preset="heading"
+				tx={titleTx}
+				style={themed($title)}
+				entering={FadeInUp}
+				exiting={FadeOutDown.duration(50)}
+			/>
+			<Text
+				key={`tag-${tagLineTx}`}
+				tx={tagLineTx}
+				entering={FadeInUp}
+				exiting={FadeOutDown.duration(50)}
+			/>
+		</Animated.View>
 	);
 });
 

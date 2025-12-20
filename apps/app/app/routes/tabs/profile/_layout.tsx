@@ -22,8 +22,12 @@ export default function ProfileLayout() {
 				}}
 			/>
 
-			<Stack.Screen name="user-profile" />
+			<Stack.Screen name="account" />
+			<Stack.Screen name="debug" />
 			<Stack.Screen name="demographics" />
+			<Stack.Screen name="financials" />
+			<Stack.Screen name="settings" />
+			<Stack.Screen name="user-profile" />
 		</Stack>
 	);
 }

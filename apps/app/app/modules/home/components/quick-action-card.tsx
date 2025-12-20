@@ -1,17 +1,22 @@
-import { type Href, Link } from "expo-router";
+import { type Href, useRouter } from "expo-router";
+import { useId } from "react";
 import {
 	Image,
 	type ImageSourcePropType,
+	Pressable as RnPressable,
 	StyleSheet,
 	type TextStyle,
-	View,
 } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 import { Text } from "@/components";
+import { type TxKeyPath, translate } from "@/i18n";
 import { spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
+const Pressable = Animated.createAnimatedComponent(RnPressable);
+
 export interface QuickActionType {
-	label: string;
+	labelTx: TxKeyPath;
 	image: ImageSourcePropType;
 	to: Href;
 	bg: `#${string}`;
@@ -20,24 +25,29 @@ export interface QuickActionType {
 type QuickActionCardProps = QuickActionType;
 export const QuickActionCard = (action: QuickActionCardProps) => {
 	const { themed } = useAppTheme();
+	const router = useRouter();
+
+	function handlePress() {
+		router.navigate(action.to);
+	}
 
 	return (
-		<Link
-			key={action.label}
-			href={action.to}
-			asChild
+		<Pressable
+			onPress={handlePress}
 			style={[styles.quickAction, { backgroundColor: action.bg }]}
 		>
-			<View>
-				<Text preset="subheading" style={themed($actionTitle)}>
-					{action.label}
-				</Text>
-				<Image
-					source={action.image}
-					style={{ position: "absolute", bottom: 0, right: spacing.md }}
-				/>
-			</View>
-		</Link>
+			<Text
+				preset="subheading"
+				style={themed($actionTitle)}
+				entering={FadeInUp}
+			>
+				{translate(action.labelTx)}
+			</Text>
+			<Image
+				source={action.image}
+				style={{ position: "absolute", bottom: 0, right: spacing.md }}
+			/>
+		</Pressable>
 	);
 };
 

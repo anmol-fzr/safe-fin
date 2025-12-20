@@ -9,8 +9,8 @@ export default function ScamsLayout() {
 				options={{
 					header: (props) => (
 						<ScreenHeader
-							titleTx="scamScreen:title"
-							tagLineTx="scamScreen:tagLine"
+							titleTx="screens:scamList.title"
+							tagLineTx="screens:scamList.tagLine"
 							{...props}
 						/>
 					),
@@ -19,7 +19,7 @@ export default function ScamsLayout() {
 			<Stack.Screen
 				name="[scamId]"
 				options={{
-					header: (props) => <GoBack tx="scamScreen:title" {...props} />,
+					header: (props) => <GoBack tx="screens:scamList.title" {...props} />,
 				}}
 			/>
 		</Stack>

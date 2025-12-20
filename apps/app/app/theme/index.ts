@@ -79,6 +79,7 @@ export { colorsLight as colors };
 export { colorsDark };
 export { spacingLight as spacing };
 
+export * from "./animation";
 export * from "./borderRadius";
 export * from "./styles";
 export * from "./timing";

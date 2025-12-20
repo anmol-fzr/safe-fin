@@ -1,40 +1,38 @@
 import { Suspense } from "react";
 import type { ViewStyle } from "react-native";
 import { StyleSheet, View } from "react-native";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Text } from "@/components";
 import type { ThemedStyle } from "@/theme";
-import type { ResourceId } from "@/types";
 import { useAppTheme } from "@/utils/useAppTheme";
-
-interface BackToLessonCardProps {
-	lessonId: ResourceId;
-}
+import { useGetLastLesson } from "../hooks/api";
 
 export function BackToLessonCard() {
 	return (
-		<Suspense fallback={<BackToLessonCardImpl.Loading />}>
-			<BackToLessonCardImpl
-				title="Make Your Money Work for You"
-				publishedDate={new Date()}
-				readMinutes={2}
-			/>
-		</Suspense>
+		<Animated.View entering={FadeIn} exiting={FadeOut}>
+			<Suspense fallback={<BackToLessonCardImpl.Loading />}>
+				<BackToLessonCardImpl />
+			</Suspense>
+		</Animated.View>
 	);
 }
 
-type BackToLessonCardImplProps = {
-	title: string;
-	publishedDate: Date;
-	readMinutes: number;
-};
-
-function BackToLessonCardImpl(props: BackToLessonCardImplProps) {
-	const { title, publishedDate, readMinutes } = props;
-
+function BackToLessonCardImpl() {
+	const { lesson } = useGetLastLesson();
 	const { themed } = useAppTheme();
+
+	if (lesson === null) return;
+
+	const { title, updatedAt, readMinutes } = lesson;
+	const publishedDate = new Date(updatedAt);
+
 	return (
-		<View style={themed($longCardStyles)}>
+		<Animated.View
+			entering={FadeIn}
+			exiting={FadeOut}
+			style={themed($longCardStyles)}
+		>
 			<Text preset="bold" size="xl">
 				{title}
 			</Text>
@@ -48,13 +46,19 @@ function BackToLessonCardImpl(props: BackToLessonCardImplProps) {
 					{readMinutes} min read
 				</Text>
 			</View>
-		</View>
+		</Animated.View>
 	);
 }
 
 BackToLessonCardImpl.Loading = () => {
+	const { themed } = useAppTheme();
+
 	return (
-		<View style={{ height: 112 }}>
+		<Animated.View
+			entering={FadeIn}
+			exiting={FadeOut}
+			style={themed($longCardStyles)}
+		>
 			<SkeletonPlaceholder>
 				<SkeletonPlaceholder.Item
 					height={30}
@@ -67,7 +71,7 @@ BackToLessonCardImpl.Loading = () => {
 					<SkeletonPlaceholder.Item height={18} width="22%" borderRadius={12} />
 				</View>
 			</SkeletonPlaceholder>
-		</View>
+		</Animated.View>
 	);
 };
 const $longCardStyles: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({

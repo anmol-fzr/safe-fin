@@ -1,5 +1,5 @@
 import axios, { type AxiosError, type AxiosResponse } from "axios";
-import { authClient } from "@/modules/auth/utils";
+import { authClient, logout } from "@/modules/auth/utils";
 import { envs } from "@/utils/envs";
 
 const axiosInstance = axios.create({
@@ -22,8 +22,10 @@ axiosInstance.interceptors.response.use(
 	},
 	(error: AxiosError<IResData>) => {
 		const status = error.response?.status;
+		console.log("got error axios interceptors");
 		if (status === 401) {
-			authClient.signOut();
+			console.log("got 401 status");
+			logout();
 		}
 
 		if (error.response?.data) {

@@ -58,6 +58,10 @@ export const colors = {
 	 */
 	text: palette.neutral800,
 	/**
+	 * Reverse text color should be dark.
+	 */
+	textInverse: palette.neutral200,
+	/**
 	 * Secondary text information.
 	 */
 	textDim: palette.neutral600,

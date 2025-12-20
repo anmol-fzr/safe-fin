@@ -60,6 +60,10 @@ export const colors = {
 	 */
 	text: palette.neutral800,
 	/**
+	 * Reverse text color.
+	 */
+	textInverse: palette.neutral200,
+	/**
 	 * Secondary text information.
 	 */
 	textDim: palette.neutral500,

@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import { useEffect } from "react";
+import { t, translate } from "@/i18n";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -15,7 +16,7 @@ export default function TabsLayout() {
 	}, [isLogin, navigate]);
 
 	const {
-		theme: { colors },
+		theme: { colors, typography },
 	} = useAppTheme();
 
 	return (
@@ -38,7 +39,7 @@ export default function TabsLayout() {
 			// tintColor={colors.palette.accent500}
 		>
 			<NativeTabs.Trigger name="index">
-				<Label>Home</Label>
+				<Label>{translate("tabs:home")}</Label>
 				<Icon
 					src={{
 						default: require("../../../assets/tabs/icons/home.png"),
@@ -48,7 +49,7 @@ export default function TabsLayout() {
 			</NativeTabs.Trigger>
 
 			<NativeTabs.Trigger name="calculators">
-				<Label>Calculator</Label>
+				<Label>{translate("tabs:calculator")}</Label>
 				<Icon
 					src={{
 						default: require("../../../assets/tabs/icons/calculator.png"),
@@ -58,7 +59,7 @@ export default function TabsLayout() {
 			</NativeTabs.Trigger>
 
 			<NativeTabs.Trigger name="learnings">
-				<Label>Learnings</Label>
+				<Label>{translate("tabs:learnings")}</Label>
 				<Icon
 					src={{
 						default: require("../../../assets/tabs/icons/book.png"),
@@ -68,7 +69,7 @@ export default function TabsLayout() {
 			</NativeTabs.Trigger>
 
 			<NativeTabs.Trigger name="scams">
-				<Label>Scams</Label>
+				<Label>{translate("tabs:scams")}</Label>
 				<Icon
 					src={{
 						default: require("../../../assets/tabs/icons/shield.png"),
@@ -78,7 +79,7 @@ export default function TabsLayout() {
 			</NativeTabs.Trigger>
 
 			<NativeTabs.Trigger name="profile">
-				<Label>Profile</Label>
+				<Label>{translate("tabs:profile")}</Label>
 				<Icon
 					src={{
 						default: require("../../../assets/tabs/icons/user.png"),

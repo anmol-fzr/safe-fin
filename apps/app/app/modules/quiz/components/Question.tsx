@@ -1,4 +1,4 @@
-import { createContext, memo, useCallback, useContext, useState } from "react";
+import { createContext, memo, use, useCallback, useState } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { Pressable, View } from "react-native";
 import { Text } from "@/components";
@@ -13,7 +13,7 @@ type QuestionContext = ReturnType<typeof useQuestion> & {
 const questionContext = createContext<QuestionContext | null>(null);
 
 const useQuestionContext = () => {
-	const ctx = useContext(questionContext);
+	const ctx = use(questionContext);
 	if (ctx === null || ctx === undefined) {
 		throw new MissingContextError("useQuestionContext", "QuestionProvider");
 	}

@@ -15,8 +15,8 @@ config.resolver.nodeModulesPaths = [
 	path.resolve(workspaceRoot, "node_modules"),
 ];
 
-// config.resolver.unstable_enableSymlinks = true;
-// config.resolver.unstable_enablePackageExports = true;
+config.resolver.unstable_enableSymlinks = true;
+config.resolver.unstable_enablePackageExports = true;
 
 config.resolver.sourceExts.push("cjs");
 

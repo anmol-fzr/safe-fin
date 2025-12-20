@@ -10,9 +10,13 @@ export const $styles = {
 
 	container: {
 		paddingTop: spacing.xs,
-		paddingBottom: 60,
-		//paddingBottom: spacing.lg,
+		paddingBottom: spacing.xxl,
 		paddingHorizontal: spacing.xs,
+	} as ViewStyle,
+
+	lowHeaderScreen: {
+		padding: spacing.xs,
+		paddingBottom: spacing.bottom,
 	} as ViewStyle,
 
 	goBack: {

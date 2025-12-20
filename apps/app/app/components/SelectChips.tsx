@@ -1,18 +1,23 @@
+import { useSafeContext } from "@safe-fin/ui/hooks";
 import type { Icon as IconType } from "iconsax-react-nativejs";
 import {
 	createContext,
 	type JSX,
 	type PropsWithChildren,
 	useCallback,
-	useContext,
 	useEffect,
 	useRef,
 	useState,
 } from "react";
 import { Pressable, View } from "react-native";
+import {
+	interpolateColor,
+	useAnimatedStyle,
+	useDerivedValue,
+	withSpring,
+} from "react-native-reanimated";
 import { Text } from "@/components";
-import { spacing } from "@/theme";
-import { MissingContextError } from "@/utils/error";
+import { ANIMATION, getSpringConfig, spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Field, type FieldLabelProps } from "./Field";
 
@@ -57,11 +62,7 @@ const selectChipsContext = createContext<{
 const SelectChipsProvider = selectChipsContext.Provider;
 
 const useSelectChipsContext = () => {
-	const ctx = useContext(selectChipsContext);
-	if (!ctx) {
-		throw new MissingContextError("SelectChips Components", "SelectChips.Root");
-	}
-	return ctx;
+	return useSafeContext(selectChipsContext, "useSelectChipsContext");
 };
 
 /* -------------------------------------------------------------------------- */

@@ -1,13 +1,15 @@
 import { Size } from "@testing-library/react-native/build/types";
 import type { TOptions } from "i18next";
+import type { ComponentProps } from "react";
 import { type ForwardedRef, forwardRef, type ReactNode } from "react";
 // eslint-disable-next-line no-restricted-imports
-import {
+import type {
 	Text as RNText,
-	type TextProps as RNTextProps,
-	type StyleProp,
-	type TextStyle,
+	TextProps as RNTextProps,
+	StyleProp,
+	TextStyle,
 } from "react-native";
+import Animated from "react-native-reanimated";
 import { isRTL, type TxKeyPath, translate } from "@/i18n";
 import { colors, type ThemedStyle, type ThemedStyleArray } from "@/theme";
 import { typography } from "@/theme/typography";
@@ -24,7 +26,9 @@ type Presets =
 	| "formHelper"
 	| "error";
 
-export interface TextProps extends RNTextProps {
+type J = ComponentProps<typeof Animated.View>;
+
+export interface TextProps extends RNTextProps, J {
 	/**
 	 * Text which is looked up via i18n.
 	 */
@@ -96,9 +100,9 @@ export const Text = forwardRef(function Text(
 	];
 
 	return (
-		<RNText {...rest} style={$styles} ref={ref}>
+		<Animated.Text {...rest} style={$styles} ref={ref}>
 			{content}
-		</RNText>
+		</Animated.Text>
 	);
 });
 

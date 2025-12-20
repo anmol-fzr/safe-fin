@@ -17,25 +17,25 @@ export function QuickActions() {
 
 	const actions: QuickActionType[] = [
 		{
-			label: "Learn",
+			labelTx: "screens:homeScreen.actions.learn",
 			image: learnActionImage,
 			to: "/tabs/learnings",
 			bg: colors.palette.accent300,
 		},
 		{
-			label: "Calculator",
+			labelTx: "screens:homeScreen.actions.calculator",
 			image: calculateActionImage,
 			to: "/tabs/calculators",
 			bg: colors.palette.successBackground,
 		},
 		{
-			label: "Scams",
+			labelTx: "screens:homeScreen.actions.scams",
 			image: scamActionImage,
 			to: "/tabs/scams",
 			bg: colors.palette.warningBackground,
 		},
 		{
-			label: "More",
+			labelTx: "screens:homeScreen.actions.more",
 			image: moreActionImage,
 			to: "/tabs/profile",
 			bg: colors.palette.neutral100,
@@ -46,7 +46,7 @@ export function QuickActions() {
 		<Section title="Quick Actions">
 			<View style={themed($quickActionCard)}>
 				{actions.map((action) => (
-					<QuickActionCard key={action.label} {...action} />
+					<QuickActionCard key={action.labelTx} {...action} />
 				))}
 			</View>
 		</Section>

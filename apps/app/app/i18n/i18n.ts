@@ -2,8 +2,8 @@ import * as Localization from "expo-localization";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { I18nManager } from "react-native";
-//import { TOptions } from "i18next";
 import "intl-pluralrules";
+import type { TOptions } from "i18next";
 
 // if English isn't your default language, move Translations to the appropriate language file.
 import en, { type Translations } from "./en";
@@ -13,7 +13,9 @@ const fallbackLocale = "en-US";
 
 const systemLocales = Localization.getLocales();
 
+//const resources = { en };
 const resources = { en, hi };
+
 const supportedTags = Object.keys(resources);
 
 // Checks to see if the device locale matches any of the supported locales
@@ -47,6 +49,7 @@ export const initI18n = async () => {
 	await i18n.init({
 		resources,
 		lng: locale?.languageTag ?? fallbackLocale,
+		//lng: "hi",
 		fallbackLng: fallbackLocale,
 		interpolation: {
 			escapeValue: false,
@@ -59,6 +62,11 @@ export const initI18n = async () => {
 /**
  * Builds up valid keypaths for translations.
  */
+
+export interface ComponentTxProps {
+	tx?: TxKeyPath;
+	txOptions?: TOptions;
+}
 
 export type TxKeyPath = RecursiveKeyOf<Translations>;
 

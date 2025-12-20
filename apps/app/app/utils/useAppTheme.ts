@@ -2,8 +2,9 @@ import {
 	type DefaultTheme,
 	useTheme as useNavTheme,
 } from "@react-navigation/native";
-import { createContext, useCallback, useContext, useMemo } from "react";
+import { createContext, use, useCallback, useMemo } from "react";
 import { type StyleProp, useColorScheme } from "react-native";
+import { useMMKVString } from "react-native-mmkv";
 import type {
 	Theme,
 	ThemeContexts,
@@ -46,7 +47,7 @@ interface UseAppThemeValue {
 const useAppTheme = () => {
 	const navTheme = useNavTheme();
 	const systemColorScheme = useColorScheme();
-	const context = useContext(ThemeContext);
+	const context = use(ThemeContext);
 
 	if (!context) {
 		throw new MissingContextError("useTheme", " ThemeProvider");
@@ -107,4 +108,11 @@ const useThemePersister = () => {
 	};
 };
 
-export { ThemeProvider, useAppTheme, useThemePersister };
+const usePersistTheme = () => {
+	const { THEME_KEY } = useThemePersister();
+	const [theme, setTheme] = useMMKVString(THEME_KEY, storage);
+
+	return [theme ?? "system", setTheme];
+};
+
+export { ThemeProvider, useAppTheme, useThemePersister, usePersistTheme };

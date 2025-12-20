@@ -9,8 +9,8 @@ export default function CalculatorLayout() {
 				options={{
 					header: (props) => (
 						<ScreenHeader
-							titleTx="learningScreen:title"
-							tagLineTx="learningScreen:tagLine"
+							titleTx="screens:learningList.title"
+							tagLineTx="screens:learningList.tagLine"
 							{...props}
 						/>
 					),
@@ -20,7 +20,9 @@ export default function CalculatorLayout() {
 			<Stack.Screen
 				name="[lessonId]"
 				options={{
-					header: (props) => <GoBack tx="lessonScreen:title" {...props} />,
+					header: (props) => (
+						<GoBack tx="screens:learningList.title" {...props} />
+					),
 				}}
 			/>
 		</Stack>

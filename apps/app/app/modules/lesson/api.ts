@@ -64,6 +64,11 @@ interface Quiz {
 
 type IResAllLessons = IResData<ILesson[], true>;
 type IResLesson = IResData<ILessonQuizzes>;
+type IResLastLesson = IResData<{
+	title: string;
+	updatedAt: string;
+	readMinutes: number;
+} | null>;
 
 export const LESSON = {
 	ALL: async (params: IReqParams): Promise<IResAllLessons> => {
@@ -81,6 +86,7 @@ export const LESSON = {
 	},
 	ONE: (lessonId: ResourceId) =>
 		axiosInstance.get<unknown, IResLesson>(`/lessons/${lessonId}`),
+	LAST: () => axiosInstance.get<unknown, IResLastLesson>(`/lessons/last`),
 	// Might get replaced by something else in future ( like posthog etc. )
 	UPDATE_STATUS: (lessonId: ResourceId) =>
 		axiosInstance.post<unknown, null>(`/lessons/${lessonId}/status`, {

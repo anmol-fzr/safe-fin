@@ -30,40 +30,6 @@ interface AuthStoreActions {
 	resetData: VoidFunction;
 }
 
-const d = {
-	data: {
-		session: {
-			createdAt: new Date("2025-12-11T13:25:12.914Z"),
-			expiresAt: new Date("2025-12-18T13:25:12.913Z"),
-			id: "m0EvUZduIYUvQ34B2v7FITFs1doBxu4R",
-			impersonatedBy: null,
-			ipAddress: "",
-			token: "DjXM1MoqDuB5kirfDZ09QOKmsyxzN0ng",
-			updatedAt: new Date("2025-12-11T13:25:12.914Z"),
-			userAgent: "better-auth",
-			userId: "N1nFy15mRJcoisIQIifyeYyUHp6NkyJX",
-		},
-		user: {
-			banExpires: null,
-			banReason: "Unknown Person",
-			banned: false,
-			createdAt: new Date("1970-01-21T08:17:46.148Z"),
-			email: "anmol@email.in",
-			emailVerified: false,
-			id: "N1nFy15mRJ coisIQIifyeYyUHp6NkyJX",
-			image: null,
-			isAnonymous: null,
-			isNew: false,
-			name: "Anmol",
-			phoneNumber: "8427822949",
-			phoneNumberVerified: true,
-			role: "admin",
-			updatedAt: new Date("2025-12-11T13:25:12.846Z"),
-		},
-	},
-	error: null,
-};
-
 type AuthStore = (AuthStoreEmpty | AuthStoreWithData) & AuthStoreActions;
 
 const useAuthStore = create<AuthStore>()(

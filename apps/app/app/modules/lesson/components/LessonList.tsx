@@ -16,11 +16,11 @@ export function LessonList() {
 function LessonListImpl() {
 	const { lessons, isRefetching, isFetchingNextPage, fetchNextPage, refetch } =
 		useGetLessons();
-	const handleViewableItemsChanged = usePrefetchListItem({
-		prefetchQueryFn: getLessonOpts,
-	});
+	// const handleViewableItemsChanged = usePrefetchListItem({
+	// 	prefetchQueryFn: getLessonOpts,
+	// });
 
-	const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
+	//const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
 
 	return (
 		<ListView
@@ -29,9 +29,9 @@ function LessonListImpl() {
 			onRefresh={refetch}
 			estimatedItemSize={105}
 			keyExtractor={(item) => item.id.toString()}
-			onEndReached={handleEndReached}
+			//onEndReached={handleEndReached}
 			ListEmptyComponent={EmptyListView}
-			onViewableItemsChanged={handleViewableItemsChanged}
+			//onViewableItemsChanged={handleViewableItemsChanged}
 			ListFooterComponent={
 				isFetchingNextPage ? <LessonListImpl.Loading /> : undefined
 			}

@@ -1,7 +1,6 @@
 import { useResourceActionToast } from "@safe-fin/ui/hooks";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback } from "react";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { useRouter } from "expo-router";
 import { useAuthStore } from "../store";
 import { authClient } from "../utils";
 
@@ -9,7 +8,7 @@ export const useGuestLogin = () => {
 	const setAuthData = useAuthStore((state) => state.setData);
 	const setAuthState = useAuthStore((state) => state.setState);
 
-	const navigation = useSafeNavigation();
+	const router = useRouter();
 
 	const toast = useResourceActionToast();
 
@@ -18,7 +17,7 @@ export const useGuestLogin = () => {
 		mutate,
 		...rest
 	} = useMutation({
-		mutationKey: ["USER", "UPDATE"],
+		mutationKey: ["USER", "LOGIN"],
 		mutationFn: () => {
 			return authClient.signIn.anonymous();
 		},
@@ -36,20 +35,16 @@ export const useGuestLogin = () => {
 
 			setAuthData({ user: { id, email, name, isAnonymous: true } });
 			setAuthState("complete");
-			navigation.navigate("MainTabs", { screen: "Home" });
+			router.push("/tabs");
 		},
 		onError() {
 			toast.error("Unable to Login as Guest");
 		},
 	});
 
-	const handleGuestLogin = useCallback(() => {
-		mutate();
-	}, []);
-
 	return {
 		isGuestLoginPending,
-		handleGuestLogin,
+		handleGuestLogin: mutate,
 		...rest,
 	};
 };

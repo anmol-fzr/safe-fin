@@ -2,8 +2,8 @@ import type React from "react";
 import {
 	createContext,
 	type PropsWithChildren,
+	use,
 	useCallback,
-	useContext,
 	useEffect,
 	useState,
 } from "react";
@@ -25,7 +25,7 @@ const DEFAULT_TOAST_OPTIONS: Required<ToastOptions> = {
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
 export const useToast = (): ToastContextValue => {
-	const context = useContext(ToastContext);
+	const context = use(ToastContext);
 	if (!context) {
 		throw new Error("useToast must be used within a ToastProvider");
 	}

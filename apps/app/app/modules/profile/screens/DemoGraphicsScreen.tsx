@@ -5,7 +5,7 @@ import { DemoGraphicsForm } from "../components";
 
 export const DemoGraphicsScreen = () => {
 	return (
-		<Screen preset="scroll" contentContainerStyle={$styles.container}>
+		<Screen preset="scroll" contentContainerStyle={$styles.lowHeaderScreen}>
 			<GuestSafe>
 				<DemoGraphicsForm />
 			</GuestSafe>
