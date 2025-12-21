@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import Animated, {
@@ -5,8 +6,7 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
-import { Button, Screen, ScreenHeader, Text } from "@/components";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { Button, Screen, Text } from "@/components";
 import { $styles, spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Question } from "../components/Question";
@@ -56,7 +56,7 @@ export function QuizResultScreen() {
 	if (!quizId) {
 		throw new Error("No QuizId array param passed on QuizScreen");
 	}
-	const navigation = useSafeNavigation();
+	const router = useRouter();
 
 	const { quiz, isPending } = useGetQuiz(quizId);
 
@@ -65,8 +65,8 @@ export function QuizResultScreen() {
 	);
 
 	const goToQuizzes = useCallback(
-		() => navigation.navigate("MainTabs", { screen: "Learning" }),
-		[navigation],
+		() => router.push("/tabs/learnings"),
+		[router],
 	);
 
 	return (
@@ -208,13 +208,13 @@ const Square = ({ isActive, isCorrect, onPress, index }: SquareProps) => {
 
 	//const isActive = activeQuesId === question.id.toString();
 
-	const borderRadius = useSharedValue(spacing.xs);
+	const borderRadius = useSharedValue<number>(spacing.xs);
 
 	useEffect(() => {
 		borderRadius.value = withTiming(isActive ? spacing.xl : spacing.xs, {
 			duration: 200,
 		});
-	}, [isActive]);
+	}, [isActive, borderRadius]);
 
 	const animatedStyle = useAnimatedStyle(() => ({
 		borderRadius: borderRadius.value,

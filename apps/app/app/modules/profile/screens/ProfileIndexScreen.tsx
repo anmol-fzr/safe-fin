@@ -2,7 +2,7 @@ import { Logout } from "iconsax-react-nativejs";
 import { Button, Screen } from "@/components";
 import { useIsGuestUser } from "@/modules/auth/hooks/use-guest-login";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useAppTheme } from "@/utils/useAppTheme";
+import { $styles } from "@/theme";
 import { AccountSettingsList } from "../components/account-settings-list";
 import { AppInfoList } from "../components/app-info-list";
 import { usePrefetchUserDemographics } from "../hooks/queries";
@@ -13,19 +13,8 @@ export const ProfileIndexScreen = () => {
 
 	usePrefetchUserDemographics();
 
-	const {
-		theme: { spacing },
-	} = useAppTheme();
-
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={{
-				gap: spacing.xl,
-				padding: spacing.xs,
-				paddingBottom: spacing.xxl,
-			}}
-		>
+		<Screen preset="scroll" contentContainerStyle={$styles.fullHeaderScreen}>
 			<AccountSettingsList />
 			<AppInfoList />
 

@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSafeContext, useSendOtp, useVerifyOtp } from "@safe-fin/ui/hooks";
+import * as Sentry from "@sentry/react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
 import { useRouter } from "expo-router";
@@ -13,10 +14,9 @@ import React, {
 import { FormProvider, useForm } from "react-hook-form";
 import { View, type ViewStyle } from "react-native";
 import type { OtpInputRef } from "react-native-otp-entry";
-
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
-import { useCountdown } from "@/hooks";
+import { useCountdown } from "@/hooks/use-countdown";
 import { type TxKeyPath, translate } from "@/i18n";
 import { loginSchema } from "@/modules/auth/schema";
 import { $styles, type ThemedStyle } from "@/theme";
@@ -78,6 +78,12 @@ export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 					if (data.error) return;
 					restart();
 					const { id, email, name } = data.data.user;
+
+					Sentry.setUser({
+						id: id,
+						email: email,
+					});
+
 					setAuthData({ user: { id, email, name, isAnonymous: false } });
 					setAuthState("complete");
 					router.navigate("/tabs");

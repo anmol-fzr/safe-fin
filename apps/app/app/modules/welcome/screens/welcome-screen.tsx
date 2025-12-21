@@ -7,7 +7,7 @@ import Animated, {
 	SlideOutLeft,
 } from "react-native-reanimated";
 import { $sizeStyles, Screen, Text } from "@/components";
-import { useLoopOverArray } from "@/hooks/use-loop-over-array.ts";
+import { useLoopOverArray } from "@/hooks/use-loop-over-array";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { usePrefetchLastLesson } from "@/modules/lesson/hooks/api";
 import { $styles, makeSpringy, type ThemedStyle } from "@/theme";

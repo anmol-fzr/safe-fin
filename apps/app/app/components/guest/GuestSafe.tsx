@@ -1,9 +1,16 @@
 import type { PropsWithChildren } from "react";
 import { Modal, StyleSheet, View } from "react-native";
+import Animated, {
+	FadeIn,
+	FadeInDown,
+	FadeOut,
+	SlideInDown,
+} from "react-native-reanimated";
 import { Button, Text } from "@/components";
 import { useToggle } from "@/hooks";
 import { LoginForm } from "@/modules/auth/components";
 import { useIsGuestUser } from "@/modules/auth/hooks/use-guest-login";
+import { makeSpringy } from "@/theme";
 import { getGuestMessage } from "@/utils/faker/guest";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -14,6 +21,7 @@ export const GuestSafe = (props: PropsWithChildren) => {
 
 	if (isGuest) {
 		const message = getGuestMessage();
+
 		const {
 			theme: { spacing, roundness },
 		} = theme;
@@ -30,10 +38,18 @@ export const GuestSafe = (props: PropsWithChildren) => {
 						},
 					]}
 				>
-					<Text size="lg" style={styles.guardMessage}>
+					<Text
+						key={message}
+						entering={makeSpringy(FadeIn)}
+						exiting={makeSpringy(FadeOut)}
+						size="lg"
+						style={styles.guardMessage}
+					>
 						{message}
 					</Text>
-					<Button onPress={onOpen}>Login</Button>
+					<Animated.View entering={makeSpringy(FadeInDown)}>
+						<Button onPress={onOpen}>Login</Button>
+					</Animated.View>
 					<Modal
 						visible={isOpen}
 						animationType="slide"

@@ -4,7 +4,7 @@ import { ScamList } from "../components";
 
 export function ScamListScreen() {
 	return (
-		<Screen contentContainerStyle={$styles.container}>
+		<Screen preset="scroll" contentContainerStyle={$styles.fullHeaderScreen}>
 			<ScamList />
 		</Screen>
 	);

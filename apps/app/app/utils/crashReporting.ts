@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/react-native";
+import { c } from "../../../../packages/db/dist/index-CnMQpbgf.mjs";
 import { envs } from "./envs";
 
 export const initCrashReporting = () => {
@@ -6,7 +7,11 @@ export const initCrashReporting = () => {
 		dsn: envs.SENTRY.DSN,
 		debug: true,
 		enableLogs: true,
-		integrations: [Sentry.consoleLoggingIntegration()],
+		sendDefaultPii: true,
+		integrations: [
+			Sentry.consoleLoggingIntegration(),
+			Sentry.httpClientIntegration(),
+		],
 	});
 };
 export enum ErrorType {
@@ -32,4 +37,8 @@ export const reportCrash = (
 	} else {
 		Sentry.captureException(error);
 	}
+};
+
+export const onLogout = () => {
+	Sentry.setUser(null);
 };

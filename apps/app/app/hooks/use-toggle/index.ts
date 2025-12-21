@@ -12,5 +12,5 @@ export const useToggle = (initVal = false) => {
 		onOpen,
 		onClose,
 		onToggle,
-	};
+	} as const;
 };

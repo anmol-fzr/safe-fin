@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 //import { Progress } from "tamagui";
 import { Button, Text } from "@/components";
-import { useCountdown } from "@/hooks";
-import { useCounter } from "@/hooks/useCounter";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { useCountdown } from "@/hooks/use-countdown";
+import { useCounter } from "@/hooks/use-counter";
 import { QUIZ } from "@/modules/quiz/api";
 import type { IQuizResult } from "@/services/api/quiz-result";
 import { spacing } from "@/theme";
@@ -42,7 +42,7 @@ export const QuizRender = () => {
 
 	const [userAnswers, setUserAnswers] = useState<ResultRecord>({});
 
-	const { goBack, push } = useSafeNavigation();
+	const { back: goBack, push } = useRouter();
 
 	useEffect(() => {
 		if (countdown === 1) {

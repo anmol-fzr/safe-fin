@@ -1,6 +1,7 @@
 import { useResourceActionToast } from "@safe-fin/ui/hooks";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
+import { onLogout } from "@/utils/crashReporting";
 import { useAuthStore } from "../store";
 import { authClient } from "../utils";
 
@@ -19,6 +20,7 @@ export const useAuth = () => {
 				},
 				onSuccess() {
 					resetAuthStore();
+					onLogout();
 					//navigation.popToTop();
 					navigate("/auth");
 					toast.success("Logged Out");

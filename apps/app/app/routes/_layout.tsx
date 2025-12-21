@@ -1,8 +1,10 @@
 import { useFonts } from "@expo-google-fonts/space-grotesk";
-import { Stack } from "expo-router";
+import { logger } from "@sentry/react-native";
+import { Stack, useGlobalSearchParams, usePathname } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import { Provider } from "@/components/Provider";
+import { useToggle } from "@/hooks/use-toggle";
 import { initI18n } from "@/i18n";
 import { LoadingScreen } from "@/screens";
 import { customFontsToLoad, type ThemeContexts } from "@/theme";
@@ -18,23 +20,24 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad);
-	const [isI18nInitialized, setIsI18nInitialized] = useState(false);
+	const { isOpen: isI18nInitialized, onOpen: onI18nInitialized } = useToggle();
 
 	const [theme, setTheme] = usePersistTheme();
+
+	const pathname = usePathname();
+	const params = useGlobalSearchParams();
+
+	useEffect(() => {
+		logger.trace("Screen Track", { pathname, params });
+	}, [pathname, params]);
 
 	useEffect(() => {
 		initCrashReporting();
 		initI18n().then(() => {
-			setIsI18nInitialized(true);
-
+			onI18nInitialized();
 			SplashScreen.hideAsync();
-			// setTimeout(() => {
-			// 	SplashScreen.setOptions({
-			// 		fade: true,
-			// 	});
-			// }, 500);
 		});
-	}, []);
+	}, [onI18nInitialized]);
 
 	if (!isI18nInitialized || (!areFontsLoaded && !fontLoadError)) {
 		return <LoadingScreen />;
@@ -42,7 +45,7 @@ export default function RootLayout() {
 
 	return (
 		<ThemeProvider value={{ theme: theme as ThemeContexts, setTheme }}>
-			<Suspense>
+			<Suspense fallback={<LoadingScreen />}>
 				<Provider>
 					<Stack screenOptions={{ headerShown: false }}>
 						<Stack.Screen name="index" />

@@ -19,6 +19,12 @@ export const $styles = {
 		paddingBottom: spacing.bottom,
 	} as ViewStyle,
 
+	fullHeaderScreen: {
+		gap: spacing.xl,
+		padding: spacing.xs,
+		paddingBottom: spacing.xxl,
+	} as ViewStyle,
+
 	goBack: {
 		display: "flex",
 		flexDirection: "row",

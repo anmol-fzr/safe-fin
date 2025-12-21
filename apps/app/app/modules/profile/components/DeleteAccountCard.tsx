@@ -37,8 +37,8 @@ export function DeleteAccountCard() {
 			>
 				<Button
 					style={{
-						marginRight: 0,
-						marginLeft: "auto",
+						marginLeft: 0,
+						marginRight: "auto",
 						paddingHorizontal: 20,
 						borderWidth: 0,
 						borderRadius: 12,

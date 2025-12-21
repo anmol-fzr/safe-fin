@@ -1,23 +1,24 @@
-import { VisibilitySensor } from "@futurejj/react-native-visibility-sensor";
-import { Link } from "@react-navigation/native";
+//import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import {
 	Share as Share2Icon,
 	Dislike as ThumbsDownIcon,
 	Like1 as ThumbsUpIcon,
 } from "iconsax-react-nativejs";
-import { Suspense, useCallback, useMemo } from "react";
-import { View, type ViewStyle } from "react-native";
+import { Suspense, useMemo } from "react";
+//import { type TextStyle, type ViewStyle } from "react-native";
+import { View } from "react-native";
 import Markdown from "react-native-markdown-display";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { $fontWeightStyles, $sizeStyles, ListView, Text } from "@/components";
-import { useDimensions } from "@/hooks/useDimensions";
-import type { ThemedStyle } from "@/theme";
+import { $fontWeightStyles, $sizeStyles } from "@/components";
+import { useDimensions } from "@/hooks/use-dimensions";
+//import type { ThemedStyle } from "@/theme";
 import { spacing } from "@/theme";
 import type { ResourceId } from "@/types";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGetLesson } from "../hooks/api";
-import { useUpdateLessonStatus } from "../hooks/mutations";
+
+//import { useUpdateLessonStatus } from "../hooks/mutations";
 
 const arr = getEmptyArr(15);
 
@@ -101,59 +102,59 @@ function LessonRenderer({ content }: LessonRendererProps) {
 	return <Markdown style={styles}>{content}</Markdown>;
 }
 
-type LessonQuizzesProps = {
-	lessonId: ResourceId;
-	quizzes: {
-		id: number;
-		lessonId: number;
-		quizId: number;
-		quiz: { title: string };
-	}[];
-};
+// type LessonQuizzesProps = {
+// 	lessonId: ResourceId;
+// 	quizzes: {
+// 		id: number;
+// 		lessonId: number;
+// 		quizId: number;
+// 		quiz: { title: string };
+// 	}[];
+// };
 
-function LessonQuizzes({ lessonId, quizzes }: LessonQuizzesProps) {
-	const { themed } = useAppTheme();
+// function LessonQuizzes({ lessonId, quizzes }: LessonQuizzesProps) {
+// 	const { themed } = useAppTheme();
+//
+// 	const { updateStatus } = useUpdateLessonStatus(lessonId);
+//
+// 	const handleVisibility = useCallback(
+// 		(isVisible: boolean) => {
+// 			if (isVisible) {
+// 				updateStatus();
+// 			}
+// 		},
+// 		[updateStatus],
+// 	);
+//
+// 	return (
+// 		<VisibilitySensor onChange={handleVisibility} triggerOnce delay={500}>
+// 			<ListView
+// 				recycleItems
+// 				data={quizzes}
+// 				keyExtractor={(item) => item.id.toString()}
+// 				ListHeaderComponent={
+// 					quizzes.length > 0 ? undefined : (
+// 						<Text preset="subheading" style={themed($quizRootTitle)}>
+// 							Test you knowledge with a Quiz
+// 						</Text>
+// 					)
+// 				}
+// 				renderItem={({ item }) => <QuizLink quiz={item} />}
+// 			/>
+// 		</VisibilitySensor>
+// 	);
+// }
 
-	const { updateStatus } = useUpdateLessonStatus(lessonId);
+//type QuizLinkProps = { quiz: LessonRendererProps["quizzes"][number] };
 
-	const handleVisibility = useCallback(
-		(isVisible: boolean) => {
-			if (isVisible) {
-				updateStatus();
-			}
-		},
-		[updateStatus],
-	);
-
-	return (
-		<VisibilitySensor onChange={handleVisibility} triggerOnce delay={500}>
-			<ListView
-				recycleItems
-				data={quizzes}
-				keyExtractor={(item) => item.id.toString()}
-				ListHeaderComponent={
-					quizzes.length > 0 ? undefined : (
-						<Text preset="subheading" style={themed($quizRootTitle)}>
-							Test you knowledge with a Quiz
-						</Text>
-					)
-				}
-				renderItem={({ item }) => <QuizLink quiz={item} />}
-			/>
-		</VisibilitySensor>
-	);
-}
-
-type QuizLinkProps = { quiz: LessonRendererProps["quizzes"][number] };
-
-function QuizLink({ quiz }: QuizLinkProps) {
-	const { themed } = useAppTheme();
-	return (
-		<Link screen="Quiz" params={{ quizId: quiz.id }} style={themed($quizLink)}>
-			<Text>{quiz.quiz.title}</Text>
-		</Link>
-	);
-}
+// function QuizLink({ quiz }: QuizLinkProps) {
+// 	const { themed } = useAppTheme();
+// 	return (
+// 		<Link screen="Quiz" params={{ quizId: quiz.id }} style={themed($quizLink)}>
+// 			<Text>{quiz.quiz.title}</Text>
+// 		</Link>
+// 	);
+// }
 
 LessonImpl.Loading = () => {
 	const { width } = useDimensions();
@@ -196,16 +197,16 @@ LessonImpl.Loading = () => {
 	);
 };
 
-const $quizRootTitle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	marginBottom: spacing.sm,
-});
+// const $quizRootTitle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+// 	marginBottom: spacing.sm,
+// });
 
-const $quizLink: ThemedStyle<ViewStyle> = ({ spacing, roundness }) => ({
-	width: "100%",
-	borderColor: "black",
-	borderWidth: 1,
-	borderRadius: roundness,
-	padding: spacing.xs,
-});
+// const $quizLink: ThemedStyle<TextStyle> = ({ spacing, roundness }) => ({
+// 	width: "100%",
+// 	borderColor: "black",
+// 	borderWidth: 1,
+// 	borderRadius: roundness,
+// 	padding: spacing.xs,
+// });
 
 export { Lesson };

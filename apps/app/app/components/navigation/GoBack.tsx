@@ -1,14 +1,13 @@
 import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
+import { useRouter } from "expo-router";
 import type { TOptions } from "i18next";
 import { ArrowLeft2 as ChevronLeft } from "iconsax-react-nativejs";
-//import { ChevronLeft } from "lucide-react-native";
 import { memo, useMemo } from "react";
 import { Pressable, type ViewStyle } from "react-native";
 import Animated, { FadeInLeft, FadeOutRight } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { type TxKeyPath, translate } from "@/i18n";
-import { $styles, ANIMATION, getSpringConfig, type ThemedStyle } from "@/theme";
+import { $styles, makeSpringy, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Text } from "../Text";
 
@@ -29,21 +28,12 @@ interface GoBackProps extends NativeStackHeaderProps {
 	isInNativeHeader?: boolean;
 }
 
-const { damping, mass, stiffness } = getSpringConfig(ANIMATION.spatial.slow);
-
-const enteringAnim = FadeInLeft.springify()
-	.damping(damping)
-	.stiffness(stiffness)
-	.mass(mass);
-
-const exitingAnim = FadeOutRight.springify()
-	.damping(damping)
-	.stiffness(stiffness)
-	.mass(mass);
+const enteringAnim = makeSpringy(FadeInLeft);
+const exitingAnim = makeSpringy(FadeOutRight);
 
 export const GoBack = memo((props: GoBackProps) => {
 	const { tx, txOptions, goBackText, navigation } = props;
-	const navigate = useSafeNavigation();
+	const router = useRouter();
 	const {
 		theme: { colors },
 		themed,
@@ -73,7 +63,7 @@ export const GoBack = memo((props: GoBackProps) => {
 	);
 
 	return (
-		<Pressable onPress={navigate.goBack}>
+		<Pressable onPress={router.back}>
 			<Animated.View
 				key={content}
 				entering={enteringAnim}

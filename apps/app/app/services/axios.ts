@@ -1,3 +1,4 @@
+import { auth } from "@safe-fin/auth/server";
 import axios, { type AxiosError, type AxiosResponse } from "axios";
 import { authClient, logout } from "@/modules/auth/utils";
 import { envs } from "@/utils/envs";

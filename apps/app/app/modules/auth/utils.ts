@@ -1,6 +1,7 @@
 import { createAppAuthClient } from "@safe-fin/auth/app";
 import * as SecureStore from "expo-secure-store";
 import { useAuthStore } from "@/modules/auth/store";
+import { onLogout } from "@/utils/crashReporting";
 import { envs } from "@/utils/envs";
 import { queryClient } from "@/utils/lib/query";
 
@@ -14,5 +15,6 @@ export type Session = (typeof authClient)["$Infer"]["Session"]["session"];
 export async function logout() {
 	queryClient.invalidateQueries();
 	useAuthStore.getState().resetData();
+	onLogout();
 	await authClient.signOut();
 }

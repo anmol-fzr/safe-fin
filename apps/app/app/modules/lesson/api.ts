@@ -1,9 +1,7 @@
 //import { lessonsResSchema } from "@safe-fin/schema/app";
-import type { ZodTypeAny } from "zod";
 import type { IResData } from "@/services/axios";
 import { axiosInstance } from "@/services/axios";
 import type { IReqParams, ResourceId } from "@/types";
-import { ERROR_MESSAGES, logger } from "@/utils/logger";
 
 export const fallbackData = {
 	data: [],
@@ -14,33 +12,6 @@ export const fallbackData = {
 	},
 };
 
-interface ParseOptions<T> {
-	schema: ZodTypeAny;
-	data: unknown;
-	fallback: T;
-	endpoint?: string;
-}
-
-/**
- * Safely parses API data using the given Zod schema.
- * Logs validation errors and returns fallback on failure.
- */
-export function safeApiParse<T>({
-	schema,
-	data,
-	fallback,
-	endpoint,
-}: ParseOptions<T>): T {
-	try {
-		return schema.parse(data);
-	} catch (error) {
-		logger.fatal(
-			`${ERROR_MESSAGES.API.VALIDATION_FAILED} ${endpoint ? `, ${endpoint}` : ""}`,
-			{ error },
-		);
-		return fallback;
-	}
-}
 export type ILesson = {
 	id: number;
 	title: string;

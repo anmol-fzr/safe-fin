@@ -2,15 +2,9 @@ import {
 	type AnimatableValue,
 	type AnimationCallback,
 	type ComplexAnimationBuilder,
-	SlideInRight,
-	SlideOutLeft,
 	type WithSpringConfig,
 	withSpring,
 } from "react-native-reanimated";
-import type {
-	IEntryAnimationBuilder,
-	IExitAnimationBuilder,
-} from "react-native-reanimated/lib/typescript/commonTypes";
 
 export const ANIMATION = {
 	spatial: {

@@ -1,13 +1,13 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSafeContext } from "@safe-fin/ui/hooks";
+import { useRouter } from "expo-router";
 import React, { createContext, type PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import type { ViewStyle } from "react-native";
 import { Button, Text } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { FormSelectField } from "@/components/form/FormSelectField";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
 import { type TxKeyPath, translate } from "@/i18n";
 import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 import { registerSchema } from "@/modules/auth/schema";
@@ -43,22 +43,24 @@ export const RegisterFormRoot = ({ children }: PropsWithChildren) => {
 		},
 	});
 
-	const navigation = useSafeNavigation();
+	const router = useRouter();
 	const setAuthState = useAuthStore((state) => state.setState);
-	const { updateUser, isPending } = useUpdateUser();
+	const { updateUser, isUpdatingUser } = useUpdateUser();
 
 	const onSubmit = methods.handleSubmit((data) => {
 		updateUser(data, {
 			onSuccess: () => {
 				setAuthState("complete");
 				// Note: Use replace or navigate based on your flow requirements
-				navigation.navigate("Welcome");
+				router.push("/");
 			},
 		});
 	});
 
 	return (
-		<RegisterFormContext.Provider value={{ onSubmit, isPending }}>
+		<RegisterFormContext.Provider
+			value={{ onSubmit, isPending: isUpdatingUser }}
+		>
 			<FormProvider {...methods}>{children}</FormProvider>
 		</RegisterFormContext.Provider>
 	);

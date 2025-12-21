@@ -1,5 +1,5 @@
-import { type FieldValues, useForm, type UseFormProps } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { type FieldValues, type UseFormProps, useForm } from "react-hook-form";
 import type { AnyObject, InferType, ObjectSchema } from "yup";
 
 type UseYupFormProps<

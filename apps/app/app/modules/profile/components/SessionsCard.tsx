@@ -17,6 +17,8 @@ import { useListSessions, useSession } from "../hooks/queries";
 
 export function SessionsCard() {
 	const { sessions, isRefetchingSessions, refetchSessions } = useListSessions();
+	console.log(sessions);
+
 	const { currSession } = useSession();
 
 	return (
@@ -37,29 +39,42 @@ export function SessionsCard() {
 				<Text>Manage your active sessions and revoke access</Text>
 			</View>
 
-			<Suspense fallback={<SessionsCard.Loading />}>
-				<ListView
-					data={sessions}
-					keyExtractor={(item) => item.token}
-					refreshing={isRefetchingSessions}
-					ListHeaderComponent={
-						sessions.length > 1 ? RevokeOtherSessions : undefined
-					}
-					onRefresh={refetchSessions}
-					renderItem={({ item }) => (
-						<SessionCell
-							{...item}
-							isCurrentSession={isStrictlySameObj(currSession, item)}
-						/>
-					)}
-				/>
+			<Suspense fallback={<SessionsCardImpl.Loading />}>
+				<SessionsCardImpl />
 			</Suspense>
 		</View>
 	);
 }
+
+function SessionsCardImpl() {
+	const { sessions, isRefetchingSessions, refetchSessions } = useListSessions();
+	console.log(sessions);
+
+	const { currSession } = useSession();
+
+	return (
+		<ListView
+			data={sessions}
+			keyExtractor={(item) => item.token}
+			refreshing={isRefetchingSessions}
+			ListHeaderComponent={
+				sessions.length > 1 ? RevokeOtherSessions : undefined
+			}
+			onRefresh={refetchSessions}
+			renderItem={({ item }) => (
+				<SessionCell
+					{...item}
+					isCurrentSession={isStrictlySameObj(currSession, item)}
+				/>
+			)}
+		/>
+	);
+}
+
 const arr = getEmptyArr(3);
 
-SessionsCard.Loading = () => arr.map((i) => <SessionCell.Loading key={i} />);
+SessionsCardImpl.Loading = () =>
+	arr.map((i) => <SessionCell.Loading key={i} />);
 
 type SessionCellProps = Session & {
 	isCurrentSession: boolean;
@@ -76,7 +91,7 @@ function SessionCell(session: SessionCellProps) {
 
 	const color = isRevokingSession
 		? colors.textDisabled
-		: colors.palette.neutral300;
+		: colors.palette.neutral700;
 
 	return (
 		<View

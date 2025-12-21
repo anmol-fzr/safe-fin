@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker/locale/en";
+//import { faker } from "@faker-js/faker/locale/en";
 
 const guestModeMessages = [
 	"You’re exploring as a guest 👀. Log in to unlock the cool stuff and make the most of the app!",
@@ -9,5 +9,7 @@ const guestModeMessages = [
 ] as const;
 
 export const getGuestMessage = () => {
-	return faker.helpers.arrayElement(guestModeMessages);
+	const idx = Math.round(Math.random() * 4);
+	return guestModeMessages[idx];
+	//return faker.helpers.arrayElement(guestModeMessages);
 };

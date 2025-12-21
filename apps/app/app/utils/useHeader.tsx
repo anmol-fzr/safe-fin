@@ -1,7 +1,7 @@
+import { useNavigation } from "expo-router";
 import { useEffect, useLayoutEffect } from "react";
-import { Header, type HeaderProps } from "../components";
 import { Platform } from "react-native";
-import { useSafeNavigation } from "@/hooks/useSafeNavigation";
+import { Header, type HeaderProps } from "../components";
 
 /**
  * A hook that can be used to easily set the Header of a react-navigation screen from within the screen's component.
@@ -13,7 +13,7 @@ export function useHeader(
 	headerProps: HeaderProps,
 	deps: Parameters<typeof useLayoutEffect>[1] = [],
 ) {
-	const navigation = useSafeNavigation();
+	const navigation = useNavigation();
 
 	/**
 	 * We need to have multiple implementations of this hook for web and mobile.

@@ -2,6 +2,7 @@ import {
 	queryOptions,
 	usePrefetchQuery,
 	useQuery,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { authClient } from "@/modules/auth/utils";
 import { DEMO_GRAPHICS } from "../api";
@@ -32,7 +33,7 @@ const getListSessionsOpts = () => {
 
 const useListSessions = () => {
 	const opts = getListSessionsOpts();
-	const { data, isRefetching, refetch, ...rest } = useQuery(opts);
+	const { data, isRefetching, refetch, ...rest } = useSuspenseQuery(opts);
 	const sessions = data?.data ?? [];
 
 	return {

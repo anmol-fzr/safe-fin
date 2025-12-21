@@ -10,14 +10,8 @@ import {
 	useState,
 } from "react";
 import { Pressable, View } from "react-native";
-import {
-	interpolateColor,
-	useAnimatedStyle,
-	useDerivedValue,
-	withSpring,
-} from "react-native-reanimated";
 import { Text } from "@/components";
-import { ANIMATION, getSpringConfig, spacing } from "@/theme";
+import { spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Field, type FieldLabelProps } from "./Field";
 
