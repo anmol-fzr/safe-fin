@@ -9,7 +9,7 @@
 		"lint": "biome lint app/",
 		"lint:check": "biome lint app/",
 		"test": "jest",
-		"test:watch": "jest --watch",
+		"test:watch": "jest --watchAll",
 		"test:maestro": "maestro test -e MAESTRO_APP_ID=com.safefin -e IS_DEV=true .maestro/flows",
 		"test:maestro:ci": "maestro test -e MAESTRO_APP_ID=com.safefin -e IS_DEV=false .maestro/flows",
 		"adb": "adb tcpip 5555 && adb connect 192.168.29.115 && adb devices",

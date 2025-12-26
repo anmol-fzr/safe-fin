@@ -1,20 +1,19 @@
-import { Suspense } from "react";
 import type { ViewStyle } from "react-native";
 import { StyleSheet, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Text } from "@/components";
+import { ViewTransition } from "@/components/view-transition";
+import { WithSuspense } from "@/components/with-suspense";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGetLastLesson } from "../hooks/api";
 
 export function BackToLessonCard() {
 	return (
-		<Animated.View entering={FadeIn} exiting={FadeOut}>
-			<Suspense fallback={<BackToLessonCardImpl.Loading />}>
-				<BackToLessonCardImpl />
-			</Suspense>
-		</Animated.View>
+		<ViewTransition>
+			<WithSuspense Component={BackToLessonCardImpl} />
+		</ViewTransition>
 	);
 }
 

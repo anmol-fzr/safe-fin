@@ -1,12 +1,14 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: Safe Fin
+description: Financial Literacy Made Simple and Practical
 template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Financial Literacy Made Simple and Practical
   image:
-    file: ../../assets/houston.webp
-  actions:
+    alt: A glittering, brightly colored logo
+    dark: https://framerusercontent.com/images/1Oq5u1X06Z1DEh6gJj3wx0wJAWg.png
+    light: https://framerusercontent.com/images/0TroAyVnaapml9MmvY5V7XXrQPo.png
+    actions:
     - text: Example Guide
       link: /guides/example/
       icon: right-arrow
@@ -18,19 +20,15 @@ hero:
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
-
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+  <a href="/blog">
+	  <Card title="Blogs" icon="pencil">
+      Checkout Blogs for Releases, Policy Updates etc...
+	  </Card>
+  </a>
+  <a href="https://github.com/anmol-fzr/safe-fin" target="_blank">
+	  <Card title="Download App" icon="download">
+		  Download SafeFin Application
+	  </Card>
+  </a>
 </CardGrid>

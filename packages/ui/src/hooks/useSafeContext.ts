@@ -1,5 +1,5 @@
 import type React from "react";
-import { useContext } from "react";
+import { use } from "react";
 
 class MissingContextError extends Error {
 	constructor(hookName: string, providerName: string) {
@@ -8,17 +8,28 @@ class MissingContextError extends Error {
 	}
 }
 
-export const useSafeContext = <T>(
+const useSafeContext = <T>(
 	context: React.Context<T | null>,
 	hookName: string,
+	contextComponentName?: string,
 ) => {
-	const ctx = useContext(context);
+	const ctx = use(context);
 
 	if (ctx === null || ctx === undefined) {
 		throw new MissingContextError(
 			hookName,
-			context.displayName ?? "<Context.Provider>",
+			context.displayName ?? contextComponentName ?? "<Context.Provider>",
 		);
 	}
 	return ctx as T;
 };
+
+const createSafeContextHook = <T>(
+	context: React.Context<T | null>,
+	hookName: string,
+	contextComponentName?: string,
+) => {
+	return () => useSafeContext(context, hookName, contextComponentName);
+};
+
+export { useSafeContext, createSafeContextHook };

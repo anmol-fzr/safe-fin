@@ -23,14 +23,20 @@ function isStrictlySameObj(
 	return isSame;
 }
 
-export function debounce(func: Function, timeout = 300) {
+type DebouncingFunc<T> = (args: T) => void;
+
+export function debounce<A>(func: DebouncingFunc<A>, timeout = 300) {
 	let timer: number;
-	return (...args: any) => {
+
+	const fn: DebouncingFunc<A> = (...args) => {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
+			// @ts-expect-error
 			func.apply(this, args);
 		}, timeout);
 	};
+
+	return fn;
 }
 
 export { currenctFmt, isStrictlySameObj };

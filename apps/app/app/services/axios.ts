@@ -1,5 +1,4 @@
-import { auth } from "@safe-fin/auth/server";
-import axios, { type AxiosError, type AxiosResponse } from "axios";
+import axios from "axios";
 import { authClient, logout } from "@/modules/auth/utils";
 import { envs } from "@/utils/envs";
 
@@ -18,10 +17,10 @@ axiosInstance.interceptors.request.use((req) => {
 
 // Response Interceptor: Extract only .data
 axiosInstance.interceptors.response.use(
-	(resp: AxiosResponse<IResData>) => {
+	(resp) => {
 		return resp.data;
 	},
-	(error: AxiosError<IResData>) => {
+	(error) => {
 		const status = error.response?.status;
 		console.log("got error axios interceptors");
 		if (status === 401) {

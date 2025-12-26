@@ -76,6 +76,7 @@ function getLastLessonOpts() {
 const useGetLastLesson = () => {
 	const opts = getLastLessonOpts();
 	const { data, ...rest } = useSuspenseQuery(opts);
+
 	return { lesson: data.data, ...rest };
 };
 

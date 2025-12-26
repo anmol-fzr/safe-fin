@@ -4,4 +4,3 @@ export * from "./useInterval";
 export * from "./useNotifier";
 export * from "./useResourceActionToast";
 export * from "./useSafeContext";
-export * from "./useStateLoop";

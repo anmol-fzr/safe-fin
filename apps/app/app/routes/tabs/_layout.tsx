@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import { useEffect } from "react";
-import { t, translate } from "@/i18n";
+import { translate } from "@/i18n";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -16,27 +16,18 @@ export default function TabsLayout() {
 	}, [isLogin, navigate]);
 
 	const {
-		theme: { colors, typography },
+		theme: { colors },
 	} = useAppTheme();
-
 	return (
 		<NativeTabs
 			labelVisibilityMode="labeled"
 			backgroundColor={colors.background}
-			//backgroundColor={colors.palette.neutral100}
-			labelStyle={{
-				default: colors.palette.neutral500,
-				selected: colors.palette.accent500,
-			}}
 			indicatorColor={colors.palette.accent200}
 			iconColor={{
 				default: colors.palette.neutral500,
 				selected: colors.palette.accent500,
 			}}
 			tintColor={colors.palette.accent500}
-
-			//backgroundColor={theme.colors.background}
-			// tintColor={colors.palette.accent500}
 		>
 			<NativeTabs.Trigger name="index">
 				<Label>{translate("tabs:home")}</Label>

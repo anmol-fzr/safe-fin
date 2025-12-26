@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { lessonRead } from "@safe-fin/db/schema";
 import { z } from "zod";
-import { getDb } from "@/db";
+import { desc, getDb } from "@/db";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db } from "@/middleware";
 

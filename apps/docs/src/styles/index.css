@@ -1,0 +1,4 @@
+img:not([style*="border-radius"]) {
+	border-radius: 30px;
+	corner-shape: squircle;
+}
