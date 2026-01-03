@@ -28,6 +28,7 @@
 	"scripts": {
 		"build": "turbo run build",
 		"build:admin": "turbo run build -F @safe-fin/admin",
+		"build:docs": "turbo run build -F @safe-fin/docs",
 		"dev": "turbo run dev",
 		"test": "turbo run test -F @safe-fin/server",
 		"check": "biome check",
