@@ -6,8 +6,8 @@
 
 import { getAuthDrizzleAdapter } from "@safe-fin/db";
 import { betterAuth } from "better-auth";
-import { envs } from "./src/envs";
-import { betterAuthOptions } from "./src/options";
+import { envs } from "./envs";
+import { betterAuthOptions } from "./options";
 
 const { BETTER_AUTH, DB, CORS_URL } = envs;
 
