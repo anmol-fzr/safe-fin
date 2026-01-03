@@ -1,3 +1,4 @@
+import { betterAuthStudioHandler } from "@safe-fin/auth/server";
 import { env } from "hono/adapter";
 import { etag } from "hono/etag";
 import { logger } from "hono/logger";
@@ -27,6 +28,12 @@ app.use(
 	}),
 );
 app.use(appCors);
+
+app.on(
+	["POST", "GET", "PUT", "DELETE"],
+	"/api/studio/*",
+	betterAuthStudioHandler,
+);
 
 app.get("/health", (c) => c.text("Hello Hono!"));
 
