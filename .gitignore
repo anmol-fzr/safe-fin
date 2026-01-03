@@ -24,6 +24,10 @@ coverage
 .wrangler/*
 .wrangler/tmp/*
 
+
+# Minio
+./minio-data/*
+
 # DB Dumps
 local.db
 dump.sql
