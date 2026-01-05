@@ -20,7 +20,7 @@
 		"build:android:sim": "eas build --profile development --platform android --local",
 		"build:android:dev": "eas build --profile development:device --platform android --local",
 		"build:android:preview": "eas build --profile preview --platform android --local",
-		"build:android:prod": "eas build --profile production --platform android --local",
+		"build:android:prod": "eas build --profile production --platform android",
 		"analyze:bundle": "react-native-bundle-visualizer --platform android",
 		"start": "expo start --dev-client",
 		"android": "expo run:android",

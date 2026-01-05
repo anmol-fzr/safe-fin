@@ -35,10 +35,7 @@
 			"ios": { "simulator": false }
 		},
 		"production": {
-			"bun": "1.3.3",
-			"android": {
-				"buildType": "apk"
-			}
+			"bun": "1.3.3"
 		}
 	},
 	"submit": {
