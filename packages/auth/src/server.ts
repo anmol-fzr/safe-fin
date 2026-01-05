@@ -3,9 +3,10 @@ import { getAuthDrizzleAdapter } from "@safe-fin/db";
 import type { BetterAuthOptions } from "better-auth";
 //import type { SecondaryStorage } from "better-auth";
 import { betterAuth } from "better-auth";
-import { betterAuthStudio } from "better-auth-studio/hono";
+//import { betterAuthStudio } from "better-auth-studio/hono";
 import { betterAuthOptions } from "./options";
-import studioConfig from "./studio.config";
+
+//import studioConfig from "./studio.config";
 
 interface AuthOpts extends GetDbOpts {
 	BETTER_AUTH_URL: string;
@@ -34,7 +35,7 @@ interface AuthOpts extends GetDbOpts {
 // };
 
 //app.on(['POST', 'GET', 'PUT', 'DELETE'], '/api/studio/*',
-export const betterAuthStudioHandler = betterAuthStudio(studioConfig);
+//export const betterAuthStudioHandler = betterAuthStudio(studioConfig);
 
 /**
  * Better Auth Instance

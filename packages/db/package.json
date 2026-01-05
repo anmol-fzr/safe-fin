@@ -35,6 +35,7 @@
 	"dependencies": {
 		"@libsql/client": "^0.15.10",
 		"drizzle-orm": "^0.44.3",
+		"better-auth": "catalog:",
 		"tsdown": "^0.15.12"
 	},
 	"devDependencies": {

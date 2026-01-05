@@ -77,7 +77,7 @@ const useGetLastLesson = () => {
 	const opts = getLastLessonOpts();
 	const { data, ...rest } = useSuspenseQuery(opts);
 
-	return { lesson: data.data, ...rest };
+	return { lesson: data?.data || null, ...rest };
 };
 
 const usePrefetchLastLesson = () => {

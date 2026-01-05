@@ -1,53 +1,53 @@
 const palette = {
 	// Inverted Neutrals for Dark Mode
-	neutral100: "#121212", // Darkest background
-	neutral200: "#1E1E1E", // Card/Elevated surface
-	neutral300: "#303030", // Border/Separator
-	neutral400: "#4F4F4F",
-	neutral500: "#8A8A8A", // Dimmed text/Icon default
-	neutral600: "#CFCFCF", // Secondary text
-	neutral700: "#E0E0E0", // Primary text
-	neutral800: "#FFFFFF", // Highest contrast text
-	neutral900: "#FFFFFF",
+	neutral100: "#0A0A0A", // Main Background (Deepest Black)
+	neutral200: "#171717", // Secondary Background / Cards
+	neutral300: "#262626", // Borders and Dividers
+	neutral400: "#404040", // Disabled state borders
+	neutral500: "#737373", // Muted text / Captions
+	neutral600: "#A3A3A3", // Secondary text
+	neutral700: "#D4D4D4", // Primary text
+	neutral800: "#F5F5F5", // Heading text
+	neutral900: "#FFFFFF", // High contrast text
 
-	// Primary (Kept the same hue, slightly adjusted for vibrancy on dark bg)
-	primary100: "#311C14",
-	primary200: "#5F382A",
-	primary300: "#925A47",
-	primary400: "#D28468",
-	primary500: "#F0A07B", // Adjusted for contrast
-	primary600: "#FFC8A8",
+	// Primary: Electric Purple (#8A43E1)
+	// 100-300 are deep background tints, 500 is your main color
+	primary100: "#1D1029", // Very dark purple background
+	primary200: "#2D1942",
+	primary300: "#4B2570",
+	primary400: "#6939C1",
+	primary500: "#8A43E1", // Main Brand Color
+	primary600: "#A875FF", // Lighter for Hover states in Dark Mode
 
-	// Secondary (Kept the same hue, slightly adjusted for vibrancy on dark bg)
-	secondary100: "#1A1B28",
-	secondary200: "#393C52",
-	secondary300: "#606485",
-	secondary400: "#8D92B9",
-	secondary500: "#ADB2D6",
+	// Secondary: Vivid Orange (#EF7B16)
+	secondary100: "#291605", // Very dark orange background
+	secondary200: "#422308",
+	secondary300: "#703B0D",
+	secondary400: "#B85D0F",
+	secondary500: "#EF7B16", // Highlight Color
 
-	// Accent (Kept the same hue, slightly adjusted for vibrancy on dark bg)
-	accent100: "#071B33", // Dark Accent Background
-	accent200: "#143C6B",
-	accent300: "#2B68A6",
-	accent400: "#51A2FF", // Active color
-	accent500: "#8FC9FF", // Lighter Active color (High contrast)
-	//accent500: "#2b7fff",
+	// Accent: Purple (Matches Primary to maintain consistency)
+	accent100: "#1D1029",
+	accent200: "#2D1942",
+	accent300: "#4B2570",
+	accent400: "#8A43E1",
+	accent500: "#A875FF", // High contrast active state
 
-	// Angry (Kept the same)
-	angry100: "#2A0E10", // Dark Angry Background
-	angry500: "#FB4D55", // Adjusted for contrast
+	// Angry: Red (#FF2F2F)
+	angry100: "#2B0909", // Dark Red Background
+	angry500: "#FF2F2F", // Error State
 
-	// Success (Kept the same hue)
-	success: "#4BB543", // Adjusted for contrast
-	successBackground: "#1B3B2B", // Dark Success Background
+	// Success: Green
+	success: "#34D399", // Slightly lighter green for visibility on dark
+	successBackground: "#064E3B", // Deep Green Background
 
-	// Warning (Kept the same hue)
-	warning: "#FFC107", // Adjusted for contrast
-	warningBackground: "#332700", // Dark Warning Background
+	// Warning: Amber
+	warning: "#FBBF24", // Lighter amber for visibility on dark
+	warningBackground: "#451A03", // Deep Amber Background
 
-	// Overlay (Kept the same, but based on a dark-mode base color)
-	overlay20: "rgba(255, 255, 255, 0.2)",
-	overlay50: "rgba(255, 255, 255, 0.5)",
+	// Overlays (White based for dark mode to create "light" on top)
+	overlay20: "rgba(255, 255, 255, 0.1)",
+	overlay50: "rgba(255, 255, 255, 0.25)",
 } as const;
 
 export const colors = {

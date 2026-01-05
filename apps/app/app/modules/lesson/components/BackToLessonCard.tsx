@@ -21,7 +21,7 @@ function BackToLessonCardImpl() {
 	const { lesson } = useGetLastLesson();
 	const { themed } = useAppTheme();
 
-	if (lesson === null) return;
+	if (lesson === null) return <></>;
 
 	const { title, updatedAt, readMinutes } = lesson;
 	const publishedDate = new Date(updatedAt);

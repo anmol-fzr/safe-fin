@@ -8,6 +8,10 @@ const config: StudioConfig = {
 		title: "Admin Dashboard",
 		theme: "dark",
 	},
+	access: {
+		roles: ["admin"],
+		allowEmails: ["admin@example.com"],
+	},
 };
 
 export default config;
