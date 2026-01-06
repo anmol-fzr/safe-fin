@@ -37,6 +37,7 @@
 		"@radix-ui/react-tooltip": "^1.2.8",
 		"@safe-fin/auth": "workspace:*",
 		"@safe-fin/ui": "workspace:*",
+		"@safe-fin/utils": "workspace:*",
 		"@tailwindcss/vite": "^4.0.15",
 		"@tanstack/react-form": "^1.12.3",
 		"@tanstack/react-query": "^5.80.5",

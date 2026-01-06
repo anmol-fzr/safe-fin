@@ -22,8 +22,8 @@ import { useVerifyOtp } from "@/hooks/api/auth";
 import useOtpTimer from "@/hooks/useOtpTimer";
 import { authClient } from "@/lib/auth";
 import { getPhonePlaceholder } from "@/lib/faker";
-import { isNull, isUndefined } from "@safe-fin/ui/utils";
 import { cn, secsToClockTime } from "@/lib/utils";
+import { isNull, isUndefined } from "@/pkg/utils";
 import { Route } from "@/routes/index";
 import { useAuthStore } from "@/store/useAuthStore";
 
