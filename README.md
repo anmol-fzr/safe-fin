@@ -127,9 +127,10 @@ This project showcases:
 └── packages
     ├── auth
     ├── db
+    ├── utils
     └── ui
 ```
-3 applications, 3 packages
+3 applications, 4 packages
 
 ```mermaid
 graph TD
@@ -137,6 +138,7 @@ graph TD
     db["@safe-fin/db"]
     auth["@safe-fin/auth"]
     ui["@safe-fin/ui"]
+    utils["@safe-fin/utils"]
     server["@safe-fin/server"]
     admin["@safe-fin/admin"]
     app["@safe-fin/app"]
@@ -145,11 +147,18 @@ graph TD
     %% Define dependencies using the short IDs
     db --> auth
     db --> server
+
     auth --> server
     auth --> admin
     auth --> app
+
     ui --> admin
     ui --> app
+
+    utils --> admin
+    utils --> app
+    utils --> server
+
     server --> root
     admin --> root
     app --> root
