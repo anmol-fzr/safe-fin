@@ -1,6 +1,6 @@
+import { env } from "hono/adapter";
 import { cors } from "hono/cors";
 import { createTypedFactory } from "../factory";
-import { env } from "hono/adapter";
 
 const { createMiddleware } = createTypedFactory();
 

@@ -1,10 +1,24 @@
-import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
 import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../factory";
 
-const { createMiddleware } = createTypedFactory();
+type PaginationQueryParams = z.infer<typeof queryParamSchema>;
 
-export function getPaginateRes({ total, offset, limit }: { total: number }) {
+const { createMiddleware } = createTypedFactory<{
+	Variables: {
+		paginate: PaginationQueryParams & { offset: number };
+	};
+}>();
+
+export function getPaginateRes({
+	total,
+	offset = 0,
+	limit = 10,
+}: {
+	total: number;
+	offset?: number;
+	limit?: number;
+}) {
 	const hasMore = offset + limit < total;
 	const nextPage = hasMore ? offset + limit + 1 : null;
 
@@ -12,7 +26,7 @@ export function getPaginateRes({ total, offset, limit }: { total: number }) {
 }
 
 export const paginate = createMiddleware(async (c, next) => {
-	const queryParams = c.req.valid("query");
+	const queryParams: PaginationQueryParams = c.req.valid("query");
 
 	const offset = (queryParams.page - 1) * queryParams.limit;
 

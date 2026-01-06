@@ -1,10 +1,15 @@
+import type { User } from "@/pkg/auth";
 import { MiddlewareOrderError } from "@/utils/error";
 import { createTypedFactory } from "../factory";
 
-const { createMiddleware } = createTypedFactory();
+const { createMiddleware } = createTypedFactory<{
+	Variables: {
+		user: User;
+	};
+}>();
 
 const roles = ["user", "admin"] as const;
-export type Role = (typeof roles)[number];
+type Role = (typeof roles)[number];
 
 const userRole = (allowedRoles: Role | Role[]) =>
 	createMiddleware(async (c, next) => {

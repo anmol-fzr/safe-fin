@@ -62,6 +62,8 @@ export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
 type BaTypes = ReturnType<typeof auth>["$Infer"]["Session"];
 
 type Session = BaTypes["session"];
-type User = BaTypes["user"];
+type User = BaTypes["user"] & {
+	role: "admin" | "user";
+};
 
 export type { Session, User };

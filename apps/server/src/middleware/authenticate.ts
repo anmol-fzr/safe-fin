@@ -1,6 +1,6 @@
 import { env } from "hono/adapter";
-import type { Session, User } from "@/auth";
-import { auth } from "@/auth";
+import type { Session, User } from "@/pkg/auth";
+import { auth } from "@/pkg/auth";
 import { createTypedFactory } from "../factory";
 
 const { createMiddleware } = createTypedFactory<{

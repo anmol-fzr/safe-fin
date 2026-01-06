@@ -1,10 +1,10 @@
 import { env } from "hono/adapter";
-import { getDb } from "@/db";
 import { createTypedFactory } from "@/factory";
+import { type DB, getDb } from "@/pkg/db";
 
 const { createMiddleware } = createTypedFactory<{
 	Variables: {
-		db: ReturnType<typeof getDb>;
+		db: DB;
 	};
 }>();
 

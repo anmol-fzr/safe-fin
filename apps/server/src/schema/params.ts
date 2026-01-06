@@ -1,5 +1,9 @@
 import * as z from "zod";
 
+export const itemIdSchema = z.object({
+	id: z.coerce.number().describe("Id of the Item"),
+});
+
 export const queryParamSchema = z.object({
 	// searchValue: z
 	// 	.string()
@@ -22,8 +26,8 @@ export const queryParamSchema = z.object({
 		.describe("The number of users to return")
 		.optional()
 		.default(10),
-	page: z
-		.string()
+	page: z.coerce
+		.number()
 		.describe("The page to start from")
 		.or(z.number())
 		.optional()
