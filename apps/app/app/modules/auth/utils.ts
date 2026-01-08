@@ -6,7 +6,7 @@ import { envs } from "@/utils/envs";
 import { queryClient } from "@/utils/lib/query";
 
 export const authClient = createAppAuthClient({
-	baseURL: envs.API_URL,
+	baseURL: envs.AUTH_API_URL,
 	storage: SecureStore,
 });
 

@@ -3,8 +3,8 @@ const isDev = env.EXPO_PUBLIC_MODE === "DEV" || __DEV__;
 
 export const envs = Object.freeze({
 	isDev,
-	API_URL: env.EXPO_PUBLIC_API_URL,
-	DOCS_URI: env.EXPO_PUBLIC_DOCS_URL,
+	API_URL: env.EXPO_PUBLIC_API_URL ?? "http://192.168.29.57:3000/api/v1",
+	AUTH_API_URL: `${env.EXPO_PUBLIC_API_URL}/auth`,
 	SENTRY: Object.freeze({
 		DSN: env.EXPO_PUBLIC_SENTRY_DSN,
 	}),
