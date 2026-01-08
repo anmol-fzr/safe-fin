@@ -41,7 +41,7 @@ export function WelcomeScreen() {
 	return (
 		<Screen
 			preset="fixed"
-			safeAreaEdges={["top"]}
+			safeAreaEdges={["top", "bottom"]}
 			contentContainerStyle={$styles.flex1}
 		>
 			<Animated.View style={themed($topContainer)}>
