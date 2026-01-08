@@ -1,6 +1,6 @@
 {
 	"expo": {
-		"name": "safeFin",
+		"name": "Safe Fin",
 		"slug": "safeFin",
 		"scheme": "safefin",
 		"version": "1.0.0",
@@ -14,7 +14,7 @@
 		"jsEngine": "hermes",
 		"assetBundlePatterns": ["**/*"],
 		"android": {
-			"icon": "./assets/images/app-icon/android/adaptive-icon.png",
+			"icon": "./assets/icons/generated/android/playstore-icon.png",
 			"package": "com.safefin",
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
