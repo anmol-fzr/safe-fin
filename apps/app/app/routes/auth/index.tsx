@@ -1,13 +1,11 @@
 import type { ViewStyle } from "react-native";
-import { Image, View } from "react-native";
+import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import { Screen, Text } from "@/components";
 import { LoginForm } from "@/modules/auth/components";
 import { $styles, type ThemedStyle } from "@/theme";
 import { APP } from "@/utils/const";
 import { useAppTheme } from "@/utils/useAppTheme";
-
-const image = require("assets/images/auth/login/saving-money.png");
 
 export default function WelcomeScreen() {
 	const {

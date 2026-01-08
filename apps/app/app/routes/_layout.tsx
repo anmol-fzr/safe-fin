@@ -1,9 +1,9 @@
 import { useFonts } from "@expo-google-fonts/space-grotesk";
-import { logger } from "@sentry/react-native";
-import { Stack, useGlobalSearchParams, usePathname } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { Provider } from "@/components/Provider";
+import { ScreenTracker } from "@/components/ScreenTracker";
 import { useToggle } from "@/hooks/use-toggle";
 import { initI18n } from "@/i18n";
 import { LoadingScreen } from "@/screens";
@@ -24,12 +24,13 @@ export default function RootLayout() {
 
 	const [theme, setTheme] = usePersistTheme();
 
-	const pathname = usePathname();
-	const params = useGlobalSearchParams();
-
-	useEffect(() => {
-		logger.trace("Screen Track", { pathname, params });
-	}, [pathname, params]);
+	const themeContextValue = useMemo(
+		() => ({
+			theme: theme as ThemeContexts,
+			setTheme: setTheme as (t: ThemeContexts) => void,
+		}),
+		[theme, setTheme],
+	);
 
 	useEffect(() => {
 		initCrashReporting();
@@ -44,9 +45,10 @@ export default function RootLayout() {
 	}
 
 	return (
-		<ThemeProvider value={{ theme: theme as ThemeContexts, setTheme }}>
+		<ThemeProvider value={themeContextValue}>
 			<Suspense fallback={<LoadingScreen />}>
 				<Provider>
+					<ScreenTracker />
 					<Stack screenOptions={{ headerShown: false }}>
 						<Stack.Screen name="index" />
 					</Stack>
