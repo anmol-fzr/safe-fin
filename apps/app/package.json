@@ -79,6 +79,7 @@
 		"i18next": "^25.7.1",
 		"iconsax-react-nativejs": "^0.0.8",
 		"intl-pluralrules": "^2.0.1",
+		"pressto": "^0.6.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
 		"react-hook-form": "^7.68.0",

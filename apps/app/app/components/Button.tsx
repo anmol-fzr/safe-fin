@@ -1,7 +1,8 @@
+import { PressableScale } from "pressto";
 import type { ComponentType } from "react";
 import {
 	ActivityIndicator,
-	Pressable,
+	type GestureResponderEvent,
 	type PressableProps,
 	type PressableStateCallbackType,
 	type StyleProp,
@@ -21,7 +22,15 @@ export interface ButtonAccessoryProps {
 	disabled?: boolean;
 }
 
-export interface ButtonProps extends PressableProps {
+export interface ButtonProps
+	extends Omit<
+		PressableProps,
+		"onPress" | "onPressIn" | "onPressOut" | "onLongPress"
+	> {
+	/**
+	 * Handler to be called when the user taps the button.
+	 */
+	onPress?: (event: GestureResponderEvent) => void;
 	/**
 	 * Text which is looked up via i18n.
 	 */
@@ -135,6 +144,7 @@ export function Button(props: ButtonProps) {
 		loadingText = "Loading ...",
 		loadingTx,
 		loadingTxOptions,
+		onPress,
 		...rest
 	} = props;
 
@@ -149,66 +159,73 @@ export function Button(props: ButtonProps) {
 	const { themed } = useAppTheme();
 
 	const preset: Presets = props.preset ?? "default";
-	/**
-	 * @param {PressableStateCallbackType} root0 - The root object containing the pressed state.
-	 * @param {boolean} root0.pressed - The pressed state.
-	 * @returns {StyleProp<ViewStyle>} The view style based on the pressed state.
-	 */
-	function $viewStyle({
-		pressed,
-	}: PressableStateCallbackType): StyleProp<ViewStyle> {
-		return [
-			themed($viewPresets[preset]),
-			$viewStyleOverride,
-			!!pressed &&
-				themed([$pressedViewPresets[preset], $pressedViewStyleOverride]),
-			!!isDisabled && $disabledViewStyleOverride,
-		];
-	}
-	/**
-	 * @param {PressableStateCallbackType} root0 - The root object containing the pressed state.
-	 * @param {boolean} root0.pressed - The pressed state.
-	 * @returns {StyleProp<TextStyle>} The text style based on the pressed state.
-	 */
-	function $textStyle({
-		pressed,
-	}: PressableStateCallbackType): StyleProp<TextStyle> {
-		return [
-			themed($textPresets[preset]),
-			$textStyleOverride,
-			!!pressed &&
-				themed([$pressedTextPresets[preset], $pressedTextStyleOverride]),
-			!!isDisabled && $disabledTextStyleOverride,
-		];
-	}
+
+	const baseViewStyle = [
+		themed($viewPresets[preset]),
+		$viewStyleOverride,
+		isDisabled && $disabledViewStyleOverride,
+	];
+
+	const baseTextStyle = [
+		themed($textPresets[preset]),
+		$textStyleOverride,
+		isDisabled && $disabledTextStyleOverride,
+	];
 
 	return (
-		<Pressable
-			style={$viewStyle}
+		<PressableScale
+			style={baseViewStyle}
 			accessibilityRole="button"
 			accessibilityState={{ disabled: !!isDisabled }}
+			pointerEvents={isDisabled ? "none" : "auto"}
+			onPress={onPress}
+			activeScale={0.95}
+			weight="light"
 			{...rest}
-			disabled={isDisabled}
 		>
-			{isLoading ? (
-				<>
-					<ActivityIndicator />
-					<Text
-						tx={loadingTx}
-						text={loadingText}
-						txOptions={loadingTxOptions}
-						style={[$textStyle({ pressed: false }), { marginLeft: 12 }]}
-					>
-						{children}
-					</Text>
-				</>
-			) : (
-				(state) => (
+			{(params) => {
+				// Extract the boolean value from SharedValue
+				const pressed = params?.isPressed?.value ?? false;
+
+				const viewStyleWithPressed = [
+					...baseViewStyle,
+					pressed &&
+					themed([$pressedViewPresets[preset], $pressedViewStyleOverride]),
+				];
+
+				const textStyleWithPressed = [
+					...baseTextStyle,
+					pressed &&
+					themed([$pressedTextPresets[preset], $pressedTextStyleOverride]),
+				];
+
+				const pressableState: PressableStateCallbackType = {
+					pressed,
+					hovered: false,
+				};
+
+				if (isLoading) {
+					return (
+						<>
+							<ActivityIndicator />
+							<Text
+								tx={loadingTx}
+								text={loadingText}
+								txOptions={loadingTxOptions}
+								style={[textStyleWithPressed, { marginLeft: 12 }]}
+							>
+								{children}
+							</Text>
+						</>
+					);
+				}
+
+				return (
 					<>
 						{!!LeftAccessory && (
 							<LeftAccessory
 								style={$leftAccessoryStyle}
-								pressableState={state}
+								pressableState={pressableState}
 								disabled={isDisabled}
 							/>
 						)}
@@ -217,7 +234,7 @@ export function Button(props: ButtonProps) {
 							tx={tx}
 							text={text}
 							txOptions={txOptions}
-							style={$textStyle(state)}
+							style={textStyleWithPressed}
 						>
 							{children}
 						</Text>
@@ -225,14 +242,14 @@ export function Button(props: ButtonProps) {
 						{!!RightAccessory && (
 							<RightAccessory
 								style={$rightAccessoryStyle}
-								pressableState={state}
+								pressableState={pressableState}
 								disabled={isDisabled}
 							/>
 						)}
 					</>
-				)
-			)}
-		</Pressable>
+				);
+			}}
+		</PressableScale>
 	);
 }
 
@@ -285,6 +302,7 @@ const $viewPresets: Record<Presets, ThemedStyleArray<ViewStyle>> = {
 		$baseViewStyle,
 		({ colors }) => ({ backgroundColor: colors.palette.neutral800 }),
 	],
+	text: [$styles.row, $baseViewStyle],
 };
 
 const $textPresets: Record<Presets, ThemedStyleArray<TextStyle>> = {
@@ -301,10 +319,12 @@ const $pressedViewPresets: Record<Presets, ThemedStyle<ViewStyle>> = {
 	default: ({ colors }) => ({ backgroundColor: colors.palette.neutral200 }),
 	filled: ({ colors }) => ({ backgroundColor: colors.palette.neutral400 }),
 	reversed: ({ colors }) => ({ backgroundColor: colors.palette.neutral700 }),
+	text: () => ({ opacity: 0.9 }),
 };
 
 const $pressedTextPresets: Record<Presets, ThemedStyle<TextStyle>> = {
 	default: () => ({ opacity: 0.9 }),
 	filled: () => ({ opacity: 0.9 }),
 	reversed: () => ({ opacity: 0.9 }),
+	text: () => ({ opacity: 0.9 }),
 };
