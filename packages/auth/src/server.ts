@@ -51,8 +51,10 @@ export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
 	return betterAuth({
 		...betterAuthOptions,
 		...baOpts,
+
 		database,
 		baseURL: opts.BETTER_AUTH_URL,
+		basePath: "/api/v1/auth",
 		secret: opts.BETTER_AUTH_SECRET,
 		trustedOrigins: [opts.CORS_ORIGIN_URL],
 		//secondaryStorage: createKVStorage(kv),
