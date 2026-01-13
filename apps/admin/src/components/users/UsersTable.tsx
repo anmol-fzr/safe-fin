@@ -1,4 +1,4 @@
-import { isNull } from "@safe-fin/ui/utils";
+import { isNull } from "@safe-fin/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useReactTable } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
