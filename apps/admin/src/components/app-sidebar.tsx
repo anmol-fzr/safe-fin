@@ -1,15 +1,14 @@
-import type * as React from "react";
+import type { LinkComponentProps } from "@tanstack/react-router";
+import { Book } from "iconsax-reactjs";
 import {
 	CircleQuestionMark,
-	Brain,
-	User,
 	LifeBuoy,
+	type LucideIcon,
 	Send,
 	Settings,
-	type LucideIcon,
+	User,
 } from "lucide-react";
-
-import type { LinkComponentProps } from "@tanstack/react-router";
+import type * as React from "react";
 
 import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -54,9 +53,9 @@ const data: Data = {
 			icon: User,
 		},
 		{
-			title: "Lessons",
-			url: "/dashboard/lessons",
-			icon: Brain,
+			title: "Courses",
+			url: "/dashboard/courses",
+			icon: Book,
 		},
 		{
 			title: "Quiz",

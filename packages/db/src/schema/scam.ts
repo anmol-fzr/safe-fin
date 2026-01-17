@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./auth";
 import { category } from "./category";
@@ -37,20 +37,3 @@ export const scamTags = sqliteTable("scam_tags", {
 		.references(() => tag.id)
 		.notNull(),
 });
-
-export const scamRelations = relations(scam, ({ many }) => ({
-	tags: many(scamTags),
-}));
-
-export const tagRelations = relations(tag, ({ many }) => ({
-	scams: many(scamTags),
-}));
-
-export const scamTagRelations = relations(scamTags, ({ one }) => ({
-	scam: one(scam, { fields: [scamTags.scamId], references: [scam.id] }),
-	tag: one(tag, { fields: [scamTags.tagId], references: [tag.id] }),
-}));
-
-export const categoryScamRelations = relations(category, ({ many }) => ({
-	scams: many(scam),
-}));

@@ -3,7 +3,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { envs } from "./envs";
 
 export const authClient = createAdminAuthClient({
-	baseURL: envs.API_URL,
+	baseURL: envs.AUTH_API_URL,
 });
 
 export type AuthType = (typeof authClient)["$Infer"]["Session"];

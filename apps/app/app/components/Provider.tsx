@@ -52,7 +52,7 @@ export function Provider({ children }: PropsWithChildren) {
 								<PressablesConfig
 									animationType="spring"
 									animationConfig={{ damping, stiffness }}
-									config={{ minScale: 0.9, activeOpacity: 0.1 }}
+									config={{ minScale: 0.95, activeOpacity: 0.1 }}
 								>
 									<IconProvider>{children}</IconProvider>
 								</PressablesConfig>

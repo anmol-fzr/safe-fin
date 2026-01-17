@@ -43,7 +43,8 @@ export function QuickActions() {
 	];
 
 	return (
-		<Section title="Quick Actions">
+		<Section>
+			<Section.Title>Quick Actions</Section.Title>
 			<View style={themed($quickActionCard)}>
 				{actions.map((action) => (
 					<QuickActionCard key={action.labelTx} {...action} />
@@ -56,5 +57,6 @@ export function QuickActions() {
 const $quickActionCard: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	gap: spacing.sm,
 	flexDirection: "row",
+	//height: "auto",
 	flexWrap: "wrap",
 });

@@ -9,7 +9,7 @@ import type {
 	ReactElement,
 	RefObject,
 } from "react";
-import { forwardRef } from "react";
+import { forwardRef, memo } from "react";
 import { View } from "react-native";
 import { Text } from "@/components/Text";
 import { getGenericEmptyState } from "@/utils/faker/emptyState";
@@ -42,3 +42,7 @@ export const EmptyListView = () => {
 		</View>
 	);
 };
+
+export const BaseListItemSeparator = memo(() => (
+	<View style={{ height: 8, width: 8 }} />
+));

@@ -14,11 +14,7 @@ export const IconProvider = (props: IconProviderProps) => {
 		theme: { colors },
 	} = useAppTheme();
 
-	const {
-		variant = "Linear",
-		color = colors.palette.neutral900,
-		size = 24,
-	} = props;
+	const { variant = "Linear", color = colors.textDim, size = 24 } = props;
 
 	return (
 		<IconContext.Provider value={{ variant, color, size }}>

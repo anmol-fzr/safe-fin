@@ -64,27 +64,34 @@ type LessonRendererProps = {
 	content: string;
 };
 
-function LessonRenderer({ content }: LessonRendererProps) {
+export function MarkdowRenderer({ content }: LessonRendererProps) {
+	const { theme } = useAppTheme();
+	const { colors } = theme;
+
 	const styles = useMemo(
 		() => ({
+			body: {
+				color: theme.colors.text,
+				fontSize: 20,
+			},
 			paragraph: {
 				fontFamily: "spaceGroteskRegular",
 			},
 			strong: {
-				fontFamily: "spaceGroteskRegular",
+				fontFamily: "spaceGroteskMedium",
 			},
 			heading1: {
-				...$sizeStyles.xl,
+				...$sizeStyles.xxl,
 				...$fontWeightStyles.bold,
 			},
 			heading2: {
-				...$sizeStyles.lg,
+				...$sizeStyles.xl,
 				...$fontWeightStyles.semiBold,
 				marginTop: spacing.xs,
 				marginBottom: spacing.xxs,
 			},
 			heading3: {
-				...$sizeStyles.md,
+				...$sizeStyles.lg,
 				...$fontWeightStyles.bold,
 				marginTop: spacing.xxs,
 				marginBottom: spacing.xxxs,
@@ -92,15 +99,27 @@ function LessonRenderer({ content }: LessonRendererProps) {
 			hr: {
 				marginBlock: spacing.md,
 			},
+			link: {
+				flex: 1,
+				color: colors.tint,
+			},
 			blockquote: {
-				marginBlock: spacing.md,
+				backgroundColor: colors.background,
+				borderColor: colors.tint,
+				borderLeftWidth: 4,
+				marginLeft: 5,
+				paddingHorizontal: 5,
 			},
 		}),
-		[],
+		[theme],
 	);
 
-	return <Markdown style={styles}>{content}</Markdown>;
+	const modified = content?.replaceAll("<u>", "[")?.replaceAll("</u>", "]()");
+
+	return <Markdown style={styles}>{modified}</Markdown>;
 }
+
+const LessonRenderer = MarkdowRenderer;
 
 // type LessonQuizzesProps = {
 // 	lessonId: ResourceId;

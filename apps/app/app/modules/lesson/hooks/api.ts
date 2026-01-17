@@ -6,17 +6,30 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
-import { queryClient } from "@/components/Provider";
+import { useMemo } from "react";
 import type { ResourceId } from "@/types";
-import { LESSON, TOPIC } from "../api";
+import { COURSES, LESSON, TOPIC } from "../api";
 
-const baseQueryKey = "LESSONS";
+const baseQueryKey = "COURSES";
+
+function getForYouCoursesOpts() {
+	return queryOptions({
+		queryKey: [baseQueryKey, "FOR_YOU"],
+		queryFn: () => COURSES.FOR_YOU(),
+	});
+}
+
+export const useGetForYouCourses = () => {
+	const opts = getForYouCoursesOpts();
+	const { data, ...rest } = useSuspenseQuery(opts);
+
+	return { courses: data.data, ...rest };
+};
 
 function getLessonOpts(lessonId: ResourceId) {
 	return queryOptions({
 		queryKey: [baseQueryKey, lessonId],
-		queryFn: () => LESSON.ONE(lessonId),
+		queryFn: () => COURSES.ONE(lessonId),
 	});
 }
 
@@ -29,7 +42,7 @@ const useGetLesson = (lessonId: ResourceId) => {
 function getLessonsOpts() {
 	return infiniteQueryOptions({
 		queryKey: [baseQueryKey],
-		queryFn: ({ pageParam }) => LESSON.ALL(pageParam),
+		queryFn: COURSES.ALL,
 		initialPageParam: { limit: 10, page: 1 },
 		getNextPageParam: ({ paginate }) => {
 			if (!paginate.hasMore) return null;
@@ -45,12 +58,12 @@ const useGetLessons = () => {
 	const opts = getLessonsOpts();
 	const { data, ...rest } = useSuspenseInfiniteQuery(opts);
 
-	const lessons = useMemo(
+	const courses = useMemo(
 		() => data.pages.flatMap((page) => page.data),
 		[data],
 	);
 
-	return { lessons, ...rest };
+	return { courses, ...rest };
 };
 
 function getLessonTopicsOpts() {

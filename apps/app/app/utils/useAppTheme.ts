@@ -83,7 +83,10 @@ const useAppTheme = () => {
 		[themeVariant],
 	);
 
+	const isDark = useMemo(() => actualTheme === "dark", [actualTheme]);
+
 	return {
+		isDark,
 		navTheme,
 		setThemeContextOverride,
 		actualTheme,

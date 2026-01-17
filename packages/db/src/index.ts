@@ -2,14 +2,14 @@ import { type Client, createClient } from "@libsql/client";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";
+//import * as relations from "./schema/relations";
 
 export interface GetDbOpts {
 	TURSO_DB_URL: string;
 	TURSO_DB_TOKEN: string;
 }
 
-type DB = ReturnType<typeof drizzle<typeof schema, Client>>;
-let dbInst: DB | null = null;
+let dbInst: ReturnType<typeof drizzle> | null = null;
 
 function getDb(opts: GetDbOpts) {
 	if (dbInst !== null) {
@@ -37,4 +37,4 @@ const getAuthDrizzleAdapter = (
 
 export * from "drizzle-orm";
 export { getAuthDrizzleAdapter, getDb };
-export type { DB };
+export type DB = ReturnType<typeof getDb>;

@@ -1,4 +1,4 @@
-import { type ComponentType, forwardRef, type ReactElement } from "react";
+import { type ComponentType, forwardRef, memo, type ReactElement } from "react";
 import {
 	type StyleProp,
 	type TextStyle,

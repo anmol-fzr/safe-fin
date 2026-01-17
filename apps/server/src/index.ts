@@ -1,7 +1,7 @@
 import { showRoutes } from "hono/dev";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
-import { appCors } from "@/middleware";
+import { appCors, paginate } from "@/middleware";
 import { v1Router } from "./api/v1/router";
 import { createTypedFactory } from "./factory";
 
@@ -22,7 +22,20 @@ app
 	)
 	.use(appCors);
 
-app.get("/health", (c) => c.text("Hello Hono!")).route("/api/v1", v1Router);
+app
+	.get("/health", (c) => c.text("Hello Hono!"))
+	.route("/api/v1", v1Router)
+	.notFound((c) => {
+		console.warn("Remove this Generic Not Found !!!");
+		return c.json({
+			data: [],
+			paginate: {
+				total: 0,
+				hasMore: false,
+				nextPage: null,
+			},
+		});
+	});
 
 showRoutes(app, {
 	verbose: true,

@@ -1,10 +1,9 @@
-import { cn, formatDateTime } from "@/lib/utils";
-
-import type { IBaseData, ITimestamps } from "@/services/api/types";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
 import type { Row } from "@tanstack/react-table";
-import { EyeIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { Edit2, Eye, Trash } from "iconsax-reactjs";
 import type { ComponentPropsWithoutRef } from "react";
+import { cn, formatDateTime } from "@/lib/utils";
+import type { IBaseData, ITimestamps } from "@/services/api/types";
 import { DeleteDialog, type DeleteDialogProps } from "../form/DeleteDialog";
 
 type TableColumn<TData extends ITimestamps | IBaseData> = {
@@ -48,7 +47,7 @@ const TableColActions = (props: ComponentPropsWithoutRef<"div">) => {
 TableColActions.View = (props: LinkComponentProps) => {
 	return (
 		<Link {...props}>
-			<EyeIcon />
+			<Eye />
 		</Link>
 	);
 };
@@ -56,7 +55,7 @@ TableColActions.View = (props: LinkComponentProps) => {
 TableColActions.Edit = (props: LinkComponentProps) => {
 	return (
 		<Link {...props}>
-			<PencilIcon />
+			<Edit2 />
 		</Link>
 	);
 };
@@ -66,7 +65,7 @@ type TableColActionsDelete = Pick<DeleteDialogProps, "onDelete" | "phrase">;
 TableColActions.Delete = (props: TableColActionsDelete) => {
 	return (
 		<DeleteDialog {...props}>
-			<Trash2Icon color="red" />
+			<Trash color="red" />
 		</DeleteDialog>
 	);
 };

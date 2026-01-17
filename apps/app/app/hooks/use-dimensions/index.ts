@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 
-export const useDimensions = () => {
-	const [dimensions, setDimensions] = useState(() => Dimensions.get("window"));
-	console.log(dimensions);
+type Dim = "window" | "screen";
+
+export const useDimensions = (dim: Dim = "window") => {
+	const [dimensions, setDimensions] = useState(() => Dimensions.get(dim));
 
 	useEffect(() => {
-		const subscription = Dimensions.addEventListener("change", ({ window }) => {
-			setDimensions(window);
+		const subscription = Dimensions.addEventListener("change", (opt) => {
+			setDimensions(opt[dim]);
 		});
 
-		return subscription.remove;
-	}, []);
+		return () => subscription.remove();
+	}, [dim]);
 
 	return dimensions;
 };

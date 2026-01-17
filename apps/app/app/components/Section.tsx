@@ -1,24 +1,25 @@
-import type { ViewProps } from "react-native";
+import type { TextProps, ViewProps } from "react-native";
 import { StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { Text } from "@/components";
 import { spacing } from "@/theme";
 
-export type SectionProps = ViewProps & {
-	title: string;
-};
+export type SectionProps = ViewProps;
 
 export function Section(props: SectionProps) {
-	const { title, children, ...rest } = props;
+	const { children, ...rest } = props;
 	return (
 		<Animated.View {...rest} style={[styles.sectionRoot, rest.style]}>
-			<Text preset="heading" size="lg">
-				{title}
-			</Text>
 			{children}
 		</Animated.View>
 	);
 }
+
+export type SectionTitleProps = TextProps;
+
+Section.Title = (props: SectionTitleProps) => {
+	return <Text preset="heading" size="lg" {...props} />;
+};
 
 const styles = StyleSheet.create({
 	sectionRoot: {

@@ -1,5 +1,4 @@
 import { type Href, useRouter } from "expo-router";
-import { useId } from "react";
 import {
 	Image,
 	type ImageSourcePropType,
@@ -54,7 +53,7 @@ export const QuickActionCard = (action: QuickActionCardProps) => {
 const styles = StyleSheet.create({
 	quickAction: {
 		width: "48%",
-		aspectRatio: 0.9,
+		height: 100,
 		alignItems: "center",
 		position: "relative",
 		justifyContent: "center",

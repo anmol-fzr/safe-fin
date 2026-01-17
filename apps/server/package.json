@@ -18,7 +18,6 @@
 		"@hono/zod-validator": "^0.7.5",
 		"@safe-fin/auth": "workspace:*",
 		"@safe-fin/db": "workspace:*",
-		"@safe-fin/schema": "workspace:*",
 		"@safe-fin/utils": "workspace:*",
 		"country-state-city": "^3.2.1",
 		"drizzle-orm": "^0.44.3",

@@ -1,5 +1,6 @@
 import { isMatch, useMatches } from "@tanstack/react-router";
-import { SidebarIcon } from "lucide-react";
+
+import { SidebarLeft } from "iconsax-reactjs";
 import { Fragment } from "react";
 import { SearchForm } from "@/components/search-form";
 import {
@@ -42,7 +43,7 @@ export function SiteHeader() {
 					size="icon"
 					onClick={toggleSidebar}
 				>
-					<SidebarIcon />
+					<SidebarLeft />
 				</Button>
 				<Separator orientation="vertical" className="mr-2 h-4" />
 				<Breadcrumb className="hidden sm:block">

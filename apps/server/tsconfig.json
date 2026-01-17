@@ -27,9 +27,9 @@
 		"alwaysStrict": true
 	},
 	"include": ["src/**/*"],
-	"exclude": ["node_modules", ".turbo/"]
-	// "references": [
-	// 	{ "path": "../../packages/db" },
-	// 	{ "path": "../../packages/auth" }
-	// ]
+	"exclude": ["node_modules", ".turbo/"],
+	"references": [
+		{ "path": "../../packages/db" },
+		{ "path": "../../packages/auth" }
+	]
 }

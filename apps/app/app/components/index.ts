@@ -10,6 +10,7 @@ export * from "./ListView";
 export * from "./navigation";
 export * from "./Screen";
 export * from "./ScreenHeader";
+export * from "./Tabs";
 export * from "./Text";
 export * from "./TextField";
 export * from "./Toggle";

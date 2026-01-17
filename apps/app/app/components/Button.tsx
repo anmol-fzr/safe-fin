@@ -190,13 +190,13 @@ export function Button(props: ButtonProps) {
 				const viewStyleWithPressed = [
 					...baseViewStyle,
 					pressed &&
-					themed([$pressedViewPresets[preset], $pressedViewStyleOverride]),
+						themed([$pressedViewPresets[preset], $pressedViewStyleOverride]),
 				];
 
 				const textStyleWithPressed = [
 					...baseTextStyle,
 					pressed &&
-					themed([$pressedTextPresets[preset], $pressedTextStyleOverride]),
+						themed([$pressedTextPresets[preset], $pressedTextStyleOverride]),
 				];
 
 				const pressableState: PressableStateCallbackType = {

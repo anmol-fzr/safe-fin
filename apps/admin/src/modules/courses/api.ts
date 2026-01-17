@@ -1,0 +1,171 @@
+import { axiosInstance as ax } from "@/services/api/axios";
+import type { IResData, ResourceId } from "@/services/api/types";
+import type { IResGetCourse } from "./types/one-course";
+import type { IResGetUnit } from "./types/one-unit";
+
+const { get, postForm, post, patch, delete: del } = ax;
+
+interface IReqCreateCourse {
+	title: string;
+	shortDesc: string;
+	longDesc: string;
+	longDescJson: string;
+}
+
+interface IReqCreateChapter {
+	title: string;
+	index: number;
+}
+
+interface IReqUpdateChapter {
+	title?: string;
+	index?: number;
+	isPublished?: boolean;
+}
+
+interface IReqCreateUnit {
+	title: string;
+	shortDesc: string;
+	longDesc: {
+		content: string;
+		contentJson?: any;
+	};
+	coverPath?: string;
+	points: number;
+	index: number;
+}
+
+export interface IReqUpdateUnit {
+	title?: string;
+	shortDesc?: string;
+	content?: string;
+	contentJson?: any;
+	coverPath?: string;
+	points?: number;
+	index?: number;
+	isPublished?: boolean;
+}
+
+export interface IReqUpdateCourse {
+	isPublished?: boolean;
+	title?: string;
+	shortDesc?: string;
+	longDesc?: string;
+	longDescJson?: any;
+}
+
+export const COURSES = {
+	ALL: () => get<unknown, IResGetCourses>(`/courses`),
+	CREATE: (course: IReqCreateCourse) =>
+		postForm<unknown, IResCreateCourse>(`/courses`, course),
+	ONE: (courseId: ResourceId) =>
+		get<unknown, IResGetCourse>(`/courses/${courseId}`),
+	UPDATE: (courseId: ResourceId, payload: IReqUpdateCourse) =>
+		patch<unknown, IResGetCourse>(`/courses/${courseId}`, payload),
+	// DELETE: (lessonId) => ax.delete(`/lessons/${lessonId}`),
+	// UPDATE: (lessonId, lesson) => patch(`/lessons/${lessonId}`, lesson),
+} as const;
+
+export const CHAPTERS = {
+	GET_BY_COURSE: (courseId: ResourceId) =>
+		get<unknown, IResData<Chapter[]>>(`/courses/${courseId}/chapters`),
+	CREATE: (courseId: ResourceId, chapters: IReqCreateChapter[]) =>
+		post<unknown, IResData<Chapter[]>>(
+			`/courses/${courseId}/chapters`,
+			chapters,
+		),
+	UPDATE: (chapterId: ResourceId, data: IReqUpdateChapter) =>
+		patch<unknown, IResData<Chapter>>(`/courses/chapters/${chapterId}`, data),
+	DELETE: (chapterId: ResourceId) =>
+		del<unknown, IResData<void>>(`/courses/chapters/${chapterId}`),
+	REORDER: (payload: {
+		courseId: number;
+		chapters: {
+			index: number;
+			id: number;
+		}[];
+	}) =>
+		post<unknown, IResData<{ success: boolean }>>(
+			`/courses/chapters/reorder`,
+			payload,
+		),
+} as const;
+
+export const UNITS = {
+	ONE: (unitId: ResourceId) =>
+		get<unknown, IResGetUnit>(`/courses/units/${unitId}`),
+
+	GET_BY_CHAPTER: (chapterId: ResourceId) =>
+		get<unknown, IResData<Unit[]>>(`/courses/chapters/${chapterId}/units`),
+	CREATE: (chapterId: ResourceId, units: IReqCreateUnit[]) =>
+		post<unknown, IResData<Unit[]>>(
+			`/courses/chapters/${chapterId}/units`,
+			units,
+		),
+	UPDATE: (unitId: ResourceId, data: IReqUpdateUnit) =>
+		patch<unknown, IResData<Unit>>(`/courses/units/${unitId}`, data),
+	DELETE: (unitId: ResourceId) =>
+		del<unknown, IResData<void>>(`/courses/units/${unitId}`),
+	REORDER: (units: Array<{ id: number; index: number }>) =>
+		post<unknown, IResData<{ success: boolean }>>(`/courses/units/reorder`, {
+			units,
+		}),
+} as const;
+
+type IResGetCourses = IResData<CourseItem[]>;
+
+type IResCreateCourse = IResData<{
+	id: number;
+	contentId: number;
+	isPublished: boolean;
+	avgRating: number;
+	rateCount: number;
+	createdAt: string;
+	updatedAt: string;
+}>;
+
+export interface CourseItem {
+	id: number;
+	isPublished: boolean;
+	avgRating: number;
+	rateCount: number;
+	createdAt: string;
+	updatedAt: string;
+	content: Content;
+	chapters: Chapter[];
+}
+
+interface Content {
+	title: string;
+	shortDesc: string;
+	longDesc: LongDesc;
+}
+
+interface LongDesc {
+	content: string;
+	contentJson: string;
+}
+
+interface Chapter {
+	id: number;
+	courseId: number;
+	title: string;
+	index: number;
+	isPublished: boolean;
+	createdAt: string;
+	updatedAt: string;
+	units: Unit[];
+}
+
+interface Unit {
+	id: number;
+	coverPath: any;
+	contentId: number;
+	chapterId: number;
+	exerciseId: any;
+	points: number;
+	index: number;
+	isPublished: boolean;
+	createdAt: string;
+	updatedAt: string;
+}

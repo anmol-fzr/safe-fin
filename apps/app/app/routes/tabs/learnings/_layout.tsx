@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import { GoBack, ScreenHeader } from "@/components";
 
 export default function CalculatorLayout() {
@@ -23,6 +23,13 @@ export default function CalculatorLayout() {
 					header: (props) => (
 						<GoBack tx="screens:learningList.title" {...props} />
 					),
+				}}
+			/>
+
+			<Stack.Screen
+				name="units"
+				options={{
+					headerShown: false,
 				}}
 			/>
 		</Stack>
