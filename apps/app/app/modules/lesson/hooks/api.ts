@@ -1,8 +1,6 @@
 import {
 	infiniteQueryOptions,
 	queryOptions,
-	usePrefetchQuery,
-	useQueryClient,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
@@ -93,16 +91,5 @@ const useGetLastLesson = () => {
 	return { lesson: data?.data || null, ...rest };
 };
 
-const usePrefetchLastLesson = () => {
-	const opts = getLastLessonOpts();
-	return usePrefetchQuery(opts);
-};
-
 export { getLessonsOpts, getLessonOpts };
-export {
-	useGetLessons,
-	useGetLesson,
-	useGetLessonTopics,
-	useGetLastLesson,
-	usePrefetchLastLesson,
-};
+export { useGetLessons, useGetLesson, useGetLessonTopics, useGetLastLesson };

@@ -4,7 +4,7 @@ const en = {
 	tabs: {
 		home: "Home",
 		calculator: "Calculator",
-		learnings: "Learnings",
+		learnings: "Courses",
 		scams: "Scams",
 		profile: "Profile",
 	},
@@ -22,8 +22,8 @@ const en = {
 			tagLine: "Explore All Financial Calculators",
 		},
 		learningList: {
-			title: "Learning",
-			tagLine: "Latest Lessons on Finance",
+			title: "Courses",
+			tagLine: "Latest Courses on Finance",
 		},
 		scamList: {
 			title: "Scams",

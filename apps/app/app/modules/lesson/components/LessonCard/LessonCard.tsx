@@ -1,12 +1,7 @@
 import { useSafeContext } from "@safe-fin/ui/hooks";
 import { useRouter } from "expo-router";
-import { Heart, Share, Star1 } from "iconsax-react-nativejs";
-import React, {
-	createContext,
-	type ReactNode,
-	useCallback,
-	useMemo,
-} from "react";
+import { Chart, Heart, Share, Star1 } from "iconsax-react-nativejs";
+import { createContext, type ReactNode, useCallback, useMemo } from "react";
 import {
 	Pressable as PressableScale,
 	type StyleProp,
@@ -15,13 +10,14 @@ import {
 	type ViewProps,
 	type ViewStyle,
 } from "react-native";
-import Animated, { FadeIn, FadeOut, withDecay } from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import type { IconTypes } from "@/components/Icon";
 import { Text, type TextProps } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import type { CourseLevel } from "../../api";
 import { useToggleCourseSave } from "../../hooks/mutations";
 
 interface LessonCardContextValue {
@@ -52,16 +48,16 @@ interface LessonCardRootProps {
 	style?: StyleProp<ViewStyle>;
 }
 
-export function LessonCard(props: LessonCardRootProps) {
+function LessonCard(props: LessonCardRootProps) {
 	const { children, id, style: $styleOverride } = props;
 	const { themed } = useAppTheme();
 	const router = useRouter();
 
 	const handlePress = useCallback(() => {
 		router.navigate({
-			pathname: "/tabs/learnings/[lessonId]",
+			pathname: "/course/[courseId]",
 			params: {
-				lessonId: id,
+				courseId: id,
 			},
 		});
 	}, [id, router.navigate]);
@@ -79,6 +75,18 @@ export function LessonCard(props: LessonCardRootProps) {
 		</LessonCardContext>
 	);
 }
+
+LessonCard.Loading = (props: ViewProps) => {
+	const { style: $styleOverride, ...rest } = props;
+	const { themed } = useAppTheme();
+
+	const style = useMemo(
+		() => [themed($container), $styleOverride],
+		[themed, $styleOverride],
+	);
+
+	return <View style={style} {...rest} />;
+};
 
 interface LessonCardIconProps {
 	/**
@@ -180,6 +188,19 @@ function LessonCardBookmark(props: LessonCardBookmarkProps) {
 	);
 }
 
+const $bookmarkButton: ThemedStyle<ViewStyle> = (theme) => ({
+	position: "absolute",
+	top: theme.spacing.sm,
+	right: theme.spacing.sm,
+	width: 36,
+	height: 36,
+	borderRadius: theme.roundness,
+	backgroundColor: "rgba(20,20,20,0.5)",
+	//backgroundColor: theme.colors.palette.neutral400,
+	justifyContent: "center",
+	alignItems: "center",
+});
+
 interface LessonCardShareProps {
 	/**
 	 * Callback when the bookmark is pressed
@@ -192,8 +213,8 @@ function LessonCardShare(props: LessonCardShareProps) {
 	const { themed } = useAppTheme();
 
 	return (
-		<PressableScale style={themed($bookmarkButton)} onPress={onPress}>
-			<Share size={20} />
+		<PressableScale style={themed($shareButton)} onPress={onPress}>
+			<IconSax icon={Share} size={20} />
 		</PressableScale>
 	);
 }
@@ -227,10 +248,6 @@ function LessonCardLabel(props: LessonCardLabelProps) {
 
 interface LessonCardTitleProps extends Omit<TextProps, "style"> {
 	/**
-	 * The title text
-	 */
-	children: string;
-	/**
 	 * Style override
 	 */
 	style?: StyleProp<TextStyle>;
@@ -251,7 +268,7 @@ function LessonCardBody(props: LessonCardBodyProps) {
 }
 
 const $body: ThemedStyle<ViewStyle> = (theme) => ({
-	paddingInline: theme.spacing.xxs,
+	paddingInline: theme.spacing.xs,
 });
 
 function LessonCardTitle(props: LessonCardTitleProps) {
@@ -311,10 +328,6 @@ function LessonCardAuthor(props: LessonCardAuthorProps) {
 }
 
 interface LessonCardDescriptionProps extends Omit<TextProps, "style"> {
-	/**
-	 * The description text
-	 */
-	children: string;
 	/**
 	 * Style override
 	 */
@@ -377,7 +390,9 @@ interface LessonCardMetadataProps {
 function LessonCardMetadata(props: LessonCardMetadataProps) {
 	const { children, style: $styleOverride } = props;
 
-	return <View style={[$metadataRow, $styleOverride]}>{children}</View>;
+	const { themed } = useAppTheme();
+
+	return <View style={[themed($metadataRow), $styleOverride]}>{children}</View>;
 }
 
 interface LessonCardMetadataItemProps {
@@ -481,15 +496,7 @@ const $iconContainer: ThemedStyle<ViewStyle> = (theme) => ({
 	position: "relative",
 });
 
-const $bookmarkButton: ThemedStyle<ViewStyle> = (theme) => ({
-	position: "absolute",
-	top: theme.spacing.sm,
-	right: theme.spacing.sm,
-	width: 36,
-	height: 36,
-	borderRadius: theme.roundness,
-	backgroundColor: "rgba(20,20,20,0.5)",
-	//backgroundColor: theme.colors.palette.neutral400,
+const $shareButton: ThemedStyle<ViewStyle> = () => ({
 	justifyContent: "center",
 	alignItems: "center",
 });
@@ -516,14 +523,14 @@ const $description: ThemedStyle<TextStyle> = (theme) => ({
 	lineHeight: 20,
 });
 
-const $metadataRow: ViewStyle = {
+const $metadataRow: ThemedStyle<ViewStyle> = (theme) => ({
 	flexDirection: "row",
 	flexWrap: "wrap",
 	alignItems: "center",
 	columnGap: 12,
 	rowGap: 8,
-	paddingBottom: 8,
-};
+	paddingBottom: theme.spacing.sm,
+});
 
 const $metadataItem: ViewStyle = {
 	flexDirection: "row",
@@ -546,10 +553,42 @@ LessonCard.Label = LessonCardLabel;
 LessonCard.Title = LessonCardTitle;
 LessonCard.Author = LessonCardAuthor;
 LessonCard.Description = LessonCardDescription;
-LessonCard.Metadata = LessonCardMetadata;
+//LessonCard.Metadata = LessonCardMetadata;
 LessonCard.MetadataItem = LessonCardMetadataItem;
 LessonCard.Rating = LessonCardRating;
 LessonCard.Body = LessonCardBody;
+
+LessonCard.Metadata = (props: LessonCardMetadataProps) => {
+	const { children, style: $styleOverride } = props;
+
+	const { themed } = useAppTheme();
+
+	return <View style={[themed($metadataRow), $styleOverride]}>{children}</View>;
+};
+
+interface LevelMetadataProps {
+	level: CourseLevel;
+}
+
+LessonCard.MetadataLevel = (props: LevelMetadataProps) => {
+	const { level } = props;
+	const {
+		theme: { colors },
+	} = useAppTheme();
+
+	return (
+		<LessonCard.MetadataItem Icon={() => <IconSax icon={Chart} size={18} />}>
+			<Text
+				style={{
+					textTransform: "capitalize",
+					color: colors.textDim,
+				}}
+			>
+				{level}
+			</Text>
+		</LessonCard.MetadataItem>
+	);
+};
 
 export type {
 	LessonCardRootProps as LessonCardProps,
@@ -562,4 +601,19 @@ export type {
 	LessonCardMetadataProps,
 	LessonCardMetadataItemProps,
 	LessonCardRatingProps,
+};
+
+export { LessonCard };
+
+LessonCardMetadataItem.Loading = () => {
+	return (
+		<SkeletonPlaceholder>
+			<SkeletonPlaceholder.Item
+				width="30%"
+				height={18}
+				borderRadius={5}
+				marginBottom={6}
+			/>
+		</SkeletonPlaceholder>
+	);
 };

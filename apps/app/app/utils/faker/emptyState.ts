@@ -1,64 +1,5 @@
 import { faker } from "@faker-js/faker/locale/en";
 
-interface EmptyStateItem {
-	emoji: string;
-	title: string;
-	subtitle: string;
-}
-
-const emptyStates: EmptyStateItem[] = [
-	// {
-	// 	emoji: "📚",
-	// 	title: "No Lessons Yet!",
-	// 	subtitle: "Check back soon for new financial literacy lessons.",
-	// },
-	// {
-	// 	emoji: "🔍",
-	// 	title: "Nothing Found!",
-	// 	subtitle: "Try adjusting your filters or search query.",
-	// },
-	{
-		emoji: "🕒",
-		title: "Coming Soon!",
-		subtitle: "We’re preparing something special for you.",
-	},
-	{
-		emoji: "😌",
-		title: "All Caught Up!",
-		subtitle: "You’ve completed all lessons. Great job!",
-	},
-	// {
-	// 	emoji: "💡",
-	// 	title: "No Tips Available!",
-	// 	subtitle: "We’ll add fresh insights shortly. Stay tuned.",
-	// },
-	// {
-	// 	emoji: "🤔",
-	// 	title: "Hmm… Nothing Here!",
-	// 	subtitle: "Seems like this section is still under development.",
-	// },
-	{
-		emoji: "📭",
-		title: "Empty Inbox!",
-		subtitle: "No notifications or updates right now.",
-	},
-	{
-		emoji: "🧩",
-		title: "No Quizzes Yet!",
-		subtitle: "We’re working on interactive content for you.",
-	},
-	{
-		emoji: "🚧",
-		title: "Under Construction!",
-		subtitle: "We’re still building this section. Check again later.",
-	},
-	{
-		emoji: "🌱",
-		title: "No Progress Yet!",
-		subtitle: "Start your first lesson to begin your learning journey.",
-	},
-];
-
 const genericEmptyStates = [
 	{
 		emoji: "📭",
@@ -86,11 +27,6 @@ const genericEmptyStates = [
 		emoji: "🌱",
 		title: "Getting Started!",
 		subtitle: "Add something to begin.",
-	},
-	{
-		emoji: "🚫",
-		title: "Unavailable!",
-		subtitle: "Content not available at the moment.",
 	},
 	{
 		emoji: "✨",

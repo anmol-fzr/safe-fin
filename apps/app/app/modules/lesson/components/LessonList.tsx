@@ -1,10 +1,15 @@
-import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense } from "react";
-import { BaseListItemSeparator, EmptyListView, ListView } from "@/components";
+import {
+	BaseListItemSeparator,
+	EmptyListView,
+	EndListView,
+	ListView,
+} from "@/components";
+import { ForYouLessonsImpl } from "@/modules/home/components/lessons/ForYouLessonsImpl";
+import { useAppTheme } from "@/utils/useAppTheme";
 //import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 import { useGetLessons } from "../hooks/api";
 import { LessonCard } from "./LessonCard/LessonCard";
-import { LessonListItem } from "./LessonListItem";
 
 export function LessonList() {
 	return (
@@ -28,6 +33,10 @@ function LessonListImpl() {
 
 	//const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
 
+	const {
+		theme: { colors },
+	} = useAppTheme();
+
 	return (
 		<ListView
 			data={courses}
@@ -41,7 +50,7 @@ function LessonListImpl() {
 			ListEmptyComponent={EmptyListView}
 			//onViewableItemsChanged={handleViewableItemsChanged}
 			ListFooterComponent={
-				isFetchingNextPage ? <LessonListImpl.Loading /> : undefined
+				isFetchingNextPage ? <LessonListImpl.Loading /> : EndListView
 			}
 			ItemSeparatorComponent={BaseListItemSeparator}
 			renderItem={({ item }) => (
@@ -50,20 +59,25 @@ function LessonListImpl() {
 						<LessonCard.Bookmark isBookmarked={item.isSaved === 1} />
 					</LessonCard.Image>
 
-					<LessonCard.Title>{item.content.title}</LessonCard.Title>
-					<LessonCard.Description>
-						{item.content.shortDesc}
-					</LessonCard.Description>
+					<LessonCard.Body>
+						<LessonCard.Title>{item.content.title}</LessonCard.Title>
+						<LessonCard.Description>
+							{item.content.shortDesc}
+						</LessonCard.Description>
 
-					<LessonCard.Metadata>
-						{/*
-						<LessonCard.MetadataItem icon="ladybug">
-							{item.level}
-						</LessonCard.MetadataItem>
-						<LessonCard.MetadataItem icon="bell">7h</LessonCard.MetadataItem>
-            */}
-						<LessonCard.Rating rating={item.avgRating} count={item.rateCount} />
-					</LessonCard.Metadata>
+						<LessonCard.Metadata
+							style={{
+								display: "flex",
+								justifyContent: "space-between",
+							}}
+						>
+							<LessonCard.MetadataLevel level={item.level} />
+							<LessonCard.Rating
+								rating={item.avgRating}
+								count={item.rateCount}
+							/>
+						</LessonCard.Metadata>
+					</LessonCard.Body>
 				</LessonCard>
 			)}
 		/>
@@ -105,13 +119,4 @@ function LessonListImpl() {
 // 	);
 // }
 
-const arr = getEmptyArr(10);
-
-LessonListImpl.Loading = () => (
-	<ListView
-		data={arr}
-		estimatedItemSize={125}
-		keyExtractor={(item) => item.toString()}
-		renderItem={() => <LessonListItem.Loading />}
-	/>
-);
+LessonListImpl.Loading = ForYouLessonsImpl.Loading;

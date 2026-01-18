@@ -12,15 +12,16 @@ import {
 	type ViewStyle,
 } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { Tabs } from "@/components";
+import { Button, Tabs } from "@/components";
 import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
-import type { ThemedStyle } from "@/theme";
+import { type ThemedStyle, typography } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import type { Chapter } from "../api-types/course_one";
+import type { Chapter, Unit } from "../api-types/course_one";
+import { ChapterBar } from "../components/course-details/ChapterBar";
+import { CourseDetails } from "../components/course-details/CourseDetails";
 import { MarkdowRenderer } from "../components/Lesson";
 import { LessonCertificate } from "../components/LessonCertificate/LessonCertificate";
-import { LessonDetail } from "../components/LessonDetail/LessonDetail";
 import { LessonListItem } from "../components/LessonListItem/LessonListItem";
 
 export interface LessonData {
@@ -30,7 +31,7 @@ export interface LessonData {
 	icon?: ImageSourcePropType;
 }
 
-interface LessonDetailScreenRootProps {
+interface CourseDetailsScreenRootProps {
 	/**
 	 * Children components
 	 */
@@ -41,7 +42,7 @@ interface LessonDetailScreenRootProps {
 	style?: StyleProp<ViewStyle>;
 }
 
-interface LessonDetailScreenHeaderProps {
+interface CourseDetailsScreenHeaderProps {
 	/**
 	 * Screen title
 	 */
@@ -56,7 +57,7 @@ interface LessonDetailScreenHeaderProps {
 	onMenu?: () => void;
 }
 
-interface LessonDetailScreenContentProps {
+interface CourseDetailsScreenContentProps {
 	/**
 	 * Course title
 	 */
@@ -115,7 +116,7 @@ interface LessonDetailScreenContentProps {
 	onStartCourse?: () => void;
 }
 
-interface LessonDetailScreenLessonsProps {
+interface CourseDetailsScreenLessonsProps {
 	/**
 	 * List of lessons
 	 */
@@ -130,7 +131,7 @@ interface LessonDetailScreenLessonsProps {
 	onLessonPress?: (lessonId: string) => void;
 }
 
-interface LessonDetailScreenCertificateProps {
+interface CourseDetailsScreenCertificateProps {
 	/**
 	 * Certificate image
 	 */
@@ -145,7 +146,7 @@ interface LessonDetailScreenCertificateProps {
 	onPress?: () => void;
 }
 
-interface LessonDetailScreenTabsProps {
+interface CourseDetailsScreenTabsProps {
 	/**
 	 * Children components (tab content)
 	 */
@@ -160,14 +161,14 @@ interface LessonDetailScreenTabsProps {
 	tabs?: string[];
 }
 
-export function LessonDetailScreen(props: LessonDetailScreenRootProps) {
+export function CourseDetailsScreen(props: CourseDetailsScreenRootProps) {
 	const { children, style: $styleOverride } = props;
 	const { themed } = useAppTheme();
 
 	return <View style={[themed($container), $styleOverride]}>{children}</View>;
 }
 
-function LessonDetailScreenContent(props: LessonDetailScreenContentProps) {
+function CourseDetailsScreenContent(props: CourseDetailsScreenContentProps) {
 	const {
 		title,
 		description,
@@ -189,35 +190,35 @@ function LessonDetailScreenContent(props: LessonDetailScreenContentProps) {
 
 	return (
 		<>
-			<LessonDetail.Image source={image} />
-			<LessonDetail.Title>{title}</LessonDetail.Title>
-			<LessonDetail.Description>{description}</LessonDetail.Description>
+			<CourseDetails.Image source={image} />
+			<CourseDetails.Title>{title}</CourseDetails.Title>
+			<CourseDetails.Description>{description}</CourseDetails.Description>
 
-			<LessonDetail.Metadata>
-				<LessonDetail.MetadataItem
+			<CourseDetails.Metadata>
+				<CourseDetails.MetadataItem
 					Icon={() => <IconSax icon={Chart} size={18} />}
 				>
 					{level}
-				</LessonDetail.MetadataItem>
+				</CourseDetails.MetadataItem>
 
-				<LessonDetail.MetadataItem
+				<CourseDetails.MetadataItem
 					Icon={() => <IconSax icon={Coin1} size={18} />}
 				>
 					{points.toString()} PX
-				</LessonDetail.MetadataItem>
-				<LessonDetail.MetadataItem
+				</CourseDetails.MetadataItem>
+				<CourseDetails.MetadataItem
 					Icon={() => <IconSax icon={Clock} size={18} />}
 				>
 					{duration}
-				</LessonDetail.MetadataItem>
-				<LessonDetail.Rating rating={rating} count={ratingCount} />
-				<LessonDetail.Updated>
+				</CourseDetails.MetadataItem>
+				<CourseDetails.Rating rating={rating} count={ratingCount} />
+				<CourseDetails.Updated>
 					Updated {formatDate(updatedDate)}
-				</LessonDetail.Updated>
-			</LessonDetail.Metadata>
+				</CourseDetails.Updated>
+			</CourseDetails.Metadata>
 
 			<View style={{ gap: 8, marginTop: theme.spacing.md }}>
-				<LessonDetail.Button>Start course for free</LessonDetail.Button>
+				<Button preset="reversed">Start course for free</Button>
 			</View>
 
 			{/*
@@ -231,12 +232,12 @@ function LessonDetailScreenContent(props: LessonDetailScreenContentProps) {
 	);
 }
 
-LessonDetailScreenContent.Loading = () => {
+CourseDetailsScreenContent.Loading = () => {
 	return (
 		<>
-			<LessonDetail.Image.Loading />
-			<LessonDetail.Title.Loading />
-			<LessonDetail.Description.Loading />
+			<CourseDetails.Image.Loading />
+			<CourseDetails.Title.Loading />
+			<CourseDetails.Description.Loading />
 
 			<SkeletonPlaceholder>
 				<SkeletonPlaceholder.Item
@@ -262,7 +263,7 @@ LessonDetailScreenContent.Loading = () => {
 	);
 };
 
-function LessonDetailScreenLessons(props: LessonDetailScreenLessonsProps) {
+function CourseDetailsScreenLessons(props: CourseDetailsScreenLessonsProps) {
 	const { lessons, levelLabel = "LEVEL 1", onLessonPress } = props;
 	const { themed } = useAppTheme();
 
@@ -289,7 +290,7 @@ function LessonDetailScreenLessons(props: LessonDetailScreenLessonsProps) {
 	);
 }
 
-LessonDetailScreenLessons.Loading = () => {
+CourseDetailsScreenLessons.Loading = () => {
 	const { themed } = useAppTheme();
 
 	return (
@@ -306,8 +307,8 @@ LessonDetailScreenLessons.Loading = () => {
 	);
 };
 
-function LessonDetailScreenCertificate(
-	props: LessonDetailScreenCertificateProps,
+function CourseDetailsScreenCertificate(
+	props: CourseDetailsScreenCertificateProps,
 ) {
 	const { image, progress = 0, onPress } = props;
 
@@ -329,7 +330,7 @@ function LessonDetailScreenCertificate(
 	);
 }
 
-LessonDetailScreenCertificate.Loading = () => {
+CourseDetailsScreenCertificate.Loading = () => {
 	return (
 		<SkeletonPlaceholder>
 			<SkeletonPlaceholder.Item
@@ -342,12 +343,12 @@ LessonDetailScreenCertificate.Loading = () => {
 	);
 };
 
-interface LessonDetailTabsProps {
+interface CourseDetailsTabsProps {
 	chapters: Chapter[];
 	desc: string;
 }
 
-function LessonDetailScreenTabs(props: LessonDetailTabsProps) {
+function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 	const { chapters, desc } = props;
 	const { theme } = useAppTheme();
 
@@ -359,71 +360,14 @@ function LessonDetailScreenTabs(props: LessonDetailTabsProps) {
 			</Tabs.List>
 			<Tabs.Content value="lessons">
 				<View style={{ gap: theme.spacing.xl }}>
-					{chapters.map((level, index) => (
-						<View key={level.title}>
-							<View style={{ flexDirection: "row", gap: 6 }}>
-								<Text weight="medium" style={{ color: theme.colors.textDim }}>
-									Level {index + 1}
-								</Text>
-
-								{/*
-								{level.type === "pro" && (
-									<Text style={{ color: theme.colors.textDim }}>|</Text>
-								)}
-								{level.type === "pro" && (
-									<Text weight="medium" style={{ color: theme.colors.tint }}>
-										PRO
-									</Text>
-								)}
-                */}
-							</View>
-							<Text weight="medium" size="md" style={{ marginBottom: 12 }}>
-								{level.title}
-							</Text>
-							<View style={{ gap: theme.spacing.xs }}>
-								{level.units.map((unit) => (
-									<Link
-										href={{
-											pathname: "/tabs/learnings/units/[unitId]",
-											params: {
-												unitId: unit.id,
-												title: unit.content.title,
-												shortDesc: unit.content.shortDesc,
-												content: unit.content.longDesc.content,
-											},
-										}}
-										key={unit.id}
-									>
-										<View style={styles.cardContainer}>
-											{/* <View style={styles.iconWrapper}>
-										<Image
-											source={{
-												uri: "https://img.icons8.com/color/96/design.png",
-											}}
-											style={styles.icon}
-										/>
-									</View> */}
-
-											<View style={styles.textWrapper}>
-												<Text weight="medium" size="sm">
-													{unit.content.title}
-												</Text>
-											</View>
-
-											<Text style={{ color: theme.colors.textDim }} size="xs">
-												{unit.points} PX
-											</Text>
-										</View>
-									</Link>
-								))}
-							</View>
-						</View>
+					{chapters.map((chapter, index) => (
+						<ChapterBar key={chapter.id} chapter={chapter} index={index} />
 					))}
 				</View>
 			</Tabs.Content>
 			<Tabs.Content value="overview">
 				<MarkdowRenderer content={desc} />
-				{/* <LessonDetailScreenCertificate /> */}
+				{/* <CourseDetailsScreenCertificate /> */}
 			</Tabs.Content>
 		</Tabs>
 	);
@@ -467,15 +411,15 @@ const styles = StyleSheet.create({
 	},
 });
 
-interface LessonDetailScreenScrollViewProps {
+interface CourseDetailsScreenScrollViewProps {
 	/**
 	 * Children components
 	 */
 	children: ReactNode;
 }
 
-function LessonDetailScreenScrollView(
-	props: LessonDetailScreenScrollViewProps,
+function CourseDetailsScreenScrollView(
+	props: CourseDetailsScreenScrollViewProps,
 ) {
 	const { children } = props;
 	const { themed } = useAppTheme();
@@ -528,16 +472,16 @@ const $lessonItemSkeleton: ThemedStyle<ViewStyle> = (theme) => ({
 	borderColor: theme.colors.palette.neutral300,
 });
 
-LessonDetailScreen.ScrollView = LessonDetailScreenScrollView;
-LessonDetailScreen.Content = LessonDetailScreenContent;
-LessonDetailScreen.Tabs = LessonDetailScreenTabs;
-LessonDetailScreen.Lessons = LessonDetailScreenLessons;
-LessonDetailScreen.Certificate = LessonDetailScreenCertificate;
+CourseDetailsScreen.ScrollView = CourseDetailsScreenScrollView;
+CourseDetailsScreen.Content = CourseDetailsScreenContent;
+CourseDetailsScreen.Tabs = CourseDetailsScreenTabs;
+CourseDetailsScreen.Lessons = CourseDetailsScreenLessons;
+CourseDetailsScreen.Certificate = CourseDetailsScreenCertificate;
 
 export type {
-	LessonDetailScreenHeaderProps,
-	LessonDetailScreenContentProps,
-	LessonDetailScreenLessonsProps,
-	LessonDetailScreenCertificateProps,
-	LessonDetailScreenTabsProps,
+	CourseDetailsScreenHeaderProps,
+	CourseDetailsScreenContentProps,
+	CourseDetailsScreenLessonsProps,
+	CourseDetailsScreenCertificateProps,
+	CourseDetailsScreenTabsProps,
 };

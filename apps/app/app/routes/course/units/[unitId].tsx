@@ -1,11 +1,10 @@
 import { useLocalSearchParams } from "expo-router";
-import { Share } from "iconsax-react-nativejs";
 import { View } from "react-native";
 import { Button, Screen, Text } from "@/components";
-import { IconSax } from "@/context/IconContext";
 import { MarkdowRenderer } from "@/modules/lesson/components/Lesson";
 import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
 import { $styles } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export default function UnitScreen() {
 	const params = useLocalSearchParams();
@@ -24,6 +23,9 @@ Accordions are especially useful for displaying FAQs or structured data. They of
 > **Pro Tip:** Use different icons to indicate open and closed sections.`;
 
 	console.log("[unitId] Screen params: ", params);
+	const {
+		theme: { spacing },
+	} = useAppTheme();
 
 	return (
 		<Screen preset="auto" contentContainerStyle={$styles.container}>
@@ -32,18 +34,15 @@ Accordions are especially useful for displaying FAQs or structured data. They of
 				<LessonCard.Description>{params.shortDesc}</LessonCard.Description>
 
 				<MarkdowRenderer content={content} />
-				<View>
-					<View>
-						<IconSax icon={Share} />
-						<Text>Rate</Text>
+				<View style={{ gap: spacing.md }}>
+					<LessonCard.Share />
+					<View style={{ paddingBottom: 60, gap: 24 }}>
+						<Text size="xxl" weight="medium">
+							Complete this lesson and move one step closer to your course
+							certificate
+						</Text>
+						<Button preset="reversed">Start Quiz</Button>
 					</View>
-				</View>
-				<View style={{ paddingBottom: 60, gap: 24 }}>
-					<Text size="xxl" weight="medium">
-						Complete this lesson and move one step closer to your course
-						certificate
-					</Text>
-					<Button preset="reversed">Start Quiz</Button>
 				</View>
 			</LessonCard.Body>
 		</Screen>

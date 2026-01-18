@@ -2,17 +2,17 @@ import { isUndefined } from "@safe-fin/utils";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Screen } from "@/components";
 import { useGetLesson } from "@/modules/lesson/hooks/api";
-import { LessonDetailScreen } from "@/modules/lesson/screens/LessonDetailScreen";
+import { CourseDetailsScreen } from "@/modules/lesson/screens/LessonDetailScreen";
 import { MissingRouteParamError } from "@/utils/error";
 
-export default function LessonScreen() {
+export default function CourseScreen() {
 	const params = useLocalSearchParams();
 	const router = useRouter();
 
-	if (!params.lessonId) {
-		throw new MissingRouteParamError("lessonId", "LessonScreen");
+	if (!params.courseId) {
+		throw new MissingRouteParamError("courseId", "LessonScreen");
 	}
-	const { lesson } = useGetLesson(params.lessonId);
+	const { lesson } = useGetLesson(params.courseId);
 
 	if (isUndefined(lesson)) {
 		return router.back();
@@ -26,9 +26,9 @@ export default function LessonScreen() {
 
 	return (
 		<Screen preset="scroll">
-			<LessonDetailScreen>
-				<LessonDetailScreen.ScrollView>
-					<LessonDetailScreen.Content
+			<CourseDetailsScreen>
+				<CourseDetailsScreen.ScrollView>
+					<CourseDetailsScreen.Content
 						title={lesson.content.title}
 						description={lesson.content.shortDesc}
 						image="https://ilarge.lisimg.com/image/28254022/1118full-iman-vellani.jpg"
@@ -39,12 +39,12 @@ export default function LessonScreen() {
 						ratingCount={lesson.rateCount}
 						updatedDate={lesson.updatedAt}
 					/>
-					<LessonDetailScreen.Tabs
+					<CourseDetailsScreen.Tabs
 						desc={lesson.content.longDesc.content}
 						chapters={lesson.chapters}
 					/>
-				</LessonDetailScreen.ScrollView>
-			</LessonDetailScreen>
+				</CourseDetailsScreen.ScrollView>
+			</CourseDetailsScreen>
 		</Screen>
 	);
 }

@@ -7,12 +7,14 @@ import type {
 	ForwardedRef,
 	PropsWithoutRef,
 	ReactElement,
+	ReactNode,
 	RefObject,
 } from "react";
 import { forwardRef, memo } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text } from "@/components/Text";
 import { getGenericEmptyState } from "@/utils/faker/emptyState";
+import { getGenericEndState } from "@/utils/faker/endState";
 
 export type ListViewRef = LegendListRef;
 
@@ -32,15 +34,35 @@ export const ListView = ListViewComponent as <T>(
 	},
 ) => ReactElement;
 
-export const EmptyListView = () => {
-	const { emoji, title, subtitle } = getGenericEmptyState();
+interface ListMessageViewProps {
+	icon: ReactNode;
+	title: string;
+	desc: string;
+}
+
+const ListMessageView = (props: ListMessageViewProps) => {
+	const { icon, title, desc } = props;
 	return (
-		<View style={{ alignItems: "center", gap: 8, paddingBlock: 48 }}>
-			<Text preset="subheading">{emoji}</Text>
+		<View style={listMessageStyles.root}>
+			<Text preset="subheading">{icon}</Text>
 			<Text preset="subheading">{title}</Text>
-			<Text>{subtitle}</Text>
+			<Text style={listMessageStyles.desc}>{desc}</Text>
 		</View>
 	);
+};
+const listMessageStyles = StyleSheet.create({
+	root: { alignItems: "center", gap: 8, paddingBlock: 32 },
+	desc: { textAlign: "center", paddingInline: 16 },
+});
+
+export const EmptyListView = () => {
+	const { emoji, title, subtitle } = getGenericEmptyState();
+	return <ListMessageView icon={emoji} title={title} desc={subtitle} />;
+};
+
+export const EndListView = () => {
+	const { emoji, title, subtitle } = getGenericEndState();
+	return <ListMessageView icon={emoji} title={title} desc={subtitle} />;
 };
 
 export const BaseListItemSeparator = memo(() => (

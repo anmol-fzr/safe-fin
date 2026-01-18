@@ -9,7 +9,6 @@ import Animated, {
 import { $sizeStyles, Screen, Text } from "@/components";
 import { useLoopOverArray } from "@/hooks/use-loop-over-array";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { usePrefetchLastLesson } from "@/modules/lesson/hooks/api";
 import { $styles, makeSpringy, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import {
@@ -35,8 +34,6 @@ export function WelcomeScreen() {
 	const { isLogin } = useAuth();
 
 	const [curr, currIndx] = useLoopOverArray(contents);
-
-	usePrefetchLastLesson();
 
 	return (
 		<Screen

@@ -1,4 +1,3 @@
-//import { Link } from "@react-navigation/native";
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import {
 	Share as Share2Icon,
@@ -6,14 +5,11 @@ import {
 	Like1 as ThumbsUpIcon,
 } from "iconsax-react-nativejs";
 import { Suspense, useMemo } from "react";
-//import { type TextStyle, type ViewStyle } from "react-native";
 import { View } from "react-native";
 import Markdown from "react-native-markdown-display";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { $fontWeightStyles, $sizeStyles } from "@/components";
 import { useDimensions } from "@/hooks/use-dimensions";
-//import type { ThemedStyle } from "@/theme";
-import { spacing } from "@/theme";
 import type { ResourceId } from "@/types";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGetLesson } from "../hooks/api";
@@ -66,13 +62,13 @@ type LessonRendererProps = {
 
 export function MarkdowRenderer({ content }: LessonRendererProps) {
 	const { theme } = useAppTheme();
-	const { colors } = theme;
+	const { colors, spacing } = theme;
 
 	const styles = useMemo(
 		() => ({
 			body: {
-				color: theme.colors.text,
-				fontSize: 20,
+				color: colors.text,
+				fontSize: 18,
 			},
 			paragraph: {
 				fontFamily: "spaceGroteskRegular",
@@ -111,7 +107,7 @@ export function MarkdowRenderer({ content }: LessonRendererProps) {
 				paddingHorizontal: 5,
 			},
 		}),
-		[theme],
+		[colors, spacing],
 	);
 
 	const modified = content?.replaceAll("<u>", "[")?.replaceAll("</u>", "]()");

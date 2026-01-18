@@ -37,7 +37,7 @@ export interface Chapter {
 	units: Unit[];
 }
 
-interface Unit {
+export interface Unit {
 	id: number;
 	coverPath: null;
 	contentId: number;

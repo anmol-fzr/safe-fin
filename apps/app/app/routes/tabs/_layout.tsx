@@ -1,6 +1,6 @@
-import { useRouter, useSegments } from "expo-router";
+import { useRouter } from "expo-router";
 import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { translate } from "@/i18n";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -18,10 +18,6 @@ export default function TabsLayout() {
 	const {
 		theme: { colors },
 	} = useAppTheme();
-
-	const segment = useSegments();
-	const page = segment[segment.length - 1];
-	const pagesToHideTabBar = ["report", "add-device"];
 
 	return (
 		<NativeTabs

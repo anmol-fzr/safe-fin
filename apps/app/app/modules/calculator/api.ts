@@ -49,17 +49,7 @@ type IResCalculator = IResData<ICalculator>;
 type IResCalculators = IResData<ICalculators, true>;
 
 export const CALCULATOR = {
-	ALL: async (): Promise<IResCalculators> => {
-		const data = await get<IResCalculators, IResCalculators>(`/calculator`);
-		return data;
-
-		return safeApiParse({
-			schema: calculatorsResSchema,
-			data,
-			fallback: fallbackData,
-			endpoint: "GET /calculator",
-		});
-	},
+	ALL: async () => get<IResCalculators, IResCalculators>(`/calculator`),
 	ONE: (id: ResourceId) =>
 		get<IResCalculator, IResCalculator>(`/calculator/${id}`),
 	//ALL: (params: IReqParams) => get<IResCalculators, IResCalculators>(`/calculator`, { params }),

@@ -233,11 +233,13 @@ export const TEMP_LESSONS = {
 
 type IResGetCourses = IResData<CourseItem[], true>;
 
+export type CourseLevel = "beginner" | "intermediate" | "advanced";
+
 interface CourseItem {
 	id: number;
 	isPublished: boolean;
 	isSaved: 0 | 1;
-	level: "beginner" | "intermediate" | "advanced";
+	level: CourseLevel;
 	points?: number;
 	avgRating: number;
 	rateCount: number;

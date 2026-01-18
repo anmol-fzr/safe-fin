@@ -1,7 +1,7 @@
-import { Link, Stack } from "expo-router";
-import { GoBack, ScreenHeader } from "@/components";
+import { Stack } from "expo-router";
+import { ScreenHeader } from "@/components";
 
-export default function CalculatorLayout() {
+export default function LearningsLayout() {
 	return (
 		<Stack>
 			<Stack.Screen
@@ -13,15 +13,6 @@ export default function CalculatorLayout() {
 							tagLineTx="screens:learningList.tagLine"
 							{...props}
 						/>
-					),
-				}}
-			/>
-
-			<Stack.Screen
-				name="[lessonId]"
-				options={{
-					header: (props) => (
-						<GoBack tx="screens:learningList.title" {...props} />
 					),
 				}}
 			/>
