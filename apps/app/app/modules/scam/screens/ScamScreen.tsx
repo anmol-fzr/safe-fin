@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import { View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Screen, Text } from "@/components";
-import { ViewTransition } from "@/components/view-transition";
 import { $styles, spacing } from "@/theme";
 import { ScamNotFoundScreen } from "./ScamNotFound";
+import { isUndefined } from "@/pkg/utils";
 
 type ScamScreenProps = { scamId: number };
 
@@ -13,11 +13,9 @@ export function ScamScreen(props: ScamScreenProps) {
 	const { scamId } = props;
 
 	return (
-		<ViewTransition>
-			<Suspense fallback={<ScamScreenImpl.Loading />}>
-				<ScamScreenImpl scamId={scamId} />
-			</Suspense>
-		</ViewTransition>
+		<Suspense fallback={<ScamScreenImpl.Loading />}>
+			<ScamScreenImpl scamId={scamId} />
+		</Suspense>
 	);
 }
 
@@ -26,8 +24,7 @@ function ScamScreenImpl(props: ScamScreenProps) {
 
 	const { scam } = useGetScam(Number(scamId));
 
-	//if (true) {
-	if (scam === undefined) {
+	if (isUndefined(scam)) {
 		console.warn("Got undefined Scam at ScamScreen, Navigaiting Back ...");
 		return <ScamNotFoundScreen />;
 	}

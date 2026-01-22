@@ -45,11 +45,6 @@ interface FinancialDetailsFormImplProps {
 	onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 }
 
-type SectionItem = {
-	title: string;
-	fields: FieldItem[];
-};
-
 type FieldItem = {
 	type: "chips";
 	props: FormSelectChipsProps<any>;

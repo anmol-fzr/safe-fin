@@ -4,24 +4,38 @@ import { FormField } from "@/components/form/FormField";
 import { useYupForm } from "@/hooks";
 import { profileSchema } from "@/modules/auth/schema";
 import { authClient } from "@/modules/auth/utils";
+import { auth } from "@safe-fin/auth/server";
+import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 
 export const ProfileForm = () => {
 	const methods = useYupForm({
 		schema: profileSchema,
 		defaultValues: async () => {
-			const { data } = await authClient.getSession();
-			if (data !== null) {
+			try {
+				const { data } = await authClient.getSession();
+				if (data !== null) {
+					return {
+						name: data?.user?.name ?? "",
+						phoneNumber: data?.user?.phoneNumber ?? "",
+					};
+				}
+			} catch (err) {
+				console.error("Error: Fetching Data for User profile, ", err);
+			} finally {
 				return {
-					name: data.user.name,
-					phoneNumber: data.user.phoneNumber,
+					name: "",
+					phoneNumber: "",
 				};
 			}
-			return {
-				name: "",
-				phoneNumber: "",
-			};
 		},
-		//disabled: true,
+	});
+
+	const { updateUser, isUpdatingUser } = useUpdateUser();
+
+	const onSubmit = methods.handleSubmit((data) => {
+		updateUser({
+			name: data.name,
+		});
 	});
 
 	//const { getValues } = methods;
@@ -95,7 +109,11 @@ export const ProfileForm = () => {
 					/>
 				)}
         */}
-			<Button preset="reversed" disabled>
+			<Button
+				preset="reversed"
+				status={isUpdatingUser ? "loading" : undefined}
+				onPress={onSubmit}
+			>
 				Update
 			</Button>
 		</FormProvider>

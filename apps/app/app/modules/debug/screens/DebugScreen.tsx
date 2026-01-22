@@ -130,7 +130,7 @@ export function DebugScreen() {
 				<ListView
 					ListHeaderComponent={<Text preset="subheading" text="App Data" />}
 					data={appDataList}
-					keyExtractor={(item) => item.label}
+					keyExtractor={(item) => `${item.label}-${item.value}`}
 					renderItem={({ item }) => (
 						<ListItem
 							LeftComponent={
@@ -148,7 +148,7 @@ export function DebugScreen() {
 				<ListView
 					ListHeaderComponent={<Text preset="subheading" text="User Data" />}
 					data={userDataList}
-					keyExtractor={(item) => item.label}
+					keyExtractor={(item) => `${item.label}-${item.value}`}
 					renderItem={({ item }) => (
 						<ListItem
 							LeftComponent={

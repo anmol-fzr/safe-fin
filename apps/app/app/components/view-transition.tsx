@@ -9,7 +9,7 @@ export function ViewTransition(props: AnimatedProps<ViewProps>) {
 	const { children, entering = FadeIn, exiting = FadeOut, ...rest } = props;
 
 	return (
-		<Animated.View entering={entering} exiting={exiting} {...rest}>
+		<Animated.View {...{ entering, exiting }} {...rest}>
 			{children}
 		</Animated.View>
 	);

@@ -1,16 +1,13 @@
-import { createContext, use } from "react";
-import { MissingContextError } from "@/utils/error";
+import { createContext } from "react";
 import type { Quiz } from "../api";
+import { useSafeContext } from "@safe-fin/ui/hooks";
 
 const quizContext = createContext<Quiz | null>(null);
 
 const useQuizContext = () => {
-	const ctx = use(quizContext);
-	if (ctx === null || ctx === undefined) {
-		throw new MissingContextError("useQuizContext", "QuizProvider");
-	}
-	return ctx;
+	return useSafeContext(quizContext, "useQuizContext");
 };
+
 const QuizProvider = quizContext.Provider;
 
 export { QuizProvider, useQuizContext };

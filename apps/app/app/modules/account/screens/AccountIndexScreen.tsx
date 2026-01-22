@@ -1,7 +1,6 @@
 import { Link, type LinkProps } from "expo-router";
 import {
 	ArrowRight2,
-	Bank,
 	DocumentText1,
 	Edit,
 	type Icon as IconType,
@@ -12,16 +11,23 @@ import {
 	Star1,
 	User,
 	WalletMoney,
+	Danger,
 } from "iconsax-react-nativejs";
 import { Image, Platform, View } from "react-native";
 import { PressableIcon, Screen, Text } from "@/components";
 import { Section } from "@/components/Section";
 import { IconSax } from "@/context/IconContext";
 import { type TxKeyPath, translate } from "@/i18n";
-import { useSession } from "@/modules/profile/hooks/queries";
+import {
+	getDemoGraphicsOpts,
+	useSession,
+} from "@/modules/profile/hooks/queries";
 import { $styles } from "@/theme";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { getCountriesOpts } from "@/hooks/queries";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 
@@ -38,17 +44,24 @@ const DATA: {
 		title: "Personal Info",
 		links: [
 			{
+				icon: User,
+				title: "screens:profileList.accountList.userProfile.title",
+				desc: "screens:profileList.accountList.userProfile.desc",
+				href: "/tabs/profile/user-profile",
+			},
+
+			{
 				icon: WalletMoney,
 				title: "screens:profileList.accountList.demographics.title",
 				desc: "screens:profileList.accountList.demographics.desc",
-				href: "/tabs/profile/demographics",
+				href: "/profile/demographics",
 			},
-			{
-				icon: Bank,
-				title: "screens:profileList.accountList.financialDetails.title",
-				desc: "screens:profileList.accountList.financialDetails.desc",
-				href: "/tabs/profile/financials",
-			},
+			// {
+			// 	icon: Bank,
+			// 	title: "screens:profileList.accountList.financialDetails.title",
+			// 	desc: "screens:profileList.accountList.financialDetails.desc",
+			// 	href: "/profile/financials",
+			// },
 		],
 	},
 	{
@@ -58,13 +71,13 @@ const DATA: {
 				icon: User,
 				title: "screens:profileList.accountList.account.title",
 				desc: "screens:profileList.accountList.account.desc",
-				href: "/tabs/profile/account",
+				href: "/profile/account",
 			},
 			{
 				icon: Setting2,
 				title: "screens:profileList.accountList.appSettings.title",
 				desc: "screens:profileList.accountList.appSettings.desc",
-				href: "/tabs/profile/settings",
+				href: "/settings/app",
 			},
 		],
 	},
@@ -90,6 +103,11 @@ const DATA: {
 				icon: DocumentText1,
 				title: "screens:profileList.appInfoList.privacyPolicy",
 				href: POLICY,
+			},
+			{
+				icon: Danger,
+				title: "screens:profileList.accountList.debug.title",
+				href: "/extras/debug",
 			},
 		],
 	},
@@ -160,8 +178,20 @@ export const AccountIndexScreen = () => {
 	const {
 		theme: { colors, spacing },
 	} = useAppTheme();
+
+	const queryClient = useQueryClient();
+
+	useEffect(() => {
+		queryClient.prefetchQuery(getCountriesOpts());
+		queryClient.prefetchQuery(getDemoGraphicsOpts());
+	}, [queryClient]);
+
 	return (
-		<Screen preset="scroll" contentContainerStyle={$styles.fullHeaderScreen}>
+		<Screen
+			preset="scroll"
+			safeAreaEdges={["bottom"]}
+			contentContainerStyle={$styles.fullHeaderScreen}
+		>
 			<Box title="Public Profile" icon={Profile} href="/profile/public" />
 
 			{DATA.map((section) => {

@@ -1,18 +1,15 @@
-import { useLocalSearchParams } from "expo-router";
 import { ScamScreen } from "@/modules/scam/screens";
-import { MissingRouteParamError } from "@/utils/error";
+import { idSchema } from "@/schema";
+import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
+import { z } from "zod";
+
+const paramsSchema = z.object({
+	scamId: idSchema,
+});
 
 export default function Screen() {
-	const params = useLocalSearchParams();
-	if (!params.scamId) {
-		throw new MissingRouteParamError("scamId", "ScamScreen");
-	}
-
-	const scamId = Number(params.scamId);
-
-	if (!Number.isSafeInteger(scamId)) {
-		throw new TypeError("scamId must be a Number");
-	}
+	const params = useTypedLocalSearchParams(paramsSchema);
+	const { scamId } = params;
 
 	return <ScamScreen scamId={scamId} />;
 }

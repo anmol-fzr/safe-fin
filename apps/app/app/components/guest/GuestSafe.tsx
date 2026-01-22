@@ -1,11 +1,6 @@
 import type { PropsWithChildren } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import Animated, {
-	FadeIn,
-	FadeInDown,
-	FadeOut,
-	SlideInDown,
-} from "react-native-reanimated";
+import Animated, { FadeIn, FadeInDown, FadeOut } from "react-native-reanimated";
 import { Button, Text } from "@/components";
 import { useToggle } from "@/hooks";
 import { LoginForm } from "@/modules/auth/components";
@@ -61,7 +56,12 @@ export const GuestSafe = (props: PropsWithChildren) => {
 						<View style={{ gap: spacing.md, padding: spacing.xs }}>
 							<Text preset="heading">Login</Text>
 							<View>
-								<LoginForm hideGuestLogin />
+								<LoginForm.Root>
+									<LoginForm.PhoneNumber />
+									<LoginForm.Otp />
+
+									<LoginForm.Submit />
+								</LoginForm.Root>
 							</View>
 							<Button onPress={onClose}>Close</Button>
 						</View>

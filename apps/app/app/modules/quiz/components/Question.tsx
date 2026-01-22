@@ -2,9 +2,9 @@ import { createContext, memo, use, useCallback, useState } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { Pressable, View } from "react-native";
 import { Text } from "@/components";
-import { MissingContextError } from "@/utils/error";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Question as IQuestion } from "../api";
+import { useSafeContext } from "@safe-fin/ui/hooks";
 
 type QuestionContext = ReturnType<typeof useQuestion> & {
 	question: IQuestion;
@@ -13,11 +13,7 @@ type QuestionContext = ReturnType<typeof useQuestion> & {
 const questionContext = createContext<QuestionContext | null>(null);
 
 const useQuestionContext = () => {
-	const ctx = use(questionContext);
-	if (ctx === null || ctx === undefined) {
-		throw new MissingContextError("useQuestionContext", "QuestionProvider");
-	}
-	return ctx;
+	return useSafeContext(questionContext, "useQuestionContext");
 };
 
 const useQuestion = () => {

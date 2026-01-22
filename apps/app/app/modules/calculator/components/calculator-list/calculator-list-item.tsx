@@ -22,13 +22,13 @@ export function CalculatorListItemImpl(props: CalculatorListItemImplProps) {
 	const { getStyles } = useListRadius({});
 
 	const styles = getStyles({ isFirst, isLast });
+
 	return (
 		<Link
 			key={id}
-			//href="/tabs/calculators/124"
 			href={{
-				pathname: "/tabs/calculators/[id]",
-				params: { id },
+				pathname: "/tabs/calculators/[calculatorId]",
+				params: { calculatorId: id },
 			}}
 			style={[themed($calculatorListItem), styles]}
 		>

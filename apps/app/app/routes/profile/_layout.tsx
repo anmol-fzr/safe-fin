@@ -1,9 +1,10 @@
-import { GoBack } from "@/components";
+import { GoBack, ScreenHeader } from "@/components";
 import { Stack } from "expo-router";
+import { ProfileScreenHeader } from "../tabs/profile/_layout";
 
 export default function SavedLayout() {
 	return (
-		<Stack>
+		<Stack screenOptions={{ header: ProfileScreenHeader }}>
 			<Stack.Screen
 				name="public"
 				options={{
@@ -18,6 +19,10 @@ export default function SavedLayout() {
 					presentation: "modal",
 				}}
 			/>
+
+			<Stack.Screen name="demographics" />
+			<Stack.Screen name="financials" />
+			<Stack.Screen name="account" />
 		</Stack>
 	);
 }

@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 type UpdateUserFnPayload = {
 	name: string;
-	gender: string;
+	//gender: string;
 };
 
 export const useUpdateUser = () => {
@@ -16,8 +16,14 @@ export const useUpdateUser = () => {
 		mutationFn(payload: UpdateUserFnPayload) {
 			return authClient.updateUser(payload);
 		},
+		onMutate() {
+			toast.loading("Updating User Profile ...");
+		},
+		onSuccess() {
+			toast.success("User Profile Updated Successfully");
+		},
 		onError() {
-			toast.error("Something Went Wrong");
+			toast.error("Unable to Update User Profile");
 		},
 	});
 

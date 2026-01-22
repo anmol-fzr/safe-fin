@@ -1,6 +1,5 @@
 import { formatDate } from "@safe-fin/utils";
-import { Link } from "expo-router";
-import { Chart, Clock, Coin1 } from "iconsax-react-nativejs";
+import { Chart, Clock } from "iconsax-react-nativejs";
 import type { ReactNode } from "react";
 import {
 	type ImageSourcePropType,
@@ -213,9 +212,11 @@ function CourseDetailsScreenContent(props: CourseDetailsScreenContentProps) {
 				</CourseDetails.Updated>
 			</CourseDetails.Metadata>
 
+			{/*
 			<View style={{ gap: 8, marginTop: theme.spacing.md }}>
 				<Button preset="reversed">Start course for free</Button>
 			</View>
+      */}
 
 			{/*
 			<LessonCard.Bookmark

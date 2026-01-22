@@ -17,7 +17,7 @@ export default function CalculatorLayout() {
 				}}
 			/>
 			<Stack.Screen
-				name="[id]"
+				name="[calculatorId]"
 				options={{
 					header: (props) => (
 						<GoBack tx="screens:calculatorList.title" {...props} />

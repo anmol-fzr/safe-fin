@@ -15,8 +15,8 @@ export const ThemeSwitcher = () => {
 
 	const themeOptions = [
 		{ label: "Light", value: "light", Icon: Sun1 },
-		{ label: "Dark", value: "dark", Icon: Moon },
 		{ label: "System", value: "system", Icon: Settings },
+		{ label: "Dark", value: "dark", Icon: Moon },
 	];
 
 	return (

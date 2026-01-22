@@ -5,7 +5,7 @@ import { FinancialDetailsForm } from "../components/FinancialDetailsForm";
 
 export const FinancialDetailsScreen = () => {
 	return (
-		<Screen preset="scroll" contentContainerStyle={$styles.lowHeaderScreen}>
+		<Screen preset="scroll" contentContainerStyle={$styles.container}>
 			<GuestSafe>
 				<FinancialDetailsForm />
 			</GuestSafe>

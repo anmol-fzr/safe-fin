@@ -31,6 +31,7 @@ const registerSchema = object({
 	//email: string().email().required().label("Email"),
 });
 
-const profileSchema = registerSchema.concat(loginSchema.pick(["phoneNumber"]));
+//const profileSchema = registerSchema.concat(loginSchema.pick(["phoneNumber"]));
+const profileSchema = registerSchema;
 
 export { loginSchema, registerSchema, profileSchema };

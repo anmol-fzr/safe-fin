@@ -21,12 +21,6 @@ export default function CourseScreen() {
 		return router.back();
 	}
 
-	// const lessonId = Number(params.lessonId);
-	//
-	// if (!Number.isSafeInteger(lessonId)) {
-	// 	throw new TypeError("lessonId must be a Number");
-	// }
-
 	return (
 		<Screen preset="scroll">
 			<CourseDetailsScreen>

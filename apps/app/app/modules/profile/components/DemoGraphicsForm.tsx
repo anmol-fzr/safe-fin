@@ -42,6 +42,7 @@ const useDemoGraphicsForm = () => {
 			const opts = getDemoGraphicsOpts();
 			try {
 				const data = await queryClient.fetchQuery(opts);
+				console.log("DemoGraphicsForm", data);
 
 				if (data.data === null || data.isNew) {
 					return emptyFormState;

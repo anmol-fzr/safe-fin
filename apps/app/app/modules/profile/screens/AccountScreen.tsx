@@ -9,7 +9,7 @@ export const AccountScreen = () => {
 	const { themed } = useAppTheme();
 
 	return (
-		<Screen preset="scroll" style={$styles.fullHeaderScreen}>
+		<Screen preset="scroll" safeAreaEdges={["bottom"]}>
 			<SessionsCard />
 			<DeleteAccountCard />
 			<View style={themed($logoutBtn)}>
@@ -26,4 +26,6 @@ const $root: ThemedViewStyle = (theme) => ({
 const $logoutBtn: ThemedViewStyle = (theme) => ({
 	gap: theme.spacing.lg,
 	padding: theme.spacing.sm,
+	paddingTop: 24,
+	paddingBottom: 96,
 });
