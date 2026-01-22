@@ -1,7 +1,13 @@
 import { useSafeContext } from "@safe-fin/ui/hooks";
 import { useRouter } from "expo-router";
 import { Chart, Coin1, Heart, Share, Star1 } from "iconsax-react-nativejs";
-import { createContext, type ReactNode, useCallback, useMemo } from "react";
+import {
+	createContext,
+	type ReactNode,
+	useCallback,
+	useMemo,
+	ComponentProps,
+} from "react";
 import {
 	Pressable as PressableScale,
 	type StyleProp,
@@ -19,6 +25,10 @@ import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { CourseLevel } from "../../api";
 import { useToggleCourseSave } from "../../hooks/mutations";
+
+type SkeletonPlaceholderItemProps = ComponentProps<
+	typeof SkeletonPlaceholder.Item
+>;
 
 interface LessonCardContextValue {
 	id: number;
@@ -287,7 +297,7 @@ function LessonCardTitle(props: LessonCardTitleProps) {
 	);
 }
 
-LessonCardTitle.Loading = () => {
+LessonCardTitle.Loading = (props: SkeletonPlaceholderItemProps) => {
 	return (
 		<SkeletonPlaceholder>
 			<SkeletonPlaceholder.Item
@@ -295,6 +305,7 @@ LessonCardTitle.Loading = () => {
 				height={22}
 				borderRadius={5}
 				marginBottom={6}
+				{...props}
 			/>
 		</SkeletonPlaceholder>
 	);

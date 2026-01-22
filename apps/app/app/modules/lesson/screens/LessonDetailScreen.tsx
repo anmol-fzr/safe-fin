@@ -294,10 +294,10 @@ CourseDetailsScreenLessons.Loading = () => {
 		<>
 			{[1, 2, 3].map((i) => (
 				<View key={i} style={themed($lessonItemSkeleton)}>
-					<LessonListItem.Icon.Loading />
 					<View style={{ flex: 1 }}>
 						<LessonListItem.Title.Loading />
 					</View>
+					<LessonListItem.Icon.Loading />
 				</View>
 			))}
 		</>
