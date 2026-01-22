@@ -16,6 +16,25 @@ import { logout } from "@/modules/auth/utils";
 import type { ThemedStyle } from "@/theme";
 import { $styles } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { envs } from "@/utils/envs";
+
+type T = Record<string, string | boolean | Record<string, string | boolean>>;
+
+function traverseObj(obj: T) {
+	const o: { label: string; value: string }[] = [];
+
+	Object.entries(obj).map(([key, value]) => {
+		if (typeof value === "object") {
+			const j = traverseObj(value);
+			o.push(...j);
+		}
+		o.push({
+			label: key,
+			value: value.toString(),
+		});
+	});
+	return o;
+}
 
 function openLinkInBrowser(url: string) {
 	Linking.canOpenURL(url).then((canOpen) => canOpen && Linking.openURL(url));
@@ -29,6 +48,8 @@ export function DebugScreen() {
 	const resetAuthData = useAuthStore((state) => state.resetData);
 	const user = useAuthStore((state) => state.user);
 
+	const envsDataList = traverseObj(envs);
+	console.log(JSON.stringify(envsDataList, null, 2));
 	// @ts-expect-error
 	const usingFabric = global.nativeFabricUIManager != null;
 
@@ -130,6 +151,44 @@ export function DebugScreen() {
 				<ListView
 					ListHeaderComponent={<Text preset="subheading" text="App Data" />}
 					data={appDataList}
+					keyExtractor={(item) => `${item.label}-${item.value}`}
+					renderItem={({ item }) => (
+						<ListItem
+							LeftComponent={
+								<View style={themed($item)}>
+									<Text preset="bold">{item.label}</Text>
+									<Text>{item.value}</Text>
+								</View>
+							}
+						/>
+					)}
+				/>
+			</View>
+
+			<View style={themed($itemsContainer)}>
+				<ListView
+					ListHeaderComponent={
+						<Text preset="subheading" text="Environment Variables" />
+					}
+					data={envsDataList}
+					keyExtractor={(item) => item.label}
+					renderItem={({ item }) => (
+						<ListItem
+							LeftComponent={
+								<View style={themed($item)}>
+									<Text preset="bold">{item.label}</Text>
+									<Text>{item.value}</Text>
+								</View>
+							}
+						/>
+					)}
+				/>
+			</View>
+
+			<View style={themed($itemsContainer)}>
+				<ListView
+					ListHeaderComponent={<Text preset="subheading" text="User Data" />}
+					data={userDataList}
 					keyExtractor={(item) => `${item.label}-${item.value}`}
 					renderItem={({ item }) => (
 						<ListItem
