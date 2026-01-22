@@ -1,4 +1,5 @@
 import { useResourceActionToast } from "@safe-fin/ui/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
 import { onLogout } from "@/utils/crashReporting";
@@ -10,6 +11,7 @@ export const useAuth = () => {
 	const isLogin = useAuthStore((state) => state.user !== null);
 	const { navigate } = useRouter();
 	const toast = useResourceActionToast();
+	const queryClient = useQueryClient();
 
 	const handleLogout = useCallback(() => {
 		authClient.signOut(
@@ -23,6 +25,7 @@ export const useAuth = () => {
 					onLogout();
 					//navigation.popToTop();
 					navigate("/auth");
+					queryClient.invalidateQueries();
 					toast.success("Logged Out");
 				},
 				onError(err) {
@@ -32,7 +35,7 @@ export const useAuth = () => {
 				},
 			},
 		);
-	}, [toast, navigate, resetAuthStore]);
+	}, [toast, navigate, resetAuthStore, queryClient]);
 
 	return { handleLogout, isLogin };
 };

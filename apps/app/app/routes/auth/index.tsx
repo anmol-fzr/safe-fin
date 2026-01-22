@@ -8,10 +8,7 @@ import { APP } from "@/utils/const";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 export default function WelcomeScreen() {
-	const {
-		themed,
-		theme: { spacing },
-	} = useAppTheme();
+	const { themed } = useAppTheme();
 
 	return (
 		<Screen
@@ -50,14 +47,7 @@ export default function WelcomeScreen() {
         */}
 			</Animated.View>
 
-			<View
-				style={{
-					flex: 1,
-					marginBottom: spacing.lg,
-					gap: spacing.md,
-					marginInline: spacing.lg,
-				}}
-			>
+			<View style={themed($formContainer)}>
 				<LoginForm.Root>
 					<View
 						style={{
@@ -68,11 +58,7 @@ export default function WelcomeScreen() {
 						<LoginForm.Otp />
 					</View>
 
-					<View
-						style={{
-							gap: spacing.md,
-						}}
-					>
+					<View style={themed($buttons)}>
 						<LoginForm.Submit />
 						<LoginForm.GuestLogin />
 					</View>
@@ -81,6 +67,17 @@ export default function WelcomeScreen() {
 		</Screen>
 	);
 }
+
+const $buttons: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+	gap: spacing.md,
+});
+
+const $formContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+	flex: 1,
+	marginBottom: spacing.lg,
+	gap: spacing.md,
+	marginInline: spacing.lg,
+});
 
 const $topContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	paddingHorizontal: spacing.lg,

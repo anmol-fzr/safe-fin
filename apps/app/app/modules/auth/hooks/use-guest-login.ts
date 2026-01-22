@@ -37,7 +37,12 @@ export const useGuestLogin = () => {
 			setAuthState("complete");
 			router.push("/tabs");
 		},
-		onError() {
+		onError(error) {
+			console.log(error);
+			console.dir(error);
+			console.debug(error);
+			console.log(error.name, error.message, error?.cause);
+
 			toast.error("Unable to Login as Guest");
 		},
 	});

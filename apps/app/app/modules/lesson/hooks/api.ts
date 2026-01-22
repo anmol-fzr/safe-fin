@@ -91,5 +91,34 @@ const useGetLastLesson = () => {
 	return { lesson: data?.data || null, ...rest };
 };
 
-export { getLessonsOpts, getLessonOpts };
-export { useGetLessons, useGetLesson, useGetLessonTopics, useGetLastLesson };
+function getSavedCoursesOpts() {
+	return infiniteQueryOptions({
+		queryKey: [baseQueryKey, "SAVED"],
+		queryFn: COURSES.SAVED.ALL,
+		initialPageParam: { limit: 10, page: 1 },
+		getNextPageParam: ({ paginate }, allPages, lastPageParam) => {
+			if (!paginate.hasMore) return null;
+
+			return {
+				limit: lastPageParam.limit,
+				page: paginate.nextPage,
+			};
+		},
+	});
+}
+
+const useGetSavedCourses = () => {
+	const opts = getSavedCoursesOpts();
+	const { data, ...rest } = useSuspenseInfiniteQuery(opts);
+
+	return { courses: data, ...rest };
+};
+
+export { getLessonsOpts, getLessonOpts, getSavedCoursesOpts };
+export {
+	useGetLessons,
+	useGetLesson,
+	useGetLessonTopics,
+	useGetLastLesson,
+	useGetSavedCourses,
+};

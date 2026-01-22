@@ -1,4 +1,11 @@
-import { Logout } from "iconsax-react-nativejs";
+import {
+	Bank,
+	Logout,
+	Setting,
+	User,
+	WalletMoney,
+} from "iconsax-react-nativejs";
+
 import { Button, Screen } from "@/components";
 import { useIsGuestUser } from "@/modules/auth/hooks/use-guest-login";
 import { useAuth } from "@/modules/auth/hooks/useAuth";

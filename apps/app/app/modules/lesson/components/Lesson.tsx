@@ -6,9 +6,9 @@ import {
 } from "iconsax-react-nativejs";
 import { Suspense, useMemo } from "react";
 import { View } from "react-native";
-import Markdown from "react-native-markdown-display";
+import { EnrichedMarkdownText } from "react-native-enriched-markdown";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { $fontWeightStyles, $sizeStyles } from "@/components";
+import { $sizeStyles } from "@/components";
 import { useDimensions } from "@/hooks/use-dimensions";
 import type { ResourceId } from "@/types";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -36,7 +36,7 @@ function LessonImpl({ id }: LessonProps) {
 
 	return (
 		<>
-			<LessonRenderer content={lesson.content} />
+			<LessonRenderer content={lesson.content?.longDesc?.content} />
 			<View
 				style={{
 					padding: spacing.md,
@@ -60,9 +60,11 @@ type LessonRendererProps = {
 	content: string;
 };
 
-export function MarkdowRenderer({ content }: LessonRendererProps) {
+export function MarkdowRenderer(props: LessonRendererProps) {
+	const { content } = props;
 	const { theme } = useAppTheme();
 	const { colors, spacing } = theme;
+	const { width } = useDimensions();
 
 	const styles = useMemo(
 		() => ({
@@ -74,21 +76,21 @@ export function MarkdowRenderer({ content }: LessonRendererProps) {
 				fontFamily: "spaceGroteskRegular",
 			},
 			strong: {
-				fontFamily: "spaceGroteskMedium",
+				//fontFamily: "spaceGroteskMedium",
 			},
-			heading1: {
+			h1: {
 				...$sizeStyles.xxl,
-				...$fontWeightStyles.bold,
+				//...$fontWeightStyles.bold,
 			},
-			heading2: {
+			h2: {
 				...$sizeStyles.xl,
-				...$fontWeightStyles.semiBold,
+				//...$fontWeightStyles.semiBold,
 				marginTop: spacing.xs,
 				marginBottom: spacing.xxs,
 			},
-			heading3: {
+			h3: {
 				...$sizeStyles.lg,
-				...$fontWeightStyles.bold,
+				//...$fontWeightStyles.bold,
 				marginTop: spacing.xxs,
 				marginBottom: spacing.xxxs,
 			},
@@ -99,20 +101,40 @@ export function MarkdowRenderer({ content }: LessonRendererProps) {
 				flex: 1,
 				color: colors.tint,
 			},
+			image: {
+				marginTop: 20,
+				marginBottom: 20,
+				width: "100%",
+				height: 220,
+				resizeMode: "contain",
+			},
+			inlineImage: {
+				size: 20,
+			},
 			blockquote: {
 				backgroundColor: colors.background,
 				borderColor: colors.tint,
 				borderLeftWidth: 4,
 				marginLeft: 5,
 				paddingHorizontal: 5,
+				marginTop: 24,
 			},
 		}),
 		[colors, spacing],
 	);
 
-	const modified = content?.replaceAll("<u>", "[")?.replaceAll("</u>", "]()");
+	// const modified = (content ?? "")
+	// 	.replaceAll("<u>", "[")
+	// 	?.replaceAll("</u>", "]()");
 
-	return <Markdown style={styles}>{modified}</Markdown>;
+	//return <EnrichedMarkdownText markdown={content} />;
+	//
+
+	const fixedContent = content.replace(/(!\[.*?\]\(.*?\))/g, "\n\n$1\n\n");
+
+	return (
+		<EnrichedMarkdownText markdownStyle={styles} markdown={fixedContent} />
+	);
 }
 
 const LessonRenderer = MarkdowRenderer;

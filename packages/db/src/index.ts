@@ -1,4 +1,4 @@
-import { type Client, createClient } from "@libsql/client";
+import { createClient } from "@libsql/client";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";

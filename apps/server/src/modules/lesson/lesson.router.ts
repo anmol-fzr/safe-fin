@@ -18,6 +18,7 @@ import {
 	publishLesson,
 	reorderChapters,
 	reorderUnits,
+	saveCourseProgressHandler,
 	updateChapter,
 	updateLesson,
 	updateUnit,
@@ -33,6 +34,7 @@ const lessonRouter = createApp()
 	.get("/", ...getUserLessons) // Get all courses (paginated)
 	.get("/:courseId", ...getLessonById) // Get course by ID with chapters
 	.post("/", ...createLessonHandler) // Create new course (admin only)
+	.post("/progress", ...saveCourseProgressHandler) // Create new course (admin only)
 	.post("/:courseId/toggle-like", ...likeCourseHandler) // Create new course (admin only)
 	.patch("/:courseId", ...updateLesson) // Update course (admin only)
 	.patch("/:id/publish", ...publishLesson) // Publish/unpublish course (admin only)
@@ -47,7 +49,8 @@ const lessonRouter = createApp()
 	.get("/chapters/:id", ...getChapterById) // Get chapter by ID with units
 	.patch("/chapters/:id", ...updateChapter) // Update chapter (admin only)
 	.delete("/chapters/:id", ...deleteChapter) // Delete chapter (admin only)
-	// ============================================ UNIT ROUTES
+	// ============================================
+	// UNIT ROUTES
 	// ============================================
 	.get("/chapters/:chapterId/units", ...getChapterUnits) // Get all units for a chapter
 	.post("/chapters/:chapterId/units", ...createUnits) // Create new unit (admin only)

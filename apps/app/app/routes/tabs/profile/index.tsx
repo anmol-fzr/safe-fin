@@ -1,3 +1,3 @@
-import { ProfileIndexScreen } from "@/modules/profile/screens";
+import { AccountIndexScreen } from "@/modules/account/screens";
 
-export default ProfileIndexScreen;
+export default AccountIndexScreen;

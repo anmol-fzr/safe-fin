@@ -13,7 +13,7 @@ import { ProfileList } from "./profile-list";
 
 type ActionItem = BaseItem & {
 	href?: string;
-	action?: VoidFunction | Promise<void>;
+	action?: () => void | Promise<void>;
 };
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE, GITHUB } =
@@ -81,13 +81,20 @@ const appInfoItems: ActionItem[] = [
 ];
 
 export const AppInfoList = () => {
-	const handleExternalPress = (item: ActionItem) => {
-		if (item.href) {
-			Linking.openURL(item.href);
-			return;
-		}
-		if (item.action) {
-			item.action();
+	const handleExternalPress = async (item: ActionItem) => {
+		try {
+			if (item.href) {
+				const canOpen = await Linking.canOpenURL(item.href);
+				if (canOpen) {
+					await Linking.openURL(item.href);
+				}
+				return;
+			}
+			if (item.action) {
+				await item.action();
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	};
 

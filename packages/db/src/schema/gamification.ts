@@ -22,7 +22,7 @@ export const publicUserActivityLog = sqliteTable("public_user_activity_log", {
 		.references(() => user.id)
 		.notNull(),
 
-	date: integer("date", { mode: "timestamp" }),
+	date: integer("date", { mode: "timestamp" }).unique(),
 	totalPxEarned: integer("total_px"),
 
 	updatedAt: timestamp.updatedAt,

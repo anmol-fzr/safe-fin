@@ -52,7 +52,7 @@ export const courseProgressRelations = relations(courseProgress, ({ one }) => ({
 		references: [course.id],
 	}),
 	currentChapter: one(chapter, {
-		fields: [courseProgress.currChapter],
+		fields: [courseProgress.currChapterId],
 		references: [chapter.id],
 	}),
 	currentUnit: one(unit, {

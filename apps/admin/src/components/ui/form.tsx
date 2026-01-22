@@ -16,11 +16,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-export type FormSubmitHandler = (e?: React.BaseSyntheticEvent) => Promise<void>;
+export type FormSubmitHandler = React.FormEventHandler;
 
 type FormProps = FormProviderProps & {
 	className: string;
-	onSubmit: FormSubmitHandler;
+	onSubmit: React.FormEventHandler;
 };
 
 const Form = ({ className, onSubmit, ...props }: FormProps) => {

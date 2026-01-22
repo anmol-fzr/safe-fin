@@ -93,16 +93,83 @@ export const TOPIC = {
 
 const { get, post } = axiosInstance;
 
+interface IReqSaveCourseProgress {
+	courseId: ResourceId;
+	chapterId: ResourceId;
+	unitId: ResourceId;
+}
+
 export const COURSES = {
 	FOR_YOU: () => get<unknown, IResGetCourses>(`/courses/for-you`),
 	ALL: () => get<unknown, IResGetCourses>(`/courses`),
 	ONE: (courseId: ResourceId) =>
 		get<unknown, IResGetCourse>(`/courses/${courseId}`),
-	TOGGLE_SAVE: (courseId: ResourceId) =>
-		post<unknown, IResData<{ success: boolean }>>(
-			`/courses/${courseId}/toggle-like`,
-		),
+
+	PROGRESS: {
+		SAVE: (payload: IReqSaveCourseProgress) =>
+			post<unknown, IResSaveCourseProgress>(`/courses/progress`, payload),
+	},
+
+	SAVED: {
+		ALL: () =>
+			get<unknown, IResGetSavedCourse>(`/saved`, {
+				params: { type: "course" },
+			}),
+		TOGGLE: (courseId: ResourceId) =>
+			post<unknown, IResToggleSavedCourse>(`/courses/${courseId}/toggle-like`),
+	},
+
+	UNITS: {
+		ONE: (unitId: ResourceId) =>
+			get<unknown, IResGetUnit>(`/courses/units/${unitId}`),
+	},
 };
+
+type IResGetUnit = IResData<{
+	id: number;
+	coverPath: null;
+	contentId: number;
+	chapterId: number;
+	exerciseId: null | number;
+	points: number;
+	index: number;
+	isPublished: boolean;
+	createdAt: string;
+	updatedAt: string;
+	content: {
+		id: number;
+		title: string;
+		shortDesc: string;
+		longDescRichId: number;
+		createdAt: string;
+		updatedAt: string;
+		longDesc: LongDesc;
+	};
+	chapter: {
+		course: {
+			id: number;
+			content: {
+				title: string;
+			};
+		};
+	};
+	nextUnitId: number | null;
+}>;
+
+type IResGetSavedCourse = IResData<
+	{
+		entityType: string;
+		entityId: number;
+		userId: string;
+		createdAt: string;
+		updatedAt: string;
+	}[],
+	true
+>;
+type IResSaveCourseProgress = IResSuccess;
+type IResToggleSavedCourse = IResSuccess;
+
+type IResSuccess = IResData<{ success: boolean }>;
 
 export const TEMP_LESSONS = {
 	ALL: () => {

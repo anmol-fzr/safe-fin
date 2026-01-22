@@ -26,7 +26,7 @@ function RouteComponent() {
 				<BackButton to="/dashboard/courses" resource={label.plural} />
 				<Page.Title title={`Create New ${label.single}`} />
 			</div>
-			<div className="mx-auto">
+			<div className="mx-auto max-h-screen">
 				<Suspense fallback={<Loader />}>
 					<NewCourseForm />
 				</Suspense>

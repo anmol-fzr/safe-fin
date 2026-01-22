@@ -9,7 +9,9 @@ import {
 	richContent,
 	richContentItem,
 	sql,
+	unit,
 } from "@/pkg/db";
+import type { CourseLevel } from "./lesson.schema";
 
 // ============================================
 // Types
@@ -30,6 +32,8 @@ interface CreateCourseData {
 	shortDesc: string;
 	longDesc: string;
 	longDescJson?: any;
+	isPublished: boolean;
+	level: CourseLevel;
 }
 
 interface UpdateCourseData {
@@ -74,16 +78,17 @@ export class LessonService {
 		const lessons = await db.query.course.findMany({
 			extras: {
 				isSaved: sql<boolean>`
-      EXISTS (
-        SELECT 1
-        FROM saved
-        WHERE saved.entity_type = 'course'
-          AND saved.entity_id = course.id
-          AND saved.user_id = ${userId}
-      )
-    `.as("is_saved"),
+EXISTS (
+SELECT 1
+FROM saved
+WHERE saved.entity_type = 'course'
+AND saved.entity_id = course.id
+AND saved.user_id = ${userId}
+)
+`.as("is_saved"),
 			},
 			where: whereConditions.length > 0 ? and(...whereConditions) : undefined,
+			orderBy: (course, { desc }) => [desc(course.createdAt)],
 			limit,
 			offset,
 			columns: {
@@ -164,20 +169,22 @@ export class LessonService {
 		};
 	}
 
-	static async getById(db: DB, courseId: number, includeUnpublished = false) {
+	static async getById(
+		db: DB,
+		courseId: number,
+		includeUnpublished = false,
+		userId: string,
+	) {
 		const foundCourse = await db.query.course.findFirst({
 			extras: {
-				points: sql<number>`
-      COALESCE(
-        (
-          SELECT SUM(unit.points)
-          FROM chapter
-          JOIN unit ON unit.chapter_id = chapter.id
-          WHERE chapter.course_id = course.id
-        ),
-        0
-      )
-    `.as("points"),
+				isCompleted:
+					sql<boolean>`EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.user_id = ${userId} AND course_progress.course_id = ${courseId} AND course_progress.is_completed = true )`.as(
+						"is_completed",
+					),
+				points:
+					sql<number>`COALESCE( ( SELECT SUM(unit.points) FROM chapter JOIN unit ON unit.chapter_id = chapter.id WHERE chapter.course_id = course.id), 0)`.as(
+						"points",
+					),
 			},
 			where: (c, { eq, and }) => {
 				const conditions = [eq(c.id, courseId)];
@@ -221,6 +228,14 @@ export class LessonService {
 					orderBy: (chapter, { asc }) => [asc(chapter.index)],
 					with: {
 						units: {
+							extras: userId
+								? {
+										isCompleted:
+											sql<boolean>` EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.user_id = ${userId} AND course_progress.course_id = ${courseId} AND course_progress.curr_unit_id = ${unit.id}) `.as(
+												"is_completed",
+											),
+									}
+								: undefined,
 							columns: {
 								chapterId: false,
 							},
@@ -275,7 +290,8 @@ export class LessonService {
 			.insert(course)
 			.values({
 				contentId: insertedRichContent.id,
-				isPublished: false,
+				level: data.level,
+				isPublished: data.isPublished,
 			})
 			.returning();
 
@@ -335,7 +351,7 @@ export class LessonService {
 		}
 
 		// Return updated course
-		return this.getById(db, courseId, true);
+		return this.getById(db, courseId, true, undefined);
 	}
 
 	static async publishCourse(db: DB, courseId: number, isPublished: boolean) {

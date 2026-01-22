@@ -10,6 +10,7 @@ import { $sizeStyles, Screen, Text } from "@/components";
 import { useLoopOverArray } from "@/hooks/use-loop-over-array";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { $styles, makeSpringy, type ThemedStyle } from "@/theme";
+import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
 import {
 	WelcomeLoginButton,
@@ -32,6 +33,11 @@ const exitingAnim = makeSpringy(SlideOutLeft);
 export function WelcomeScreen() {
 	const { themed } = useAppTheme();
 	const { isLogin } = useAuth();
+
+	// const router = useRouter();
+	// useEffect(() => {
+	// 	router.navigate("/profile/public");
+	// }, []);
 
 	const [curr, currIndx] = useLoopOverArray(contents);
 
@@ -71,6 +77,8 @@ export function WelcomeScreen() {
 					</Text>
 				</Animated.View>
 			</Animated.View>
+			<Text>{envs.API_URL}</Text>
+			<Text>{envs.AUTH_API_URL}</Text>
 
 			<Animated.View entering={FadeInDown}>
 				{isLogin ? <WelcomeNextButton /> : <WelcomeLoginButton />}

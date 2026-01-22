@@ -1,6 +1,6 @@
 import { useSafeContext } from "@safe-fin/ui/hooks";
 import { useRouter } from "expo-router";
-import { Chart, Heart, Share, Star1 } from "iconsax-react-nativejs";
+import { Chart, Coin1, Heart, Share, Star1 } from "iconsax-react-nativejs";
 import { createContext, type ReactNode, useCallback, useMemo } from "react";
 import {
 	Pressable as PressableScale,
@@ -586,6 +586,20 @@ LessonCard.MetadataLevel = (props: LevelMetadataProps) => {
 			>
 				{level}
 			</Text>
+		</LessonCard.MetadataItem>
+	);
+};
+
+interface PointsMetadataProps {
+	points: number;
+}
+
+LessonCard.MetadataPoints = (props: PointsMetadataProps) => {
+	const { points } = props;
+
+	return (
+		<LessonCard.MetadataItem Icon={() => <IconSax icon={Coin1} size={18} />}>
+			{points.toString()} PX
 		</LessonCard.MetadataItem>
 	);
 };

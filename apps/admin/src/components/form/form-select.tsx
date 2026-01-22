@@ -1,7 +1,7 @@
 import {
-	useFormContext,
 	type FieldPath,
 	type FieldValues,
+	useFormContext,
 } from "react-hook-form";
 import {
 	FormControl,
@@ -15,9 +15,9 @@ import {
 	Select,
 	SelectContent,
 	SelectItem,
+	type SelectProps,
 	SelectTrigger,
 	SelectValue,
-	type SelectProps,
 } from "@/components/ui/select";
 
 type FormSelectProps<

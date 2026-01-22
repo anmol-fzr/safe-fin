@@ -281,17 +281,17 @@ export function Editor({ content, setContent, disabled = false }: EditorProps) {
 	const handleLinkClick = React.useCallback(() => setMobileView("link"), []);
 	const handleMain = React.useCallback(() => setMobileView("main"), []);
 	return (
-		<div className="bg-sidebar/50 rounded-xl">
+		<div className="bg-sidebar/50 rounded-xl max-h-[700px] flex flex-col overflow-hidden">
 			<EditorContext.Provider value={{ editor }}>
 				{!disabled && (
 					<Toolbar
-						className="!bg-sidebar rounded-t-xl"
+						className="!bg-sidebar rounded-t-xl shrink-0 z-20"
 						ref={toolbarRef}
 						style={{
 							...(isMobile
 								? {
-										bottom: `calc(100% - ${height - rect.y}px)`,
-									}
+									bottom: `calc(100% - ${height - rect.y}px)`,
+								}
 								: {}),
 						}}
 					>
@@ -310,11 +310,9 @@ export function Editor({ content, setContent, disabled = false }: EditorProps) {
 					</Toolbar>
 				)}
 
-				<EditorContent
-					editor={editor}
-					role="presentation"
-					className="simple-editor-content"
-				/>
+				<div className="flex-1 overflow-y-auto min-h-0">
+					<EditorContent editor={editor} className="simple-editor-content " />
+				</div>
 			</EditorContext.Provider>
 		</div>
 	);

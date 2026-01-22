@@ -5,7 +5,7 @@ import { appCors, paginate } from "@/middleware";
 import { v1Router } from "./api/v1/router";
 import { createTypedFactory } from "./factory";
 
-const { createApp } = createTypedFactory();
+const { createApp, createMiddleware } = createTypedFactory();
 const app = createApp();
 
 app
@@ -21,6 +21,11 @@ app
 		}),
 	)
 	.use(appCors);
+
+app.use("*", async (c, next) => {
+	c.header("Cache-Control", "public max-age=86400");
+	await next();
+});
 
 app
 	.get("/health", (c) => c.text("Hello Hono!"))

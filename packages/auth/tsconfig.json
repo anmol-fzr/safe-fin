@@ -7,9 +7,7 @@
 			"@/*": ["./src/*"]
 		},
 		"outDir": "dist",
-		"rootDir": "src",
-		"declaration": true,
-		"declarationMap": true
+		"rootDir": "src"
 	},
 	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules", "dist"],

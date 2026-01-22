@@ -1,21 +1,25 @@
+import type { ExternalPathString } from "expo-router";
+
 const env = process.env;
 const isDev = env.EXPO_PUBLIC_MODE === "DEV" || __DEV__;
 
 export const envs = Object.freeze({
 	isDev,
 	API_URL: env.EXPO_PUBLIC_API_URL ?? "http://192.168.29.57:3000/api/v1",
-	AUTH_API_URL: `${env.EXPO_PUBLIC_API_URL}/auth`,
+	get AUTH_API_URL() {
+		return `${this.API_URL}/auth`;
+	},
 	SENTRY: Object.freeze({
 		DSN: env.EXPO_PUBLIC_SENTRY_DSN,
 	}),
 	META_URLS: Object.freeze({
-		PLAYSTORE: env.EXPO_PUBLIC_METADATA_PLAYSTORE as string,
-		APPSTORE: env.EXPO_PUBLIC_METADATA_APPSTORE as string,
-		GITHUB: env.EXPO_PUBLIC_METADATA_GITHUB as string,
+		PLAYSTORE: env.EXPO_PUBLIC_METADATA_PLAYSTORE as ExternalPathString,
+		APPSTORE: env.EXPO_PUBLIC_METADATA_APPSTORE as ExternalPathString,
+		GITHUB: env.EXPO_PUBLIC_METADATA_GITHUB as ExternalPathString,
 
-		ABOUT: env.EXPO_PUBLIC_METADATA_ABOUT_URL as string,
-		TERMS: env.EXPO_PUBLIC_METADATA_TERMS_URL as string,
-		SUPPORT: env.EXPO_PUBLIC_METADATA_SUPPORT_URL as string,
-		POLICY: env.EXPO_PUBLIC_METADATA_POLICY_URL as string,
+		ABOUT: env.EXPO_PUBLIC_METADATA_ABOUT_URL as ExternalPathString,
+		TERMS: env.EXPO_PUBLIC_METADATA_TERMS_URL as ExternalPathString,
+		SUPPORT: env.EXPO_PUBLIC_METADATA_SUPPORT_URL as ExternalPathString,
+		POLICY: env.EXPO_PUBLIC_METADATA_POLICY_URL as ExternalPathString,
 	}),
 });

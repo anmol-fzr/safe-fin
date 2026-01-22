@@ -5,7 +5,7 @@
 	"compatibility_flags": ["export_commonjs_default", "nodejs_compat"],
 	"preview_urls": true,
 	"dev": {
-		//"ip": "10.10.46.110",
+		//"ip": "10.10.45.109",
 		"ip": "192.168.29.57",
 		"port": 3000
 	},

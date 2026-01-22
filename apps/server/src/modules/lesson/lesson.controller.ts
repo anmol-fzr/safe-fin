@@ -3,9 +3,9 @@ import type { DB } from "@safe-fin/db";
 import { z } from "zod";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, paginate, userRole } from "@/middleware";
-import { and, eq, saved } from "@/pkg/db";
+import { and, courseProgress, eq, saved } from "@/pkg/db";
 import { dbIdSchema, idParamSchema } from "@/schema";
-import { toggleEntitySave } from "../saves/saves.controller";
+import { SavedService } from "../saved/saved.service";
 import {
 	createChapterSchema,
 	createCourseSchema,
@@ -65,7 +65,7 @@ export const forYouLessons = createHandlers(authenticate, db, async (c) => {
 export const getLessonById = createHandlers(
 	authenticate,
 	db,
-	zValidator("param", z.object({ courseId: idParamSchema })),
+	zValidator("param", courseIdParamSchema),
 	async (c) => {
 		const { courseId } = c.req.valid("param");
 		const user = c.get("user");
@@ -76,6 +76,7 @@ export const getLessonById = createHandlers(
 			db,
 			courseId,
 			includeUnpublished,
+			user.id,
 		);
 
 		if (!lesson) {
@@ -86,13 +87,43 @@ export const getLessonById = createHandlers(
 	},
 );
 
+export const saveCourseProgressHandler = createHandlers(
+	authenticate,
+	db,
+	zValidator(
+		"json",
+		z.object({
+			courseId: idParamSchema,
+			chapterId: idParamSchema,
+			unitId: idParamSchema,
+		}),
+	),
+	async (c) => {
+		const user = c.get("user");
+		const db = c.get("db");
+
+		const data = c.req.valid("json");
+
+		await db
+			.insert(courseProgress)
+			.values({
+				userId: user.id,
+				courseId: data.courseId,
+				currChapterId: data.chapterId,
+				currUnitId: data.unitId,
+			})
+			.onConflictDoNothing();
+
+		return c.json({ data: { success: true } }, 201);
+	},
+);
+
 export const createLessonHandler = createHandlers(
 	authenticate,
 	db,
 	userRole("admin"),
 	zValidator("form", createCourseSchema),
 	async (c) => {
-		const user = c.get("user");
 		const db = c.get("db");
 
 		const data = c.req.valid("form");
@@ -111,7 +142,7 @@ export const likeCourseHandler = createHandlers(
 		const db = c.get("db");
 		const { courseId } = c.req.valid("param");
 
-		await toggleEntitySave(db, {
+		await SavedService.toggleEntitySave(db, {
 			entityId: courseId,
 			entityType: "course",
 			userId,
@@ -125,7 +156,7 @@ export const updateLesson = createHandlers(
 	authenticate,
 	db,
 	userRole("admin"),
-	zValidator("param", z.object({ courseId: idParamSchema })),
+	zValidator("param", courseIdParamSchema),
 	zValidator("json", updateCourseSchema),
 	async (c) => {
 		const db = c.get("db");
@@ -237,7 +268,7 @@ export const createChapter = createHandlers(
 	db,
 	userRole("admin"),
 	zValidator("json", createChapterSchema),
-	zValidator("param", z.object({ courseId: idParamSchema })),
+	zValidator("param", courseIdParamSchema),
 	async (c) => {
 		const db = c.get("db");
 		const { courseId } = c.req.valid("param");

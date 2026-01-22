@@ -33,10 +33,6 @@ function LessonListImpl() {
 
 	//const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
 
-	const {
-		theme: { colors },
-	} = useAppTheme();
-
 	return (
 		<ListView
 			data={courses}

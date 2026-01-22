@@ -8,7 +8,6 @@ export default function CourseLayout() {
 				name="[courseId]"
 				options={{
 					header: (props) => <GoBack tx="tabs:learnings" {...props} />,
-					presentation: "fullScreenModal",
 				}}
 			/>
 

@@ -30,6 +30,7 @@ CourseDetails.Author = LessonCard.Author;
 CourseDetails.Description = LessonCard.Description;
 CourseDetails.Metadata = LessonCard.Metadata;
 CourseDetails.MetadataItem = LessonCard.MetadataItem;
+CourseDetails.MetadataPoints = LessonCard.MetadataPoints;
 CourseDetails.Rating = LessonCard.Rating;
 CourseDetails.Body = LessonCard.Body;
 

@@ -6,6 +6,7 @@ import { Add, ArrowDown, ArrowUp, Edit2, Trash } from "iconsax-reactjs";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as Yup from "yup";
+import { convertJsonToMarkdown } from "@/components/editor/Editor";
 import { FormEditor } from "@/components/form/form-editor";
 import { FormInput } from "@/components/form/form-input";
 import { FormTextarea } from "@/components/form/form-textarea";
@@ -43,7 +44,6 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 	const { courseId } = props;
 
 	const [autoAnimateRef] = useAutoAnimate();
-	const [editingChapterId, setEditingChapterId] = useState<number | null>(null);
 	const [showNewChapterForm, setShowNewChapterForm] = useState(false);
 	const [showNewUnitForm, setShowNewUnitForm] = useState<number | null>(null);
 
@@ -55,7 +55,6 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 
 	// Mutations
 	const { createChapter } = useCreateChapter();
-	const { updateChapter } = useUpdateChapter();
 	const { deleteChapter } = useDeleteChapter();
 	const { reorderChapters } = useReorderChapters();
 	const { createUnit } = useCreateUnit();
@@ -96,9 +95,19 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 		);
 	};
 
-	const handleCreateUnit = (chapterId: number, data: any) => {
+	const handleCreateUnit = (
+		chapterId: number,
+		data: {
+			title: string;
+			shortDesc: string;
+			content: any;
+			points: number;
+		},
+	) => {
 		const chapter = course.chapters?.find((ch) => ch.id === chapterId);
 		const nextIndex = chapter?.units?.length || 0;
+
+		const markdown = convertJsonToMarkdown(data.content);
 
 		createUnit(
 			{
@@ -108,8 +117,8 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 						title: data.title,
 						shortDesc: data.shortDesc,
 						longDesc: {
-							content: data.content,
-							contentJson: {},
+							content: markdown,
+							contentJson: data.content,
 						},
 						points: data.points,
 						index: nextIndex,

@@ -10,6 +10,7 @@ interface IReqCreateCourse {
 	shortDesc: string;
 	longDesc: string;
 	longDescJson: string;
+	coverImage?: string | null;
 }
 
 interface IReqCreateChapter {

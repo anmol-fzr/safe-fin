@@ -1,10 +1,10 @@
-import type { GetDbOpts } from "@safe-fin/db";
-import { getAuthDrizzleAdapter } from "@safe-fin/db";
 import type { BetterAuthOptions } from "better-auth";
 //import type { SecondaryStorage } from "better-auth";
 import { betterAuth } from "better-auth";
+import type { GetDbOpts } from "@/pkg/db";
+import { getAuthDrizzleAdapter, getDb } from "@/pkg/db";
 //import { betterAuthStudio } from "better-auth-studio/hono";
-import { betterAuthOptions } from "./options";
+import { getBetterAuthOptions } from "./options";
 
 //import studioConfig from "./studio.config";
 
@@ -47,6 +47,13 @@ export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
 		TURSO_DB_URL: opts.TURSO_DB_URL,
 		TURSO_DB_TOKEN: opts.TURSO_DB_TOKEN,
 	});
+
+	const db = getDb({
+		TURSO_DB_URL: opts.TURSO_DB_URL,
+		TURSO_DB_TOKEN: opts.TURSO_DB_TOKEN,
+	});
+
+	const betterAuthOptions = getBetterAuthOptions({ db });
 
 	return betterAuth({
 		...betterAuthOptions,

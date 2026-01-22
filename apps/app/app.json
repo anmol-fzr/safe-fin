@@ -65,6 +65,12 @@
 				{
 					"root": "./app/routes"
 				}
+			],
+			[
+				"expo-image-picker",
+				{
+					"photosPermission": "The app accesses your photos to let you set your Public Profile Image"
+				}
 			]
 		],
 		"experiments": {

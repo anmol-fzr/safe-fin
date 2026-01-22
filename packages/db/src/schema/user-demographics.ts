@@ -52,7 +52,9 @@ export const userDemographics = sqliteTable(
 			.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 	},
-	(table) => [index("user_id_idx").on(table.userId)],
+	(t) => ({
+		userIdIdx: index("user_id_idx").on(t.userId),
+	}),
 );
 
 export const userDemographicsRelations = relations(

@@ -6,7 +6,7 @@ const en = {
 		calculator: "Calculator",
 		learnings: "Courses",
 		scams: "Scams",
-		profile: "Profile",
+		profile: "Account",
 	},
 	screens: {
 		homeScreen: {
@@ -43,7 +43,8 @@ const en = {
 				account: { title: "Account", desc: "Session, Delete Account etc..." },
 				appSettings: {
 					title: "App Settings",
-					desc: "Theme, Language, Accessibility etc...",
+					desc: "Theme, Language etc...",
+					//desc: "Theme, Language, Accessibility etc...",
 				},
 				debug: {
 					title: "Debug",
@@ -142,7 +143,7 @@ const en = {
 		tagLine: "Settings",
 	},
 	profileScreen: {
-		title: "Profile",
+		title: "Account",
 		tagLine: "Manage User Profile & App Settings",
 	},
 	demoGraphicsScreen: {

@@ -4,7 +4,6 @@ import { BackButton } from "@/components/form/button/BackButton";
 import Loader from "@/components/loader";
 import { Page } from "@/components/page";
 import { CurriculumBuilder } from "@/modules/courses/components/CurriculumBuilder";
-import { getCourseOpts } from "@/modules/courses/hooks/queries";
 
 export const Route = createFileRoute(
 	"/dashboard/courses/$courseId/edit/curriculum",

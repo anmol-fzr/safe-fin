@@ -1,18 +1,21 @@
 import { isUndefined } from "@safe-fin/utils";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import { z } from "zod";
 import { Screen } from "@/components";
+import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useGetLesson } from "@/modules/lesson/hooks/api";
 import { CourseDetailsScreen } from "@/modules/lesson/screens/LessonDetailScreen";
-import { MissingRouteParamError } from "@/utils/error";
+import { idSchema } from "@/schema";
+
+const paramsSchema = z.object({
+	courseId: idSchema,
+});
 
 export default function CourseScreen() {
-	const params = useLocalSearchParams();
+	const { courseId } = useTypedLocalSearchParams(paramsSchema);
 	const router = useRouter();
 
-	if (!params.courseId) {
-		throw new MissingRouteParamError("courseId", "LessonScreen");
-	}
-	const { lesson } = useGetLesson(params.courseId);
+	const { lesson } = useGetLesson(courseId);
 
 	if (isUndefined(lesson)) {
 		return router.back();

@@ -3,10 +3,19 @@ import type { ResourceId } from "@/types";
 import { COURSES, LESSON } from "../api";
 import { getLessonsOpts } from "./api";
 
-const useUpdateLessonStatus = (lessonId: ResourceId) => {
+const useSaveCourseProgress = () => {
 	const { mutate, ...rest } = useMutation({
-		mutationKey: ["LESSON", lessonId, "STATUS"],
-		mutationFn: () => LESSON.UPDATE_STATUS(lessonId),
+		mutationKey: ["COURSE", "PROGRESS", "SAVE"],
+		mutationFn: COURSES.PROGRESS.SAVE,
+	});
+
+	return { saveCourseProgress: mutate, ...rest };
+};
+
+const useUpdateLessonStatus = () => {
+	const { mutate, ...rest } = useMutation({
+		mutationKey: ["LESSON", "STATUS"],
+		mutationFn: LESSON.UPDATE_STATUS,
 	});
 	return { updateStatus: mutate, ...rest };
 };
@@ -15,8 +24,8 @@ const useToggleCourseSave = () => {
 	const queryOpts = getLessonsOpts();
 
 	const { mutate, ...rest } = useMutation({
-		mutationKey: ["COURSE", "TOGGLE_SAVE"],
-		mutationFn: (courseId: ResourceId) => COURSES.TOGGLE_SAVE(courseId),
+		mutationKey: ["COURSE", "SAVE", "TOGGLE"],
+		mutationFn: (courseId: ResourceId) => COURSES.SAVED.TOGGLE(courseId),
 		onMutate: async (courseId, context) => {
 			const prevCourses = context.client.getQueryData(queryOpts.queryKey);
 
@@ -42,4 +51,4 @@ const useToggleCourseSave = () => {
 	return { toggleSave: mutate, ...rest };
 };
 
-export { useUpdateLessonStatus, useToggleCourseSave };
+export { useUpdateLessonStatus, useToggleCourseSave, useSaveCourseProgress };

@@ -1,26 +1,22 @@
-import { getEmptyArr } from "@safe-fin/ui/utils";
+import { getEmptyArr } from "@/pkg/ui";
 import {
 	Monitor as LaptopIcon,
 	Mobile as SmartphoneIcon,
 } from "iconsax-react-nativejs";
 import { Suspense } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { UAParser } from "ua-parser-js";
 import { Button, ListView, Text } from "@/components";
 import type { Session } from "@/modules/auth/utils";
 import { $styles, colors, spacing } from "@/theme";
-import { isStrictlySameObj } from "@/utils/funcs";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useRevokeOtherSessions, useRevokeSession } from "../hooks/mutations";
 import { useListSessions, useSession } from "../hooks/queries";
+import { IconProvider, IconSax } from "@/context/IconContext";
+import { Section } from "@/components/Section";
 
 export function SessionsCard() {
-	const { sessions, isRefetchingSessions, refetchSessions } = useListSessions();
-	console.log(sessions);
-
-	const { currSession } = useSession();
-
 	return (
 		<View
 			style={{
@@ -28,59 +24,64 @@ export function SessionsCard() {
 				paddingHorizontal: $styles.container.paddingHorizontal,
 			}}
 		>
-			<View
-				style={{
-					gap: spacing.xs,
-				}}
-			>
-				<Text size="xl" weight="semiBold">
-					Sessions
-				</Text>
-				<Text>Manage your active sessions and revoke access</Text>
-			</View>
+			<Section>
+				<Section.Header
+					style={{ flexDirection: "column", alignItems: "flex-start" }}
+				>
+					<Section.Title>Sessions</Section.Title>
 
-			<Suspense fallback={<SessionsCardImpl.Loading />}>
-				<SessionsCardImpl />
-			</Suspense>
+					<Text>Manage your active sessions and revoke access</Text>
+				</Section.Header>
+				<Section.Body preset="default">
+					<Suspense fallback={<SessionsCardImpl.Loading />}>
+						<SessionsCardImpl />
+					</Suspense>
+				</Section.Body>
+			</Section>
 		</View>
 	);
 }
 
 function SessionsCardImpl() {
 	const { sessions, isRefetchingSessions, refetchSessions } = useListSessions();
-	console.log(sessions);
 
 	const { currSession } = useSession();
 
 	return (
 		<ListView
 			data={sessions}
-			keyExtractor={(item) => item.token}
+			keyExtractor={(item) => item.id}
 			refreshing={isRefetchingSessions}
 			ListHeaderComponent={
 				sessions.length > 1 ? RevokeOtherSessions : undefined
 			}
 			onRefresh={refetchSessions}
 			renderItem={({ item }) => (
-				<SessionCell
-					{...item}
-					isCurrentSession={isStrictlySameObj(currSession, item)}
-				/>
+				<SessionCell {...item} isCurrentSession={item.id === currSession?.id} />
 			)}
 		/>
 	);
 }
 
-const arr = getEmptyArr(3);
+SessionsCardImpl.Loading = () => {
+	const arr = getEmptyArr(3);
 
-SessionsCardImpl.Loading = () =>
-	arr.map((i) => <SessionCell.Loading key={i} />);
+	return (
+		<ListView
+			data={arr}
+			keyExtractor={(item) => item.toString()}
+			renderItem={SessionCell.Loading}
+		/>
+	);
+};
 
 type SessionCellProps = Session & {
 	isCurrentSession: boolean;
 };
 
-function SessionCell(session: SessionCellProps) {
+function SessionCell(props: SessionCellProps) {
+	const { isCurrentSession, ...session } = props;
+
 	const parser = UAParser(session.userAgent as string);
 	const isMobile =
 		parser.ua.includes("okhttp") || parser.device.type === "mobile";
@@ -88,17 +89,19 @@ function SessionCell(session: SessionCellProps) {
 	const { revokeSession, isRevokingSession } = useRevokeSession();
 
 	const handleRevoke = () => revokeSession(session.token);
+	const {
+		theme: { colors },
+	} = useAppTheme();
 
-	const color = isRevokingSession
-		? colors.textDisabled
-		: colors.palette.neutral700;
+	const color = isRevokingSession ? colors.textDim : colors.palette.neutral700;
 
 	return (
 		<View
 			style={{
-				borderWidth: 1,
-				borderColor: color,
-				padding: spacing.sm,
+				borderWidth: isCurrentSession ? 2 : 1,
+				borderColor: isCurrentSession ? colors.tint : color,
+				paddingInline: spacing.sm,
+				height: 60,
 				marginBottom: spacing.xs,
 				borderRadius: spacing.sm,
 				flexDirection: "row",
@@ -106,17 +109,19 @@ function SessionCell(session: SessionCellProps) {
 				gap: spacing.sm,
 			}}
 		>
-			{isMobile ? (
-				<SmartphoneIcon color={color} size={20} />
-			) : (
-				<LaptopIcon color={color} size={20} />
-			)}
+			<IconProvider color={isCurrentSession ? colors.tint : color} size={20}>
+				{isMobile ? (
+					<IconSax icon={SmartphoneIcon} />
+				) : (
+					<IconSax icon={LaptopIcon} />
+				)}
+			</IconProvider>
 			<Text
 				style={{
 					color,
 				}}
 			>
-				{session.isCurrentSession
+				{isCurrentSession
 					? "Current Session"
 					: parser.os.name && parser.browser.name
 						? `${parser.os.name}, ${parser.browser.name}`
@@ -141,7 +146,7 @@ function SessionCell(session: SessionCellProps) {
 						marginLeft: "auto",
 					}}
 				>
-					{session.isCurrentSession ? "Sign Out" : "Revoke"}
+					{isCurrentSession ? "Sign Out" : "Revoke"}
 				</Button>
 			)}
 		</View>
@@ -172,22 +177,25 @@ function RevokeOtherSessions() {
 				display: "flex",
 				flexDirection: "row",
 				gap: 4,
-				alignItems: "flex-end",
+				alignItems: "flex-start",
 				marginBottom: spacing.md,
 			}}
 		>
-			<Button
+			<Pressable
 				preset="text"
 				onPress={revokeOtherSessions}
-				style={styles.sessionRevokerButton}
+				style={[styles.sessionRevokerButton, ,]}
 				status={isPending ? "disabled" : undefined}
-				textStyle={{
-					textDecorationLine: "underline",
-					color: isPending ? colors.textDisabled : colors.palette.neutral900,
-				}}
 			>
-				Revoke all Other
-			</Button>
+				<Text
+					style={{
+						textDecorationLine: "underline",
+						color: isPending ? colors.textDim : colors.palette.neutral900,
+					}}
+				>
+					Revoke all Other
+				</Text>
+			</Pressable>
 			<Text>Session except current</Text>
 		</View>
 	);

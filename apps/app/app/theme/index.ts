@@ -1,4 +1,4 @@
-import type { StyleProp } from "react-native";
+import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { roundness } from "./borderRadius";
 import { colors as colorsLight } from "./colors";
 import { colors as colorsDark } from "./colorsDark";
@@ -73,6 +73,9 @@ export type ThemedStyleArray<T> = (
 	| StyleProp<T>
 	| (StyleProp<T> | ThemedStyle<T>)[]
 )[];
+
+export type ThemedViewStyle = ThemedStyle<ViewStyle>;
+export type ThemedTextStyle = ThemedStyle<TextStyle>;
 
 // Export the theme objects with backwards compatibility for the old theme structure.
 export { colorsLight as colors };

@@ -2,6 +2,12 @@ import { z } from "zod";
 import { dbIdSchema } from "@/schema";
 import { queryParamSchema } from "@/schema/params";
 
+const courseLevelSchema = z
+	.enum(["beginner", "intermediate", "advanced"])
+	.default("beginner");
+
+export type CourseLevel = z.infer<typeof courseLevelSchema>;
+
 // ============================================
 // Course Schemas
 // ============================================
@@ -11,6 +17,8 @@ export const createCourseSchema = z.object({
 	shortDesc: z.string().min(10).max(500),
 	longDesc: z.string().min(50),
 	longDescJson: z.any(), // JSON content for rich text editor
+	isPublished: z.boolean().optional().default(false),
+	level: courseLevelSchema,
 });
 
 export const updateCourseSchema = z.object({

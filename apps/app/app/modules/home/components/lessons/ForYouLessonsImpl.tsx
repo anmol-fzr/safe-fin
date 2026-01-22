@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import { underDampedSpringCalculations } from "react-native-reanimated/lib/typescript/animation/spring";
-import { BaseListItemSeparator, ListView } from "@/components";
+import { BaseListItemSeparator, EmptyListView, ListView } from "@/components";
 import { useDimensions } from "@/hooks/use-dimensions";
 import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
 import { useGetForYouCourses } from "@/modules/lesson/hooks/api";
@@ -18,12 +17,13 @@ export const ForYouLessonsImpl = () => {
 
 	return (
 		<ListView
-			horizontal
 			data={courses}
+			horizontal
 			recycleItems
 			showsVerticalScrollIndicator={false}
 			keyExtractor={(item) => item.id.toString()}
 			ItemSeparatorComponent={BaseListItemSeparator}
+			ListEmptyComponent={EmptyListView}
 			renderItem={({ item }) => (
 				<LessonCard
 					id={item.id}

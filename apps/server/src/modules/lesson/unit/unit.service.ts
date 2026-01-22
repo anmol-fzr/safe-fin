@@ -89,10 +89,51 @@ export class UnitService {
 						},
 					},
 				},
+				chapter: {
+					columns: {
+						course: true,
+					},
+					with: {
+						course: {
+							columns: {
+								id: true,
+								content: true,
+							},
+							with: {
+								content: {
+									columns: {
+										title: true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		});
 
-		return foundUnit;
+		if (!foundUnit) {
+			return undefined;
+		}
+
+		const nextUnit = await db.query.unit.findFirst({
+			where: (u, { eq, and, gt }) => {
+				const conditions = [
+					eq(u.chapterId, foundUnit.chapterId),
+					gt(u.index, foundUnit.index),
+				];
+				if (!isAdmin) {
+					conditions.push(eq(u.isPublished, true));
+				}
+				return and(...conditions);
+			},
+			orderBy: (u, { asc }) => [asc(u.index)],
+			columns: {
+				id: true,
+			},
+		});
+
+		return { ...foundUnit, nextUnitId: nextUnit?.id ?? null };
 	}
 
 	static async create(

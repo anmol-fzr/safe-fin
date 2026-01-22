@@ -7,9 +7,7 @@ export default function CalculatorLayout() {
 			<Stack.Screen
 				name="[unitId]"
 				options={{
-					header: (props) => (
-						<GoBack tx="screens:learningList.title" {...props} />
-					),
+					header: (props) => <GoBack tx="Chapters" {...props} />,
 				}}
 			/>
 		</Stack>

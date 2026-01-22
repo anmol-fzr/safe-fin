@@ -1,5 +1,5 @@
-import { useNavigate, useRouter } from "@tanstack/react-router";
-import { object, string } from "yup";
+import { useNavigate } from "@tanstack/react-router";
+import { boolean, object, string } from "yup";
 import { convertJsonToMarkdown } from "@/components/editor/Editor";
 import { useYupForm } from "@/hooks/form/useYupForm";
 import { useCreateCourse } from "@/modules/courses/hooks/mutations";
@@ -8,7 +8,10 @@ import { CourseForm } from "./CourseForm";
 const courseSchema = object({
 	title: string().required().label("Title"),
 	desc: string().required().label("Description"),
-	content: string().required().label("Content"),
+	content: string().required().label("Content").min(10),
+	level: string().required().label("Course Difficulty Level"),
+	isPublished: boolean().label("Publish or Draft").default(false),
+	//coverImage: string().nullable().label("Cover Image"),
 });
 
 function NewCourseForm() {
@@ -27,6 +30,7 @@ function NewCourseForm() {
 			shortDesc: values.desc,
 			longDesc: markdown,
 			longDescJson: jsonString,
+			//coverImage: values.coverImage || null,
 		}).then((resp) => {
 			navigate({
 				to: "/dashboard/courses/$courseId/edit/curriculum",
@@ -38,12 +42,21 @@ function NewCourseForm() {
 	});
 
 	return (
-		<CourseForm.Root form={form} handleSubmit={handleSubmit}>
-			<CourseForm.Editor />
+		<CourseForm.Root
+			form={form}
+			handleSubmit={handleSubmit}
+			className="flex justify-center"
+		>
+			<CourseForm.Editor className="flex-1 w-full" />
 			<div className="w-full max-w-md space-y-4">
-				<div className="w-full max-w-md space-y-4">
+				<div className="w-full space-y-4">
 					<CourseForm.TitleField />
 					<CourseForm.DescField />
+					<CourseForm.LevelSelect />
+					<CourseForm.PublishSwitch />
+					{/*
+					<CourseForm.CoverImageField />
+          */}
 				</div>
 				<CourseForm.Actions>
 					<CourseForm.SaveAction />

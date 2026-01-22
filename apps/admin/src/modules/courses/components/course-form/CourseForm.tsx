@@ -1,16 +1,31 @@
-import type { ComponentPropsWithoutRef, PropsWithChildren } from "react";
-import { useCallback, useRef } from "react";
-import { FormProvider, type UseFormReturn } from "react-hook-form";
+import {
+	type ComponentPropsWithoutRef,
+	type PropsWithChildren,
+	useCallback,
+	useRef,
+} from "react";
+import {
+	Controller,
+	FormProvider,
+	type SubmitHandler,
+	type UseFormReturn,
+	useFormContext,
+} from "react-hook-form";
+import { DraftPublishSwitch } from "@/components/DraftPublishSwitch";
 import { FormEditor } from "@/components/form/form-editor";
 import { FormInput } from "@/components/form/form-input";
+import { FormSelect } from "@/components/form/form-select";
+import { FormSwitch } from "@/components/form/form-switch";
 import { FormTextarea } from "@/components/form/form-textarea";
+import { ImageUploader } from "@/components/image-uploader";
 import { Button, type ButtonProps } from "@/components/ui/button";
-import { Form, type FormSubmitHandler } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { uploadMedia } from "@/services/api";
 
 type CourseFormRootProps = PropsWithChildren & {
 	form: UseFormReturn;
-	handleSubmit: FormSubmitHandler;
+	handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 	className?: string;
 };
 
@@ -48,11 +63,60 @@ function CourseFormRoot({
 }
 
 const CourseFormTitleField = () => (
-	<FormInput name="title" label="Title" placeholder="Title" />
+	<FormInput
+		name="title"
+		label="Course Title"
+		placeholder="e.g. Financial Basics 101"
+	/>
 );
 const CourseFormDescField = () => (
-	<FormTextarea name="desc" label="Description" placeholder="Description" />
+	<FormTextarea
+		name="desc"
+		label="Short Summary"
+		placeholder="Briefly Describe Content of the Course"
+	/>
 );
+
+const courseLevelOpts = [
+	{ label: "Beginner", value: "beginner" },
+	{ label: "Intermediate", value: "intermediate" },
+	{ label: "Advanced", value: "advanced" },
+];
+
+const CourseFormLevelSelect = () => (
+	<FormSelect
+		className="w-full"
+		options={courseLevelOpts}
+		name="level"
+		label="Course Level"
+		placeholder="Difficulty Level of the Course"
+	/>
+);
+
+const CourseFormPublishSwitch = DraftPublishSwitch;
+
+const CourseFormCoverImageField = () => {
+	const { control } = useFormContext();
+
+	return (
+		<Controller
+			control={control}
+			name="coverImage"
+			render={({ field, fieldState }) => (
+				<ImageUploader
+					value={field.value}
+					onChange={field.onChange}
+					errorMessage={fieldState.error?.message}
+					uploadFn={async (file) => {
+						return await uploadMedia(file);
+					}}
+					aspectRatio={16 / 9}
+					acceptedFileTypes={["image/png", "image/jpeg", "image/webp"]}
+				/>
+			)}
+		/>
+	);
+};
 
 const CourseFormEditor = ({ className }: { className?: string }) => {
 	/*
@@ -64,10 +128,10 @@ const CourseFormEditor = ({ className }: { className?: string }) => {
 					placeholder="Description"
 				/>
 			</div>
-      */
+	  */
 	return (
 		<div className={cn("w-full max-w-screen-lg ", className)}>
-			<FormEditor name="content" />
+			<FormEditor name="content" label="Course Content" />
 		</div>
 	);
 };
@@ -121,6 +185,9 @@ const CourseForm = {
 	Editor: CourseFormEditor,
 	TitleField: CourseFormTitleField,
 	DescField: CourseFormDescField,
+	LevelSelect: CourseFormLevelSelect,
+	PublishSwitch: CourseFormPublishSwitch,
+	CoverImageField: CourseFormCoverImageField,
 	Actions: CourseFormActions,
 	DraftAction: CourseFormDraftAction,
 	PublishAction: CourseFormPublishAction,

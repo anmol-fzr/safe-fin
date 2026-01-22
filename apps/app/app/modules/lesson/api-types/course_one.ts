@@ -1,8 +1,8 @@
-import type { IResData } from "@/services/axios";
+import type { IResData, ITimestamps } from "@/services/axios";
 
 export type IResGetCourse = IResData<Data>;
 
-interface Data {
+interface Data extends ITimestamps {
 	id: number;
 	isPublished: boolean;
 	avgRating: number;
@@ -10,15 +10,11 @@ interface Data {
 	content: Content;
 	chapters: Chapter[];
 	points: number;
-	createdAt: string;
-	updatedAt: string;
 }
 
-interface Content {
+interface Content extends ITimestamps {
 	title: string;
 	shortDesc: string;
-	createdAt: string;
-	updatedAt: string;
 	longDesc: LongDesc;
 }
 
@@ -27,17 +23,15 @@ interface LongDesc {
 	contentJson: string;
 }
 
-export interface Chapter {
+export interface Chapter extends ITimestamps {
 	id: number;
 	title: string;
 	index: number;
 	isPublished: boolean;
-	createdAt: string;
-	updatedAt: string;
 	units: Unit[];
 }
 
-export interface Unit {
+export interface Unit extends ITimestamps {
 	id: number;
 	coverPath: null;
 	contentId: number;
@@ -45,17 +39,14 @@ export interface Unit {
 	points: number;
 	index: number;
 	isPublished: boolean;
-	createdAt: string;
-	updatedAt: string;
+	isCompleted: 0 | 1;
 	content: Content2;
 }
 
-interface Content2 {
+interface Content2 extends ITimestamps {
 	id: number;
 	title: string;
 	shortDesc: string;
-	createdAt: string;
-	updatedAt: string;
 	longDesc: LongDesc2;
 }
 

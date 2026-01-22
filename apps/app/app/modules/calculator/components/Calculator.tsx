@@ -33,7 +33,12 @@ const getInitResultFromConfig = ({
 }: GetInitResultFromConfig) => {
 	const obj: Input = {};
 	Object.entries(calculate).forEach(([key, expression]) => {
-		obj[key] = calculateExpr(expression, { ...input, ...obj });
+		try {
+			obj[key] = calculateExpr(expression, { ...input, ...obj });
+		} catch (error) {
+			console.error(`Calculation error for ${key}:`, error);
+			obj[key] = 0;
+		}
 	});
 	return obj;
 };
@@ -105,13 +110,15 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 
 			{pieChart && pieData?.length > 0 && (
 				<CalculatorPieChart
-					data={pieData?.map((pieDataObj, index) => {
-						return {
-							...pieDataObj,
-							color: getPieColor(index),
-							value: resultData[pieDataObj.valueKey],
-						};
-					})}
+					data={
+						pieData?.map((pieDataObj, index) => {
+							return {
+								...pieDataObj,
+								color: getPieColor(index),
+								value: resultData[pieDataObj.valueKey],
+							};
+						}) ?? []
+					}
 				/>
 			)}
 

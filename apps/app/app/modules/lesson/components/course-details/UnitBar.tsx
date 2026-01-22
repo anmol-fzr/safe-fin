@@ -1,8 +1,13 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "expo-router";
+import { Play, TickCircle } from "iconsax-react-nativejs";
 import { StyleSheet, View } from "react-native";
 import { Text } from "@/components/Text";
+import { IconSax } from "@/context/IconContext";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Unit } from "../../api-types/course_one";
+import { getUnitOpts } from "../../hooks/units/queries";
+import { CourseCompleteBadge } from "../CourseCompletedBadge";
 
 type UnitProps = {
 	unit: Unit;
@@ -11,26 +16,38 @@ type UnitProps = {
 export const UnitBar = (props: UnitProps) => {
 	const { unit } = props;
 
-	const { id, content, points } = unit;
-	const { title, shortDesc, longDesc } = content;
+	const { id, content, points, isCompleted } = unit;
 
 	const {
-		theme: { colors },
+		theme: { colors, spacing },
 	} = useAppTheme();
+
+	const queryClient = useQueryClient();
+
+	function prefetchUnit() {
+		queryClient.prefetchQuery(getUnitOpts(id));
+	}
 
 	return (
 		<Link
+			onPressIn={prefetchUnit}
 			href={{
 				pathname: "/course/units/[unitId]",
 				params: {
 					unitId: id,
-					title,
-					shortDesc,
-					content: longDesc.content,
 				},
 			}}
 		>
-			<View style={styles.cardContainer}>
+			<View
+				style={{
+					flexDirection: "row",
+					alignItems: "center",
+					padding: 12,
+					borderWidth: 1,
+					borderColor: isCompleted ? colors.success : "#E0E0E0",
+					borderRadius: 12,
+				}}
+			>
 				{/*
 				<View style={styles.iconWrapper}>
 					<Image
@@ -45,11 +62,20 @@ export const UnitBar = (props: UnitProps) => {
 					<Text weight="medium" size="sm">
 						{content.title}
 					</Text>
+
+					<View style={{ flexDirection: "row", gap: spacing.md }}>
+						<Text style={{ color: colors.textDim }} size="xs" weight="semiBold">
+							{points} PX
+						</Text>
+						{isCompleted === 1 && <CourseCompleteBadge />}
+					</View>
 				</View>
 
-				<Text style={{ color: colors.textDim }} size="xs">
-					{points} PX
-				</Text>
+				{isCompleted === 1 ? (
+					<IconSax icon={TickCircle} color={colors.success} />
+				) : (
+					<IconSax icon={Play} color={colors.tint} />
+				)}
 			</View>
 		</Link>
 	);

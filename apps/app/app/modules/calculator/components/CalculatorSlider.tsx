@@ -55,7 +55,7 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 	const onInputChange = useCallback(
 		(val: string) => {
 			const numeric = Number(val);
-			if (!Number.isNaN(numeric)) {
+			if (!Number.isNaN(numeric) && Number.isFinite(numeric)) {
 				debouncedSetValue(numeric);
 			}
 		},

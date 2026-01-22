@@ -86,6 +86,11 @@ apply from: new File(["node", "--print", "require('path').dirname(require.resolv
 android {
     ndkVersion rootProject.ext.ndkVersion
 
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 

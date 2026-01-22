@@ -15,9 +15,9 @@ import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Button, Tabs } from "@/components";
 import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
-import { type ThemedStyle, typography } from "@/theme";
+import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import type { Chapter, Unit } from "../api-types/course_one";
+import type { Chapter } from "../api-types/course_one";
 import { ChapterBar } from "../components/course-details/ChapterBar";
 import { CourseDetails } from "../components/course-details/CourseDetails";
 import { MarkdowRenderer } from "../components/Lesson";
@@ -201,11 +201,7 @@ function CourseDetailsScreenContent(props: CourseDetailsScreenContentProps) {
 					{level}
 				</CourseDetails.MetadataItem>
 
-				<CourseDetails.MetadataItem
-					Icon={() => <IconSax icon={Coin1} size={18} />}
-				>
-					{points.toString()} PX
-				</CourseDetails.MetadataItem>
+				<CourseDetails.MetadataPoints points={points} />
 				<CourseDetails.MetadataItem
 					Icon={() => <IconSax icon={Clock} size={18} />}
 				>

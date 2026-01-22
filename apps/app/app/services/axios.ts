@@ -22,6 +22,8 @@ axiosInstance.interceptors.response.use(
 	},
 	(error) => {
 		const status = error.response?.status;
+		console.log(error);
+
 		console.log("got error axios interceptors");
 		if (status === 401) {
 			console.log("got 401 status");
@@ -66,5 +68,10 @@ type IResData<D, IsPaginated extends boolean = false> = IsPaginated extends true
 	? PaginatedRes<D>
 	: NonPaginatedRes<D>;
 
-export type { IResData };
+interface ITimestamps {
+	createdAt: string;
+	updatedAt: string;
+}
+
+export type { IResData, ITimestamps };
 export { axiosInstance };
