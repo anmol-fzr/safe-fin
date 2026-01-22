@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
 
 		if (error.response?.data) {
 			// Optionally handle specific status codes
-			return Promise.reject(error.response.data);
+			return Promise.reject(error);
 		}
 		return Promise.reject({
 			data: null,

@@ -1,11 +1,11 @@
-import { isUndefined } from "@safe-fin/utils";
-import { useRouter } from "expo-router";
 import { z } from "zod";
-import { Screen } from "@/components";
+import { Screen, Text } from "@/components";
 import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useGetLesson } from "@/modules/lesson/hooks/api";
 import { CourseDetailsScreen } from "@/modules/lesson/screens/LessonDetailScreen";
 import { idSchema } from "@/schema";
+import { Suspense } from "react";
+import { ErrorBoundary } from "@/screens";
 
 const paramsSchema = z.object({
 	courseId: idSchema,
@@ -13,35 +13,57 @@ const paramsSchema = z.object({
 
 export default function CourseScreen() {
 	const { courseId } = useTypedLocalSearchParams(paramsSchema);
-	const router = useRouter();
-
-	const { lesson } = useGetLesson(courseId);
-
-	if (isUndefined(lesson)) {
-		return router.back();
-	}
 
 	return (
 		<Screen preset="scroll">
-			<CourseDetailsScreen>
-				<CourseDetailsScreen.ScrollView>
-					<CourseDetailsScreen.Content
-						title={lesson.content.title}
-						description={lesson.content.shortDesc}
-						image="https://ilarge.lisimg.com/image/28254022/1118full-iman-vellani.jpg"
-						level="Beginner"
-						duration="7h"
-						points={lesson.points}
-						rating={lesson.avgRating}
-						ratingCount={lesson.rateCount}
-						updatedDate={lesson.updatedAt}
-					/>
-					<CourseDetailsScreen.Tabs
-						desc={lesson.content.longDesc.content}
-						chapters={lesson.chapters}
-					/>
-				</CourseDetailsScreen.ScrollView>
-			</CourseDetailsScreen>
+			<ErrorBoundary catchErrors="always">
+				<Suspense fallback={<CourseScreenImpl.Loading />}>
+					<CourseScreenImpl courseId={courseId} />
+				</Suspense>
+			</ErrorBoundary>
 		</Screen>
 	);
 }
+
+interface CourseScreenImplProps {
+	courseId: number;
+}
+
+function CourseScreenImpl(props: CourseScreenImplProps) {
+	const { courseId } = props;
+
+	const { lesson } = useGetLesson(courseId);
+
+	return (
+		<CourseDetailsScreen>
+			<CourseDetailsScreen.ScrollView>
+				<CourseDetailsScreen.Content
+					title={lesson.content.title}
+					description={lesson.content.shortDesc}
+					image="https://ilarge.lisimg.com/image/28254022/1118full-iman-vellani.jpg"
+					level="Beginner"
+					duration="7h"
+					points={lesson.points}
+					rating={lesson.avgRating}
+					ratingCount={lesson.rateCount}
+					updatedDate={lesson.updatedAt}
+				/>
+				<CourseDetailsScreen.Tabs
+					desc={lesson.content.longDesc.content}
+					chapters={lesson.chapters}
+				/>
+			</CourseDetailsScreen.ScrollView>
+		</CourseDetailsScreen>
+	);
+}
+
+CourseScreenImpl.Loading = () => {
+	return (
+		<CourseDetailsScreen>
+			<CourseDetailsScreen.ScrollView>
+				<CourseDetailsScreen.Content.Loading />
+				<CourseDetailsScreen.Lessons.Loading />
+			</CourseDetailsScreen.ScrollView>
+		</CourseDetailsScreen>
+	);
+};

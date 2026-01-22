@@ -21,9 +21,11 @@ export default function UnitScreen() {
 	const params = useTypedLocalSearchParams(paramsSchema);
 
 	return (
-		<Suspense fallback={<Text>Loading...</Text>}>
-			<UnitScreenImpl {...params} />
-		</Suspense>
+		<Screen preset="auto" contentContainerStyle={$styles.container}>
+			<Suspense fallback={<UnitScreenImpl.Loading />}>
+				<UnitScreenImpl {...params} />
+			</Suspense>
+		</Screen>
 	);
 }
 
@@ -54,37 +56,36 @@ function UnitScreenImpl(props: Props) {
 	}
 
 	return (
-		<Screen preset="auto" contentContainerStyle={$styles.container}>
-			<LessonCard.Body>
-				<LessonCard.Title style={{ fontSize: 40, lineHeight: 44 }}>
-					{title}
-				</LessonCard.Title>
-				<LessonCard.Description>{shortDesc}</LessonCard.Description>
+		<LessonCard.Body>
+			<LessonCard.Title style={{ fontSize: 40, lineHeight: 44 }}>
+				{title}
+			</LessonCard.Title>
+			<LessonCard.Description>{shortDesc}</LessonCard.Description>
 
-				<LessonCard.MetadataPoints points={points} />
+			<LessonCard.MetadataPoints points={points} />
 
-				<Separator />
-				<MarkdowRenderer content={content.longDesc.content} />
-				<Separator />
+			<Separator />
+			<MarkdowRenderer content={content.longDesc.content} />
+			<Separator />
 
-				<View style={{ paddingBlock: 20, gap: spacing.lg }}>
-					<FromCourseCard courseTitle={unit.chapter.course.content.title} />
+			<View style={{ paddingBlock: 20, gap: spacing.lg }}>
+				<FromCourseCard courseTitle={unit.chapter.course.content.title} />
 
-					<Button
-						onPress={handleCompletion}
-						preset="reversed"
-						style={{
-							backgroundColor: colors.tint,
-							alignItems: "center",
-							justifyContent: "center",
-							alignContent: "center",
-						}}
-					>
-						Next Unit
-					</Button>
-				</View>
+				<Button
+					onPress={handleCompletion}
+					preset="reversed"
+					style={{
+						backgroundColor: colors.tint,
+						alignItems: "center",
+						justifyContent: "center",
+						alignContent: "center",
+					}}
+				>
+					Next Unit
+				</Button>
+			</View>
 
-				{/*
+			{/*
 				<View style={{ paddingTop: 48, paddingBlock: 24 }}>
 					<Button onPress={handleCompletion}>Mark as Complete</Button>
 
@@ -100,10 +101,19 @@ function UnitScreenImpl(props: Props) {
 					</View>
 				</View>
         */}
-			</LessonCard.Body>
-		</Screen>
+		</LessonCard.Body>
 	);
 }
+
+UnitScreenImpl.Loading = () => {
+	return (
+		<LessonCard.Body>
+			<LessonCard.Title.Loading height={44} />
+			<LessonCard.Description.Loading />
+		</LessonCard.Body>
+	);
+};
+
 interface FromCourseCardProps {
 	courseTitle: string;
 }
