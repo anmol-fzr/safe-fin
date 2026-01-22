@@ -16,6 +16,7 @@ import {
 	WelcomeLoginButton,
 	WelcomeNextButton,
 } from "../components/welcome-action-buttons";
+import { WelcomeActionButton } from "../components/welcome-action-buttons/welcome-action-button";
 
 const balanceImage = require("assets/images/start/balance.png");
 const becomingRichImage = require("assets/images/start/becoming-rich.png");
@@ -77,12 +78,16 @@ export function WelcomeScreen() {
 					</Text>
 				</Animated.View>
 			</Animated.View>
-			<Text>{envs.API_URL}</Text>
-			<Text>{envs.AUTH_API_URL}</Text>
 
 			<Animated.View entering={FadeInDown}>
 				{isLogin ? <WelcomeNextButton /> : <WelcomeLoginButton />}
 			</Animated.View>
+			{envs.isDev && (
+				<WelcomeActionButton
+					href="/extras/debug"
+					labelTx="demoDebugScreen:title"
+				/>
+			)}
 		</Screen>
 	);
 }
