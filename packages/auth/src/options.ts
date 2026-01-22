@@ -79,7 +79,9 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 				adminUserIds: ["F7EOrNtgbhOUA4FYvj0r7bN4eJykYGMb"],
 			}),
 			openAPI(),
-			anonymous(),
+			anonymous({
+				generateName: () => "Guest",
+			}),
 			multiSession(),
 			phoneNumber({
 				allowedAttempts: 3,
