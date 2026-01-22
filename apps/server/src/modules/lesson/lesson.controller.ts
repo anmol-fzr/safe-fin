@@ -11,7 +11,6 @@ import {
 	createCourseSchema,
 	createUnitSchema,
 	getChapterUnitsQuerySchema,
-	getCourseChaptersQuerySchema,
 	getLessonsQueryParamSchema,
 	publishCourseSchema,
 	reorderChaptersSchema,
@@ -83,7 +82,7 @@ export const getLessonById = createHandlers(
 			return c.json({ error: "Lesson not found" }, 404);
 		}
 
-		return c.json({ data: lesson });
+		return c.json({ data: lesson }, 404);
 	},
 );
 
@@ -225,18 +224,16 @@ export const getCourseChapters = createHandlers(
 	authenticate,
 	db,
 	zValidator("param", z.object({ courseId: dbIdSchema })),
-	zValidator("query", getCourseChaptersQuerySchema),
 	async (c) => {
 		const user = c.get("user");
 		const db = c.get("db");
 		const { courseId } = c.req.valid("param");
-		const { includeUnpublished } = c.req.valid("query");
 
-		const canSeeUnpublished = user.role === "admin" && includeUnpublished;
+		const includeUnpublished = user.role === "admin";
 		const chapters = await ChapterService.getChaptersByCourseId(
 			db,
 			courseId,
-			canSeeUnpublished,
+			includeUnpublished,
 		);
 
 		return c.json({ data: chapters });

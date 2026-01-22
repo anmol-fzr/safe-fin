@@ -121,13 +121,6 @@ export const getLessonsQueryParamSchema = queryParamSchema.extend({
 	status: z.enum(["seen", "red"]).optional(),
 });
 
-export const getCourseChaptersQuerySchema = z.object({
-	includeUnpublished: z
-		.string()
-		.transform((val) => val === "true")
-		.optional(),
-});
-
 export const getChapterUnitsQuerySchema = z.object({
 	includeUnpublished: z
 		.string()

@@ -27,37 +27,29 @@ import {
 const { createApp } = createTypedFactory();
 
 const lessonRouter = createApp()
-	// ============================================
-	// COURSE ROUTES
-	// ============================================
-	.get("/for-you", ...forYouLessons) // Get user's last interacted course
-	.get("/", ...getUserLessons) // Get all courses (paginated)
-	.get("/:courseId", ...getLessonById) // Get course by ID with chapters
-	.post("/", ...createLessonHandler) // Create new course (admin only)
-	.post("/progress", ...saveCourseProgressHandler) // Create new course (admin only)
-	.post("/:courseId/toggle-like", ...likeCourseHandler) // Create new course (admin only)
-	.patch("/:courseId", ...updateLesson) // Update course (admin only)
-	.patch("/:id/publish", ...publishLesson) // Publish/unpublish course (admin only)
-	.delete("/:id", ...deleteLesson) // Delete course (admin only)
+	.get("/for-you", ...forYouLessons)
+	.get("/", ...getUserLessons)
+	.get("/:courseId", ...getLessonById)
+	.post("/", ...createLessonHandler)
+	.post("/progress", ...saveCourseProgressHandler)
+	.post("/:courseId/toggle-like", ...likeCourseHandler)
+	.patch("/:courseId", ...updateLesson)
+	.patch("/:id/publish", ...publishLesson)
+	.delete("/:id", ...deleteLesson)
 
-	// ============================================
-	// CHAPTER ROUTES
-	// ============================================
 	.get("/:courseId/chapters", ...getCourseChapters)
 	.post("/:courseId/chapters", ...createChapter)
-	.post("/chapters/reorder", ...reorderChapters) // Reorder chapters (admin only)
-	.get("/chapters/:id", ...getChapterById) // Get chapter by ID with units
-	.patch("/chapters/:id", ...updateChapter) // Update chapter (admin only)
-	.delete("/chapters/:id", ...deleteChapter) // Delete chapter (admin only)
-	// ============================================
-	// UNIT ROUTES
-	// ============================================
-	.get("/chapters/:chapterId/units", ...getChapterUnits) // Get all units for a chapter
-	.post("/chapters/:chapterId/units", ...createUnits) // Create new unit (admin only)
-	.post("/units/reorder", ...reorderUnits) // Reorder units (admin only)
-	.get("/units/:unitId", ...getUnitById) // Get unit by ID
-	.patch("/units/:unitId", ...updateUnit) // Update unit (admin only)
-	.delete("/units/:id", ...deleteUnit) // Delete unit (admin only)
+	.post("/chapters/reorder", ...reorderChapters)
+	.get("/chapters/:id", ...getChapterById)
+	.patch("/chapters/:id", ...updateChapter)
+	.delete("/chapters/:id", ...deleteChapter)
+
+	.get("/chapters/:chapterId/units", ...getChapterUnits)
+	.post("/chapters/:chapterId/units", ...createUnits)
+	.post("/units/reorder", ...reorderUnits)
+	.get("/units/:unitId", ...getUnitById)
+	.patch("/units/:unitId", ...updateUnit)
+	.delete("/units/:id", ...deleteUnit)
 
 	// ============================================
 	// LEGACY ROUTES (deprecated)
