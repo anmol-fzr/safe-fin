@@ -82,7 +82,7 @@ export const getLessonById = createHandlers(
 			return c.json({ error: "Lesson not found" }, 404);
 		}
 
-		return c.json({ data: lesson }, 404);
+		return c.json({ data: lesson });
 	},
 );
 
