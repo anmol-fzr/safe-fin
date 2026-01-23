@@ -6,28 +6,40 @@
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"userInterfaceStyle": "automatic",
-		"icon": "./assets/images/app-icon-all.png",
+		"icon": "./assets/icons/app-icon.png",
 		"updates": {
-			"fallbackToCacheTimeout": 0
+			"fallbackToCacheTimeout": 0,
+			"url": "https://u.expo.dev/65ecfa2b-b101-4892-b765-64c97a4898d4"
 		},
 		"newArchEnabled": true,
 		"jsEngine": "hermes",
 		"assetBundlePatterns": ["**/*"],
 		"android": {
-			"icon": "./assets/icons/generated/android/playstore-icon.png",
+			"icon": {
+				"foregroundImage": "./assets/icons/app-icon.png",
+				"monochromeImage": "./assets/icons/app-icon.png",
+				"backgroundColor": "#000"
+			},
 			"package": "com.safefin",
 			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
-				"backgroundImage": "./assets/images/app-icon-android-adaptive-background.png",
 				"foregroundImage": "./assets/images/app-icon/android/adaptive-icon.png",
 				"backgroundImage": "./assets/images/app-icon/android/adaptive-icon.png"
 			},
-			"allowBackup": false
+			"allowBackup": false,
+			"permissions": ["android.permission.RECORD_AUDIO"]
 		},
 		"ios": {
 			"icon": "./assets/images/app-icon-ios.png",
 			"supportsTablet": true,
-			"bundleIdentifier": "com.safefin"
+			"bundleIdentifier": "com.safefin",
+			"privacyManifests": {
+				"NSPrivacyAccessedAPITypes": [
+					{
+						"NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+						"NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+					}
+				]
+			}
 		},
 		"web": {
 			"favicon": "./assets/images/app-icon-web-favicon.png",
@@ -39,10 +51,10 @@
 			[
 				"expo-splash-screen",
 				{
-					"image": "./assets/images/app-icon-android-adaptive-foreground.png",
+					"image": "./assets/icons/app-icon.png",
 					"imageWidth": 300,
 					"resizeMode": "contain",
-					"backgroundColor": "#191015"
+					"backgroundColor": "#000"
 				}
 			],
 			[
@@ -81,6 +93,7 @@
 			"eas": {
 				"projectId": "65ecfa2b-b101-4892-b765-64c97a4898d4"
 			}
-		}
+		},
+		"runtimeVersion": "1.0.0"
 	}
 }
