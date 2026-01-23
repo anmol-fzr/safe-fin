@@ -13,7 +13,9 @@
 		},
 		"newArchEnabled": true,
 		"jsEngine": "hermes",
-		"assetBundlePatterns": ["**/*"],
+		"assetBundlePatterns": [
+			"**/*"
+		],
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/icons/app-icons/android/adaptive-icon-transparent.png",
@@ -22,7 +24,9 @@
 			},
 			"package": "com.safefin",
 			"allowBackup": false,
-			"permissions": ["android.permission.RECORD_AUDIO"]
+			"permissions": [
+				"android.permission.RECORD_AUDIO"
+			]
 		},
 		"ios": {
 			"icon": "./assets/images/app-icon-ios.png",
@@ -32,7 +36,9 @@
 				"NSPrivacyAccessedAPITypes": [
 					{
 						"NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-						"NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+						"NSPrivacyAccessedAPITypeReasons": [
+							"CA92.1"
+						]
 					}
 				]
 			}

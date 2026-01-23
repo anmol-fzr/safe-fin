@@ -4,7 +4,7 @@ import { category } from "./category";
 import { chapter, course, courseProgress, courseRating, unit } from "./course";
 import { exercise, option, question } from "./exercise";
 import { exerciseResult, questionResult } from "./exercise-result";
-import { publicUserProfile, userActivityLog } from "./gamification";
+import { userActivityLog, publicUserProfile } from "./gamification";
 import { profile } from "./profile";
 import { rating } from "./rating";
 import { richContent, richContentItem } from "./rich-content";

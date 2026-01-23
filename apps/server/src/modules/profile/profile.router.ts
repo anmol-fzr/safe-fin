@@ -1,10 +1,15 @@
 import { createTypedFactory } from "@/factory";
-import { getProfile, updateProfile } from "./profile.controller";
+import {
+	getProfile,
+	getProfileActivity,
+	updateProfile,
+} from "./profile.controller";
 
 const { createApp } = createTypedFactory();
 
 const profileRouter = createApp()
 	.get("/", ...getProfile)
+	.get("/activity", ...getProfileActivity)
 	.post("/", ...updateProfile);
 
 export { profileRouter };

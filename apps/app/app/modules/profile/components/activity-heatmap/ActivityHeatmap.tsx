@@ -1,0 +1,316 @@
+import { View, ScrollView, Pressable } from "react-native";
+import { Text } from "@/components";
+import Animated, {
+	FadeIn,
+	FadeOut,
+	interpolate,
+	interpolateColor,
+	useAnimatedStyle,
+	useDerivedValue,
+	withSpring,
+} from "react-native-reanimated";
+import { useAppTheme } from "@/utils/useAppTheme";
+import {
+	Dispatch,
+	memo,
+	SetStateAction,
+	useCallback,
+	useMemo,
+	useState,
+} from "react";
+import { Section } from "@/components/Section";
+import { IconSax } from "@/context/IconContext";
+import { Activity } from "iconsax-react-nativejs";
+import { ANIMATION, colors, getSpringConfig, spacing } from "@/theme";
+import { formatDate } from "@safe-fin/utils";
+
+/* ------------------ Constants ------------------ */
+
+const ROW_COUNT = 7;
+
+/* ------------------ Root ------------------ */
+type ActivityRow = {
+	date: string;
+	totalPxEarned: number;
+};
+
+function buildActivity(
+	year: number,
+	rows: ActivityRow[],
+	month?: { from: number; to: number },
+): ActivityRow[] {
+	const map = new Map<string, ActivityRow>();
+
+	for (const row of rows) {
+		const key = row.date.slice(0, 10); // YYYY-MM-DD
+		map.set(key, row);
+	}
+
+	const result: ActivityRow[] = [];
+
+	const today = new Date();
+
+	const start = new Date(Date.UTC(year, month?.from ?? 0, 1));
+	const end = new Date(
+		Date.UTC(year, month?.to ?? today.getMonth(), today.getDate()),
+	);
+
+	for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+		const key = d.toISOString().slice(0, 10);
+
+		const existing = map.get(key);
+
+		result.push(
+			existing ?? {
+				date: d.toISOString(),
+				totalPxEarned: 0,
+			},
+		);
+	}
+
+	return result;
+}
+
+export function ActivityHeatmap() {
+	const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+	const activityData = buildActivity(
+		2026,
+		[
+			{
+				date: "2026-01-22T18:30:00.000Z",
+				totalPxEarned: 1400,
+			},
+		],
+		//{ from: 0, to: 0 },
+	);
+
+	const activeItem = activeIndex !== null ? activityData[activeIndex] : null;
+
+	return (
+		<Section>
+			<Section.Header>
+				<View
+					style={{
+						flexDirection: "row",
+						justifyContent: "flex-start",
+						alignItems: "center",
+						gap: spacing.xs,
+					}}
+				>
+					<IconSax icon={Activity} color={colors.tint} />
+					<Section.Title style={{ color: colors.tint }}>
+						Recent Activity
+					</Section.Title>
+				</View>
+
+				<Text size="xs" style={{ color: colors.textDim }}>
+					This Year Activity
+				</Text>
+			</Section.Header>
+
+			<Section.Body preset="filled">
+				<View>
+					<Heatmap
+						activeIndex={activeIndex}
+						setActiveIndex={setActiveIndex}
+						data={activityData}
+					/>
+
+					<View
+						style={{
+							marginTop: 8,
+						}}
+					>
+						{activeIndex !== null ? (
+							<View style={{ flexDirection: "row", gap: 6 }}>
+								{activeItem?.totalPxEarned === 0 ? (
+									<>
+										<Text style={{ color: colors.textDim }}>No PX Earned</Text>
+									</>
+								) : (
+									<>
+										<Text style={{ color: colors.textDim }}>Earned</Text>
+										<Text weight="bold">{activeItem?.totalPxEarned} PX</Text>
+									</>
+								)}
+
+								<Text style={{ color: colors.textDim }}>
+									{formatDate(activeItem?.date)}
+								</Text>
+							</View>
+						) : (
+							<Text>Tap any day to see your PX for that day</Text>
+						)}
+					</View>
+					<View style={{ marginTop: 8, alignItems: "flex-end" }}>
+						<View
+							style={{ flexDirection: "row", gap: 6, alignItems: "flex-end" }}
+						>
+							<Text style={{ color: colors.textDim }} size="xs">
+								Less
+							</Text>
+							<DayItem count={0} />
+							<DayItem count={500} />
+							<DayItem count={1000} />
+							<DayItem count={1500} />
+							<DayItem count={2000} />
+							<Text style={{ color: colors.textDim }} size="xs">
+								More
+							</Text>
+						</View>
+					</View>
+				</View>
+			</Section.Body>
+		</Section>
+	);
+}
+
+/* ------------------ Heatmap ------------------ */
+
+interface HeatmapProps {
+	activeIndex: number | null;
+	setActiveIndex: Dispatch<SetStateAction<number | null>>;
+	data: ActivityRow[];
+}
+
+function Heatmap(props: HeatmapProps) {
+	const { activeIndex, setActiveIndex, data } = props;
+	const {
+		theme: { spacing },
+	} = useAppTheme();
+
+	const columnCount = useMemo(() => Math.ceil(data.length / ROW_COUNT), []);
+
+	const onSelect = useCallback(
+		(index: number) => {
+			setActiveIndex((currIndex) => (currIndex !== index ? index : null));
+		},
+		[setActiveIndex],
+	);
+
+	return (
+		<ScrollView
+			horizontal
+			contentContainerStyle={{
+				gap: spacing.xxxs,
+			}}
+		>
+			{Array.from({ length: columnCount }).map((_, col) => (
+				<View key={col} style={{ gap: spacing.xxxs }}>
+					{Array.from({ length: ROW_COUNT }).map((_, row) => {
+						const index = row + col * ROW_COUNT;
+						const item = data[index];
+						if (!item) return null;
+
+						return (
+							<ActivityDayItem
+								key={item.date}
+								index={index}
+								count={item.totalPxEarned}
+								isActive={index === activeIndex}
+								onPress={onSelect}
+							/>
+						);
+					})}
+				</View>
+			))}
+		</ScrollView>
+	);
+}
+
+/* ------------------ Day Cell ------------------ */
+
+interface ActivityDayItemProps {
+	index: number;
+	count: number;
+	isActive: boolean;
+	onPress: (index: number) => void;
+}
+
+const ActivityDayItem = memo(
+	({ index, count, isActive, onPress }: ActivityDayItemProps) => {
+		const handlePress = useCallback(() => {
+			onPress(index);
+		}, [index, onPress]);
+
+		return (
+			<Pressable onPress={handlePress}>
+				<DayItem {...{ count, isActive }} />
+			</Pressable>
+		);
+	},
+	(prev, next) => prev.isActive === next.isActive && prev.count === next.count,
+);
+
+/* ------------------ Utils ------------------ */
+
+function interpolateColorsHelper(
+	color1: string,
+	color2: string,
+	percent: number,
+) {
+	const r1 = parseInt(color1.substring(1, 3), 16);
+	const g1 = parseInt(color1.substring(3, 5), 16);
+	const b1 = parseInt(color1.substring(5, 7), 16);
+
+	const r2 = parseInt(color2.substring(1, 3), 16);
+	const g2 = parseInt(color2.substring(3, 5), 16);
+	const b2 = parseInt(color2.substring(5, 7), 16);
+
+	const r = Math.round(r1 + (r2 - r1) * percent);
+	const g = Math.round(g1 + (g2 - g1) * percent);
+	const b = Math.round(b1 + (b2 - b1) * percent);
+
+	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+type DayItemProps = {
+	count: number;
+	isActive?: boolean;
+};
+
+const DayItem = memo(({ count, isActive = false }: DayItemProps) => {
+	const {
+		theme: { colors, roundness },
+	} = useAppTheme();
+
+	const intensity = Math.min(count / 2000);
+
+	const springConfig = getSpringConfig(ANIMATION.effects.default);
+
+	const progress = useDerivedValue(() => {
+		return withSpring(isActive ? 1 : 0, springConfig);
+	}, [isActive]);
+
+	const rStyle = useAnimatedStyle(() => {
+		return {
+			borderRadius: interpolate(progress.value, [0, 1], [2, roundness]),
+			borderColor: interpolateColor(
+				progress.value,
+				[0, 1],
+				["transparent", colors.palette.primary600],
+			),
+		};
+	});
+
+	return (
+		<Animated.View
+			entering={FadeIn}
+			exiting={FadeOut}
+			style={[
+				{
+					width: 30,
+					aspectRatio: 1,
+					borderWidth: 1,
+					backgroundColor: interpolateColorsHelper(
+						colors.palette.neutral100,
+						colors.palette.primary600,
+						intensity,
+					),
+				},
+				rStyle, // Apply the animated styles
+			]}
+		/>
+	);
+});

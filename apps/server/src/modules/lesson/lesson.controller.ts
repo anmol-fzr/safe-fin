@@ -4,7 +4,16 @@ import { z } from "zod";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, paginate, userRole } from "@/middleware";
 import { s3 } from "@/middleware/s3";
-import { courseProgress } from "@/pkg/db";
+import {
+	and,
+	course,
+	courseProgress,
+	eq,
+	saved,
+	sql,
+	unit,
+	userActivityLog,
+} from "@/pkg/db";
 import { dbIdSchema, idParamSchema } from "@/schema";
 import { SavedService } from "../saved/saved.service";
 import {
@@ -109,17 +118,57 @@ export const saveCourseProgressHandler = createHandlers(
 		const user = c.get("user");
 		const db = c.get("db");
 
-		const data = c.req.valid("json");
+		const { courseId, chapterId, unitId } = c.req.valid("json");
 
-		await db
+		const courseProgressInsertResult = await db
 			.insert(courseProgress)
 			.values({
 				userId: user.id,
-				courseId: data.courseId,
-				currChapterId: data.chapterId,
-				currUnitId: data.unitId,
+				courseId: courseId,
+				currChapterId: chapterId,
+				currUnitId: unitId,
 			})
 			.onConflictDoNothing();
+
+		if (courseProgressInsertResult.rowsAffected === 0) {
+			return c.json({ data: { success: true } }, 201);
+		}
+
+		const foundUnit = await db.query.unit.findFirst({
+			where: (units, { eq }) => eq(units.id, unitId),
+			columns: {
+				points: true,
+			},
+		});
+
+		const currEarnedPX = foundUnit?.points;
+
+		const today = new Date();
+		const date = new Date(
+			today.getFullYear(),
+			today.getMonth(),
+			today.getDate(),
+			0,
+			0,
+			0,
+			0,
+		);
+
+		await db
+			.insert(userActivityLog)
+			.values({
+				userId: user.id,
+				date,
+				totalPxEarned: currEarnedPX,
+			})
+			.onConflictDoUpdate({
+				target: [userActivityLog.userId, userActivityLog.date],
+				set: {
+					totalPxEarned: sql`
+		     ${userActivityLog.totalPxEarned} + excluded.total_px
+		   `,
+				},
+			});
 
 		return c.json({ data: { success: true } }, 201);
 	},

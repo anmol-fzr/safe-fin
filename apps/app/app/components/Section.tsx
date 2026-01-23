@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { Text } from "@/components";
 import { spacing, type ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export type SectionProps = ViewProps;
 type SectionPreset = "default" | "filled";
@@ -29,6 +30,7 @@ Section.Title = (props: SectionTitleProps) => {
 	return <Text preset="heading" size="lg" {...props} />;
 };
 
+const $sectionBodyDefault: ThemedViewStyle = () => ({});
 const $sectionBodyFilled: ThemedViewStyle = (theme) => ({
 	backgroundColor: theme.colors.palette.neutral200,
 	padding: theme.spacing.md,
@@ -36,7 +38,7 @@ const $sectionBodyFilled: ThemedViewStyle = (theme) => ({
 });
 
 const presetXStyles = {
-	default: {},
+	default: $sectionBodyDefault,
 	filled: $sectionBodyFilled,
 } as const;
 
@@ -47,7 +49,9 @@ interface SectionBodyProps extends ViewProps {
 Section.Body = (props: SectionBodyProps) => {
 	const { style: $styleOverride, preset = "default", ...rest } = props;
 
-	const $styles = presetXStyles[preset];
+	const { themed } = useAppTheme();
+
+	const $styles = themed(presetXStyles[preset]);
 
 	return <View style={[$styles, $styleOverride]} {...rest} />;
 };
