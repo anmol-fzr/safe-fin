@@ -14,7 +14,7 @@ import {
 	Danger,
 } from "iconsax-react-nativejs";
 import { Image, Platform, View } from "react-native";
-import { PressableIcon, Screen, Text } from "@/components";
+import { ListView, PressableIcon, Screen, Text } from "@/components";
 import { Section } from "@/components/Section";
 import { IconSax } from "@/context/IconContext";
 import { type TxKeyPath, translate } from "@/i18n";
@@ -193,15 +193,20 @@ export const AccountIndexScreen = () => {
 			contentContainerStyle={$styles.fullHeaderScreen}
 		>
 			<Box title="Public Profile" icon={Profile} href="/profile/public" />
-
-			{DATA.map((section) => {
-				return (
-					<Section key={section.title}>
+			<ListView
+				data={DATA}
+				keyExtractor={(item) => item.title}
+				contentContainerStyle={{ gap: spacing.sm }}
+				renderItem={({ item: section }) => (
+					<Section>
 						<Section.Title>{section.title}</Section.Title>
-						<Section.Body style={{ gap: spacing.lg }} preset="filled">
-							{section.links.map((linkItem) => {
-								return (
-									<Link key={linkItem.title} href={linkItem.href}>
+						<Section.Body preset="filled">
+							<ListView
+								data={section.links}
+								keyExtractor={(item) => item.title}
+								contentContainerStyle={{ gap: spacing.xs }}
+								renderItem={({ item }) => (
+									<Link href={item.href}>
 										<View
 											style={{
 												flexDirection: "row",
@@ -209,28 +214,24 @@ export const AccountIndexScreen = () => {
 												gap: spacing.md,
 											}}
 										>
-											<IconSax
-												icon={linkItem.icon}
-												size={24}
-												color={colors.text}
-											/>
+											<IconSax icon={item.icon} size={24} color={colors.text} />
 											<View style={{ flex: 1 }}>
-												<Text size="md">{translate(linkItem.title)}</Text>
-												{linkItem.desc && (
+												<Text size="md">{translate(item.title)}</Text>
+												{item.desc && (
 													<Text size="sm" style={{ color: colors.textDim }}>
-														{translate(linkItem.desc)}
+														{translate(item.desc)}
 													</Text>
 												)}
 											</View>
 											<IconSax icon={ArrowRight2} />
 										</View>
 									</Link>
-								);
-							})}
+								)}
+							/>
 						</Section.Body>
 					</Section>
-				);
-			})}
+				)}
+			/>
 		</Screen>
 	);
 };
@@ -265,7 +266,7 @@ export const UserDetailsCard = () => {
 			/>
 			<View>
 				<Text size="xxl" weight="medium">
-					{currUser?.name ?? ""}
+					{currUser?.name ?? "User"}
 				</Text>
 			</View>
 

@@ -22,6 +22,7 @@ import { MarkdowRenderer } from "../components/Lesson";
 import { LessonCertificate } from "../components/LessonCertificate/LessonCertificate";
 import { LessonListItem } from "../components/LessonListItem/LessonListItem";
 import { ChapterList } from "../components/course-details/ChapterList";
+import { getEmptyArr } from "@safe-fin/ui/utils";
 
 export interface LessonData {
 	id: string;
@@ -289,18 +290,21 @@ function CourseDetailsScreenLessons(props: CourseDetailsScreenLessonsProps) {
 
 CourseDetailsScreenLessons.Loading = () => {
 	const { themed } = useAppTheme();
+	const arr = getEmptyArr(3);
 
 	return (
-		<>
-			{[1, 2, 3].map((i) => (
-				<View key={i} style={themed($lessonItemSkeleton)}>
+		<ListView
+			data={arr}
+			keyExtractor={(item) => item.toString()}
+			renderItem={() => (
+				<View style={themed($lessonItemSkeleton)}>
 					<View style={{ flex: 1 }}>
 						<LessonListItem.Title.Loading />
 					</View>
 					<LessonListItem.Icon.Loading />
 				</View>
-			))}
-		</>
+			)}
+		/>
 	);
 };
 

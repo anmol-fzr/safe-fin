@@ -1,8 +1,8 @@
-import { View, type ViewStyle } from "react-native";
 import { Section } from "@/components/Section";
-import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { QuickActionCard, type QuickActionType } from "./quick-action-card";
+import { ListView } from "@/components";
+import { StyleSheet } from "react-native";
 
 const learnActionImage = require("assets/icons/home/learn-action.png");
 const calculateActionImage = require("assets/icons/home/calculate-action.png");
@@ -12,7 +12,6 @@ const moreActionImage = require("assets/icons/home/more-action.png");
 export function QuickActions() {
 	const {
 		theme: { colors },
-		themed,
 	} = useAppTheme();
 
 	const actions: QuickActionType[] = [
@@ -38,25 +37,27 @@ export function QuickActions() {
 			labelTx: "screens:homeScreen.actions.more",
 			image: moreActionImage,
 			to: "/tabs/profile",
-			bg: colors.palette.neutral100,
+			bg: colors.palette.neutral200,
 		},
 	];
 
 	return (
 		<Section>
 			<Section.Title>Quick Actions</Section.Title>
-			<View style={themed($quickActionCard)}>
-				{actions.map((action) => (
-					<QuickActionCard key={action.labelTx} {...action} />
-				))}
-			</View>
+			<ListView
+				data={actions}
+				keyExtractor={(action) => action.labelTx}
+				numColumns={2}
+				contentContainerStyle={styles.separator}
+				renderItem={({ item }) => <QuickActionCard {...item} />}
+			/>
 		</Section>
 	);
 }
 
-const $quickActionCard: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	gap: spacing.sm,
-	flexDirection: "row",
-	//height: "auto",
-	flexWrap: "wrap",
+const styles = StyleSheet.create({
+	separator: {
+		gap: 8,
+		rowGap: 12,
+	},
 });
