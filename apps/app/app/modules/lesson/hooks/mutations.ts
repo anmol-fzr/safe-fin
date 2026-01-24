@@ -30,10 +30,13 @@ const useToggleCourseSave = () => {
 			const prevCourses = context.client.getQueryData(queryOpts.queryKey);
 
 			const newCourses = structuredClone(prevCourses);
-			newCourses?.data.forEach((course) => {
-				if (course.id === courseId) {
-					course.isSaved = course.isSaved === 0 ? 1 : 0;
-				}
+
+			newCourses?.pages.forEach((page) => {
+				page.data.forEach((course) => {
+					if (course.id === courseId) {
+						course.isSaved = course.isSaved === 0 ? 1 : 0;
+					}
+				});
 			});
 
 			context.client.setQueryData(queryOpts.queryKey, newCourses);
