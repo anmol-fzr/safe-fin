@@ -39,7 +39,7 @@ export const DraftPublishSwitch = <
 					<div className="flex gap-4">
 						<FormLabel>{labels[0]}</FormLabel>
 						<FormControl>
-							<Switch {...field} />
+							<Switch checked={field.value} {...field} />
 						</FormControl>
 						<FormLabel>{labels[1]}</FormLabel>
 					</div>

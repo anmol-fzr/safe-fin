@@ -4,6 +4,7 @@ export type IResGetCourse = IResData<{
 	id: number;
 	isPublished: boolean;
 	avgRating: number;
+	coverUrl: string;
 	rateCount: number;
 	createdAt: string;
 	updatedAt: string;

@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { boolean, object, string } from "yup";
+import { boolean, mixed, object, string } from "yup";
 import { convertJsonToMarkdown } from "@/components/editor/Editor";
 import { useYupForm } from "@/hooks/form/useYupForm";
 import { useCreateCourse } from "@/modules/courses/hooks/mutations";
@@ -11,6 +11,8 @@ const courseSchema = object({
 	content: string().required().label("Content").min(10),
 	level: string().required().label("Course Difficulty Level"),
 	isPublished: boolean().label("Publish or Draft").default(false),
+	coverImage: mixed().required().label("Cover Image"),
+	coverPath: string().required().label("Cover Path"),
 	//coverImage: string().nullable().label("Cover Image"),
 });
 
@@ -30,7 +32,7 @@ function NewCourseForm() {
 			shortDesc: values.desc,
 			longDesc: markdown,
 			longDescJson: jsonString,
-			//coverImage: values.coverImage || null,
+			coverPath: values.coverPath,
 		}).then((resp) => {
 			navigate({
 				to: "/dashboard/courses/$courseId/edit/curriculum",
@@ -54,9 +56,7 @@ function NewCourseForm() {
 					<CourseForm.DescField />
 					<CourseForm.LevelSelect />
 					<CourseForm.PublishSwitch />
-					{/*
 					<CourseForm.CoverImageField />
-          */}
 				</div>
 				<CourseForm.Actions>
 					<CourseForm.SaveAction />

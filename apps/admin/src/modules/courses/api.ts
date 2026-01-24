@@ -10,12 +10,15 @@ interface IReqCreateCourse {
 	shortDesc: string;
 	longDesc: string;
 	longDescJson: string;
-	coverImage?: string | null;
+	coverPath: string;
 }
 
 interface IReqCreateChapter {
-	title: string;
-	index: number;
+	chapters: {
+		title: string;
+		index: number;
+	}[];
+	isPublished: boolean;
 }
 
 interface IReqUpdateChapter {
@@ -70,10 +73,10 @@ export const COURSES = {
 export const CHAPTERS = {
 	GET_BY_COURSE: (courseId: ResourceId) =>
 		get<unknown, IResData<Chapter[]>>(`/courses/${courseId}/chapters`),
-	CREATE: (courseId: ResourceId, chapters: IReqCreateChapter[]) =>
+	CREATE: (courseId: ResourceId, payload: IReqCreateChapter) =>
 		post<unknown, IResData<Chapter[]>>(
 			`/courses/${courseId}/chapters`,
-			chapters,
+			payload,
 		),
 	UPDATE: (chapterId: ResourceId, data: IReqUpdateChapter) =>
 		patch<unknown, IResData<Chapter>>(`/courses/chapters/${chapterId}`, data),
@@ -98,10 +101,13 @@ export const UNITS = {
 
 	GET_BY_CHAPTER: (chapterId: ResourceId) =>
 		get<unknown, IResData<Unit[]>>(`/courses/chapters/${chapterId}/units`),
-	CREATE: (chapterId: ResourceId, units: IReqCreateUnit[]) =>
+	CREATE: (
+		chapterId: ResourceId,
+		payload: { units: IReqCreateUnit[]; isPublished: boolean },
+	) =>
 		post<unknown, IResData<Unit[]>>(
 			`/courses/chapters/${chapterId}/units`,
-			units,
+			payload,
 		),
 	UPDATE: (unitId: ResourceId, data: IReqUpdateUnit) =>
 		patch<unknown, IResData<Unit>>(`/courses/units/${unitId}`, data),

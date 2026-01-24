@@ -24,7 +24,6 @@ export const uploadMedia = async (file: File) => {
 		},
 	});
 
-	debugger;
 	if (!uploadRes.ok) {
 		throw new Error("Failed to upload image to storage");
 	}

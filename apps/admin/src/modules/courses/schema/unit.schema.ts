@@ -8,6 +8,7 @@ const unitSchema = Yup.object({
 		.max(500),
 	content: Yup.mixed(),
 	points: Yup.number().min(0).default(10),
+	isPublished: Yup.boolean().default(false).label("Published / Draft"),
 });
 
 export const newUnitSchema = unitSchema;

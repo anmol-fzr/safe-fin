@@ -92,10 +92,12 @@ const useCreateChapter = () => {
 		mutationFn: ({
 			courseId,
 			chapters,
+			isPublished,
 		}: {
 			courseId: ResourceId;
 			chapters: Array<{ title: string; index: number }>;
-		}) => CHAPTERS.CREATE(courseId, chapters),
+			isPublished: boolean;
+		}) => CHAPTERS.CREATE(courseId, { chapters, isPublished }),
 		onMutate: () => {
 			toast.loading(loadingMsg);
 		},
@@ -211,7 +213,7 @@ const useCreateUnit = () => {
 		}: {
 			chapterId: ResourceId;
 			units: any[];
-		}) => UNITS.CREATE(chapterId, units),
+		}) => UNITS.CREATE(chapterId, { units, isPublished: true }),
 		onMutate: () => {
 			toast.loading(loadingMsg);
 		},

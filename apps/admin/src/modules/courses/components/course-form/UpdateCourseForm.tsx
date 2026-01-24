@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { mixed, object, string } from "yup";
+import { boolean, mixed, object, string } from "yup";
 import { convertJsonToMarkdown } from "@/components/editor/Editor";
 import { useYupForm } from "@/hooks/form/useYupForm";
 import { useUpdateCourse } from "@/modules/courses/hooks/mutations";
@@ -11,6 +11,7 @@ const courseSchema = object({
 	content: mixed().required().label("Content"),
 	coverImage: mixed().required().label("Cover Image"),
 	coverPath: string().required().label("Cover Path"),
+	isPublished: boolean().default(false).label("Published / Draft"),
 });
 
 interface UpdateCourseFormProps {
@@ -19,6 +20,8 @@ interface UpdateCourseFormProps {
 		title: string;
 		shortDesc: string;
 		longDescJson: any;
+		coverUrl: string;
+		isPublished: boolean;
 	};
 }
 
@@ -31,6 +34,8 @@ function UpdateCourseForm(props: UpdateCourseFormProps) {
 			title: course.title,
 			desc: course.shortDesc,
 			content: course.longDescJson,
+			coverImage: course.coverUrl,
+			isPublished: course.isPublished,
 		},
 	});
 
@@ -69,6 +74,7 @@ function UpdateCourseForm(props: UpdateCourseFormProps) {
 					<CourseForm.TitleField />
 					<CourseForm.DescField />
 					<CourseForm.CoverImageField />
+					<CourseForm.PublishSwitch />
 				</div>
 				<CourseForm.Actions>
 					<CourseForm.SaveAction />

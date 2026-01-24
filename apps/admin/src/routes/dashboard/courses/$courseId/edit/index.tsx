@@ -59,6 +59,8 @@ function RouteComponent() {
 							title: course.content.title,
 							shortDesc: course.content.shortDesc,
 							longDescJson: course.content.longDesc.contentJson,
+							coverUrl: course.coverUrl,
+							isPublished: course.isPublished,
 						}}
 					/>
 				</Suspense>

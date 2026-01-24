@@ -6,6 +6,7 @@ import { Add, ArrowDown, ArrowUp, Edit2, Trash } from "iconsax-reactjs";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as Yup from "yup";
+import { DraftPublishSwitch } from "@/components/DraftPublishSwitch";
 import { convertJsonToMarkdown } from "@/components/editor/Editor";
 import { FormEditor } from "@/components/form/form-editor";
 import { FormInput } from "@/components/form/form-input";
@@ -38,6 +39,7 @@ interface CurriculumBuilderProps {
 // Schema for creating a new chapter
 const newChapterSchema = Yup.object({
 	title: Yup.string().required("Chapter title is required").min(3).max(256),
+	isPublished: Yup.boolean().default(false).label("Published / Draft"),
 });
 
 export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
@@ -66,6 +68,7 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 		resolver: yupResolver(newChapterSchema),
 		defaultValues: {
 			title: "",
+			isPublished: false,
 		},
 	});
 
@@ -76,15 +79,18 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 			shortDesc: "",
 			content: "",
 			points: 10,
+			isPublished: false,
 		},
 	});
 
-	const handleCreateChapter = (data: { title: string }) => {
+	const handleCreateChapter = newChapterForm.handleSubmit((data) => {
 		const nextIndex = course.chapters?.length || 0;
+
 		createChapter(
 			{
 				courseId: Number(props.courseId),
 				chapters: [{ title: data.title, index: nextIndex }],
+				isPublished: data.isPublished,
 			},
 			{
 				onSuccess: () => {
@@ -93,7 +99,11 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 				},
 			},
 		);
-	};
+	});
+
+	// onSubmit={newUnitForm.handleSubmit((data) =>
+	// 	handleCreateUnit(chapter.id, data),
+	// )}
 
 	const handleCreateUnit = (
 		chapterId: number,
@@ -102,6 +112,7 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 			shortDesc: string;
 			content: any;
 			points: number;
+			isPublished: boolean;
 		},
 	) => {
 		const chapter = course.chapters?.find((ch) => ch.id === chapterId);
@@ -122,6 +133,7 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 						},
 						points: data.points,
 						index: nextIndex,
+						isPublished: data.isPublished,
 					},
 				],
 			},
@@ -201,9 +213,7 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 						{showNewChapterForm && (
 							<Card className="border-2 border-dashed">
 								<CardContent className="pt-6">
-									<form
-										onSubmit={newChapterForm.handleSubmit(handleCreateChapter)}
-									>
+									<form onSubmit={handleCreateChapter}>
 										<FormProvider {...newChapterForm}>
 											<div className="space-y-4">
 												<FormInput
@@ -211,6 +221,7 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 													label="Chapter Title"
 													placeholder="e.g., Introduction to Finance"
 												/>
+												<DraftPublishSwitch />
 												<div className="flex gap-2">
 													<Button type="submit">Create Chapter</Button>
 													<Button
@@ -418,6 +429,7 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 																				placeholder="Main content of the unit"
 																				rows={4}
 																			/>
+																			<DraftPublishSwitch />
 																			<FormInput
 																				name="points"
 																				label="Points"
