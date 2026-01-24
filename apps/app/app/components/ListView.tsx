@@ -1,8 +1,12 @@
 import {
-	LegendList,
-	type LegendListProps,
+	//LegendList,
+	//type LegendListProps,
 	type LegendListRef,
 } from "@legendapp/list";
+import {
+	AnimatedLegendList,
+	type AnimatedLegendListProps,
+} from "@legendapp/list/reanimated";
 import type {
 	ForwardedRef,
 	PropsWithoutRef,
@@ -11,18 +15,19 @@ import type {
 	RefObject,
 } from "react";
 import { forwardRef, memo } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewProps } from "react-native";
 import { Text } from "@/components/Text";
 import { getGenericEmptyState } from "@/utils/faker/emptyState";
 import { getGenericEndState } from "@/utils/faker/endState";
+import { ThemedViewStyle } from "@/theme";
 
 export type ListViewRef = LegendListRef;
 
-export type ListViewProps<T> = PropsWithoutRef<LegendListProps<T>>;
+export type ListViewProps<T> = PropsWithoutRef<AnimatedLegendListProps<T>>;
 
 const ListViewComponent = forwardRef(
 	<T,>(props: ListViewProps<T>, ref: ForwardedRef<LegendListRef>) => {
-		return <LegendList {...props} ref={ref} />;
+		return <AnimatedLegendList {...props} ref={ref} />;
 	},
 );
 
@@ -65,6 +70,10 @@ export const EndListView = () => {
 	return <ListMessageView icon={emoji} title={title} desc={subtitle} />;
 };
 
-export const BaseListItemSeparator = memo(() => (
-	<View style={{ height: 8, width: 8 }} />
+export const BaseListItemSeparator = memo((props?: ViewProps) => (
+	<View style={{ height: 8, width: 8 }} {...props} />
 ));
+
+export const $baseListItemSeparatorStyles: ThemedViewStyle = (theme) => ({
+	gap: theme.spacing.xs,
+});
