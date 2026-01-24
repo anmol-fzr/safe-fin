@@ -9,7 +9,10 @@ const { createMiddleware } = createTypedFactory<{
 }>();
 
 const db = createMiddleware(async (c, next) => {
-	c.set("db", getDb(env(c)));
+	const { DB_URL, DB_TOKEN } = env(c);
+	const creds = { DB_URL, DB_TOKEN };
+
+	c.set("db", getDb(creds));
 	await next();
 });
 
