@@ -1,59 +1,33 @@
 import { createTypedFactory } from "@/factory";
+import { chapterRouter } from "./chapter/chapter.router";
 import {
-	createChapter,
 	createLessonHandler,
-	createUnits,
-	deleteChapter,
 	deleteLesson,
-	deleteUnit,
 	forYouLessons,
-	getChapterById,
-	getChapterUnits,
-	getCourseChapters,
 	getLessonById,
-	getUnitById,
 	getUserLessons,
 	likeCourseHandler,
 	linkLessonWithQuiz,
 	publishLesson,
-	reorderChapters,
-	reorderUnits,
 	saveCourseProgressHandler,
-	updateChapter,
 	updateLesson,
-	updateUnit,
 } from "./lesson.controller";
+import { unitRouter } from "./unit/unit.router";
 
 const { createApp } = createTypedFactory();
 
 const lessonRouter = createApp()
-	.get("/for-you", ...forYouLessons)
 	.get("/", ...getUserLessons)
-	.get("/:courseId", ...getLessonById)
 	.post("/", ...createLessonHandler)
+	.get("/for-you", ...forYouLessons)
 	.post("/progress", ...saveCourseProgressHandler)
-	.post("/:courseId/toggle-like", ...likeCourseHandler)
+	.get("/:courseId", ...getLessonById)
 	.patch("/:courseId", ...updateLesson)
-	.patch("/:id/publish", ...publishLesson)
+	.post("/:courseId/toggle-like", ...likeCourseHandler)
 	.delete("/:id", ...deleteLesson)
-
-	.get("/:courseId/chapters", ...getCourseChapters)
-	.post("/:courseId/chapters", ...createChapter)
-	.post("/chapters/reorder", ...reorderChapters)
-	.get("/chapters/:id", ...getChapterById)
-	.patch("/chapters/:id", ...updateChapter)
-	.delete("/chapters/:id", ...deleteChapter)
-
-	.get("/chapters/:chapterId/units", ...getChapterUnits)
-	.post("/chapters/:chapterId/units", ...createUnits)
-	.post("/units/reorder", ...reorderUnits)
-	.get("/units/:unitId", ...getUnitById)
-	.patch("/units/:unitId", ...updateUnit)
-	.delete("/units/:id", ...deleteUnit)
-
-	// ============================================
-	// LEGACY ROUTES (deprecated)
-	// ============================================
+	.patch("/:id/publish", ...publishLesson)
+	.route("/", chapterRouter)
+	.route("/", unitRouter)
 	.post("/link", ...linkLessonWithQuiz); // Deprecated - returns 410
 
 export { lessonRouter };

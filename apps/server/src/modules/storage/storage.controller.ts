@@ -9,7 +9,7 @@ const app = new Hono<{ Bindings: CloudflareBindings }>();
 const uploadSchema = z.object({
 	filename: z.string(),
 	contentType: z.string(),
-	folder: z.enum(["safefin-courses"]),
+	folder: z.enum(["safefin"]),
 });
 
 app.post(
@@ -29,7 +29,7 @@ app.post(
 
 		const service = new StorageService({
 			...env,
-			S3_BUCKET: "safefin-courses",
+			S3_BUCKET: "safefin",
 		});
 
 		const result = await service.generateUploadUrl(

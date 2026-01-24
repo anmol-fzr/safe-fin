@@ -138,7 +138,7 @@ export class UnitService {
 
 	static async create(
 		db: DB,
-		data: { chapterId: number; units: CreateUnitData[] },
+		data: { chapterId: number; units: CreateUnitData[]; isPublished: boolean },
 	) {
 		const { chapterId, units } = data;
 		const richContentItemsData = units.map((unit) => ({
@@ -168,7 +168,7 @@ export class UnitService {
 			coverPath: unit.coverPath,
 			points: unit.points || 10,
 			index: unit.index,
-			isPublished: false,
+			isPublished: data.isPublished,
 		}));
 
 		const insertedUnits = await db.insert(unit).values(unitsData).returning();

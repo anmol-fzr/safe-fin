@@ -1,16 +1,13 @@
 import { z } from "zod";
-import { dbIdSchema } from "@/schema";
+import { dbIdSchema, idParamSchema } from "@/schema";
 import { queryParamSchema } from "@/schema/params";
 
+export const courseIdParamSchema = z.object({ courseId: idParamSchema });
 const courseLevelSchema = z
 	.enum(["beginner", "intermediate", "advanced"])
 	.default("beginner");
 
 export type CourseLevel = z.infer<typeof courseLevelSchema>;
-
-// ============================================
-// Course Schemas
-// ============================================
 
 export const createCourseSchema = z.object({
 	title: z.string().min(3).max(256),
@@ -18,6 +15,7 @@ export const createCourseSchema = z.object({
 	longDesc: z.string().min(50),
 	longDescJson: z.any(), // JSON content for rich text editor
 	isPublished: z.boolean().optional().default(false),
+	coverPath: z.string(),
 	level: courseLevelSchema,
 });
 
@@ -62,62 +60,6 @@ export const reorderChaptersSchema = z.object({
 	),
 });
 
-type T = z.infer<typeof reorderChaptersSchema>;
-
-// ============================================
-// Unit Schemas
-// ============================================
-
-const unitSchema = z.object({
-	title: z.string().min(3).max(256),
-	shortDesc: z.string().min(10).max(500),
-	longDesc: z.object({
-		content: z.string().min(50),
-		contentJson: z.any(),
-	}),
-	coverPath: z.string().url().optional(),
-	points: z.number().int().min(0).default(10),
-	index: z.number().int().min(0),
-});
-
-export const createUnitSchema = z.array(unitSchema).min(1).max(100);
-
-// export const createUnitSchema = z.object({
-// 	chapterId: dbIdSchema,
-// 	title: z.string().min(3).max(256),
-// 	shortDesc: z.string().min(10).max(500),
-// 	content: z.string().min(50),
-// 	contentJson: z.any(),
-// 	coverPath: z.string().url().optional(),
-// 	points: z.number().int().min(0).default(10),
-// 	index: z.number().int().min(0).optional(),
-// });
-
-export const updateUnitSchema = z.object({
-	title: z.string().min(3).max(256).optional(),
-	shortDesc: z.string().min(10).max(500).optional(),
-	content: z.string().min(50).optional(),
-	contentJson: z.any().optional(),
-	coverPath: z.string().url().optional(),
-	points: z.number().int().min(0).optional(),
-	index: z.number().int().min(0).optional(),
-	isPublished: z.boolean().optional(),
-});
-
-export const reorderUnitsSchema = z.object({
-	chapterId: dbIdSchema,
-	units: z.array(
-		z.object({
-			id: dbIdSchema,
-			index: z.number().int().min(0),
-		}),
-	),
-});
-
-// ============================================
-// Query Schemas
-// ============================================
-
 export const getLessonsQueryParamSchema = queryParamSchema.extend({
 	status: z.enum(["seen", "red"]).optional(),
 });
@@ -128,10 +70,6 @@ export const getChapterUnitsQuerySchema = z.object({
 		.transform((val) => val === "true")
 		.optional(),
 });
-
-// ============================================
-// Legacy (to be removed)
-// ============================================
 
 const lessonQuizLinkSchema = z.object({
 	lessonId: dbIdSchema,

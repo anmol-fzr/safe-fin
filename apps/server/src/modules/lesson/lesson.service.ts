@@ -1,8 +1,8 @@
 import { getPaginateRes } from "@/middleware";
+import type { BucketConfig } from "@/middleware/s3";
 import type { DB } from "@/pkg/db";
 import {
 	and,
-	chapter,
 	count,
 	course,
 	eq,
@@ -32,6 +32,7 @@ interface CreateCourseData {
 	shortDesc: string;
 	longDesc: string;
 	longDescJson?: any;
+	coverPath: string;
 	isPublished: boolean;
 	level: CourseLevel;
 }
@@ -45,28 +46,10 @@ interface UpdateCourseData {
 	isPublished?: boolean;
 }
 
-interface CreateChapterData {
-	title: string;
-	index: number;
-}
-
-interface UpdateChapterData {
-	title?: string;
-	index?: number;
-	isPublished?: boolean;
-}
-
-// ============================================
-// Course Service
-// ============================================
-
 export class LessonService {
 	// ========== GET OPERATIONS ==========
 
-	static async getLessons(
-		db: DB,
-		{ limit, page, status, user }: GetLessonsParams,
-	) {
+	static async getLessons(db: DB, { limit, page, user }: GetLessonsParams) {
 		const offset = (page - 1) * limit;
 		const { id: userId, role } = user;
 		const isAdmin = role === "admin";
@@ -77,7 +60,7 @@ export class LessonService {
 		}
 
 		const URL = "http://localhost:9000";
-		const BUCKET = "safefin-courses";
+		const BUCKET = "safefin";
 		const lessons = await db.query.course.findMany({
 			extras: {
 				isSaved: sql<boolean>`
@@ -144,7 +127,7 @@ AND saved.user_id = ${userId}
 
 	static async getRecentInteracted(db: DB, userId: string) {
 		const recentProgress = await db.query.courseProgress.findFirst({
-			where: (progress, { eq }) => eq(progress.userId, Number(userId)),
+			where: (progress, { eq }) => eq(progress.userId, userId),
 			orderBy: (progress, { desc }) => [desc(progress.updatedAt)],
 			with: {
 				course: {
@@ -180,9 +163,16 @@ AND saved.user_id = ${userId}
 		courseId: number,
 		includeUnpublished = false,
 		userId: string,
+		s3: BucketConfig,
 	) {
+		const { BUCKET, ENDPOINT } = s3;
+
 		const foundCourse = await db.query.course.findFirst({
 			extras: {
+				coverUrl:
+					sql<string>`CONCAT(${ENDPOINT}, '/', ${BUCKET}, '/', course.cover_path)`.as(
+						"cover_url",
+					),
 				isCompleted:
 					sql<boolean>`EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.user_id = ${userId} AND course_progress.course_id = ${courseId} AND course_progress.is_completed = true )`.as(
 						"is_completed",
@@ -272,7 +262,6 @@ AND saved.user_id = ${userId}
 	// ========== CREATE OPERATIONS ==========
 
 	static async create(db: DB, data: CreateCourseData) {
-		// Step 1: Create rich content item (long description)
 		const [insertedRichContentItem] = await db
 			.insert(richContentItem)
 			.values({
@@ -281,7 +270,6 @@ AND saved.user_id = ${userId}
 			})
 			.returning();
 
-		// Step 2: Create rich content (title + short desc + reference to long desc)
 		const [insertedRichContent] = await db
 			.insert(richContent)
 			.values({
@@ -291,13 +279,13 @@ AND saved.user_id = ${userId}
 			})
 			.returning();
 
-		// Step 3: Create course
 		const [insertedCourse] = await db
 			.insert(course)
 			.values({
 				contentId: insertedRichContent.id,
 				level: data.level,
 				isPublished: data.isPublished,
+				coverPath: data.coverPath,
 			})
 			.returning();
 
@@ -348,7 +336,7 @@ AND saved.user_id = ${userId}
 			}
 		}
 
-		const payload = {};
+		const payload: any = {};
 
 		if (data.isPublished !== undefined) {
 			payload.isPublished = data.isPublished;
@@ -357,7 +345,6 @@ AND saved.user_id = ${userId}
 		if (data.coverPath !== undefined) {
 			payload.coverPath = data.coverPath;
 		}
-		console.log({ data, payload });
 
 		if (Object.keys(payload).length > 0) {
 			await db.update(course).set(payload).where(eq(course.id, courseId));
@@ -378,130 +365,5 @@ AND saved.user_id = ${userId}
 		// Note: Cascade deletes should be handled by DB constraints
 		// This will delete the course and related chapters/units
 		return db.delete(course).where(eq(course.id, courseId));
-	}
-}
-
-// ============================================
-// Chapter Service
-// ============================================
-
-export class ChapterService {
-	// ========== GET OPERATIONS ==========
-
-	static async getChaptersByCourseId(
-		db: DB,
-		courseId: number,
-		includeUnpublished = false,
-	) {
-		const chapters = await db.query.chapter.findMany({
-			where: (ch, { eq, and }) => {
-				const conditions = [eq(ch.courseId, courseId)];
-				if (!includeUnpublished) {
-					conditions.push(eq(ch.isPublished, true));
-				}
-				return and(...conditions);
-			},
-			orderBy: (ch, { asc }) => [asc(ch.index)],
-			columns: {
-				id: true,
-				title: true,
-				index: true,
-				isPublished: true,
-				createdAt: true,
-				updatedAt: true,
-			},
-		});
-
-		return chapters;
-	}
-
-	static async getById(db: DB, chapterId: number, includeUnpublished = false) {
-		const foundChapter = await db.query.chapter.findFirst({
-			where: (ch, { eq, and }) => {
-				const conditions = [eq(ch.id, chapterId)];
-				if (!includeUnpublished) {
-					conditions.push(eq(ch.isPublished, true));
-				}
-				return and(...conditions);
-			},
-			with: {
-				units: {
-					columns: {
-						id: true,
-						coverPath: true,
-						points: true,
-						index: true,
-						isPublished: true,
-						createdAt: true,
-						updatedAt: true,
-					},
-					with: {
-						content: {
-							columns: {
-								title: true,
-								shortDesc: true,
-							},
-						},
-					},
-					orderBy: (unit, { asc }) => [asc(unit.index)],
-				},
-			},
-		});
-
-		return foundChapter;
-	}
-
-	// ========== CREATE OPERATIONS ==========
-
-	static async create(
-		db: DB,
-		data: { courseId: number; chapters: CreateChapterData[] },
-	) {
-		const chaptersData = data.chapters.map((chapter) => {
-			return {
-				...chapter,
-				courseId: data.courseId,
-			};
-		});
-
-		const insertedChapters = await db
-			.insert(chapter)
-			.values(chaptersData)
-			.returning();
-
-		return insertedChapters;
-	}
-
-	// ========== UPDATE OPERATIONS ==========
-
-	static async updateById(db: DB, chapterId: number, data: UpdateChapterData) {
-		const [updatedChapter] = await db
-			.update(chapter)
-			.set(data)
-			.where(eq(chapter.id, chapterId))
-			.returning();
-
-		return updatedChapter;
-	}
-
-	static async reorderChapters(
-		db: DB,
-		chapters: Array<{ id: number; index: number }>,
-	) {
-		// Update each chapter's index
-		for (const ch of chapters) {
-			await db
-				.update(chapter)
-				.set({ index: ch.index })
-				.where(eq(chapter.id, ch.id));
-		}
-
-		return { success: true };
-	}
-
-	// ========== DELETE OPERATIONS ==========
-
-	static async delete(db: DB, chapterId: number) {
-		return db.delete(chapter).where(eq(chapter.id, chapterId));
 	}
 }
