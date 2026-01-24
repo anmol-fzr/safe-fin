@@ -51,6 +51,9 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 			changeEmail: {
 				enabled: true,
 			},
+			deleteUser: {
+				enabled: true,
+			},
 			additionalFields: {
 				isNew: {
 					type: "boolean",
