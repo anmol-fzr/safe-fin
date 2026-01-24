@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import {
-	BaseListItemSeparator,
+	$baseListItemSeparatorStyles,
 	EmptyListView,
 	EndListView,
 	ListView,
@@ -24,7 +24,7 @@ function LessonListImpl() {
 		courses,
 		isRefetching,
 		isFetchingNextPage = false,
-		fetchNextPage,
+		//fetchNextPage,
 		refetch,
 	} = useGetLessons();
 	// const handleViewableItemsChanged = usePrefetchListItem({
@@ -33,6 +33,7 @@ function LessonListImpl() {
 
 	//const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
 
+	const { themed } = useAppTheme();
 	return (
 		<ListView
 			data={courses}
@@ -48,7 +49,7 @@ function LessonListImpl() {
 			ListFooterComponent={
 				isFetchingNextPage ? <LessonListImpl.Loading /> : EndListView
 			}
-			ItemSeparatorComponent={BaseListItemSeparator}
+			contentContainerStyle={themed($baseListItemSeparatorStyles)}
 			renderItem={({ item }) => (
 				<LessonCard id={item.id}>
 					<LessonCard.Image source="https://ilarge.lisimg.com/image/28254022/1118full-iman-vellani.jpg">
