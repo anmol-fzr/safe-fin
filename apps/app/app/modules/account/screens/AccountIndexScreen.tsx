@@ -6,7 +6,7 @@ import {
 	type Icon as IconType,
 	Lifebuoy,
 	Profile,
-	Setting2,
+	//Setting2,
 	Share,
 	Star1,
 	User,
@@ -73,12 +73,12 @@ const DATA: {
 				desc: "screens:profileList.accountList.account.desc",
 				href: "/profile/account",
 			},
-			{
-				icon: Setting2,
-				title: "screens:profileList.accountList.appSettings.title",
-				desc: "screens:profileList.accountList.appSettings.desc",
-				href: "/settings/app",
-			},
+			// {
+			// 	icon: Setting2,
+			// 	title: "screens:profileList.accountList.appSettings.title",
+			// 	desc: "screens:profileList.accountList.appSettings.desc",
+			// 	href: "/settings/app",
+			// },
 		],
 	},
 	{
@@ -124,12 +124,12 @@ const DATA: {
 					default: PLAYSTORE,
 				}),
 			},
-			{
-				icon: Share,
-				title: "screens:profileList.appInfoList.shareApp",
-				//desc: "Share App with you friends",
-				href: "/tabs/profile/financials",
-			},
+			// {
+			// 	icon: Share,
+			// 	title: "screens:profileList.appInfoList.shareApp",
+			// 	//desc: "Share App with you friends",
+			// 	href: "/tabs/profile/financials",
+			// },
 		],
 	},
 ];
