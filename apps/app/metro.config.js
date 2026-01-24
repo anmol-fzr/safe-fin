@@ -11,7 +11,13 @@ const config = getSentryExpoConfig(projectRoot, {
 });
 
 // 2. Setup Monorepo Watch Folders
-config.watchFolders = [...config.watchFolders, workspaceRoot];
+config.watchFolders = [
+	projectRoot,
+	path.resolve(workspaceRoot, "node_modules"),
+	path.resolve(workspaceRoot, "packages/ui"),
+	path.resolve(workspaceRoot, "packages/auth"),
+	path.resolve(workspaceRoot, "packages/utils"),
+];
 
 // 3. Setup Node Modules Resolution
 config.resolver.nodeModulesPaths = [
