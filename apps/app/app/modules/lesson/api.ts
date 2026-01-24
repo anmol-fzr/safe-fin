@@ -302,7 +302,7 @@ type IResGetCourses = IResData<CourseItem[], true>;
 
 export type CourseLevel = "beginner" | "intermediate" | "advanced";
 
-interface CourseItem {
+export interface CourseItem {
 	id: number;
 	isPublished: boolean;
 	isSaved: 0 | 1;

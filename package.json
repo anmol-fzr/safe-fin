@@ -19,9 +19,7 @@
 		"deps:check": "syncpack list-mismatches",
 		"deps:fix": "syncpack fix-mismatches",
 		"deps:update": "syncpack update",
-		"auth:generate": "turbo run auth:generate --filter=@safe-fin/auth",
-		"prepare": "husky",
-		"build:android:preview": "turbo run build:android:preview -F @safe-fin/app"
+		"prepare": "husky"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.4",

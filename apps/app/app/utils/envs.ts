@@ -5,7 +5,8 @@ const isDev = env.EXPO_PUBLIC_MODE === "DEV" || __DEV__;
 
 export const envs = Object.freeze({
 	isDev,
-	API_URL: "https://safe-fin.anmol-fzr.workers.dev/api/v1",
+	API_URL:
+		env.EXPO_PUBLIC_API_URL ?? "https://safe-fin.anmol-fzr.workers.dev/api/v1",
 	get AUTH_API_URL() {
 		return `${this.API_URL}/auth`;
 	},

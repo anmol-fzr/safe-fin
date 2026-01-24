@@ -19,10 +19,6 @@ export const AccountScreen = () => {
 	);
 };
 
-const $root: ThemedViewStyle = (theme) => ({
-	gap: theme.spacing.md,
-});
-
 const $logoutBtn: ThemedViewStyle = (theme) => ({
 	gap: theme.spacing.lg,
 	padding: theme.spacing.sm,
