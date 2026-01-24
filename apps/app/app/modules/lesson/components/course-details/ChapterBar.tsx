@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Text } from "@/components";
+import { $baseListItemSeparatorStyles, ListView, Text } from "@/components";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Chapter } from "../../api-types/course_one";
 import { UnitBar } from "./UnitBar";
@@ -15,6 +15,7 @@ export const ChapterBar = (props: ChapterProps) => {
 	const { title, units } = chapter;
 
 	const {
+		themed,
 		theme: { colors, spacing, typography },
 	} = useAppTheme();
 
@@ -45,9 +46,12 @@ export const ChapterBar = (props: ChapterProps) => {
 				{title}
 			</Text>
 			<View style={{ gap: spacing.xs }}>
-				{units.map((unit) => (
-					<UnitBar key={unit.id} unit={unit} />
-				))}
+				<ListView
+					data={units}
+					keyExtractor={(item) => item.id.toString()}
+					renderItem={({ item }) => <UnitBar unit={item} />}
+					contentContainerStyle={themed($baseListItemSeparatorStyles)}
+				/>
 			</View>
 		</View>
 	);

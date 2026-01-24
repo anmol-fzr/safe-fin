@@ -5,16 +5,15 @@ import {
 	type ImageSourcePropType,
 	ScrollView,
 	type StyleProp,
-	StyleSheet,
 	type TextStyle,
 	View,
 	type ViewStyle,
 } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { Button, Tabs } from "@/components";
+import { BaseListItemSeparator, Button, ListView, Tabs } from "@/components";
 import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
-import type { ThemedStyle } from "@/theme";
+import { spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Chapter } from "../api-types/course_one";
 import { ChapterBar } from "../components/course-details/ChapterBar";
@@ -22,6 +21,7 @@ import { CourseDetails } from "../components/course-details/CourseDetails";
 import { MarkdowRenderer } from "../components/Lesson";
 import { LessonCertificate } from "../components/LessonCertificate/LessonCertificate";
 import { LessonListItem } from "../components/LessonListItem/LessonListItem";
+import { ChapterList } from "../components/course-details/ChapterList";
 
 export interface LessonData {
 	id: string;
@@ -347,7 +347,6 @@ interface CourseDetailsTabsProps {
 
 function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 	const { chapters, desc } = props;
-	const { theme } = useAppTheme();
 
 	return (
 		<Tabs defaultValue="lessons" className="w-[400px]">
@@ -356,11 +355,7 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 				<Tabs.Trigger value="overview">Overview</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="lessons">
-				<View style={{ gap: theme.spacing.xl }}>
-					{chapters.map((chapter, index) => (
-						<ChapterBar key={chapter.id} chapter={chapter} index={index} />
-					))}
-				</View>
+				<ChapterList chapters={chapters} />
 			</Tabs.Content>
 			<Tabs.Content value="overview">
 				<MarkdowRenderer content={desc} />
@@ -370,43 +365,43 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 	);
 }
 
-const styles = StyleSheet.create({
-	cardContainer: {
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 12,
-		borderWidth: 1,
-		borderColor: "#E0E0E0",
-		borderRadius: 12,
-	},
-	iconWrapper: {
-		width: 48,
-		height: 48,
-		backgroundColor: "#F5F5F5",
-		borderRadius: 8,
-		justifyContent: "center",
-		alignItems: "center",
-		marginRight: 12, // Space between icon and text
-	},
-	icon: {
-		width: 24,
-		height: 24,
-	},
-	textWrapper: {
-		flex: 1, // <--- THIS IS THE KEY FIX
-		marginRight: 16, // Space between text and the "250 PX"
-	},
-	title: {
-		fontSize: 16,
-		fontWeight: "600",
-		color: "#000",
-		// By default text wraps, but flex: 1 on parent enforces the width limit
-	},
-	rightText: {
-		fontSize: 14,
-		color: "#888",
-	},
-});
+// const styles = StyleSheet.create({
+// 	cardContainer: {
+// 		flexDirection: "row",
+// 		alignItems: "center",
+// 		padding: 12,
+// 		borderWidth: 1,
+// 		borderColor: "#E0E0E0",
+// 		borderRadius: 12,
+// 	},
+// 	iconWrapper: {
+// 		width: 48,
+// 		height: 48,
+// 		backgroundColor: "#F5F5F5",
+// 		borderRadius: 8,
+// 		justifyContent: "center",
+// 		alignItems: "center",
+// 		marginRight: 12, // Space between icon and text
+// 	},
+// 	icon: {
+// 		width: 24,
+// 		height: 24,
+// 	},
+// 	textWrapper: {
+// 		flex: 1, // <--- THIS IS THE KEY FIX
+// 		marginRight: 16, // Space between text and the "250 PX"
+// 	},
+// 	title: {
+// 		fontSize: 16,
+// 		fontWeight: "600",
+// 		color: "#000",
+// 		// By default text wraps, but flex: 1 on parent enforces the width limit
+// 	},
+// 	rightText: {
+// 		fontSize: 14,
+// 		color: "#888",
+// 	},
+// });
 
 interface CourseDetailsScreenScrollViewProps {
 	/**

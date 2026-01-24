@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import { Play, TickCircle } from "iconsax-react-nativejs";
 import { StyleSheet, View } from "react-native";
@@ -6,7 +5,7 @@ import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Unit } from "../../api-types/course_one";
-import { getUnitOpts } from "../../hooks/units/queries";
+import { usePrefetchUnit } from "../../hooks/units/queries";
 import { CourseCompleteBadge } from "../CourseCompletedBadge";
 
 type UnitProps = {
@@ -22,15 +21,15 @@ export const UnitBar = (props: UnitProps) => {
 		theme: { colors, spacing },
 	} = useAppTheme();
 
-	const queryClient = useQueryClient();
+	const { prefetchUnit } = usePrefetchUnit();
 
-	function prefetchUnit() {
-		queryClient.prefetchQuery(getUnitOpts(id));
+	function handlePrefetchUnit() {
+		prefetchUnit(id);
 	}
 
 	return (
 		<Link
-			onPressIn={prefetchUnit}
+			onPressIn={handlePrefetchUnit}
 			href={{
 				pathname: "/course/units/[unitId]",
 				params: {
