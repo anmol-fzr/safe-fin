@@ -1,4 +1,8 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import {
+	queryOptions,
+	useQueryClient,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
 import type { ResourceId } from "@/types";
 import { COURSES } from "../../api";
 
@@ -9,6 +13,16 @@ function getUnitOpts(unitId: ResourceId) {
 	});
 }
 
+const usePrefetchUnit = () => {
+	const queryClient = useQueryClient();
+
+	function prefetchUnit(unitId: ResourceId) {
+		queryClient.prefetchQuery(getUnitOpts(unitId));
+	}
+
+	return { prefetchUnit };
+};
+
 const useGetUnit = (unitId: ResourceId) => {
 	const opts = getUnitOpts(unitId);
 	const { data, ...rest } = useSuspenseQuery(opts);
@@ -16,4 +30,4 @@ const useGetUnit = (unitId: ResourceId) => {
 };
 
 export { getUnitOpts };
-export { useGetUnit };
+export { useGetUnit, usePrefetchUnit };
