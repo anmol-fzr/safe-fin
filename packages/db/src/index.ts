@@ -9,7 +9,9 @@ export interface GetDbOpts {
 	DB_TOKEN: string;
 }
 
-let dbInst: ReturnType<typeof drizzle> | null = null;
+let dbInst: ReturnType<
+	typeof drizzle<typeof schema, ReturnType<typeof createClient>>
+> | null = null;
 
 function getDb(opts: GetDbOpts) {
 	if (dbInst !== null) {
