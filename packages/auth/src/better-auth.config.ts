@@ -12,12 +12,12 @@ import { getBetterAuthOptions } from "./options";
 const { BETTER_AUTH, DB, CORS_URL } = envs;
 
 const database = getAuthDrizzleAdapter({
-	TURSO_DB_URL: DB.URL,
-	TURSO_DB_TOKEN: DB.TOKEN,
+	DB_URL: DB.URL,
+	DB_TOKEN: DB.TOKEN,
 });
 const db = getDb({
-	TURSO_DB_URL: DB.URL,
-	TURSO_DB_TOKEN: DB.TOKEN,
+	DB_URL: DB.URL,
+	DB_TOKEN: DB.TOKEN,
 });
 
 const betterAuthOptions = getBetterAuthOptions({ db });

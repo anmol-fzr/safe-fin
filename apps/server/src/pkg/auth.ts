@@ -5,8 +5,8 @@ export function auth(envs: CloudflareBindings) {
 		BETTER_AUTH_URL,
 		BETTER_AUTH_SECRET,
 		CORS_ORIGIN_URL,
-		TURSO_DB_URL,
-		TURSO_DB_TOKEN,
+		DB_URL,
+		DB_TOKEN,
 		KV,
 	} = envs;
 
@@ -14,8 +14,8 @@ export function auth(envs: CloudflareBindings) {
 		BETTER_AUTH_URL,
 		BETTER_AUTH_SECRET,
 		CORS_ORIGIN_URL,
-		TURSO_DB_URL,
-		TURSO_DB_TOKEN,
+		DB_URL,
+		DB_TOKEN,
 		KV,
 	});
 }

@@ -6,8 +6,8 @@ const envs = Object.freeze({
 		SECRET: env.BETTER_AUTH_SECRET,
 	},
 	DB: {
-		URL: env.TURSO_DB_URL,
-		TOKEN: env.TURSO_DB_TOKEN,
+		URL: env.DB_URl,
+		TOKEN: env.DB_TOKEN,
 	},
 	GITHUB: {
 		ID: env.GITHUB_CLIENT_ID,

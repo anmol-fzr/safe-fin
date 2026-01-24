@@ -2,8 +2,8 @@ const env = process.env;
 
 const envs = Object.freeze({
 	DB: Object.freeze({
-		URL: env.TURSO_DB_URL,
-		TOKEN: env.TURSO_DB_TOKEN,
+		URL: env.DB_URL,
+		TOKEN: env.DB_TOKEN,
 	}),
 });
 

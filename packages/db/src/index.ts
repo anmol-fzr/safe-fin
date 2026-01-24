@@ -5,8 +5,8 @@ import * as schema from "./schema";
 //import * as relations from "./schema/relations";
 
 export interface GetDbOpts {
-	TURSO_DB_URL: string;
-	TURSO_DB_TOKEN: string;
+	DB_URL: string;
+	DB_TOKEN: string;
 }
 
 let dbInst: ReturnType<typeof drizzle> | null = null;
@@ -16,11 +16,11 @@ function getDb(opts: GetDbOpts) {
 		return dbInst;
 	}
 
-	const { TURSO_DB_URL, TURSO_DB_TOKEN } = opts;
+	const { DB_URL, DB_TOKEN } = opts;
 
 	const turso = createClient({
-		url: TURSO_DB_URL,
-		authToken: TURSO_DB_TOKEN,
+		url: DB_URL,
+		authToken: DB_TOKEN,
 	});
 
 	dbInst = drizzle(turso, { schema, logger: true });
