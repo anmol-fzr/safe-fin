@@ -27,6 +27,8 @@ coverage
 
 # Minio
 ./minio-data/*
+./minio-data/
+minio-data/
 
 # DB Dumps
 local.db

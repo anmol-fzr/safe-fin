@@ -3,13 +3,14 @@ import { mixed, object, string } from "yup";
 import { convertJsonToMarkdown } from "@/components/editor/Editor";
 import { useYupForm } from "@/hooks/form/useYupForm";
 import { useUpdateCourse } from "@/modules/courses/hooks/mutations";
-import type { ResourceId } from "@/services/api/types";
 import { CourseForm } from "./CourseForm";
 
 const courseSchema = object({
 	title: string().required().label("Title"),
 	desc: string().required().label("Description"),
 	content: mixed().required().label("Content"),
+	coverImage: mixed().required().label("Cover Image"),
+	coverPath: string().required().label("Cover Path"),
 });
 
 interface UpdateCourseFormProps {
@@ -41,8 +42,6 @@ function UpdateCourseForm(props: UpdateCourseFormProps) {
 
 		const markdown = convertJsonToMarkdown(jsonString);
 		console.log(markdown);
-
-		return;
 		updateCourseAsync({
 			courseId: course.id,
 			data: {
@@ -50,6 +49,7 @@ function UpdateCourseForm(props: UpdateCourseFormProps) {
 				shortDesc: values.desc,
 				longDesc: markdown,
 				longDescJson: jsonString,
+				coverPath: values.coverPath,
 			},
 		}).then((resp) => {
 			navigate({
@@ -68,6 +68,7 @@ function UpdateCourseForm(props: UpdateCourseFormProps) {
 				<div className="w-full max-w-md space-y-4">
 					<CourseForm.TitleField />
 					<CourseForm.DescField />
+					<CourseForm.CoverImageField />
 				</div>
 				<CourseForm.Actions>
 					<CourseForm.SaveAction />

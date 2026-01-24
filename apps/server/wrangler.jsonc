@@ -5,16 +5,16 @@
 	"compatibility_flags": ["export_commonjs_default", "nodejs_compat"],
 	"preview_urls": true,
 	"dev": {
-		"ip": "192.168.29.195",
+		"ip": "192.168.29.57",
 		"port": 3000
 	},
 	"observability": {
 		"enabled": true,
 		"head_sampling_rate": 1
 	},
-  "placement": {
-    "region": "aws:ap-south-1"
-  },
+	"placement": {
+		"region": "aws:ap-south-1"
+	},
 	"kv_namespaces": [
 		{
 			"binding": "KV",

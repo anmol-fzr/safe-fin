@@ -7,7 +7,6 @@ import {
 import {
 	Controller,
 	FormProvider,
-	type SubmitHandler,
 	type UseFormReturn,
 	useFormContext,
 } from "react-hook-form";
@@ -15,7 +14,6 @@ import { DraftPublishSwitch } from "@/components/DraftPublishSwitch";
 import { FormEditor } from "@/components/form/form-editor";
 import { FormInput } from "@/components/form/form-input";
 import { FormSelect } from "@/components/form/form-select";
-import { FormSwitch } from "@/components/form/form-switch";
 import { FormTextarea } from "@/components/form/form-textarea";
 import { ImageUploader } from "@/components/image-uploader";
 import { Button, type ButtonProps } from "@/components/ui/button";
@@ -96,7 +94,7 @@ const CourseFormLevelSelect = () => (
 const CourseFormPublishSwitch = DraftPublishSwitch;
 
 const CourseFormCoverImageField = () => {
-	const { control } = useFormContext();
+	const { control, setValue } = useFormContext();
 
 	return (
 		<Controller
@@ -108,7 +106,10 @@ const CourseFormCoverImageField = () => {
 					onChange={field.onChange}
 					errorMessage={fieldState.error?.message}
 					uploadFn={async (file) => {
-						return await uploadMedia(file);
+						const { fileUrl, publicUrl } = await uploadMedia(file);
+
+						setValue("coverPath", fileUrl);
+						return publicUrl;
 					}}
 					aspectRatio={16 / 9}
 					acceptedFileTypes={["image/png", "image/jpeg", "image/webp"]}
@@ -130,7 +131,7 @@ const CourseFormEditor = ({ className }: { className?: string }) => {
 			</div>
 	  */
 	return (
-		<div className={cn("w-full max-w-screen-lg ", className)}>
+		<div className={cn("w-full max-w-5xl", className)}>
 			<FormEditor name="content" label="Course Content" />
 		</div>
 	);

@@ -165,7 +165,7 @@ export const updateLesson = createHandlers(
 
 		const updatedCourse = await LessonService.updateById(db, courseId, data);
 
-		if (!updatedCourse) {
+		if (!updatedCourse.success) {
 			return c.json({ error: "Course not found" }, 404);
 		}
 

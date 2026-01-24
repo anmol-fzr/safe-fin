@@ -26,6 +26,7 @@ export const updateCourseSchema = z.object({
 	shortDesc: z.string().min(10).max(500).optional(),
 	longDesc: z.string().min(50).optional(),
 	longDescJson: z.any().optional(),
+	coverPath: z.string(),
 	isPublished: z.boolean().optional(),
 });
 

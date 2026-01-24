@@ -16,14 +16,15 @@ export const publicUserProfile = sqliteTable("public_user_profile", {
 	updatedAt: timestamp.updatedAt,
 });
 
-export const publicUserActivityLog = sqliteTable("public_user_activity_log", {
+export const userActivityLog = sqliteTable("user_activity_log", {
 	id,
 	userId: text("user_id")
 		.references(() => user.id)
 		.notNull(),
 
-	date: integer("date", { mode: "timestamp" }).unique(),
+	date: timestamp("date").notNull(),
 	totalPxEarned: integer("total_px"),
 
+	createdAt: timestamp.createdAt,
 	updatedAt: timestamp.updatedAt,
 });

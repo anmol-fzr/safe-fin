@@ -4,7 +4,7 @@ import { category } from "./category";
 import { chapter, course, courseProgress, courseRating, unit } from "./course";
 import { exercise, option, question } from "./exercise";
 import { exerciseResult, questionResult } from "./exercise-result";
-import { publicUserActivityLog, publicUserProfile } from "./gamification";
+import { publicUserProfile, userActivityLog } from "./gamification";
 import { profile } from "./profile";
 import { rating } from "./rating";
 import { richContent, richContentItem } from "./rich-content";
@@ -189,10 +189,10 @@ export const publicUserProfileRelations = relations(
 );
 
 export const publicUserActivityLogRelations = relations(
-	publicUserActivityLog,
+	userActivityLog,
 	({ one }) => ({
 		user: one(user, {
-			fields: [publicUserActivityLog.userId],
+			fields: [userActivityLog.userId],
 			references: [user.id],
 		}),
 	}),
@@ -226,7 +226,7 @@ export const userRelations = relations(user, ({ many }) => ({
 	accounts: many(account),
 	profiles: many(profile),
 	publicProfile: many(publicUserProfile),
-	activityLogs: many(publicUserActivityLog),
+	activityLogs: many(userActivityLog),
 	ratings: many(rating),
 	courseProgress: many(courseProgress),
 	exerciseResults: many(exerciseResult),

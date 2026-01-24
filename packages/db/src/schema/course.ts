@@ -16,6 +16,7 @@ export const course = sqliteTable("course", {
 	contentId: integer("content_id")
 		.references(() => richContent.id)
 		.notNull(),
+	coverPath: text("cover_path"),
 
 	level: text("level", {
 		enum: ["beginner", "intermediate", "advanced"],

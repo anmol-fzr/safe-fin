@@ -41,6 +41,7 @@ interface UpdateCourseData {
 	shortDesc?: string;
 	longDesc?: string;
 	longDescJson?: any;
+	coverPath: string;
 	isPublished?: boolean;
 }
 
@@ -75,6 +76,8 @@ export class LessonService {
 			whereConditions.push(eq(course.isPublished, true));
 		}
 
+		const URL = "http://localhost:9000";
+		const BUCKET = "safefin-courses";
 		const lessons = await db.query.course.findMany({
 			extras: {
 				isSaved: sql<boolean>`
@@ -86,6 +89,9 @@ AND saved.entity_id = course.id
 AND saved.user_id = ${userId}
 )
 `.as("is_saved"),
+				coverUrl: sql<string>`
+    CONCAT(${URL}, '/', ${BUCKET}, '/', course.cover_path)
+  `.as("cover_url"),
 			},
 			where: whereConditions.length > 0 ? and(...whereConditions) : undefined,
 			orderBy: (course, { desc }) => [desc(course.createdAt)],
@@ -342,16 +348,22 @@ AND saved.user_id = ${userId}
 			}
 		}
 
-		// Update course-level fields (like isPublished)
+		const payload = {};
+
 		if (data.isPublished !== undefined) {
-			await db
-				.update(course)
-				.set({ isPublished: data.isPublished })
-				.where(eq(course.id, courseId));
+			payload.isPublished = data.isPublished;
 		}
 
-		// Return updated course
-		return this.getById(db, courseId, true, undefined);
+		if (data.coverPath !== undefined) {
+			payload.coverPath = data.coverPath;
+		}
+		console.log({ data, payload });
+
+		if (Object.keys(payload).length > 0) {
+			await db.update(course).set(payload).where(eq(course.id, courseId));
+		}
+
+		return { success: true };
 	}
 
 	static async publishCourse(db: DB, courseId: number, isPublished: boolean) {
