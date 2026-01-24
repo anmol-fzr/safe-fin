@@ -6,6 +6,7 @@ import {
 import { authClient } from "@/modules/auth/utils";
 import { DEMO_GRAPHICS } from "../api";
 import { getListSessionsOpts } from "./queries";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 const getUpdateDemoGraphicsOpts = () => {
 	return mutationOptions({
@@ -56,4 +57,23 @@ const useRevokeOtherSessions = () => {
 	return { revokeOtherSessions: mutate, ...rest };
 };
 
-export { useUpdateDemoGraphics, useRevokeSession, useRevokeOtherSessions };
+const useDeleteAccount = () => {
+	const { handleLogout } = useAuth();
+
+	const { mutate, ...rest } = useMutation({
+		mutationKey: ["AUTH", "REVOKE", "OTHER", "SESSION"],
+		mutationFn: () => authClient.deleteUser(),
+		onSuccess: () => {
+			handleLogout();
+		},
+	});
+
+	return { deleteAccount: mutate, ...rest };
+};
+
+export {
+	useUpdateDemoGraphics,
+	useRevokeSession,
+	useRevokeOtherSessions,
+	useDeleteAccount,
+};
