@@ -26,7 +26,8 @@ export default function RootLayout() {
 
 	const themeContextValue = useMemo(
 		() => ({
-			theme: theme as ThemeContexts,
+			theme: "light" as ThemeContexts,
+			//theme: theme as ThemeContexts,
 			setTheme: setTheme as (t: ThemeContexts) => void,
 		}),
 		[theme, setTheme],
