@@ -114,7 +114,12 @@ const useGetSavedCourses = () => {
 	return { courses: data, ...rest };
 };
 
-export { getLessonsOpts, getLessonOpts, getSavedCoursesOpts };
+export {
+	getLessonsOpts,
+	getLessonOpts,
+	getSavedCoursesOpts,
+	getForYouCoursesOpts,
+};
 export {
 	useGetLessons,
 	useGetLesson,

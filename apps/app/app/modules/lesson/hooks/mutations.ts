@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import type { ResourceId } from "@/types";
 import { COURSES, LESSON } from "../api";
-import { getLessonsOpts } from "./api";
+import { getForYouCoursesOpts, getLessonsOpts } from "./api";
 
 const useSaveCourseProgress = () => {
 	const { mutate, ...rest } = useMutation({
@@ -22,6 +22,7 @@ const useUpdateLessonStatus = () => {
 
 const useToggleCourseSave = () => {
 	const queryOpts = getLessonsOpts();
+	const forYouQueryOpts = getForYouCoursesOpts();
 
 	const { mutate, ...rest } = useMutation({
 		mutationKey: ["COURSE", "SAVE", "TOGGLE"],
@@ -30,7 +31,6 @@ const useToggleCourseSave = () => {
 			const prevCourses = context.client.getQueryData(queryOpts.queryKey);
 
 			const newCourses = structuredClone(prevCourses);
-
 			newCourses?.pages.forEach((page) => {
 				page.data.forEach((course) => {
 					if (course.id === courseId) {
@@ -38,15 +38,38 @@ const useToggleCourseSave = () => {
 					}
 				});
 			});
-
 			context.client.setQueryData(queryOpts.queryKey, newCourses);
 
-			return { prevCourses, newCourses, courseId };
+			// For You
+			const prevForYouCourses = context.client.getQueryData(
+				forYouQueryOpts.queryKey,
+			);
+
+			const newForYouCourses = structuredClone(prevForYouCourses);
+			newForYouCourses?.data.forEach((course) => {
+				if (course.id === courseId) {
+					course.isSaved = course.isSaved === 0 ? 1 : 0;
+				}
+			});
+			context.client.setQueryData(forYouQueryOpts.queryKey, newForYouCourses);
+
+			return {
+				prevCourses,
+				newCourses,
+				courseId,
+				prevForYouCourses,
+				newForYouCourses,
+			};
 		},
 		onError: (err, courseId, onMutateResult, context) => {
 			context.client.setQueryData(
 				queryOpts.queryKey,
 				onMutateResult?.prevCourses,
+			);
+
+			context.client.setQueryData(
+				forYouQueryOpts.queryKey,
+				onMutateResult?.prevForYouCourses,
 			);
 		},
 	});
