@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { axiosInstance as ax } from "@/services/api/axios";
 import type { IResData, ResourceId } from "@/services/api/types";
 import type { IResGetCourse } from "./types/one-course";
@@ -66,6 +67,38 @@ export const COURSES = {
 		get<unknown, IResGetCourse>(`/courses/${courseId}`),
 	UPDATE: (courseId: ResourceId, payload: IReqUpdateCourse) =>
 		patch<unknown, IResGetCourse>(`/courses/${courseId}`, payload),
+
+	UPLOAD: async (file: File) => {
+		const id = toast.loading("Uploading Image ...");
+		const { uploadUrl, publicUrl, fileUrl } = await post<
+			unknown,
+			{
+				uploadUrl: string;
+				fileUrl: string;
+				publicUrl: string;
+			}
+		>("/courses/upload-url", {
+			filename: file.name,
+			type: "courses",
+		});
+
+		const uploadRes = await fetch(uploadUrl, {
+			method: "PUT",
+			body: file,
+			headers: {
+				"Content-Type": file.type,
+			},
+		});
+
+		if (!uploadRes.ok) {
+			toast.error("Unable to Upload Image", { id });
+			throw new Error("Failed to upload image to storage");
+		}
+		toast.success("Unable to Upload Image", { id });
+
+		return { publicUrl, fileUrl };
+	},
+
 	// DELETE: (lessonId) => ax.delete(`/lessons/${lessonId}`),
 	// UPDATE: (lessonId, lesson) => patch(`/lessons/${lessonId}`, lesson),
 } as const;

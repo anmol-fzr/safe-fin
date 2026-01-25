@@ -1,9 +1,4 @@
-import {
-	type ComponentPropsWithoutRef,
-	type PropsWithChildren,
-	useCallback,
-	useRef,
-} from "react";
+import { type ComponentPropsWithoutRef, type PropsWithChildren } from "react";
 import {
 	Controller,
 	FormProvider,
@@ -19,28 +14,12 @@ import { ImageUploader } from "@/components/image-uploader";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import { uploadMedia } from "@/services/api";
+import { COURSES } from "../../api";
 
 type CourseFormRootProps = PropsWithChildren & {
 	form: UseFormReturn;
 	handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 	className?: string;
-};
-
-type Action = "publish" | "draft";
-
-export const useCourseActionFormRef = () => {
-	const ref = useRef<Action>("publish");
-
-	const toPublish = useCallback(() => {
-		ref.current = "publish";
-	}, []);
-
-	const toDraft = useCallback(() => {
-		ref.current = "draft";
-	}, []);
-
-	return { ref, toDraft, toPublish };
 };
 
 function CourseFormRoot({
@@ -106,7 +85,7 @@ const CourseFormCoverImageField = () => {
 					onChange={field.onChange}
 					errorMessage={fieldState.error?.message}
 					uploadFn={async (file) => {
-						const { fileUrl, publicUrl } = await uploadMedia(file);
+						const { fileUrl, publicUrl } = await COURSES.UPLOAD(file);
 
 						setValue("coverPath", fileUrl);
 						return publicUrl;
