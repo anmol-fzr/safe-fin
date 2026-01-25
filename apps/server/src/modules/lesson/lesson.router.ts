@@ -4,10 +4,10 @@ import {
 	createLessonHandler,
 	deleteLesson,
 	forYouLessons,
+	getCourseObjectUploadUrl,
 	getLessonById,
 	getUserLessons,
 	likeCourseHandler,
-	linkLessonWithQuiz,
 	publishLesson,
 	saveCourseProgressHandler,
 	updateLesson,
@@ -24,10 +24,10 @@ const lessonRouter = createApp()
 	.get("/:courseId", ...getLessonById)
 	.patch("/:courseId", ...updateLesson)
 	.post("/:courseId/toggle-like", ...likeCourseHandler)
-	.delete("/:id", ...deleteLesson)
-	.patch("/:id/publish", ...publishLesson)
+	.delete("/:courseId", ...deleteLesson)
+	.patch("/:courseId/publish", ...publishLesson)
 	.route("/", chapterRouter)
 	.route("/", unitRouter)
-	.post("/link", ...linkLessonWithQuiz); // Deprecated - returns 410
+	.post("/upload-url", ...getCourseObjectUploadUrl);
 
 export { lessonRouter };

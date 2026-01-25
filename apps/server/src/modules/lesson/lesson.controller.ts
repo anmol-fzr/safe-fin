@@ -1,6 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
 import type { DB } from "@safe-fin/db";
-import { env } from "hono/adapter";
 import { z } from "zod";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, paginate, userRole } from "@/middleware";
@@ -185,7 +184,7 @@ export const updateLesson = createHandlers(
 export const publishLesson = createHandlers(
 	authenticate,
 	db,
-	zValidator("param", z.object({ id: dbIdSchema })),
+	zValidator("param", courseIdParamSchema),
 	zValidator("json", publishCourseSchema),
 	async (c) => {
 		const user = c.get("user");
@@ -196,10 +195,10 @@ export const publishLesson = createHandlers(
 			return c.json({ error: "Unauthorized" }, 403);
 		}
 
-		const { id } = c.req.valid("param");
+		const { courseId } = c.req.valid("param");
 		const { isPublished } = c.req.valid("json");
 
-		const result = await LessonService.publishCourse(db, id, isPublished);
+		const result = await LessonService.publishCourse(db, courseId, isPublished);
 
 		return c.json({ data: result });
 	},
@@ -208,7 +207,7 @@ export const publishLesson = createHandlers(
 export const deleteLesson = createHandlers(
 	authenticate,
 	db,
-	zValidator("param", z.object({ id: dbIdSchema })),
+	zValidator("param", courseIdParamSchema),
 	async (c) => {
 		const user = c.get("user");
 		const db = c.get("db");
@@ -218,30 +217,35 @@ export const deleteLesson = createHandlers(
 			return c.json({ error: "Unauthorized" }, 403);
 		}
 
-		const { id } = c.req.valid("param");
-		await LessonService.delete(db, id);
+		const { courseId } = c.req.valid("param");
+		await LessonService.delete(db, courseId);
 
 		return c.json({ success: true });
 	},
 );
 
 // ============================================
-// UNIT HANDLERS
-// ============================================
-// ============================================
 // LEGACY (to be removed)
 // ============================================
 
-export const linkLessonWithQuiz = createHandlers(
+const uploadSchema = z.object({
+	fileName: z.string(),
+	type: z.enum(["cover"]),
+});
+
+export const getCourseObjectUploadUrl = createHandlers(
 	authenticate,
-	db,
+	userRole("admin"),
+	s3,
+	zValidator("json", uploadSchema),
 	async (c) => {
-		return c.json(
-			{
-				error:
-					"This endpoint is deprecated. Exercises are now linked to units, not courses.",
-			},
-			410,
-		);
+		const { fileName, type } = c.req.valid("json");
+		const storage = c.get("storage");
+
+		const key = `courses/${type}/${crypto.randomUUID()}-${fileName}`;
+
+		const result = await storage.getUploadUrl(key, 600);
+
+		return c.json(result);
 	},
 );
