@@ -7,6 +7,7 @@ interface Data extends ITimestamps {
 	isPublished: boolean;
 	avgRating: number;
 	rateCount: number;
+	coverUrl: string;
 	content: Content;
 	chapters: Chapter[];
 	points: number;

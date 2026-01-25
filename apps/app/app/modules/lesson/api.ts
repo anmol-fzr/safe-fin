@@ -307,6 +307,7 @@ export interface CourseItem {
 	isPublished: boolean;
 	isSaved: 0 | 1;
 	level: CourseLevel;
+	coverUrl: string;
 	points?: number;
 	avgRating: number;
 	rateCount: number;

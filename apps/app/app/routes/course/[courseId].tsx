@@ -1,10 +1,10 @@
+import { Suspense } from "react";
 import { z } from "zod";
 import { Screen, Text } from "@/components";
 import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useGetLesson } from "@/modules/lesson/hooks/api";
 import { CourseDetailsScreen } from "@/modules/lesson/screens/LessonDetailScreen";
 import { idSchema } from "@/schema";
-import { Suspense } from "react";
 import { ErrorBoundary } from "@/screens";
 
 const paramsSchema = z.object({
@@ -40,7 +40,7 @@ function CourseScreenImpl(props: CourseScreenImplProps) {
 				<CourseDetailsScreen.Content
 					title={lesson.content.title}
 					description={lesson.content.shortDesc}
-					image="https://ilarge.lisimg.com/image/28254022/1118full-iman-vellani.jpg"
+					image={lesson.coverUrl}
 					level="Beginner"
 					duration="7h"
 					points={lesson.points}

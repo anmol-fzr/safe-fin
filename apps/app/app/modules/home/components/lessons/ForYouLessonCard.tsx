@@ -1,8 +1,8 @@
-import { useDimensions } from "@/hooks/use-dimensions";
-import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
 import { clamp } from "@safe-fin/utils";
 import { useMemo } from "react";
+import { useDimensions } from "@/hooks/use-dimensions";
 import type { CourseItem } from "@/modules/lesson/api";
+import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
 
 interface ForYouLessonCardProps {
 	course: CourseItem;
@@ -10,7 +10,15 @@ interface ForYouLessonCardProps {
 
 export const ForYouLessonCard = (props: ForYouLessonCardProps) => {
 	const { course } = props;
-	const { id, isSaved = 0, content, level, avgRating, rateCount } = course;
+	const {
+		id,
+		isSaved = 0,
+		content,
+		level,
+		avgRating,
+		rateCount,
+		coverUrl,
+	} = course;
 
 	const { maxWidth = 350 } = useForYouLessonCardStyles({ horizontal: true });
 
@@ -21,7 +29,7 @@ export const ForYouLessonCard = (props: ForYouLessonCardProps) => {
 				maxWidth,
 			}}
 		>
-			<LessonCard.Image source="https://ilarge.lisimg.com/image/28254022/1118full-iman-vellani.jpg">
+			<LessonCard.Image source={coverUrl}>
 				<LessonCard.Bookmark isBookmarked={isSaved === 1} />
 			</LessonCard.Image>
 

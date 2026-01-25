@@ -52,7 +52,7 @@ function LessonListImpl() {
 			contentContainerStyle={themed($baseListItemSeparatorStyles)}
 			renderItem={({ item }) => (
 				<LessonCard id={item.id}>
-					<LessonCard.Image source="https://ilarge.lisimg.com/image/28254022/1118full-iman-vellani.jpg">
+					<LessonCard.Image source={item.coverUrl}>
 						<LessonCard.Bookmark isBookmarked={item.isSaved === 1} />
 					</LessonCard.Image>
 
