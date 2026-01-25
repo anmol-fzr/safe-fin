@@ -1,16 +1,20 @@
 import { type Href, useRouter } from "expo-router";
+import { PressableScale } from "pressto";
 import {
 	Image,
 	type ImageSourcePropType,
 	StyleSheet,
 	type TextStyle,
 } from "react-native";
-import { FadeInUp } from "react-native-reanimated";
+import Animated, {
+	FadeIn,
+	FadeInUp,
+	SlideInDown,
+} from "react-native-reanimated";
 import { Text } from "@/components";
 import { type TxKeyPath, translate } from "@/i18n";
-import { spacing, type ThemedStyle } from "@/theme";
+import { makeSpringy, spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { PressableScale } from "pressto";
 
 export interface QuickActionType {
 	labelTx: TxKeyPath;
@@ -36,12 +40,13 @@ export const QuickActionCard = (action: QuickActionCardProps) => {
 			<Text
 				preset="subheading"
 				style={themed($actionTitle)}
-				entering={FadeInUp}
+				entering={makeSpringy(FadeInUp)}
 			>
 				{translate(action.labelTx)}
 			</Text>
-			<Image
+			<Animated.Image
 				source={action.image}
+				entering={makeSpringy(SlideInDown)}
 				style={{ position: "absolute", bottom: 0, right: spacing.md }}
 			/>
 		</PressableScale>

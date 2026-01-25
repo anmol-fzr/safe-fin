@@ -1,8 +1,8 @@
+import { StyleSheet, View } from "react-native";
+import { ListView } from "@/components";
 import { Section } from "@/components/Section";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { QuickActionCard, type QuickActionType } from "./quick-action-card";
-import { ListView } from "@/components";
-import { StyleSheet } from "react-native";
 
 const learnActionImage = require("assets/icons/home/learn-action.png");
 const calculateActionImage = require("assets/icons/home/calculate-action.png");
@@ -44,13 +44,16 @@ export function QuickActions() {
 	return (
 		<Section>
 			<Section.Title>Quick Actions</Section.Title>
-			<ListView
-				data={actions}
-				keyExtractor={(action) => action.labelTx}
-				numColumns={2}
-				contentContainerStyle={styles.separator}
-				renderItem={({ item }) => <QuickActionCard {...item} />}
-			/>
+			<View style={{ flex: 1 }}>
+				<ListView
+					data={actions}
+					keyExtractor={(action) => action.labelTx}
+					numColumns={2}
+					estimatedItemSize={112}
+					contentContainerStyle={styles.separator}
+					renderItem={({ item }) => <QuickActionCard {...item} />}
+				/>
+			</View>
 		</Section>
 	);
 }
