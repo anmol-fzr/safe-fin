@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		// Environment setup & latest features
 		"composite": true,
-		"lib": ["ESNext"],
+		"lib": ["ESNext", "dom"],
 		"target": "ESNext",
 		"module": "Preserve",
 		"moduleDetection": "force",

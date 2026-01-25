@@ -1,8 +1,8 @@
-import type { createAdminAuthClient } from "@safe-fin/auth/admin";
+import type { createAuthClient } from "better-auth/react";
 import { createContext, type PropsWithChildren } from "react";
 import { useSafeContext } from "./useSafeContext";
 
-export type AuthClientType = ReturnType<typeof createAdminAuthClient>;
+type AuthClientType = ReturnType<typeof createAuthClient>;
 
 const AuthContext = createContext<AuthClientType | null>(null);
 AuthContext.displayName = "AuthContext";
@@ -15,6 +15,6 @@ export const AuthProvider = ({ client, children }: AuthProviderProps) => {
 	return <AuthContext.Provider value={client}>{children}</AuthContext.Provider>;
 };
 
-export const useAuthClient = (): AuthClientType => {
+export const useAuthClient = () => {
 	return useSafeContext(AuthContext, useAuthClient.name);
 };
