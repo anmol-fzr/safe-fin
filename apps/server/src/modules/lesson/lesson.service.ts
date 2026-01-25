@@ -49,32 +49,31 @@ interface UpdateCourseData {
 export class LessonService {
 	// ========== GET OPERATIONS ==========
 
-	static async getLessons(db: DB, { limit, page, user }: GetLessonsParams) {
+	static async getLessons(
+		db: DB,
+		{ limit, page, user }: GetLessonsParams,
+		s3Config: BucketConfig,
+	) {
 		const offset = (page - 1) * limit;
 		const { id: userId, role } = user;
 		const isAdmin = role === "admin";
+		const { BUCKET, ENDPOINT } = s3Config;
 
 		const whereConditions = [];
 		if (!isAdmin) {
 			whereConditions.push(eq(course.isPublished, true));
 		}
 
-		const URL = "http://localhost:9000";
-		const BUCKET = "safefin";
 		const lessons = await db.query.course.findMany({
 			extras: {
-				isSaved: sql<boolean>`
-EXISTS (
-SELECT 1
-FROM saved
-WHERE saved.entity_type = 'course'
-AND saved.entity_id = course.id
-AND saved.user_id = ${userId}
-)
-`.as("is_saved"),
-				coverUrl: sql<string>`
-    CONCAT(${URL}, '/', ${BUCKET}, '/', course.cover_path)
-  `.as("cover_url"),
+				isSaved:
+					sql<boolean>` EXISTS ( SELECT 1 FROM saved WHERE saved.entity_type = 'course' AND saved.entity_id = course.id AND saved.user_id = ${userId}) `.as(
+						"is_saved",
+					),
+				coverUrl:
+					sql<string>` CONCAT(${ENDPOINT}, '/', ${BUCKET}, '/', course.cover_path) `.as(
+						"cover_url",
+					),
 			},
 			where: whereConditions.length > 0 ? and(...whereConditions) : undefined,
 			orderBy: (course, { desc }) => [desc(course.createdAt)],

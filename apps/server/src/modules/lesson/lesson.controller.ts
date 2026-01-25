@@ -23,6 +23,7 @@ const courseIdParamSchema = z.object({ courseId: idParamSchema });
 export const getUserLessons = createHandlers(
 	authenticate,
 	db,
+	s3,
 	zValidator("query", getLessonsQueryParamSchema),
 	paginate,
 	async (c) => {
@@ -31,26 +32,37 @@ export const getUserLessons = createHandlers(
 		const user = c.get("user");
 		const db = c.get("db");
 
-		const lessons = await LessonService.getLessons(db, {
-			limit,
-			page,
-			status,
-			user,
-		});
+		const s3Config = c.get("s3");
+
+		const lessons = await LessonService.getLessons(
+			db,
+			{
+				limit,
+				page,
+				status,
+				user,
+			},
+			s3Config,
+		);
 
 		return c.json(lessons);
 	},
 );
 
-export const forYouLessons = createHandlers(authenticate, db, async (c) => {
+export const forYouLessons = createHandlers(authenticate, db, s3, async (c) => {
 	const user = c.get("user");
 	const db = c.get("db");
+	const s3Config = c.get("s3");
 
-	const lessons = await LessonService.getLessons(db, {
-		limit: 3,
-		page: 1,
-		user,
-	});
+	const lessons = await LessonService.getLessons(
+		db,
+		{
+			limit: 3,
+			page: 1,
+			user,
+		},
+		s3Config,
+	);
 
 	return c.json({ data: lessons.data });
 });
