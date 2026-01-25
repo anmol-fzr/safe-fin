@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useCallback } from "react";
 import {
 	$baseListItemSeparatorStyles,
 	EmptyListView,
@@ -24,30 +24,31 @@ function LessonListImpl() {
 		courses,
 		isRefetching,
 		isFetchingNextPage = false,
-		//fetchNextPage,
+		fetchNextPage,
 		refetch,
+		hasNextPage,
 	} = useGetLessons();
-	// const handleViewableItemsChanged = usePrefetchListItem({
-	// 	prefetchQueryFn: getLessonOpts,
-	// });
 
-	//const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
+	const handleEndReached = () => {
+		if (hasNextPage) fetchNextPage();
+	};
 
 	const { themed } = useAppTheme();
 	return (
 		<ListView
 			data={courses}
 			recycleItems
+			onEndReachedThreshold={0.5}
+			estimatedItemSize={300}
 			style={{ paddingBottom: 36 }}
 			showsVerticalScrollIndicator={false}
 			refreshing={isRefetching}
 			onRefresh={refetch}
 			keyExtractor={(item) => item.id.toString()}
-			//onEndReached={handleEndReached}
+			onEndReached={handleEndReached}
 			ListEmptyComponent={EmptyListView}
-			//onViewableItemsChanged={handleViewableItemsChanged}
 			ListFooterComponent={
-				isFetchingNextPage ? <LessonListImpl.Loading /> : EndListView
+				isFetchingNextPage ? LessonListImpl.Loading : EndListView
 			}
 			contentContainerStyle={themed($baseListItemSeparatorStyles)}
 			renderItem={({ item }) => (

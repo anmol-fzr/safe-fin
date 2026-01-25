@@ -101,7 +101,8 @@ interface IReqSaveCourseProgress {
 
 export const COURSES = {
 	FOR_YOU: () => get<unknown, IResGetCourses>(`/courses/for-you`),
-	ALL: () => get<unknown, IResGetCourses>(`/courses`),
+	ALL: (params: IReqParams) =>
+		get<unknown, IResGetCourses>(`/courses`, { params }),
 	ONE: (courseId: ResourceId) =>
 		get<unknown, IResGetCourse>(`/courses/${courseId}`),
 

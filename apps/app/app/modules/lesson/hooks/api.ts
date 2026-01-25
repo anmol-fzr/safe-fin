@@ -5,7 +5,7 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useMemo } from "react";
-import type { ResourceId } from "@/types";
+import type { IReqParams, ResourceId } from "@/types";
 import { COURSES, LESSON, TOPIC } from "../api";
 
 const baseQueryKey = "COURSES";
@@ -40,12 +40,12 @@ const useGetLesson = (lessonId: ResourceId) => {
 function getLessonsOpts() {
 	return infiniteQueryOptions({
 		queryKey: [baseQueryKey],
-		queryFn: COURSES.ALL,
+		queryFn: ({ pageParam }) => COURSES.ALL(pageParam),
 		initialPageParam: { limit: 10, page: 1 },
-		getNextPageParam: ({ paginate }) => {
+		getNextPageParam: ({ paginate }, allPages, lastPageParam) => {
 			if (!paginate.hasMore) return null;
 			return {
-				limit: 10,
+				limit: lastPageParam.limit,
 				page: paginate.nextPage,
 			};
 		},
