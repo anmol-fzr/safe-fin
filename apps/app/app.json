@@ -15,16 +15,12 @@
 		"jsEngine": "hermes",
 		"assetBundlePatterns": ["**/*"],
 		"android": {
-			"icon": {
-				"foregroundImage": "./assets/icons/app-icon.png",
-				"monochromeImage": "./assets/icons/app-icon.png",
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/icons/app-icons/android/adaptive-icon-transparent.png",
+				"monochromeImage": "./assets/icons/app-icons/android/adaptive-icon-transparent.png",
 				"backgroundColor": "#000"
 			},
 			"package": "com.safefin",
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/app-icon/android/adaptive-icon.png",
-				"backgroundImage": "./assets/images/app-icon/android/adaptive-icon.png"
-			},
 			"allowBackup": false,
 			"permissions": ["android.permission.RECORD_AUDIO"]
 		},
@@ -51,10 +47,14 @@
 			[
 				"expo-splash-screen",
 				{
-					"image": "./assets/icons/app-icon.png",
+					"dark": {
+						"image": "./assets/icons/app-icons/android/adaptive-icon-transparent.png",
+						"backgroundColor": "#000"
+					},
+					"image": "./assets/icons/app-icons/android/adaptive-icon-transparent-dark.png",
+					"backgroundColor": "#fff",
 					"imageWidth": 300,
-					"resizeMode": "contain",
-					"backgroundColor": "#000"
+					"resizeMode": "contain"
 				}
 			],
 			[
