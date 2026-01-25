@@ -20,7 +20,7 @@ export function getPaginateRes({
 	limit?: number;
 }) {
 	const hasMore = offset + limit < total;
-	const nextPage = hasMore ? offset + limit + 1 : null;
+	const nextPage = hasMore ? Math.floor(offset / limit) + 2 : null;
 
 	return { total, hasMore, nextPage };
 }
