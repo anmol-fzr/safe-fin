@@ -1,5 +1,6 @@
-import { useAuthClient, useResourceActionToast } from "@safe-fin/ui/hooks";
+import { useResourceActionToast } from "@safe-fin/ui/hooks";
 import { useMutation } from "@tanstack/react-query";
+import { authClient } from "../utils";
 
 type UpdateUserFnPayload = {
 	name: string;
@@ -7,8 +8,6 @@ type UpdateUserFnPayload = {
 };
 
 export const useUpdateUser = () => {
-	const authClient = useAuthClient();
-
 	const toast = useResourceActionToast();
 
 	const { mutate, isPending, ...rest } = useMutation({

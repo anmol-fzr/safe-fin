@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSafeContext, useSendOtp, useVerifyOtp } from "@safe-fin/ui/hooks";
+import { useSafeContext, useSendOtp } from "@safe-fin/ui/hooks";
 import * as Sentry from "@sentry/react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
@@ -24,6 +24,7 @@ import { $styles, type ThemedStyle } from "@/theme";
 import { getFakePhoneNumber } from "@/utils/faker/fields";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGuestLogin } from "../hooks/use-guest-login";
+import { useVerifyOtp } from "../hooks/useVerifyOtp";
 import { useAuthStore } from "../store";
 import { FormOtpField } from "./FormOtpField";
 
@@ -61,7 +62,7 @@ export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 	const setAuthState = useAuthStore((state) => state.setState);
 
 	const { sendOtp, isOtpSent, resetSentOtp } = useSendOtp(queryClient);
-	const { verifyOtpAsync } = useVerifyOtp(queryClient);
+	const { verifyOtpAsync } = useVerifyOtp();
 	const { isGuestLoginPending, handleGuestLogin } = useGuestLogin();
 
 	const form = useForm({
