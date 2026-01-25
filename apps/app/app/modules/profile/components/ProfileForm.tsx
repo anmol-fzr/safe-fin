@@ -1,11 +1,11 @@
+import { auth } from "@safe-fin/auth/server";
 import { FormProvider } from "react-hook-form";
 import { Button } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useYupForm } from "@/hooks";
+import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 import { profileSchema } from "@/modules/auth/schema";
 import { authClient } from "@/modules/auth/utils";
-import { auth } from "@safe-fin/auth/server";
-import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 
 export const ProfileForm = () => {
 	const methods = useYupForm({
@@ -69,7 +69,7 @@ export const ProfileForm = () => {
 
 	return (
 		<FormProvider {...methods}>
-			<FormField name="name" label="Name" placeholder="Anmol" />
+			<FormField name="name" label="Name" placeholder="John Doe" />
 			{/*
 				<FormField
 					name="email"
@@ -80,7 +80,7 @@ export const ProfileForm = () => {
 			<FormField
 				name="phoneNumber"
 				label="Phone Number"
-				placeholder="8427822949"
+				placeholder="8528833050"
 				status="disabled"
 			/>
 

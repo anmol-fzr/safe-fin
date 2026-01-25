@@ -1,9 +1,9 @@
-import { Screen } from "@/components";
-import { Calculator } from "@/modules/calculator/components/Calculator";
-import { $styles } from "@/theme";
 import { z } from "zod";
-import { idSchema } from "@/schema";
+import { Screen } from "@/components";
 import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
+import { Calculator } from "@/modules/calculator/components/Calculator";
+import { idSchema } from "@/schema";
+import { $styles } from "@/theme";
 
 const paramsSchema = z.object({
 	calculatorId: idSchema,

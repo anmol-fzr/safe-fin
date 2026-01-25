@@ -1,4 +1,3 @@
-//import { lessonsResSchema } from "@safe-fin/schema/app";
 import type { IResData } from "@/services/axios";
 import { axiosInstance } from "@/services/axios";
 import type { IReqParams, ResourceId } from "@/types";

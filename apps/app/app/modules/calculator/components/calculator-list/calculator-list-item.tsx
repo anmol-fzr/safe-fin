@@ -27,7 +27,7 @@ export function CalculatorListItemImpl(props: CalculatorListItemImplProps) {
 		<Link
 			key={id}
 			href={{
-				pathname: "/tabs/calculators/[calculatorId]",
+				pathname: "/(protected)/calculators/[calculatorId]",
 				params: { calculatorId: id },
 			}}
 			style={[themed($calculatorListItem), styles]}
@@ -45,7 +45,7 @@ export function CalculatorListItemImpl(props: CalculatorListItemImplProps) {
 CalculatorListItemImpl.Loading = () => (
 	<SkeletonPlaceholder>
 		<SkeletonPlaceholder.Item
-			height={100}
+			height={90}
 			width="100%"
 			borderRadius={24}
 			marginBottom={12}

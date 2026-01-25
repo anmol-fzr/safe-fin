@@ -1,5 +1,5 @@
 import { getEmptyArr } from "@safe-fin/ui/utils";
-import { ListView } from "@/components";
+import { EndListView, ListView } from "@/components";
 import { WithSuspense } from "@/components/with-suspense";
 //import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 import {
@@ -28,6 +28,7 @@ function ScamListImpl() {
 			onRefresh={refetch}
 			estimatedItemSize={127}
 			keyExtractor={(item) => item.id.toString()}
+			ListFooterComponent={EndListView}
 			renderItem={({ item, data, index }) => (
 				<ScamListItemImpl
 					scam={item}
@@ -38,9 +39,10 @@ function ScamListImpl() {
 		/>
 	);
 }
-const arr = getEmptyArr(12);
 
 ScamListImpl.Loading = () => {
+	const arr = getEmptyArr(12);
+
 	return (
 		<ListView
 			showsVerticalScrollIndicator={false}

@@ -1,8 +1,4 @@
-//import { lessonsResSchema } from "@safe-fin/schema/app";
-import type { ZodTypeAny } from "zod";
-import type { IResData } from "@/services/axios";
-import { axiosInstance } from "@/services/axios";
-import type { IReqParams, ResourceId } from "@/types";
+import type { ZodObject } from "zod";
 import { ERROR_MESSAGES, logger, SUCCESS_MESSAGES } from "@/utils/logger";
 
 export const fallbackData = {
@@ -15,7 +11,7 @@ export const fallbackData = {
 };
 
 interface ParseOptions<T> {
-	schema: ZodTypeAny;
+	schema: ZodObject;
 	data: unknown;
 	fallback: T;
 	endpoint?: string;

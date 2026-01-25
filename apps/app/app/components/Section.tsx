@@ -54,7 +54,7 @@ Section.Body = (props: SectionBodyProps) => {
 
 const styles = StyleSheet.create({
 	sectionRoot: {
-		gap: spacing.md,
+		gap: spacing.xs,
 	},
 	header: {
 		flexDirection: "row",

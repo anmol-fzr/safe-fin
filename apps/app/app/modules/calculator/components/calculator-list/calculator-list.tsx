@@ -1,5 +1,5 @@
 import { getEmptyArr } from "@safe-fin/ui/utils";
-import { EmptyListView, ListView } from "@/components";
+import { EmptyListView, EndListView, ListView } from "@/components";
 import { WithSuspense } from "@/components/with-suspense";
 //import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 //import { getLessonOpts } from "@/modules/lesson/hooks/api";
@@ -11,7 +11,8 @@ export const CalculatorList = () => {
 };
 
 function CalculatorListImpl() {
-	const { calculators, isRefetching, refetch } = useGetCalculators();
+	const { calculators, isRefetching, refetch, isFetchingNextPage } =
+		useGetCalculators();
 
 	// const handleViewableItemsChanged = usePrefetchListItem({
 	// 	prefetchQueryFn: getLessonOpts,
@@ -25,6 +26,9 @@ function CalculatorListImpl() {
 			onRefresh={refetch}
 			keyExtractor={(item) => item.title}
 			ListEmptyComponent={EmptyListView}
+			ListFooterComponent={
+				isFetchingNextPage ? <CalculatorListItemImpl.Loading /> : EndListView
+			}
 			//onViewableItemsChanged={handleViewableItemsChanged}
 			renderItem={({ item, data, index }) => (
 				<CalculatorListItemImpl

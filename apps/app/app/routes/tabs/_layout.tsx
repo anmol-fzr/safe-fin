@@ -22,7 +22,7 @@ export default function TabsLayout() {
 	return (
 		<NativeTabs
 			labelVisibilityMode="labeled"
-			backgroundColor={colors.background}
+			backgroundColor={colors.palette.neutral200}
 			indicatorColor={colors.palette.accent200}
 			iconColor={{
 				default: colors.palette.neutral500,

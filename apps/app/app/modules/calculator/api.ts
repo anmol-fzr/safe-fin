@@ -49,8 +49,7 @@ type IResCalculator = IResData<ICalculator>;
 type IResCalculators = IResData<ICalculators, true>;
 
 export const CALCULATOR = {
-	ALL: async () => get<IResCalculators, IResCalculators>(`/calculator`),
-	ONE: (id: ResourceId) =>
-		get<IResCalculator, IResCalculator>(`/calculator/${id}`),
+	ALL: () => get<unknown, IResCalculators>(`/calculator`),
+	ONE: (id: ResourceId) => get<unknown, IResCalculator>(`/calculator/${id}`),
 	//ALL: (params: IReqParams) => get<IResCalculators, IResCalculators>(`/calculator`, { params }),
 } as const;
