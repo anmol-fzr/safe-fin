@@ -1,11 +1,19 @@
 import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
-import type { GetDbOpts } from "@/pkg/db";
-import { getAuthDrizzleAdapter, getDb } from "@/pkg/db";
+import {
+	getDevAuthDrizzleAdapter,
+	getDevDb,
+	getProdAuthDrizzleAdapter,
+	getProdDb,
+} from "@/pkg/db";
 import { getBetterAuthOptions } from "./options";
 //import studioConfig from "./studio.config";
+import type { D1Database } from "@cloudflare/workers-types";
 
-interface AuthOpts extends GetDbOpts {
+interface AuthOpts {
+	DB?: D1Database;
+	DB_URL?: string;
+	DB_TOKEN?: string;
 	BETTER_AUTH_URL: string;
 	BETTER_AUTH_SECRET: string;
 	CORS_ORIGIN_URL: string;
@@ -15,17 +23,26 @@ interface AuthOpts extends GetDbOpts {
  * Better Auth Instance
  */
 export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
-	const { DB_URL, DB_TOKEN } = opts;
+	const { DB_URL, DB_TOKEN, DB } = opts;
 
-	const database = getAuthDrizzleAdapter({
-		DB_URL,
-		DB_TOKEN,
-	});
+	let database;
+	let db;
 
-	const db = getDb({
-		DB_URL,
-		DB_TOKEN,
-	});
+	if (DB_URL && DB_TOKEN) {
+		database = getDevAuthDrizzleAdapter({
+			DB_URL,
+			DB_TOKEN,
+		});
+		db = getDevDb({
+			DB_URL,
+			DB_TOKEN,
+		});
+	} else if (DB) {
+		database = getProdAuthDrizzleAdapter(DB);
+		db = getProdDb(DB);
+	} else {
+		throw new Error("No database configuration found");
+	}
 
 	const betterAuthOptions = getBetterAuthOptions({ db });
 
