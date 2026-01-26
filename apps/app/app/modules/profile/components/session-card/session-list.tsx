@@ -44,31 +44,32 @@ export function SessionList() {
 				)}
 			/>
 
-			{maxNumSessionShown !== sessions.length ? (
-				<PressableScale onPress={onSessionsExpand}>
-					<Text
-						style={{
-							color: colors.palette.neutral700,
-							marginBottom: 24,
-							textAlign: "center",
-						}}
-					>
-						And {sessions.length - maxNumSessionShown} More ...
-					</Text>
-				</PressableScale>
-			) : (
-				<PressableScale onPress={onSessionsCollapse}>
-					<Text
-						style={{
-							color: colors.palette.neutral700,
-							marginBottom: 24,
-							textAlign: "center",
-						}}
-					>
-						Collapse Sessions
-					</Text>
-				</PressableScale>
-			)}
+			{sessions.length > maxNumSessionShown &&
+				(maxNumSessionShown !== sessions.length ? (
+					<PressableScale onPress={onSessionsExpand}>
+						<Text
+							style={{
+								color: colors.palette.neutral700,
+								marginBottom: 24,
+								textAlign: "center",
+							}}
+						>
+							And {sessions.length - maxNumSessionShown} More ...
+						</Text>
+					</PressableScale>
+				) : (
+					<PressableScale onPress={onSessionsCollapse}>
+						<Text
+							style={{
+								color: colors.palette.neutral700,
+								marginBottom: 24,
+								textAlign: "center",
+							}}
+						>
+							Collapse Sessions
+						</Text>
+					</PressableScale>
+				))}
 		</>
 	);
 }
