@@ -54,7 +54,14 @@ const en = {
 			appInfoList: {
 				aboutUs: "About Us",
 				shareApp: "Share the app",
-				rateApp: "Rate the app",
+				rateApp: {
+					title: "Rate the app",
+					desc: "Review our app on Playstore",
+				},
+				feedback: {
+					title: "Feedback",
+					desc: "Let us know, your thoughts on SafeFin",
+				},
 				support: "Support",
 				terms: "Terms of Service",
 				privacyPolicy: "Privacy Policy",

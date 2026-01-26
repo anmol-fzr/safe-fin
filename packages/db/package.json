@@ -9,6 +9,14 @@
 			"types": "./dist/main.d.mts",
 			"default": "./dist/main.mjs"
 		},
+		"./db.dev": {
+			"types": "./dist/db_dev.d.mts",
+			"default": "./dist/db_dev.mjs"
+		},
+		"./db.prod": {
+			"types": "./dist/db_prod.d.mts",
+			"default": "./dist/db_prod.mjs"
+		},
 		"./schema": {
 			"types": "./dist/schema.d.mts",
 			"default": "./dist/schema.mjs"
@@ -39,6 +47,7 @@
 		"tsdown": "^0.15.12"
 	},
 	"devDependencies": {
-		"drizzle-kit": "^0.28.1"
+		"@cloudflare/workers-types": "^4.20260114.0",
+		"drizzle-kit": "^0.30.6"
 	}
 }

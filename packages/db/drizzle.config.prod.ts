@@ -4,9 +4,12 @@ import { envs } from "./src/envs";
 export default defineConfig({
 	out: "./migrations/prod",
 	schema: "./src/schema/index.ts",
-	dialect: "turso",
+	dialect: "sqlite",
+	driver: "d1-http",
+	tablesFilter: ["!_cf_KV"],
 	dbCredentials: {
-		url: envs.DB.URL,
-		authToken: envs.DB.TOKEN,
+		accountId: envs.CLOUDFLARE.ACCOUNT_ID,
+		databaseId: envs.CLOUDFLARE.DATABASE_ID,
+		token: envs.CLOUDFLARE.D1_TOKEN,
 	},
 });

@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"composite": true,
 		"target": "ESNext",
+    "types": ["@cloudflare/workers-types"],
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
 		"strict": true,
@@ -19,3 +20,4 @@
 	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules", "dist"]
 }
+
