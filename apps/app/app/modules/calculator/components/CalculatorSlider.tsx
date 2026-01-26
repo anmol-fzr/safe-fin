@@ -68,9 +68,9 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 	} = useAppTheme();
 
 	return (
-		<View style={styles.sliderContainer}>
+		<View>
 			<View style={styles.labelRow}>
-				<Text>{label}</Text>
+				<Text weight="semiBold">{label}</Text>
 				<TextField
 					value={value.toString()}
 					LeftAccessory={() => <Text>{prepend}</Text>}
@@ -89,10 +89,10 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 					{...{ value, step, onValueChange }}
 					minimumValue={minValue}
 					maximumValue={maxValue}
-					minimumTrackTintColor={colors.success}
-					thumbTintColor={colors.successBackground}
+					minimumTrackTintColor={colors.border}
+					maximumTrackTintColor={colors.border}
+					thumbTintColor={colors.tint}
 					disabled={disabled}
-					maximumTrackTintColor={colors.palette.neutral900}
 				/>
 			)}
 		</View>
@@ -103,13 +103,11 @@ const $textField: ThemedStyle<TextStyle> = ({ colors }) => ({
 	height: 20,
 	marginBottom: 0,
 	textAlign: "right",
+	fontWeight: "medium",
 	color: colors.tint,
 });
 
 const styles = StyleSheet.create({
-	sliderContainer: {
-		marginTop: spacing.xl,
-	},
 	labelRow: {
 		flexDirection: "row",
 		justifyContent: "space-between",
@@ -123,7 +121,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	slider: {
-		height: 40,
+		height: 32,
 	},
 	inputWrapperStyle: {
 		backgroundColor: "transparent",

@@ -2,15 +2,21 @@ import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Parser } from "expr-eval";
 import { Suspense, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import Animated, {
+	FadeIn,
+	FadeInUp,
+	FadeOutDown,
+} from "react-native-reanimated";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListView, Text } from "@/components";
+import { Section } from "@/components/Section";
 import {
 	CalculatorPieChart,
 	CalculatorResultItem,
 	CalculatorSlider,
 	getPieColor,
 } from "@/modules/calculator/components";
-import { colors, spacing } from "@/theme";
+import { colors, makeSpringy, spacing } from "@/theme";
 import type { ResourceId } from "@/types";
 import type { SliderConfig } from "@/utils/const";
 import { useGetCalculator } from "../hooks/queries";
@@ -68,6 +74,7 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		title,
 		calculate,
 		sliders,
+		list: { desc },
 		//constants,
 		resultKeys,
 		pieData,
@@ -106,7 +113,18 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 
 	return (
 		<>
-			<Text preset="heading" text={title} />
+			<Text
+				preset="heading"
+				entering={FadeInUp}
+				exiting={FadeOutDown.duration(50)}
+				text={title}
+			/>
+			<Text
+				preset="subheading"
+				entering={FadeInUp.delay(50)}
+				exiting={FadeOutDown.duration(50).delay(50)}
+				text={desc}
+			/>
 
 			{pieChart && pieData?.length > 0 && (
 				<CalculatorPieChart
@@ -122,14 +140,22 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 				/>
 			)}
 
-			{sliders.map((slider) => (
-				<CalculatorSlider
-					{...slider}
-					key={slider.key}
-					value={formState[slider.key]}
-					setValue={onSliderChange(slider.key)}
-				/>
-			))}
+			<Section>
+				<Section.Body preset="filled">
+					<ListView
+						data={sliders}
+						keyExtractor={(item) => item.key}
+						contentContainerStyle={{ marginTop: 24 }}
+						renderItem={({ item }) => {
+							const value = formState[item.key];
+							const setValue = onSliderChange(item.key);
+							return (
+								<CalculatorSlider {...item} value={value} setValue={setValue} />
+							);
+						}}
+					/>
+				</Section.Body>
+			</Section>
 
 			{/*
       {constants?.map((vals) => (
@@ -146,12 +172,17 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
       ))}
       */}
 
-			<ListView
-				style={styles.resultsContainer}
-				data={resultList}
-				keyExtractor={(item) => item.label}
-				renderItem={({ item }) => <CalculatorResultItem {...item} />}
-			/>
+			<Section>
+				<Section.Body>
+					<ListView
+						style={styles.resultsContainer}
+						data={resultList}
+						contentContainerStyle={{ gap: 6 }}
+						keyExtractor={(item) => item.label}
+						renderItem={({ item }) => <CalculatorResultItem {...item} />}
+					/>
+				</Section.Body>
+			</Section>
 		</>
 	);
 }

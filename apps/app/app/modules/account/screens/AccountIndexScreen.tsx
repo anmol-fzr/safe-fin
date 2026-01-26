@@ -1,6 +1,8 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, type LinkProps } from "expo-router";
 import {
 	ArrowRight2,
+	Danger,
 	DocumentText1,
 	Edit,
 	type Icon as IconType,
@@ -11,12 +13,13 @@ import {
 	Star1,
 	User,
 	WalletMoney,
-	Danger,
 } from "iconsax-react-nativejs";
+import { useEffect } from "react";
 import { Image, Platform, View } from "react-native";
 import { ListView, PressableIcon, Screen, Text } from "@/components";
 import { Section } from "@/components/Section";
 import { IconSax } from "@/context/IconContext";
+import { getCountriesOpts } from "@/hooks/queries";
 import { type TxKeyPath, translate } from "@/i18n";
 import {
 	getDemoGraphicsOpts,
@@ -25,9 +28,6 @@ import {
 import { $styles } from "@/theme";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { getCountriesOpts } from "@/hooks/queries";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 
@@ -196,7 +196,7 @@ export const AccountIndexScreen = () => {
 			<ListView
 				data={DATA}
 				keyExtractor={(item) => item.title}
-				contentContainerStyle={{ gap: spacing.sm }}
+				contentContainerStyle={{ gap: spacing.md }}
 				renderItem={({ item: section }) => (
 					<Section>
 						<Section.Title>{section.title}</Section.Title>
@@ -204,7 +204,7 @@ export const AccountIndexScreen = () => {
 							<ListView
 								data={section.links}
 								keyExtractor={(item) => item.title}
-								contentContainerStyle={{ gap: spacing.xs }}
+								contentContainerStyle={{ gap: spacing.md }}
 								renderItem={({ item }) => (
 									<Link href={item.href}>
 										<View

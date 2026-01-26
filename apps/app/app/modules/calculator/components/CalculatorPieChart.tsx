@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
 		gap: spacing.xs,
 	},
 	legendColorBox: {
-		height: 12,
-		aspectRatio: 2,
+		height: 18,
+		aspectRatio: 1.6,
 		borderRadius: 12,
 	},
 });
