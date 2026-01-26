@@ -2,10 +2,13 @@
 	"name": "safe-fin",
 	"main": "./src/index.ts",
 	"compatibility_date": "2022-07-12",
-	"compatibility_flags": ["export_commonjs_default", "nodejs_compat"],
+	"compatibility_flags": [
+		"export_commonjs_default",
+		"nodejs_compat"
+	],
 	"preview_urls": true,
 	"dev": {
-		"ip": "192.168.29.57",
+		"ip": "192.168.29.195",
 		"port": 3000
 	},
 	"observability": {
@@ -19,6 +22,13 @@
 		{
 			"binding": "KV",
 			"id": "2e03d7a48e124a6992fce8146dcbf91c"
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "safe-fin-prod",
+			"database_id": "f3511c33-e483-466f-b16e-428487152f19"
 		}
 	]
 }

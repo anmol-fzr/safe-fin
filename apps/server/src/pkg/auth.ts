@@ -7,6 +7,7 @@ export function auth(envs: CloudflareBindings) {
 		CORS_ORIGIN_URL,
 		DB_URL,
 		DB_TOKEN,
+		DB,
 	} = envs;
 
 	return authOrg({
@@ -15,6 +16,7 @@ export function auth(envs: CloudflareBindings) {
 		CORS_ORIGIN_URL,
 		DB_URL,
 		DB_TOKEN,
+		DB,
 	});
 }
 

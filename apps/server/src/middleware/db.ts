@@ -1,6 +1,6 @@
 import { env } from "hono/adapter";
 import { createTypedFactory } from "@/factory";
-import { type DB, getDb } from "@/pkg/db";
+import { type DB, getDevDb, getProdDb } from "@/pkg/db";
 
 const { createMiddleware } = createTypedFactory<{
 	Variables: {
@@ -9,10 +9,16 @@ const { createMiddleware } = createTypedFactory<{
 }>();
 
 const db = createMiddleware(async (c, next) => {
-	const { DB_URL, DB_TOKEN } = env(c);
-	const creds = { DB_URL, DB_TOKEN };
+	const { DB, DB_URL, DB_TOKEN } = env(c);
 
-	c.set("db", getDb(creds));
+	if (DB_URL && DB_TOKEN) {
+		c.set("db", getDevDb({ DB_URL, DB_TOKEN }));
+	} else if (DB) {
+		c.set("db", getProdDb(DB));
+	} else {
+		throw new Error("No database configuration found");
+	}
+
 	await next();
 });
 

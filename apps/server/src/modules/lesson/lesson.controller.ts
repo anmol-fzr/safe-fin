@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import type { DB } from "@safe-fin/db";
+import type { DB } from "@/pkg/db";
 import { z } from "zod";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, paginate, userRole } from "@/middleware";
