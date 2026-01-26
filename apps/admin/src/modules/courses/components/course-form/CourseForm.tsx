@@ -75,6 +75,13 @@ const CourseFormPublishSwitch = DraftPublishSwitch;
 const CourseFormCoverImageField = () => {
 	const { control, setValue } = useFormContext();
 
+	const handleUploadFn = async (file: File) => {
+		const { fileUrl, publicUrl } = await COURSES.UPLOAD(file);
+
+		setValue("coverPath", fileUrl);
+		return publicUrl;
+	};
+
 	return (
 		<Controller
 			control={control}
@@ -84,12 +91,7 @@ const CourseFormCoverImageField = () => {
 					value={field.value}
 					onChange={field.onChange}
 					errorMessage={fieldState.error?.message}
-					uploadFn={async (file) => {
-						const { fileUrl, publicUrl } = await COURSES.UPLOAD(file);
-
-						setValue("coverPath", fileUrl);
-						return publicUrl;
-					}}
+					uploadFn={handleUploadFn}
 					aspectRatio={16 / 9}
 					acceptedFileTypes={["image/png", "image/jpeg", "image/webp"]}
 				/>
