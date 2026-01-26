@@ -1,0 +1,8 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "safe-fin-admin",
+	"pages_build_output_dir": "./dist",
+	"vars": {
+		"VITE_PUBLIC_SERVER_URL": "https://safe-fin.anmol-fzr.workers.dev/api/v1"
+	}
+}
