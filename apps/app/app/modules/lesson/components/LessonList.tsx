@@ -1,4 +1,4 @@
-import { Suspense, useCallback } from "react";
+import { Suspense } from "react";
 import {
 	$baseListItemSeparatorStyles,
 	EmptyListView,
@@ -48,7 +48,10 @@ function LessonListImpl() {
 			onEndReached={handleEndReached}
 			ListEmptyComponent={EmptyListView}
 			ListFooterComponent={
-				isFetchingNextPage ? LessonListImpl.Loading : EndListView
+				<LessonListImpl.Footer
+					dataLen={courses.length}
+					isFetchingNextPage={isFetchingNextPage}
+				/>
 			}
 			contentContainerStyle={themed($baseListItemSeparatorStyles)}
 			renderItem={({ item }) => (
@@ -118,3 +121,21 @@ function LessonListImpl() {
 // }
 
 LessonListImpl.Loading = ForYouLessonsImpl.Loading;
+
+interface LessonListImplFooterProps {
+	dataLen: number;
+	isFetchingNextPage: boolean;
+}
+
+LessonListImpl.Footer = (props: LessonListImplFooterProps) => {
+	const { dataLen: coursesLen, isFetchingNextPage } = props;
+
+	if (coursesLen === 0) {
+		return undefined;
+	}
+	if (isFetchingNextPage) {
+		return LessonListImpl.Loading;
+	}
+
+	return EndListView;
+};
