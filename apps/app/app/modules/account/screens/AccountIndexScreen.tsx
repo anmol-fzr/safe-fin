@@ -13,6 +13,7 @@ import {
 	Star1,
 	User,
 	WalletMoney,
+	LikeDislike,
 } from "iconsax-react-nativejs";
 import { useEffect } from "react";
 import { Image, Platform, View } from "react-native";
@@ -116,13 +117,19 @@ const DATA: {
 		links: [
 			{
 				icon: Star1,
-				title: "screens:profileList.appInfoList.rateApp",
-				//desc: "Review our app on Playstore",
+				title: "screens:profileList.appInfoList.rateApp.title",
+				desc: "screens:profileList.appInfoList.rateApp.desc",
 				href: Platform.select({
 					ios: APPSTORE,
 					android: PLAYSTORE,
 					default: PLAYSTORE,
 				}),
+			},
+			{
+				icon: LikeDislike,
+				title: "screens:profileList.appInfoList.feedback.title",
+				desc: "screens:profileList.appInfoList.feedback.desc",
+				href: "/extras/feedback",
 			},
 			// {
 			// 	icon: Share,

@@ -5,8 +5,11 @@ import {
 } from "@tanstack/react-query";
 import { authClient } from "@/modules/auth/utils";
 import { DEMO_GRAPHICS } from "../api";
-import { getListSessionsOpts } from "./queries";
+import { getListSessionsOpts, useSession } from "./queries";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
+import * as Sentry from "@sentry/react-native";
+import { useResourceActionToast } from "@safe-fin/ui/hooks";
+import { useAuthStore } from "@/modules/auth/store";
 
 const getUpdateDemoGraphicsOpts = () => {
 	return mutationOptions({
@@ -71,9 +74,42 @@ const useDeleteAccount = () => {
 	return { deleteAccount: mutate, ...rest };
 };
 
+const useSubmitFeedback = () => {
+	const toast = useResourceActionToast();
+	const userId = useAuthStore((state) => state?.user?.id ?? "");
+
+	const { mutate, isPending, ...rest } = useMutation({
+		mutationFn: (message: string) => {
+			Sentry.captureFeedback(
+				{ message },
+				{
+					captureContext: {
+						tags: {
+							userId,
+						},
+					},
+				},
+			);
+		},
+		onMutate() {
+			toast.loading("Submitting ...");
+		},
+		onSuccess() {
+			toast.success("Feedback Submitted");
+		},
+		onError(err) {
+			console.log(err);
+			toast.error("Unable to Submit Feedback");
+		},
+	});
+
+	return { submitFeedback: mutate, isSubmittingFeedback: isPending, ...rest };
+};
+
 export {
 	useUpdateDemoGraphics,
 	useRevokeSession,
 	useRevokeOtherSessions,
 	useDeleteAccount,
+	useSubmitFeedback,
 };

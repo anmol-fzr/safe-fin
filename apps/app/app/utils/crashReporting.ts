@@ -1,5 +1,4 @@
 import * as Sentry from "@sentry/react-native";
-import { c } from "../../../../packages/db/dist/index-CnMQpbgf.mjs";
 import { envs } from "./envs";
 
 export const initCrashReporting = () => {
@@ -11,6 +10,11 @@ export const initCrashReporting = () => {
 		integrations: [
 			Sentry.consoleLoggingIntegration(),
 			Sentry.httpClientIntegration(),
+			Sentry.feedbackIntegration({
+				colorScheme: "system",
+				isNameRequired: true,
+				isEmailRequired: true,
+			}),
 		],
 	});
 };
