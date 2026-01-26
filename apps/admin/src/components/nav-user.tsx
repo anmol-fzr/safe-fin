@@ -32,8 +32,11 @@ type NavUserProps = {
 	user: User;
 };
 
-export function NavUser({ user }: NavUserProps) {
+export function NavUser(props: NavUserProps) {
+	const { user = {} } = props;
 	const { isMobile } = useSidebar();
+
+	const { name = "", image = "", email = "" } = user;
 
 	return (
 		<SidebarMenu>
@@ -44,10 +47,10 @@ export function NavUser({ user }: NavUserProps) {
 							size="lg"
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
-							<UserAvatar image={user.image} name={user.name} />
+							<UserAvatar image={image} name={name} />
 							<div className="grid flex-1 text-left text-sm leading-tight">
-								<span className="truncate font-medium">{user.name}</span>
-								<span className="truncate text-xs">{user.email}</span>
+								<span className="truncate font-medium">{name}</span>
+								<span className="truncate text-xs">{email}</span>
 							</div>
 							<ChevronsUpDown className="ml-auto size-4" />
 						</SidebarMenuButton>
@@ -60,10 +63,10 @@ export function NavUser({ user }: NavUserProps) {
 					>
 						<DropdownMenuLabel className="p-0 font-normal">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-								<UserAvatar image={user.image} name={user.name} />
+								<UserAvatar image={image} name={name} />
 								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-medium">{user.name}</span>
-									<span className="truncate text-xs">{user.email}</span>
+									<span className="truncate font-medium">{name}</span>
+									<span className="truncate text-xs">{email}</span>
 								</div>
 							</div>
 						</DropdownMenuLabel>
