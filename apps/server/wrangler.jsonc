@@ -13,7 +13,7 @@
 		"head_sampling_rate": 1
 	},
 	"placement": {
-		"region": "aws:ap-south-1"
+		"mode": "smart"
 	},
 	"kv_namespaces": [
 		{
