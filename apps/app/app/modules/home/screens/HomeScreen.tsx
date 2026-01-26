@@ -4,7 +4,7 @@ import { Screen } from "@/components";
 import { getCalculatorsOpts } from "@/modules/calculator/hooks/queries";
 import { getLessonsOpts } from "@/modules/lesson/hooks/api";
 import { getScamsOpts } from "@/modules/scam/hooks/queries";
-import { $styles, spacing } from "@/theme";
+import { $styles } from "@/theme";
 import { ForYouLessons } from "../components/lessons/ForYouLessons";
 import { QuickActions } from "../components/quick-actions";
 
@@ -20,10 +20,7 @@ export function HomeScreen() {
 	return (
 		<Screen
 			preset="scroll"
-			contentContainerStyle={[
-				$styles.container,
-				{ gap: spacing.lg, padding: spacing.sm },
-			]}
+			contentContainerStyle={$styles.fullHeaderScreen}
 			safeAreaEdges={["top", "bottom"]}
 		>
 			<QuickActions />

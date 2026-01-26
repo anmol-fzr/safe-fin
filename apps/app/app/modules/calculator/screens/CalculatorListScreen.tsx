@@ -4,7 +4,7 @@ import { CalculatorList } from "../components";
 
 export const CalculatorListScreen = () => {
 	return (
-		<Screen preset="scroll" contentContainerStyle={$styles.container}>
+		<Screen preset="scroll" contentContainerStyle={$styles.fullHeaderScreen}>
 			<CalculatorList />
 		</Screen>
 	);
