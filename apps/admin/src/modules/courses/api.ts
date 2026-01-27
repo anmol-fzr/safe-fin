@@ -78,8 +78,8 @@ export const COURSES = {
 				publicUrl: string;
 			}
 		>("/courses/upload-url", {
-			filename: file.name,
-			type: "courses",
+			fileName: file.name,
+			type: "cover",
 		});
 
 		const uploadRes = await fetch(uploadUrl, {
