@@ -5,23 +5,19 @@ import { safeApiParse } from "../lesson/api";
 interface ICalculator {
 	id: number;
 	title: string;
-	list: List;
-	sliders: Slider[];
-	resultKeys: ResultKeysObj;
-	pieChart: boolean;
-	pieData?: PieDaum[];
-	calculate: CalculateObj;
+	desc: string;
+	calculator: {
+		sliders: Slider[];
+		resultKeys: ResultKeysObj;
+		pieChart: boolean;
+		pieData?: PieDaum[];
+		calculate: CalculateObj;
+	};
 }
 
 export interface PieDaum {
 	valueKey: string;
 	text: string;
-}
-
-interface List {
-	title: string;
-	desc: string;
-	screen: string;
 }
 
 interface Slider {
@@ -44,9 +40,15 @@ interface CalculateObj {
 
 const { get } = axiosInstance;
 
-type ICalculators = ICalculator[];
 type IResCalculator = IResData<ICalculator>;
-type IResCalculators = IResData<ICalculators, true>;
+type IResCalculators = IResData<
+	{
+		id: number;
+		title: string;
+		desc: string;
+	}[],
+	true
+>;
 
 export const CALCULATOR = {
 	ALL: () => get<unknown, IResCalculators>(`/calculator`),

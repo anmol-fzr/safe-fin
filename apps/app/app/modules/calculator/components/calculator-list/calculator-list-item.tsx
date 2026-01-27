@@ -6,6 +6,8 @@ import { Text } from "@/components";
 import { useListRadius } from "@/hooks/useListRadius";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { useQueryClient } from "@tanstack/react-query";
+import { getCalculatorOpts } from "../../hooks/queries";
 
 interface CalculatorListItemImplProps {
 	id: number;
@@ -18,13 +20,18 @@ interface CalculatorListItemImplProps {
 export function CalculatorListItemImpl(props: CalculatorListItemImplProps) {
 	const { id, title, desc, isFirst, isLast } = props;
 	const { themed } = useAppTheme();
-
+	const queryClient = useQueryClient();
 	const { getStyles } = useListRadius({});
 
 	const styles = getStyles({ isFirst, isLast });
 
+	const prefetchCalculator = () => {
+		queryClient.prefetchQuery(getCalculatorOpts(id));
+	};
+
 	return (
 		<Link
+			onPressIn={prefetchCalculator}
 			key={id}
 			href={{
 				pathname: "/(protected)/calculators/[calculatorId]",

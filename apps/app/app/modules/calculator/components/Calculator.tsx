@@ -2,11 +2,7 @@ import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Parser } from "expr-eval";
 import { Suspense, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, {
-	FadeIn,
-	FadeInUp,
-	FadeOutDown,
-} from "react-native-reanimated";
+import { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { ListView, Text } from "@/components";
 import { Section } from "@/components/Section";
@@ -16,7 +12,7 @@ import {
 	CalculatorSlider,
 	getPieColor,
 } from "@/modules/calculator/components";
-import { colors, makeSpringy, spacing } from "@/theme";
+import { colors, spacing } from "@/theme";
 import type { ResourceId } from "@/types";
 import type { SliderConfig } from "@/utils/const";
 import { useGetCalculator } from "../hooks/queries";
@@ -72,13 +68,8 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 
 	const {
 		title,
-		calculate,
-		sliders,
-		list: { desc },
-		//constants,
-		resultKeys,
-		pieData,
-		pieChart,
+		desc,
+		calculator: { calculate, sliders, resultKeys, pieData, pieChart },
 	} = calculator;
 
 	const [formState, setFormState] = useState(() =>
@@ -126,7 +117,7 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 				text={desc}
 			/>
 
-			{pieChart && pieData?.length > 0 && (
+			{pieChart && pieData && pieData?.length > 0 && (
 				<CalculatorPieChart
 					data={
 						pieData?.map((pieDataObj, index) => {

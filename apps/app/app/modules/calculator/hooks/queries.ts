@@ -51,5 +51,5 @@ const useGetCalculator = (calcId: ResourceId) => {
 	return { calculator: data.data, ...rest };
 };
 
-export { getCalculatorsOpts };
+export { getCalculatorsOpts, getCalculatorOpts };
 export { useGetCalculators, useGetCalculator };

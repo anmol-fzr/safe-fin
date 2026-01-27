@@ -36,7 +36,7 @@ function CalculatorListImpl() {
 					isLast={index === data.length - 1}
 					id={item.id}
 					title={item.title}
-					desc={item.list.desc}
+					desc={item.desc}
 				/>
 			)}
 		/>
