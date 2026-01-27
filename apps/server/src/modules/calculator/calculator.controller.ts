@@ -1,10 +1,14 @@
 import { zValidator } from "@hono/zod-validator";
 import { db, getPaginateRes, paginate } from "@/middleware";
-import { itemIdSchema, queryParamSchema } from "@/schema/params";
+import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../../factory";
 import { CALCULATOR_CODES, CalculatorErrors } from "./calculator.codes";
-import { calculatorMetadataSchema } from "./calculator.schema";
+import {
+	calculatorIdParamSchema,
+	calculatorMetadataSchema,
+} from "./calculator.schema";
 import { CalculatorService } from "./calculator.service";
+import { isUndefined } from "@/pkg/utils";
 
 const { createHandlers } = createTypedFactory();
 
@@ -499,22 +503,26 @@ export const getCalculators = createHandlers(
 	db,
 	async (c) => {
 		const { limit, offset } = c.get("paginate");
-		//const db = c.get("db");
+		const db = c.get("db");
 
-		// const { calculators, total } = await CalculatorService.getAll(
-		// 	db,
-		// 	limit,
-		// 	offset,
-		// );
+		const countQuery = CalculatorService.getCount(db);
+		const calculatorsQuery = db.query.calculator.findMany({
+			columns: {
+				calculator: false,
+			},
+			limit,
+			offset,
+		});
 
-		// const formatted = calculators.map((calc) => ({
-		// 	id: calc.id,
-		// 	...JSON.parse(calc.text),
-		// }));
+		const [calculators, countResult] = await Promise.all([
+			calculatorsQuery,
+			countQuery,
+		]);
+		const total = countResult[0].count;
 
 		return c.json({
-			data: CALCS,
-			paginate: getPaginateRes({ total: CALCS.length, offset, limit }),
+			data: calculators,
+			paginate: getPaginateRes({ total, offset, limit }),
 		});
 	},
 );
@@ -536,35 +544,32 @@ export const createCalculator = createHandlers(
 );
 
 export const getCalculatorById = createHandlers(
-	zValidator("param", itemIdSchema),
+	zValidator("param", calculatorIdParamSchema),
 	db,
 	async (c) => {
-		const { id: calcId } = c.req.valid("param");
-		//const db = c.get("db");
+		const { calculatorId } = c.req.valid("param");
+		const db = c.get("db");
 
-		// const foundCalc = await CalculatorService.getById(db, calcId);
-		// const calculator = JSON.parse(foundCalc.text);
+		const foundCalculator = await CalculatorService.getById(db, calculatorId);
 
-		const foundCalc = CALCS.find((calc) => calc.id === calcId);
-
-		if (!foundCalc) {
+		if (isUndefined(foundCalculator)) {
 			return c.json({ data: null }, 404);
 		}
 
-		return c.json({ data: foundCalc });
+		return c.json({ data: foundCalculator });
 	},
 );
 
 export const deleteCalculatorById = createHandlers(
-	zValidator("param", itemIdSchema),
+	zValidator("param", calculatorIdParamSchema),
 	db,
 	async (c) => {
-		const { id: calcId } = c.req.valid("param");
+		const { calculatorId } = c.req.valid("param");
 		const db = c.get("db");
 
-		const foundCalc = await CalculatorService.delete(db, calcId);
+		const foundCalculator = await CalculatorService.delete(db, calculatorId);
 
-		if (foundCalc.rowsAffected === 0) {
+		if (foundCalculator.rowsAffected === 0) {
 			return CalculatorErrors.NotFound();
 		}
 

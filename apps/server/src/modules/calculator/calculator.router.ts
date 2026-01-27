@@ -11,7 +11,7 @@ const { createApp } = createTypedFactory();
 const calculatorRouter = createApp()
 	.get("/", ...getCalculators)
 	.post("/", ...createCalculator)
-	.get("/:id", ...getCalculatorById)
-	.delete("/:id", ...deleteCalculatorById);
+	.get("/:calculatorId", ...getCalculatorById)
+	.delete("/:calculatorId", ...deleteCalculatorById);
 
 export { calculatorRouter };

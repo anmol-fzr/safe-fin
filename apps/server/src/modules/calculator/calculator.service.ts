@@ -1,37 +1,39 @@
 import { calculator, count, type DB, eq } from "@/pkg/db";
 
-export const CalculatorService = {
-	getAll: async (db: DB, limit: number, offset: number) => {
+export class CalculatorService {
+	static async getAll(db: DB, limit: number, offset: number) {
 		const query = db.select().from(calculator).limit(limit).offset(offset);
-		const countPrms = db.select({ count: count() }).from(calculator);
+		const countQuery = this.getCount(db);
 
-		const [resultCount, calcs] = await Promise.all([countPrms, query]);
+		const [queryResult, countResult] = await Promise.all([query, countQuery]);
 
 		return {
-			calculators: calcs,
-			total: resultCount[0].count,
+			calculators: queryResult,
+			total: countResult?.[0]?.count ?? 0,
 		};
-	},
+	}
 
-	create: async (db: DB, body: any) => {
+	static async create(db: DB, body: any) {
 		const [newCalc] = await db
 			.insert(calculator)
 			.values({ text: JSON.stringify(body) })
 			.returning();
 		return newCalc;
-	},
+	}
 
-	getById: async (db: DB, id: number) => {
-		const [foundCalc] = await db
-			.select()
-			.from(calculator)
-			.where(eq(calculator.id, id))
-			.limit(1);
+	static async getById(db: DB, id: number) {
+		const foundCalculator = db.query.calculator.findFirst({
+			where: eq(calculator.id, id),
+		});
 
-		return foundCalc;
-	},
+		return foundCalculator;
+	}
 
-	delete: async (db: DB, id: number) => {
+	static async delete(db: DB, id: number) {
 		return await db.delete(calculator).where(eq(calculator.id, id));
-	},
-};
+	}
+
+	static getCount(db: DB) {
+		return db.select({ count: count() }).from(calculator);
+	}
+}

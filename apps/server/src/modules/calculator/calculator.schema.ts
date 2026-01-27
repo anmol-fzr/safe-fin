@@ -1,4 +1,9 @@
+import { idParamSchema } from "@/schema";
 import { z } from "zod";
+
+export const calculatorIdParamSchema = z.object({
+	calculatorId: idParamSchema,
+});
 
 /**
  * NOTE: adjust `allowedGlobals` if you rely on additional helper names
