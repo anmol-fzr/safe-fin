@@ -4,8 +4,8 @@ import { authClient } from "@/lib/auth";
 import { useResourceActionToast } from "./defaults";
 
 type IVerifyOtp = {
-	phoneNumber: string;
-	code: string;
+	email: string;
+	otp: string;
 };
 
 const useVerifyOtp = () => {
@@ -19,7 +19,7 @@ const useVerifyOtp = () => {
 		useMutation({
 			mutationKey: ["AUTH", "VERIFY", "OTP"],
 			mutationFn(payload: IVerifyOtp) {
-				return authClient.phoneNumber.verify(payload);
+				return authClient.signIn.emailOtp(payload);
 			},
 			onMutate() {
 				toast.loading(loadingMsg);

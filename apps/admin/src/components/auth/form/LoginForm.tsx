@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useSendOtp } from "@safe-fin/ui/hooks";
+import { useSendOtp } from "@/modules/auth/hook/mutations";
 import type React from "react";
 import { useCallback } from "react";
 import { toast } from "sonner";
@@ -21,7 +21,6 @@ import { Label } from "@/components/ui/label";
 import { useVerifyOtp } from "@/hooks/api/auth";
 import useOtpTimer from "@/hooks/useOtpTimer";
 import { authClient } from "@/lib/auth";
-import { getPhonePlaceholder } from "@/lib/faker";
 import { cn, secsToClockTime } from "@/lib/utils";
 import { isNull, isUndefined } from "@/pkg/utils";
 import { Route } from "@/routes/index";
@@ -40,11 +39,9 @@ export function LoginForm({
 	const { sendOtp, isSendingOtp, isOtpSent, resetSentOtp } = useSendOtp();
 	const { verifyOtpAsync, isVerifyingOtp } = useVerifyOtp();
 
-	const phonePlaceholder = getPhonePlaceholder();
-
 	const handleSendOtp = useCallback(
-		(phoneNumber: string) => {
-			sendOtp(phoneNumber);
+		(email: string) => {
+			sendOtp(email);
 			resetTimer();
 			startTimer();
 		},
@@ -55,15 +52,15 @@ export function LoginForm({
 		async (e) => {
 			e.preventDefault();
 			const data = new FormData(e.currentTarget);
-			const phoneNumber = data.get("phone-number")?.toString();
+			const email = data.get("email")?.toString();
 
-			if (isUndefined(phoneNumber) || isNull(phoneNumber)) {
-				toast.error("Phone Number is Required");
+			if (isUndefined(email) || isNull(email)) {
+				toast.error("Email is Required");
 				return;
 			}
 
 			if (!isOtpSent) {
-				handleSendOtp(phoneNumber);
+				handleSendOtp(email);
 				return;
 			}
 
@@ -73,7 +70,7 @@ export function LoginForm({
 				return;
 			}
 
-			await verifyOtpAsync({ phoneNumber, code: otp });
+			await verifyOtpAsync({ email, otp });
 			const respData = await authClient.getSession();
 
 			if (isUndefined(respData.data?.user)) {
@@ -103,12 +100,12 @@ export function LoginForm({
 					<form onSubmit={handleSubmit}>
 						<div className="flex flex-col gap-6" ref={animateRef}>
 							<div className="grid gap-3">
-								<Label htmlFor="phone-number">Phone Number</Label>
+								<Label htmlFor="email">Email</Label>
 								<Input
-									id="phone-number"
-									name="phone-number"
-									type="tel"
-									placeholder={phonePlaceholder}
+									id="email"
+									name="email"
+									type="text"
+									placeholder="user@email.com"
 									required
 									readOnly={isOtpSent}
 								/>
@@ -151,7 +148,7 @@ export function LoginForm({
 								</Button>
 								{isOtpSent && (
 									<Button variant="link" onClick={resetSentOtp}>
-										Change Phone Number
+										Change Email
 									</Button>
 								)}
 							</div>
@@ -168,7 +165,7 @@ LoginForm.Header = () => {
 		<CardHeader>
 			<CardTitle>Login to your account</CardTitle>
 			<CardDescription>
-				Enter your Phone Number below to login to your account
+				Enter your Email Address below to login to your account
 			</CardDescription>
 		</CardHeader>
 	);
