@@ -3,8 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authClient } from "../utils";
 
 type IVerifyOtp = {
-	phoneNumber: string;
-	code: string;
+	email: string;
+	otp: string;
 };
 
 export const useVerifyOtp = () => {
@@ -21,7 +21,7 @@ export const useVerifyOtp = () => {
 			{
 				mutationKey: ["AUTH", "VERIFY", "OTP"],
 				mutationFn(payload: IVerifyOtp) {
-					return authClient.phoneNumber.verify(payload);
+					return authClient.signIn.emailOtp(payload);
 				},
 				onMutate() {
 					toast.loading(loadingMsg);

@@ -4,13 +4,13 @@ import Animated, { FadeIn, FadeInDown, FadeOut } from "react-native-reanimated";
 import { Button, Text } from "@/components";
 import { useToggle } from "@/hooks";
 import { LoginForm } from "@/modules/auth/components";
-import { useIsGuestUser } from "@/modules/auth/hooks/use-guest-login";
 import { makeSpringy } from "@/theme";
 import { getGuestMessage } from "@/utils/faker/guest";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export const GuestSafe = (props: PropsWithChildren) => {
-	const isGuest = useIsGuestUser();
+	const { isGuest } = useAuth();
 	const theme = useAppTheme();
 	const { isOpen, onOpen, onClose } = useToggle();
 

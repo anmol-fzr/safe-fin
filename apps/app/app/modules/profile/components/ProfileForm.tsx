@@ -1,32 +1,22 @@
-import { auth } from "@safe-fin/auth/server";
 import { FormProvider } from "react-hook-form";
 import { Button } from "@/components";
 import { FormField } from "@/components/form/FormField";
 import { useYupForm } from "@/hooks";
 import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 import { profileSchema } from "@/modules/auth/schema";
-import { authClient } from "@/modules/auth/utils";
+import { getFakeEmail } from "@/utils/faker/fields";
+import { useAuthStore } from "@/modules/auth/store";
 
 export const ProfileForm = () => {
+	const user = useAuthStore((state) => state.user);
+
 	const methods = useYupForm({
 		schema: profileSchema,
 		defaultValues: async () => {
-			try {
-				const { data } = await authClient.getSession();
-				if (data !== null) {
-					return {
-						name: data?.user?.name ?? "",
-						phoneNumber: data?.user?.phoneNumber ?? "",
-					};
-				}
-			} catch (err) {
-				console.error("Error: Fetching Data for User profile, ", err);
-			} finally {
-				return {
-					name: "",
-					phoneNumber: "",
-				};
-			}
+			return {
+				name: user?.name ?? "",
+				email: user?.email ?? "",
+			};
 		},
 	});
 
@@ -38,77 +28,15 @@ export const ProfileForm = () => {
 		});
 	});
 
-	//const { getValues } = methods;
-
-	// async function sendOtp() {
-	// 	const { phoneNumber } = getValues();
-	// 	const isOtpSent = await authClient.phoneNumber.sendOtp({
-	// 		phoneNumber: phoneNumber.toString(),
-	// 	});
-	// 	if (isOtpSent.error === null) {
-	// 		console.log(isOtpSent.data.message);
-	// 		setPhoneOtpState("sent");
-	// 	}
-	// }
-
-	// async function verifyOtp() {
-	// 	const { phoneNumber, otp } = getValues();
-	// 	if (!otp) {
-	// 		return;
-	// 	}
-	// 	const isOtpVerified = await authClient.phoneNumber.verify({
-	// 		phoneNumber: phoneNumber.toString(),
-	// 		code: otp.toString(),
-	// 		updatePhoneNumber: true,
-	// 	});
-	// 	if (isOtpVerified.error === null) {
-	// 		console.log(isOtpVerified.data);
-	// 		setPhoneOtpState("verified");
-	// 	}
-	// }
-
 	return (
 		<FormProvider {...methods}>
 			<FormField name="name" label="Name" placeholder="John Doe" />
-			{/*
-				<FormField
-					name="email"
-					label="Email"
-					placeholder="anmol@withanmol.com"
-				/>
-        */}
 			<FormField
-				name="phoneNumber"
-				label="Phone Number"
-				placeholder="8528833050"
+				name="email"
+				label="Email Address"
+				placeholder={getFakeEmail()}
 				status="disabled"
 			/>
-
-			{/*
-				{["open", "verified"].includes(phoneOtpState) && (
-					<FormField
-						name="otp"
-						autoCapitalize="none"
-						autoComplete="sms-otp"
-						autoCorrect={false}
-						labelTx="loginScreen:otpFieldLabel"
-						placeholderTx="loginScreen:otpFieldPlaceholder"
-						RightAccessory={() => (
-							<Button
-								preset="text"
-								style={{
-									marginTop: "auto",
-									marginRight: spacing.sm,
-									marginBottom: "auto",
-								}}
-								onPress={() => setPhoneOtpState("closed")}
-							>
-								Verify OTP
-							</Button>
-						)}
-					/>
-				)}
-        */}
 			<Button
 				preset="reversed"
 				status={isUpdatingUser ? "loading" : undefined}

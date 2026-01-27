@@ -114,8 +114,8 @@ const en = {
 		guestLogInPending: "Logging In as Guest ...",
 		enterDetails:
 			"Enter your details below to unlock top secret info. You'll never guess what we've got waiting. Or maybe you will; it's not rocket science here.",
-		phoneFieldLabel: "Phone Number",
-		phoneFieldPlaceholder: "Enter your Phone Number",
+		emailFieldLabel: "Email Address",
+		emailFieldPlaceholder: "Enter your Email Address",
 		otpFieldLabel: "OTP ( One Time Password )",
 		otpFieldPlaceholder: "123456",
 		verifyOtp: "Verify Otp",

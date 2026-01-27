@@ -39,8 +39,6 @@ export const useGuestLogin = () => {
 		},
 		onError(error) {
 			console.log(error);
-			console.dir(error);
-			console.debug(error);
 			console.log(error.name, error.message, error?.cause);
 
 			toast.error("Unable to Login as Guest");
@@ -52,10 +50,4 @@ export const useGuestLogin = () => {
 		handleGuestLogin: mutate,
 		...rest,
 	};
-};
-
-export const useIsGuestUser = () => {
-	const isAnonymous = useAuthStore((state) => state.user?.isAnonymous ?? false);
-
-	return isAnonymous;
 };

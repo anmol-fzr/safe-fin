@@ -5,10 +5,15 @@ import { useCallback } from "react";
 import { onLogout } from "@/utils/crashReporting";
 import { useAuthStore } from "../store";
 import { authClient } from "../utils";
+import { isNotNull } from "@safe-fin/utils";
 
 export const useAuth = () => {
 	const resetAuthStore = useAuthStore((state) => state.resetData);
-	const isLogin = useAuthStore((state) => state.user !== null);
+	const user = useAuthStore((state) => state.user);
+
+	const isGuest = user?.isAnonymous ?? false;
+	const isLogin = isNotNull(user);
+
 	const { navigate } = useRouter();
 	const toast = useResourceActionToast();
 	const queryClient = useQueryClient();
@@ -37,5 +42,5 @@ export const useAuth = () => {
 		);
 	}, [toast, navigate, resetAuthStore, queryClient]);
 
-	return { handleLogout, isLogin };
+	return { handleLogout, isLogin, isGuest, user };
 };

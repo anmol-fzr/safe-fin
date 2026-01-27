@@ -42,7 +42,6 @@ const useDemoGraphicsForm = () => {
 			const opts = getDemoGraphicsOpts();
 			try {
 				const data = await queryClient.fetchQuery(opts);
-				console.log("DemoGraphicsForm", data);
 
 				if (data.data === null || data.isNew) {
 					return emptyFormState;
@@ -50,8 +49,12 @@ const useDemoGraphicsForm = () => {
 				const { country = "", state = "" } = data.data;
 
 				queryClient.ensureQueryData(getCountriesOpts());
-				queryClient.ensureQueryData(getStatesOpts(country));
-				queryClient.ensureQueryData(getCitiesOpts(state, country));
+				if (country) {
+					queryClient.ensureQueryData(getStatesOpts(country));
+					if (state) {
+						queryClient.ensureQueryData(getCitiesOpts(state, country));
+					}
+				}
 				return data.data;
 			} catch (error) {
 				console.error("Get User Demo Graphics Data Failed", { cause: error });

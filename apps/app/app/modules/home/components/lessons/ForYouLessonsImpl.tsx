@@ -13,7 +13,7 @@ export const ForYouLessonsImpl = () => {
 			data={courses}
 			horizontal
 			recycleItems
-			showsVerticalScrollIndicator={false}
+			showsHorizontalScrollIndicator={false}
 			keyExtractor={(item) => item.id.toString()}
 			contentContainerStyle={themed($baseListItemSeparatorStyles)}
 			renderItem={({ item }) => <ForYouLessonCard course={item} />}

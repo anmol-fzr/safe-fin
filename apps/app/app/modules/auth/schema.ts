@@ -1,4 +1,5 @@
 import { number, object, string } from "yup";
+import * as Yup from "yup";
 
 const phoneNumber = number()
 	.positive()
@@ -21,14 +22,20 @@ const otp = number()
 // 	return value?.toString().length === 6;
 // });
 
+const email = Yup.string()
+	.email()
+	.required()
+	.label("Email")
+	.typeError("Enter a valid Email address");
+
 const loginSchema = object().shape({
-	phoneNumber,
+	email,
 	otp,
 });
 
 const registerSchema = object({
 	name: string().required().label("Name"),
-	//email: string().email().required().label("Email"),
+	email,
 });
 
 //const profileSchema = registerSchema.concat(loginSchema.pick(["phoneNumber"]));

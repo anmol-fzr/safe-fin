@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSafeContext, useSendOtp } from "@safe-fin/ui/hooks";
+import { useSafeContext } from "@safe-fin/ui/hooks";
 import * as Sentry from "@sentry/react-native";
-import { useQueryClient } from "@tanstack/react-query";
 import * as Burnt from "burnt";
 import { useRouter } from "expo-router";
 import React, {
@@ -21,12 +20,13 @@ import { type TxKeyPath, translate } from "@/i18n";
 import { loginSchema } from "@/modules/auth/schema";
 import { isUndefined } from "@/pkg/utils";
 import { $styles, type ThemedStyle } from "@/theme";
-import { getFakePhoneNumber } from "@/utils/faker/fields";
+import { getFakeEmail, getFakePhoneNumber } from "@/utils/faker/fields";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useGuestLogin } from "../hooks/use-guest-login";
 import { useVerifyOtp } from "../hooks/useVerifyOtp";
 import { useAuthStore } from "../store";
 import { FormOtpField } from "./FormOtpField";
+import { useSendOtp } from "../hooks/useSendOtp";
 
 // --- Context Definition ---
 
@@ -55,13 +55,12 @@ const useLoginFormContext = () => {
 export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 	const { countdown, reset, restart } = useCountdown(59);
 	const otpInputRef = useRef<OtpInputRef>(null);
-	const queryClient = useQueryClient();
 	const router = useRouter();
 
 	const setAuthData = useAuthStore((state) => state.setData);
 	const setAuthState = useAuthStore((state) => state.setState);
 
-	const { sendOtp, isOtpSent, resetSentOtp } = useSendOtp(queryClient);
+	const { sendOtp, isOtpSent, resetSentOtp } = useSendOtp();
 	const { verifyOtpAsync } = useVerifyOtp();
 	const { isGuestLoginPending, handleGuestLogin } = useGuestLogin();
 
@@ -69,10 +68,7 @@ export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 		resolver: yupResolver(loginSchema),
 	});
 
-	const handleVerifyOtp = async (payload: {
-		phoneNumber: string;
-		code: string;
-	}) => {
+	const handleVerifyOtp = async (payload: { email: string; otp: string }) => {
 		try {
 			await verifyOtpAsync(payload, {
 				onSuccess(data) {
@@ -97,7 +93,7 @@ export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 
 	const handleSubmit = form.handleSubmit(async (data) => {
 		if (!isOtpSent) {
-			sendOtp(data.phoneNumber.toString());
+			sendOtp(data.email);
 			return;
 		}
 		if (isUndefined(data.otp)) {
@@ -105,8 +101,8 @@ export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 			return;
 		}
 		handleVerifyOtp({
-			phoneNumber: data.phoneNumber.toString(),
-			code: data.otp.toString(),
+			email: data.email,
+			otp: data.otp.toString(),
 		});
 	});
 
@@ -136,7 +132,25 @@ export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 	);
 };
 
-// --- Sub-Components ---
+const EmailField = () => {
+	const emailPlaceholder = getFakeEmail();
+	const { isOtpSent, otpInputRef, handleSubmit } = useLoginFormContext();
+	return (
+		<FormField
+			name="email"
+			autoCapitalize="none"
+			autoComplete="email"
+			autoCorrect={false}
+			status={isOtpSent ? "disabled" : undefined}
+			onEndEditing={
+				isOtpSent ? () => otpInputRef.current?.focus() : handleSubmit
+			}
+			keyboardType="email-address"
+			labelTx="loginScreen:emailFieldLabel"
+			placeholder={emailPlaceholder}
+		/>
+	);
+};
 
 const PhoneNumberField = () => {
 	const phonePlaceholder = getFakePhoneNumber();
@@ -265,20 +279,13 @@ const $tapButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 export const LoginForm = Object.assign(LoginFormRoot, {
 	Root: LoginFormRoot,
 	PhoneNumber: PhoneNumberField,
+	Email: EmailField,
 	Otp: OtpField,
 	Timer: Timer,
 	Submit: SubmitButton,
 	GuestLogin: GuestLoginButton,
 	ChangeNumber: ChangeNumberButton,
 });
-
-LoginForm.Root = LoginFormRoot;
-LoginForm.PhoneNumber = PhoneNumberField;
-LoginForm.Otp = OtpField;
-LoginForm.Timer = Timer;
-LoginForm.Submit = SubmitButton;
-LoginForm.GuestLogin = GuestLoginButton;
-LoginForm.ChangeNumber = ChangeNumberButton;
 
 const $actionBtn: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	//margin: spacing.lg,

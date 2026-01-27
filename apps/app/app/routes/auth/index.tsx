@@ -54,7 +54,7 @@ export default function WelcomeScreen() {
 							flex: 1,
 						}}
 					>
-						<LoginForm.PhoneNumber />
+						<LoginForm.Email />
 						<LoginForm.Otp />
 					</View>
 
