@@ -13,8 +13,15 @@ export const authClient = createAppAuthClient({
 export type Session = (typeof authClient)["$Infer"]["Session"]["session"];
 
 export async function logout() {
+	if (!useAuthStore.getState().user) {
+		return;
+	}
 	queryClient.invalidateQueries();
 	useAuthStore.getState().resetData();
 	onLogout();
-	await authClient.signOut();
+	try {
+		await authClient.signOut();
+	} catch (error) {
+		console.log("Error signing out", error);
+	}
 }
