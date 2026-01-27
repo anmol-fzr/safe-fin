@@ -48,10 +48,11 @@ function LessonListImpl() {
 			onEndReached={handleEndReached}
 			ListEmptyComponent={EmptyListView}
 			ListFooterComponent={
-				<LessonListImpl.Footer
-					dataLen={courses.length}
-					isFetchingNextPage={isFetchingNextPage}
-				/>
+				courses.length === 0
+					? undefined
+					: isFetchingNextPage
+						? LessonListImpl.Loading
+						: EndListView
 			}
 			contentContainerStyle={themed($baseListItemSeparatorStyles)}
 			renderItem={({ item }) => (
@@ -121,21 +122,3 @@ function LessonListImpl() {
 // }
 
 LessonListImpl.Loading = ForYouLessonsImpl.Loading;
-
-interface LessonListImplFooterProps {
-	dataLen: number;
-	isFetchingNextPage: boolean;
-}
-
-LessonListImpl.Footer = (props: LessonListImplFooterProps) => {
-	const { dataLen: coursesLen, isFetchingNextPage } = props;
-
-	if (coursesLen === 0) {
-		return undefined;
-	}
-	if (isFetchingNextPage) {
-		return LessonListImpl.Loading;
-	}
-
-	return EndListView;
-};

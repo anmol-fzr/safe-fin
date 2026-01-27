@@ -25,6 +25,9 @@ import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { CourseLevel } from "../../api";
 import { useToggleCourseSave } from "../../hooks/mutations";
+import { queryClient } from "@/utils/lib/query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getLessonOpts } from "../../hooks/api";
 
 type SkeletonPlaceholderItemProps = ComponentProps<
 	typeof SkeletonPlaceholder.Item
@@ -77,9 +80,18 @@ function LessonCard(props: LessonCardRootProps) {
 		[themed, $styleOverride],
 	);
 
+	const queryClient = useQueryClient();
+	const prefetchCourse = () => {
+		queryClient.prefetchQuery(getLessonOpts(id));
+	};
+
 	return (
 		<LessonCardContext value={{ id }}>
-			<PressableScale {...{ style }} onPress={handlePress}>
+			<PressableScale
+				{...{ style }}
+				onPress={handlePress}
+				onPressIn={prefetchCourse}
+			>
 				{children}
 			</PressableScale>
 		</LessonCardContext>
