@@ -1,5 +1,5 @@
 import type { BetterAuthOptions } from "better-auth";
-import { betterAuth } from "better-auth";
+import { betterAuth } from "better-auth/minimal";
 import {
 	getDevAuthDrizzleAdapter,
 	getDevDb,
