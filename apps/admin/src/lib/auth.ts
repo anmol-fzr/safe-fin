@@ -14,13 +14,21 @@ export type IUser = AuthType["user"] & {
 export type Session = AuthType["session"];
 
 export async function logout() {
-	await authClient.signOut({
-		fetchOptions: {
-			onSuccess: () => {
-				window.location.href = "/";
+	if (!useAuthStore.getState().isLogin) {
+		useAuthStore.getState().resetData();
+		window.location.href = "/";
+		return;
+	}
+	try {
+		await authClient.signOut({
+			fetchOptions: {
+				onSuccess: () => {
+					window.location.href = "/";
+				},
 			},
-		},
-	});
-	useAuthStore.getState().resetData();
-	window.location.href = "/";
+		});
+	} finally {
+		useAuthStore.getState().resetData();
+		window.location.href = "/";
+	}
 }
