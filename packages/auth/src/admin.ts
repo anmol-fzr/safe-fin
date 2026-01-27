@@ -1,9 +1,7 @@
 import {
 	adminClient,
-	anonymousClient,
 	inferAdditionalFields,
-	multiSessionClient,
-	phoneNumberClient,
+	emailOTPClient,
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import type { auth } from "./server";
@@ -18,10 +16,8 @@ const createAdminAuthClient = (opts: CreateAdminAuthClientOpts) => {
 	return createAuthClient({
 		baseURL,
 		plugins: [
-			anonymousClient(),
-			phoneNumberClient(),
+			emailOTPClient(),
 			adminClient(),
-			multiSessionClient(),
 			inferAdditionalFields<typeof auth>(),
 		],
 	});

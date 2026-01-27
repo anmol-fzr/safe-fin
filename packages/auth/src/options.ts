@@ -7,11 +7,14 @@ import {
 	multiSession,
 	openAPI,
 	phoneNumber,
+	emailOTP,
 } from "better-auth/plugins";
 import type { DB } from "@/pkg/db";
 import { eq, verification } from "@/pkg/db";
 import type { KVNamespace } from "@cloudflare/workers-types";
 import type { SecondaryStorage } from "better-auth";
+import { sendVerificationOTP } from "./email";
+import { EmailOtps } from "./server";
 
 const createKVSecondaryStorage = (
 	kv: KVNamespace<string>,
@@ -43,9 +46,11 @@ const GOOGLE_TEST_PHONE = "9876543210";
 const GOOGLE_TEST_OTP = "123456:0";
 
 interface GetBetterAuthOptions {
+	isDev: boolean;
 	DB: DB;
-	KV?: KVNamespace<string>;
-	waitUntil?: (promise: Promise<any>) => void;
+	EMAIL: EmailOtps;
+	//KV?: KVNamespace<string>;
+	//waitUntil?: (promise: Promise<any>) => void;
 }
 
 /**
@@ -54,7 +59,7 @@ interface GetBetterAuthOptions {
  * Docs: https://www.better-auth.com/docs/reference/options
  */
 export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
-	const { DB } = params;
+	const { DB, isDev } = params;
 
 	//const secondaryStorage = params?.KV ? createKVSecondaryStorage(params.KV, params.waitUntil) : undefined;
 	const secondaryStorage = undefined;
@@ -97,10 +102,16 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 		},
 		advanced: {
 			disableOriginCheck: true,
-			defaultCookieAttributes: {
-				httpOnly: true,
-				//secure: true,
-			},
+			defaultCookieAttributes: isDev
+				? {
+						httpOnly: true,
+					}
+				: {
+						httpOnly: true,
+						secure: true,
+						sameSite: "none",
+						path: "/",
+					},
 		},
 		session: {
 			cookieCache: {
@@ -120,6 +131,12 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 				generateName: () => "Guest",
 			}),
 			multiSession(),
+			emailOTP({
+				async sendVerificationOTP({ email, otp, type }) {
+					console.info({ email, otp, type });
+					await sendVerificationOTP({ email, otp, ...params.EMAIL });
+				},
+			}),
 			phoneNumber({
 				allowedAttempts: 3,
 				sendOTP: async ({ phoneNumber, code }) => {

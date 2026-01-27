@@ -14,22 +14,32 @@ import type {
 	KVNamespace,
 } from "@cloudflare/workers-types";
 
+export interface EmailOtps {
+	CLIENT_ID: string;
+	CLIENT_SECRET: string;
+	REFRESH_TOKEN: string;
+}
+
 interface AuthOpts {
+	isDev: boolean;
 	DB?: D1Database;
-	KV: KVNamespace<string>;
+	//KV: KVNamespace<string>;
 	DB_URL?: string;
 	DB_TOKEN?: string;
 	BETTER_AUTH_URL: string;
 	BETTER_AUTH_SECRET: string;
 	CORS_ORIGIN_URL: string;
-	ctx?: ExecutionContext;
+
+	EMAIL: EmailOtps;
+	//ctx?: ExecutionContext;
 }
 
 /**
  * Better Auth Instance
  */
 export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
-	const { DB_URL, DB_TOKEN, DB, KV, ctx } = opts;
+	console.log(JSON.stringify(opts, null, 1));
+	const { DB_URL, DB_TOKEN, DB } = opts;
 
 	let database;
 	let db;
@@ -52,8 +62,10 @@ export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
 
 	const betterAuthOptions = getBetterAuthOptions({
 		DB: db,
-		KV,
-		waitUntil: ctx?.waitUntil.bind(ctx),
+		isDev: opts.isDev,
+		EMAIL: opts.EMAIL,
+		//KV,
+		//waitUntil: ctx?.waitUntil.bind(ctx),
 	});
 
 	return betterAuth({
