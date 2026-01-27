@@ -15,13 +15,19 @@ const { createMiddleware } = createTypedFactory<{
 }>();
 
 const s3 = createMiddleware(async (c, next) => {
-	const { S3_BUCKET, S3_ENDPOINT, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY } =
-		env<{
-			S3_BUCKET: string;
-			S3_ENDPOINT: string;
-			S3_ACCESS_KEY_ID: string;
-			S3_SECRET_ACCESS_KEY: string;
-		}>(c);
+	const {
+		S3_BUCKET,
+		S3_ENDPOINT,
+		S3_PUBLIC_ENDPOINT,
+		S3_ACCESS_KEY_ID,
+		S3_SECRET_ACCESS_KEY,
+	} = env<{
+		S3_BUCKET: string;
+		S3_ENDPOINT: string;
+		S3_PUBLIC_ENDPOINT: string;
+		S3_ACCESS_KEY_ID: string;
+		S3_SECRET_ACCESS_KEY: string;
+	}>(c);
 
 	const storage = new StorageService({
 		bucket: S3_BUCKET,
@@ -33,7 +39,7 @@ const s3 = createMiddleware(async (c, next) => {
 	c.set("storage", storage);
 	c.set("s3", {
 		BUCKET: S3_BUCKET,
-		ENDPOINT: S3_ENDPOINT,
+		ENDPOINT: S3_PUBLIC_ENDPOINT,
 	});
 
 	await next();

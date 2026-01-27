@@ -57,7 +57,7 @@ export class LessonService {
 		const offset = (page - 1) * limit;
 		const { id: userId, role } = user;
 		const isAdmin = role === "admin";
-		const { BUCKET, ENDPOINT } = s3Config;
+		const { ENDPOINT } = s3Config;
 
 		const whereConditions = [];
 		if (!isAdmin) {
@@ -70,10 +70,9 @@ export class LessonService {
 					sql<boolean>` EXISTS ( SELECT 1 FROM saved WHERE saved.entity_type = 'course' AND saved.entity_id = course.id AND saved.user_id = ${userId}) `.as(
 						"is_saved",
 					),
-				coverUrl:
-					sql<string>` CONCAT(${ENDPOINT}, '/', ${BUCKET}, '/', course.cover_path) `.as(
-						"cover_url",
-					),
+				coverUrl: sql<string>` CONCAT(${ENDPOINT}, '/', course.cover_path) `.as(
+					"cover_url",
+				),
 			},
 			where: whereConditions.length > 0 ? and(...whereConditions) : undefined,
 			orderBy: (course, { desc }) => [desc(course.createdAt)],
@@ -164,14 +163,13 @@ export class LessonService {
 		userId: string,
 		s3: BucketConfig,
 	) {
-		const { BUCKET, ENDPOINT } = s3;
+		const { ENDPOINT } = s3;
 
 		const foundCourse = await db.query.course.findFirst({
 			extras: {
-				coverUrl:
-					sql<string>`CONCAT(${ENDPOINT}, '/', ${BUCKET}, '/', course.cover_path)`.as(
-						"cover_url",
-					),
+				coverUrl: sql<string>`CONCAT(${ENDPOINT}, '/', course.cover_path)`.as(
+					"cover_url",
+				),
 				isCompleted:
 					sql<boolean>`EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.user_id = ${userId} AND course_progress.course_id = ${courseId} AND course_progress.is_completed = true )`.as(
 						"is_completed",
