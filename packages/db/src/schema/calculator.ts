@@ -1,8 +1,9 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { id } from "./__utils";
 
-const calculator = sqliteTable("table", {
-	id: integer("id").primaryKey({ autoIncrement: true }).notNull(),
-	text: text({ mode: "json" }),
+const calculator = sqliteTable("calculator", {
+	id,
+	calculator: text({ mode: "json" }),
 });
 
 export { calculator };
