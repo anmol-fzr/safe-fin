@@ -1,6 +1,8 @@
 import { auth as authOrg } from "@safe-fin/auth/server";
 
-export function auth(envs: CloudflareBindings) {
+import type { ExecutionContext } from "@cloudflare/workers-types";
+
+export function auth(envs: CloudflareBindings, ctx?: ExecutionContext) {
 	const {
 		BETTER_AUTH_URL,
 		BETTER_AUTH_SECRET,
@@ -8,6 +10,7 @@ export function auth(envs: CloudflareBindings) {
 		DB_URL,
 		DB_TOKEN,
 		DB,
+		KV,
 	} = envs;
 
 	return authOrg({
@@ -17,6 +20,8 @@ export function auth(envs: CloudflareBindings) {
 		DB_URL,
 		DB_TOKEN,
 		DB,
+		KV,
+		ctx,
 	});
 }
 

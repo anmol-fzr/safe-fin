@@ -20,7 +20,7 @@ const db = getDb({
 	DB_TOKEN: DB.TOKEN,
 });
 
-const betterAuthOptions = getBetterAuthOptions({ db });
+const betterAuthOptions = getBetterAuthOptions({ db: DB });
 
 export const auth: ReturnType<typeof betterAuth> = betterAuth({
 	...betterAuthOptions,

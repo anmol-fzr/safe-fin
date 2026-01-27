@@ -10,12 +10,42 @@ import {
 } from "better-auth/plugins";
 import type { DB } from "@/pkg/db";
 import { eq, verification } from "@/pkg/db";
+import type { KVNamespace } from "@cloudflare/workers-types";
+import type { SecondaryStorage } from "better-auth";
+
+const createKVSecondaryStorage = (
+	kv: KVNamespace<string>,
+	waitUntil?: (promise: Promise<any>) => void,
+): SecondaryStorage => {
+	const secondaryStorage: SecondaryStorage = {
+		get: (key) => kv.get(key),
+		set: (key, value, ttl) => {
+			const promise = kv.put(key, value, { expirationTtl: ttl });
+			if (waitUntil) {
+				waitUntil(promise);
+				return Promise.resolve();
+			}
+			return promise;
+		},
+		delete: (key) => {
+			const promise = kv.delete(key);
+			if (waitUntil) {
+				waitUntil(promise);
+				return Promise.resolve();
+			}
+			return promise;
+		},
+	};
+	return secondaryStorage;
+};
 
 const GOOGLE_TEST_PHONE = "9876543210";
 const GOOGLE_TEST_OTP = "123456:0";
 
 interface GetBetterAuthOptions {
-	db: DB;
+	DB: DB;
+	KV?: KVNamespace<string>;
+	waitUntil?: (promise: Promise<any>) => void;
 }
 
 /**
@@ -24,13 +54,17 @@ interface GetBetterAuthOptions {
  * Docs: https://www.better-auth.com/docs/reference/options
  */
 export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
-	const { db } = params;
+	const { DB } = params;
+
+	//const secondaryStorage = params?.KV ? createKVSecondaryStorage(params.KV, params.waitUntil) : undefined;
+	const secondaryStorage = undefined;
 
 	return {
 		/**
 		 * The name of the application.
 		 */
 		appName: "safe-fin-api",
+		secondaryStorage,
 		hooks: {
 			after: createAuthMiddleware(async (ctx) => {
 				if (ctx.path.endsWith("/update-user")) {
@@ -92,8 +126,7 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 					if (phoneNumber === GOOGLE_TEST_PHONE) {
 						console.log("! Google Test Bot detected. Skipping SMS.");
 
-						await db
-							.update(verification)
+						await DB.update(verification)
 							.set({
 								value: GOOGLE_TEST_OTP,
 								expiresAt: new Date(Date.now() + 1000 * 60 * 10),

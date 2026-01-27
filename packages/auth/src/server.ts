@@ -8,22 +8,28 @@ import {
 } from "@/pkg/db";
 import { getBetterAuthOptions } from "./options";
 //import studioConfig from "./studio.config";
-import type { D1Database } from "@cloudflare/workers-types";
+import type {
+	D1Database,
+	ExecutionContext,
+	KVNamespace,
+} from "@cloudflare/workers-types";
 
 interface AuthOpts {
 	DB?: D1Database;
+	KV: KVNamespace<string>;
 	DB_URL?: string;
 	DB_TOKEN?: string;
 	BETTER_AUTH_URL: string;
 	BETTER_AUTH_SECRET: string;
 	CORS_ORIGIN_URL: string;
+	ctx?: ExecutionContext;
 }
 
 /**
  * Better Auth Instance
  */
 export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
-	const { DB_URL, DB_TOKEN, DB } = opts;
+	const { DB_URL, DB_TOKEN, DB, KV, ctx } = opts;
 
 	let database;
 	let db;
@@ -44,7 +50,11 @@ export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
 		throw new Error("No database configuration found");
 	}
 
-	const betterAuthOptions = getBetterAuthOptions({ db });
+	const betterAuthOptions = getBetterAuthOptions({
+		DB: db,
+		KV,
+		waitUntil: ctx?.waitUntil.bind(ctx),
+	});
 
 	return betterAuth({
 		...betterAuthOptions,
