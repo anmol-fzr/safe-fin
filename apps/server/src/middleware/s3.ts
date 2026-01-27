@@ -1,6 +1,6 @@
-import { env } from "hono/adapter";
 import { createTypedFactory } from "@/factory";
 import { StorageService } from "@/pkg/storage";
+import { env } from "cloudflare:workers";
 
 export interface BucketConfig {
 	BUCKET: string;
@@ -19,21 +19,15 @@ const s3 = createMiddleware(async (c, next) => {
 		S3_BUCKET,
 		S3_ENDPOINT,
 		S3_PUBLIC_ENDPOINT,
-		S3_ACCESS_KEY_ID,
-		S3_SECRET_ACCESS_KEY,
-	} = env<{
-		S3_BUCKET: string;
-		S3_ENDPOINT: string;
-		S3_PUBLIC_ENDPOINT: string;
-		S3_ACCESS_KEY_ID: string;
-		S3_SECRET_ACCESS_KEY: string;
-	}>(c);
+		S3_ACCESS_KEY,
+		S3_SECRET_KEY,
+	} = env;
 
 	const storage = new StorageService({
 		bucket: S3_BUCKET,
 		endpoint: S3_ENDPOINT,
-		accessKeyId: S3_ACCESS_KEY_ID,
-		secretAccessKey: S3_SECRET_ACCESS_KEY,
+		accessKeyId: S3_ACCESS_KEY,
+		secretAccessKey: S3_SECRET_KEY,
 	});
 
 	c.set("storage", storage);
