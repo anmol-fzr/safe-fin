@@ -23,6 +23,7 @@ import { LessonCertificate } from "../components/LessonCertificate/LessonCertifi
 import { LessonListItem } from "../components/LessonListItem/LessonListItem";
 import { ChapterList } from "../components/course-details/ChapterList";
 import { getEmptyArr } from "@safe-fin/ui/utils";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 export interface LessonData {
 	id: string;
@@ -359,7 +360,9 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 				<Tabs.Trigger value="overview">Overview</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="lessons">
-				<ChapterList chapters={chapters} />
+				<Animated.View layout={LinearTransition}>
+					<ChapterList chapters={chapters} />
+				</Animated.View>
 			</Tabs.Content>
 			<Tabs.Content value="overview">
 				<MarkdowRenderer content={desc} />

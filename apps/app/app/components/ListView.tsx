@@ -14,12 +14,17 @@ import type {
 	ReactNode,
 	RefObject,
 } from "react";
-import { forwardRef, memo } from "react";
+import { forwardRef, memo, useId } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { Text } from "@/components/Text";
 import { getGenericEmptyState } from "@/utils/faker/emptyState";
 import { getGenericEndState } from "@/utils/faker/endState";
-import { ThemedViewStyle } from "@/theme";
+import { makeSpringy, ThemedViewStyle } from "@/theme";
+import Animated, {
+	BounceIn,
+	FadeIn,
+	FadeInDown,
+} from "react-native-reanimated";
 
 export type ListViewRef = LegendListRef;
 
@@ -47,12 +52,22 @@ interface ListMessageViewProps {
 
 const ListMessageView = (props: ListMessageViewProps) => {
 	const { icon, title, desc } = props;
+
 	return (
-		<View style={listMessageStyles.root}>
-			<Text preset="subheading">{icon}</Text>
-			<Text preset="subheading">{title}</Text>
-			<Text style={listMessageStyles.desc}>{desc}</Text>
-		</View>
+		<Animated.View
+			style={listMessageStyles.root}
+			entering={makeSpringy(FadeIn)}
+		>
+			<Text entering={makeSpringy(BounceIn)} preset="subheading">
+				{icon}
+			</Text>
+			<Text entering={FadeInDown} preset="subheading">
+				{title}
+			</Text>
+			<Text entering={FadeInDown} style={listMessageStyles.desc}>
+				{desc}
+			</Text>
+		</Animated.View>
 	);
 };
 const listMessageStyles = StyleSheet.create({

@@ -8,8 +8,6 @@ import {
 	type Icon as IconType,
 	Lifebuoy,
 	Profile,
-	//Setting2,
-	Share,
 	Star1,
 	User,
 	WalletMoney,
@@ -29,6 +27,7 @@ import {
 import { $styles } from "@/theme";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
+import Animated, { FadeIn } from "react-native-reanimated";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 
@@ -204,39 +203,52 @@ export const AccountIndexScreen = () => {
 				data={DATA}
 				keyExtractor={(item) => item.title}
 				contentContainerStyle={{ gap: spacing.md }}
-				renderItem={({ item: section }) => (
-					<Section>
-						<Section.Title>{section.title}</Section.Title>
-						<Section.Body preset="filled">
-							<ListView
-								data={section.links}
-								keyExtractor={(item) => item.title}
-								contentContainerStyle={{ gap: spacing.md }}
-								renderItem={({ item }) => (
-									<Link href={item.href}>
-										<View
-											style={{
-												flexDirection: "row",
-												alignItems: "center",
-												gap: spacing.md,
-											}}
-										>
-											<IconSax icon={item.icon} size={24} color={colors.text} />
-											<View style={{ flex: 1 }}>
-												<Text size="md">{translate(item.title)}</Text>
-												{item.desc && (
-													<Text size="sm" style={{ color: colors.textDim }}>
-														{translate(item.desc)}
-													</Text>
-												)}
-											</View>
-											<IconSax icon={ArrowRight2} />
-										</View>
-									</Link>
-								)}
-							/>
-						</Section.Body>
-					</Section>
+				renderItem={({ item: section, index }) => (
+					<Animated.View entering={FadeIn.delay(50 * index)}>
+						<Section>
+							<Section.Title>{section.title}</Section.Title>
+							<Section.Body preset="filled">
+								<View style={{ flex: 1 }}>
+									<ListView
+										data={section.links}
+										keyExtractor={(item) => item.title}
+										contentContainerStyle={{ gap: spacing.md }}
+										renderItem={({ item, index }) => (
+											<Animated.View entering={FadeIn.delay(50 * index)}>
+												<Link href={item.href}>
+													<View
+														style={{
+															flexDirection: "row",
+															alignItems: "center",
+															gap: spacing.md,
+														}}
+													>
+														<IconSax
+															icon={item.icon}
+															size={24}
+															color={colors.text}
+														/>
+														<View style={{ flex: 1 }}>
+															<Text size="md">{translate(item.title)}</Text>
+															{item.desc && (
+																<Text
+																	size="sm"
+																	style={{ color: colors.textDim }}
+																>
+																	{translate(item.desc)}
+																</Text>
+															)}
+														</View>
+														<IconSax icon={ArrowRight2} />
+													</View>
+												</Link>
+											</Animated.View>
+										)}
+									/>
+								</View>
+							</Section.Body>
+						</Section>
+					</Animated.View>
 				)}
 			/>
 		</Screen>

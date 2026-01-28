@@ -49,8 +49,8 @@ const useSession = () => {
 		queryKey: ["AUTH", "SESSION"],
 		queryFn: () => authClient.getSession(),
 	});
-	const currSession = data?.data?.session ?? {};
-	const currUser = data?.data?.user ?? {};
+	const currSession = data?.data?.session;
+	const currUser = data?.data?.user;
 
 	return { currSession, currUser, ...rest };
 };

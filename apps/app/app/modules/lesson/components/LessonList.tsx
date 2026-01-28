@@ -10,6 +10,8 @@ import { useAppTheme } from "@/utils/useAppTheme";
 //import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 import { useGetLessons } from "../hooks/api";
 import { LessonCard } from "./LessonCard/LessonCard";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { makeSpringy } from "@/theme";
 
 export function LessonList() {
 	return (
@@ -55,32 +57,34 @@ function LessonListImpl() {
 						: EndListView
 			}
 			contentContainerStyle={themed($baseListItemSeparatorStyles)}
-			renderItem={({ item }) => (
-				<LessonCard id={item.id}>
-					<LessonCard.Image source={item.coverUrl}>
-						<LessonCard.Bookmark isBookmarked={item.isSaved === 1} />
-					</LessonCard.Image>
+			renderItem={({ item, index }) => (
+				<Animated.View entering={makeSpringy(FadeIn).delay(50 * index)}>
+					<LessonCard id={item.id}>
+						<LessonCard.Image source={item.coverUrl}>
+							<LessonCard.Bookmark isBookmarked={item.isSaved === 1} />
+						</LessonCard.Image>
 
-					<LessonCard.Body>
-						<LessonCard.Title>{item.content.title}</LessonCard.Title>
-						<LessonCard.Description>
-							{item.content.shortDesc}
-						</LessonCard.Description>
+						<LessonCard.Body>
+							<LessonCard.Title>{item.content.title}</LessonCard.Title>
+							<LessonCard.Description>
+								{item.content.shortDesc}
+							</LessonCard.Description>
 
-						<LessonCard.Metadata
-							style={{
-								display: "flex",
-								justifyContent: "space-between",
-							}}
-						>
-							<LessonCard.MetadataLevel level={item.level} />
-							<LessonCard.Rating
-								rating={item.avgRating}
-								count={item.rateCount}
-							/>
-						</LessonCard.Metadata>
-					</LessonCard.Body>
-				</LessonCard>
+							<LessonCard.Metadata
+								style={{
+									display: "flex",
+									justifyContent: "space-between",
+								}}
+							>
+								<LessonCard.MetadataLevel level={item.level} />
+								<LessonCard.Rating
+									rating={item.avgRating}
+									count={item.rateCount}
+								/>
+							</LessonCard.Metadata>
+						</LessonCard.Body>
+					</LessonCard>
+				</Animated.View>
 			)}
 		/>
 	);

@@ -20,7 +20,7 @@ export const $styles = {
 	} as ViewStyle,
 
 	fullHeaderScreen: {
-		gap: spacing.xl,
+		gap: spacing.md,
 		padding: spacing.xs,
 		paddingBottom: spacing.xxl,
 	} as ViewStyle,

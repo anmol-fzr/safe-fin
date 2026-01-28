@@ -1,11 +1,12 @@
 import { getEmptyArr } from "@/pkg/ui";
 import { useState } from "react";
 import { ListView, Text } from "@/components";
-import { colors } from "@/theme";
+import { colors, makeSpringy } from "@/theme";
 import { useListSessions, useSession } from "../../hooks/queries";
 import { PressableScale } from "pressto";
 import { RevokeOtherSessions } from "./revoke-other-sessions";
 import { SessionCell } from "./session-cell";
+import Animated, { FadeIn, FadingTransition } from "react-native-reanimated";
 
 const MAX_NUM_SESSIONS_SHOWN = 3;
 
@@ -28,21 +29,25 @@ export function SessionList() {
 
 	return (
 		<>
-			<ListView
-				data={sessions.slice(0, maxNumSessionShown)}
-				keyExtractor={(item) => item.id}
-				refreshing={isRefetchingSessions}
-				ListHeaderComponent={
-					sessions.length > 1 ? RevokeOtherSessions : undefined
-				}
-				onRefresh={refetchSessions}
-				renderItem={({ item }) => (
-					<SessionCell
-						{...item}
-						isCurrentSession={item.id === currSession?.id}
-					/>
-				)}
-			/>
+			<Animated.View layout={FadingTransition}>
+				<ListView
+					data={sessions.slice(0, maxNumSessionShown)}
+					keyExtractor={(item) => item.id}
+					refreshing={isRefetchingSessions}
+					ListHeaderComponent={
+						sessions.length > 1 ? RevokeOtherSessions : undefined
+					}
+					onRefresh={refetchSessions}
+					renderItem={({ item, index }) => (
+						<Animated.View entering={makeSpringy(FadeIn).delay(100 * index)}>
+							<SessionCell
+								{...item}
+								isCurrentSession={item.id === currSession?.id}
+							/>
+						</Animated.View>
+					)}
+				/>
+			</Animated.View>
 
 			{sessions.length > maxNumSessionShown &&
 				(maxNumSessionShown !== sessions.length ? (

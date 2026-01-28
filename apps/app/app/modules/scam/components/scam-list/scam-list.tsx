@@ -15,7 +15,6 @@ export function ScamList() {
 
 function ScamListImpl() {
 	const { scams, isRefetching, refetch } = useGetScams();
-	console.log(scams);
 
 	// const handleViewableItemsChanged = usePrefetchListItem({
 	// 	prefetchQueryFn: getScamsOpts(),

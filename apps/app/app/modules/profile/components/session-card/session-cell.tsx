@@ -12,6 +12,7 @@ import { useAppTheme } from "@/utils/useAppTheme";
 import { useRevokeSession } from "../../hooks/mutations";
 import { IconProvider, IconSax } from "@/context/IconContext";
 import { isNull, isUndefined } from "@/pkg/utils";
+import Animated from "react-native-reanimated";
 
 type SessionCellProps = Session & {
 	isCurrentSession: boolean;
@@ -59,7 +60,7 @@ export function SessionCell(props: SessionCellProps) {
 	const iconColor = isCurrentSession ? colors.tint : color;
 
 	return (
-		<View
+		<Animated.View
 			style={[
 				themed($root),
 				{
@@ -87,7 +88,7 @@ export function SessionCell(props: SessionCellProps) {
 					{isCurrentSession ? "Sign Out" : "Revoke"}
 				</Button>
 			)}
-		</View>
+		</Animated.View>
 	);
 }
 

@@ -12,6 +12,7 @@ import {
 	type ViewStyle,
 } from "react-native";
 import Animated, {
+	FadingTransition,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
@@ -97,7 +98,14 @@ export function Tabs({
 function TabsList({ children, style }: TabsListProps) {
 	const { themed } = useAppTheme();
 
-	return <View style={[themed($tabsListStyle), style]}>{children}</View>;
+	return (
+		<Animated.View
+			style={[themed($tabsListStyle), style]}
+			layout={FadingTransition}
+		>
+			{children}
+		</Animated.View>
+	);
 }
 
 function TabsTrigger({

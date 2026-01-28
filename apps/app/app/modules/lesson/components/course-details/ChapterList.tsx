@@ -1,8 +1,10 @@
 import { ListView } from "@/components";
 import { Chapter } from "../../api-types/course_one";
 import { ChapterBar } from "./ChapterBar";
-import { ThemedViewStyle } from "@/theme";
+import { makeSpringy, ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { View } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 interface ChapterListProps {
 	chapters: Chapter[];
@@ -14,14 +16,18 @@ export const ChapterList = (props: ChapterListProps) => {
 	const { themed } = useAppTheme();
 
 	return (
-		<ListView
-			data={chapters}
-			keyExtractor={(item) => item.id.toString()}
-			contentContainerStyle={themed($separator)}
-			renderItem={({ item, index }) => (
-				<ChapterBar chapter={item} index={index} />
-			)}
-		/>
+		<View style={{ flex: 1 }}>
+			<ListView
+				data={chapters}
+				keyExtractor={(item) => item.id.toString()}
+				contentContainerStyle={themed($separator)}
+				renderItem={({ item, index }) => (
+					<Animated.View entering={makeSpringy(FadeInUp).delay(50 * index)}>
+						<ChapterBar chapter={item} index={index} />
+					</Animated.View>
+				)}
+			/>
+		</View>
 	);
 };
 

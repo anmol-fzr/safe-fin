@@ -3,6 +3,8 @@ import { $baseListItemSeparatorStyles, ListView, Text } from "@/components";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Chapter } from "../../api-types/course_one";
 import { UnitBar } from "./UnitBar";
+import { makeSpringy } from "@/theme";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 type ChapterProps = {
 	chapter: Chapter;
@@ -11,6 +13,8 @@ type ChapterProps = {
 
 export const ChapterBar = (props: ChapterProps) => {
 	const { chapter, index = 0 } = props;
+
+	const chapterIndex = index;
 
 	const { title, units } = chapter;
 
@@ -45,11 +49,19 @@ export const ChapterBar = (props: ChapterProps) => {
 			<Text weight="medium" size="md" style={{ marginBottom: 12 }}>
 				{title}
 			</Text>
-			<View style={{ gap: spacing.xs }}>
+			<View style={{ gap: spacing.xs, flex: 1 }}>
 				<ListView
 					data={units}
 					keyExtractor={(item) => item.id.toString()}
-					renderItem={({ item }) => <UnitBar unit={item} />}
+					renderItem={({ item, index }) => (
+						<Animated.View
+							entering={makeSpringy(FadeInUp).delay(
+								50 * (index + chapterIndex),
+							)}
+						>
+							<UnitBar unit={item} />
+						</Animated.View>
+					)}
 					contentContainerStyle={themed($baseListItemSeparatorStyles)}
 				/>
 			</View>

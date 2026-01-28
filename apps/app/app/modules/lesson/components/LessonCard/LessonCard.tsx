@@ -25,8 +25,7 @@ import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { CourseLevel } from "../../api";
 import { useToggleCourseSave } from "../../hooks/mutations";
-import { queryClient } from "@/utils/lib/query";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { getLessonOpts } from "../../hooks/api";
 
 type SkeletonPlaceholderItemProps = ComponentProps<
@@ -408,14 +407,6 @@ interface LessonCardMetadataProps {
 	 * Style override
 	 */
 	style?: StyleProp<ViewStyle>;
-}
-
-function LessonCardMetadata(props: LessonCardMetadataProps) {
-	const { children, style: $styleOverride } = props;
-
-	const { themed } = useAppTheme();
-
-	return <View style={[themed($metadataRow), $styleOverride]}>{children}</View>;
 }
 
 interface LessonCardMetadataItemProps {

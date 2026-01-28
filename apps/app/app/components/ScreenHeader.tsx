@@ -5,7 +5,7 @@ import type { TextStyle } from "react-native";
 import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { TxKeyPath } from "@/i18n";
-import type { ThemedStyle } from "@/theme";
+import { makeSpringy, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Text } from "./Text";
 
@@ -53,13 +53,13 @@ export const ScreenHeader = memo((props: ScreenHeaderProps) => {
 				preset="heading"
 				tx={titleTx}
 				style={themed($title)}
-				entering={FadeInUp}
+				entering={makeSpringy(FadeInUp)}
 				exiting={FadeOutDown.duration(50)}
 			/>
 			<Text
 				key={`tag-${tagLineTx}`}
 				tx={tagLineTx}
-				entering={FadeInUp}
+				entering={makeSpringy(FadeInUp).delay(20)}
 				exiting={FadeOutDown.duration(50)}
 			/>
 		</Animated.View>
