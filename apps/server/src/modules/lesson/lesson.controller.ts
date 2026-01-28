@@ -129,11 +129,11 @@ export const createLessonHandler = createHandlers(
 	authenticate,
 	db,
 	userRole("admin"),
-	zValidator("form", createCourseSchema),
+	zValidator("json", createCourseSchema),
 	async (c) => {
 		const db = c.get("db");
 
-		const data = c.req.valid("form");
+		const data = c.req.valid("json");
 		const newCourse = await LessonService.create(db, data);
 
 		return c.json({ data: newCourse }, 201);
