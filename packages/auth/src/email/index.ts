@@ -11,7 +11,6 @@ interface SendVerificationOTP extends EmailEnvs {
 
 export async function sendVerificationOTP(payload: SendVerificationOTP) {
 	const { email, otp, ...env } = payload;
-	console.log(console.log(JSON.stringify(payload, null, 2)));
 
 	try {
 		const accessToken = await getAccessToken(env);

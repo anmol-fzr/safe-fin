@@ -38,7 +38,6 @@ interface AuthOpts {
  * Better Auth Instance
  */
 export const auth = (opts: AuthOpts, baOpts?: BetterAuthOptions) => {
-	console.log(JSON.stringify(opts, null, 1));
 	const { DB_URL, DB_TOKEN, DB } = opts;
 
 	let database;
