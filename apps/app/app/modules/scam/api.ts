@@ -1,4 +1,5 @@
-import { scams } from "@/utils/const";
+import { axiosInstance, IResData } from "@/services/axios";
+import { IReqParams, ResourceId } from "@/types";
 
 export type Scam = {
 	id: number;
@@ -8,12 +9,12 @@ export type Scam = {
 };
 export type Scams = Scam[];
 
+const { get } = axiosInstance;
+
+type IResScams = IResData<Scams, true>;
+type IResScam = IResData<Scam>;
+
 export const SCAM = {
-	ALL: (): Promise<Scams> => new Promise((resolve) => resolve(scams)),
-	ONE: (scamId: number): Promise<Scam | undefined> => {
-		return new Promise((resolve) => {
-			const foundScam = scams.find((scam) => scam.id === scamId);
-			resolve(foundScam);
-		});
-	},
+	ALL: (params: IReqParams) => get<unknown, IResScams>("/scam", { params }),
+	ONE: (scamId: ResourceId) => get<unknown, IResScam>(`/scam/${scamId}`),
 } as const;

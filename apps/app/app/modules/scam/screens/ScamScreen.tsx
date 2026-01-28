@@ -22,7 +22,7 @@ export function ScamScreen(props: ScamScreenProps) {
 function ScamScreenImpl(props: ScamScreenProps) {
 	const { scamId } = props;
 
-	const { scam } = useGetScam(Number(scamId));
+	const { scam } = useGetScam(scamId);
 
 	if (isUndefined(scam)) {
 		console.warn("Got undefined Scam at ScamScreen, Navigaiting Back ...");
