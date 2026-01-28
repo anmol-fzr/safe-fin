@@ -30,7 +30,7 @@ export default function TabsLayout() {
 			}}
 			tintColor={colors.palette.accent500}
 		>
-			<NativeTabs.Trigger name="index">
+			<NativeTabs.Trigger name="home">
 				<Label>{translate("tabs:home")}</Label>
 				<Icon
 					src={{

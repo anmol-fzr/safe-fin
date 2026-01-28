@@ -35,7 +35,7 @@ export const useGuestLogin = () => {
 
 			setAuthData({ user: { id, email, name, isAnonymous: true } });
 			setAuthState("complete");
-			router.push("/tabs");
+			router.push("/tabs/home");
 		},
 		onError(error) {
 			console.log(error);

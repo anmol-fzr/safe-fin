@@ -25,7 +25,7 @@ export const FeedbackForm = () => {
 		if (router.canGoBack()) {
 			router.back();
 		} else {
-			router.navigate("/tabs");
+			router.navigate("/tabs/home");
 		}
 	});
 

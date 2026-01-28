@@ -83,7 +83,7 @@ export const LoginFormRoot = ({ children }: PropsWithChildren) => {
 
 					setAuthData({ user: { id, email, name, isAnonymous: false } });
 					setAuthState("complete");
-					router.navigate("/tabs");
+					router.navigate("/tabs/home");
 				},
 			});
 		} catch (error) {
