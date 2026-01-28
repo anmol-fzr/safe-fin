@@ -5,6 +5,7 @@ import { calculatorRouter } from "@/modules/calculator";
 import { lessonRouter } from "@/modules/lesson";
 import { profileRouter } from "@/modules/profile";
 import { savedRouter } from "@/modules/saved";
+import { scamRouter } from "@/modules/scam";
 
 //import { quizRouter } from "@/modules/quiz";
 
@@ -19,6 +20,7 @@ v1Router
 	.route("/calculator", calculatorRouter)
 	.route("/saved", savedRouter)
 	.route("/profile", profileRouter)
-	.route("/address", addressRouter);
+	.route("/address", addressRouter)
+	.route("/scam", scamRouter);
 
 export { v1Router };
