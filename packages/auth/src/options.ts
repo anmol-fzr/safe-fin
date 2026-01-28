@@ -6,11 +6,9 @@ import {
 	createAuthMiddleware,
 	multiSession,
 	openAPI,
-	phoneNumber,
 	emailOTP,
 } from "better-auth/plugins";
 import type { DB } from "@/pkg/db";
-import { eq, verification } from "@/pkg/db";
 import type { KVNamespace } from "@cloudflare/workers-types";
 import type { SecondaryStorage } from "better-auth";
 import { sendVerificationOTP } from "./email";
@@ -134,31 +132,9 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) {
 					console.info({ email, otp, type });
-					await sendVerificationOTP({ email, otp, ...params.EMAIL });
-				},
-			}),
-			phoneNumber({
-				allowedAttempts: 3,
-				sendOTP: async ({ phoneNumber, code }) => {
-					if (phoneNumber === GOOGLE_TEST_PHONE) {
-						console.log("! Google Test Bot detected. Skipping SMS.");
-
-						await DB.update(verification)
-							.set({
-								value: GOOGLE_TEST_OTP,
-								expiresAt: new Date(Date.now() + 1000 * 60 * 10),
-							})
-							.where(eq(verification.identifier, phoneNumber));
-						console.info({ phoneNumber, code: GOOGLE_TEST_OTP });
-
-						return;
+					if (!isDev) {
+						await sendVerificationOTP({ email, otp, ...params.EMAIL });
 					}
-
-					console.info({ phoneNumber, code });
-				},
-				signUpOnVerification: {
-					getTempEmail: (phoneNumber) => phoneNumber,
-					getTempName: (phoneNumber) => phoneNumber,
 				},
 			}),
 		],
