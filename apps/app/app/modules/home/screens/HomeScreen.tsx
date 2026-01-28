@@ -7,6 +7,7 @@ import { getScamsOpts } from "@/modules/scam/hooks/queries";
 import { $styles } from "@/theme";
 import { ForYouLessons } from "../components/lessons/ForYouLessons";
 import { QuickActions } from "../components/quick-actions";
+import { ProfileCompletionBanner } from "../components/profile-banner";
 
 export function HomeScreen() {
 	const queryClient = useQueryClient();
@@ -21,8 +22,9 @@ export function HomeScreen() {
 		<Screen
 			preset="scroll"
 			contentContainerStyle={$styles.fullHeaderScreen}
-			safeAreaEdges={["top", "bottom"]}
+			safeAreaEdges={["bottom"]}
 		>
+			<ProfileCompletionBanner />
 			<QuickActions />
 			<ForYouLessons />
 		</Screen>
