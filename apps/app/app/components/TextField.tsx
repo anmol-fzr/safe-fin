@@ -16,7 +16,7 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-import { useToggle } from "@/hooks";
+import { useToggle } from "@/pkg/ui";
 import { isRTL, translate } from "@/i18n";
 import type { ThemedStyle, ThemedStyleArray } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";

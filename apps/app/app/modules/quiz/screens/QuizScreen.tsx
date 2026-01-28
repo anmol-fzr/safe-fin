@@ -2,17 +2,14 @@ import { memo } from "react";
 import type { TextStyle } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Button, GoBack, Screen, Text } from "@/components";
-import { useToggle } from "@/hooks";
+import { useToggle } from "@/pkg/ui";
 import { $styles, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { QuizProvider } from "../components/QuizContext";
 import { QuizRender } from "../components/QuizRender";
 import { useGetQuiz } from "../hooks/queries";
-import type { QuizStackScreenProps } from "../navigator";
 
-type QuizScreenProps = QuizStackScreenProps<"Quiz">;
-
-export function QuizScreen(props: QuizScreenProps) {
+export function QuizScreen(props: any) {
 	const { quizId } = props.route.params;
 
 	const { isOpen: isStarted, onOpen: handleQuizStart } = useToggle();

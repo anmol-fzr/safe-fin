@@ -4,7 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { Suspense, useEffect, useMemo } from "react";
 import { Provider } from "@/components/Provider";
 import { ScreenTracker } from "@/components/ScreenTracker";
-import { useToggle } from "@/hooks/use-toggle";
+import { useToggle } from "@/pkg/ui";
 import { initI18n } from "@/i18n";
 import { LoadingScreen } from "@/screens";
 import { customFontsToLoad, type ThemeContexts } from "@/theme";

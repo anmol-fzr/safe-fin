@@ -2,7 +2,7 @@ import type { PropsWithChildren } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import Animated, { FadeIn, FadeInDown, FadeOut } from "react-native-reanimated";
 import { Button, Text } from "@/components";
-import { useToggle } from "@/hooks";
+import { useToggle } from "@/pkg/ui";
 import { LoginForm } from "@/modules/auth/components";
 import { makeSpringy } from "@/theme";
 import { getGuestMessage } from "@/utils/faker/guest";
