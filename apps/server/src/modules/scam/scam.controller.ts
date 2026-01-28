@@ -86,19 +86,21 @@ export const getScams = createHandlers(
 	},
 );
 
-
 export const getScamById = createHandlers(
-  zValidator("param",scamIdParamSchema)
-  async (c) => {
-		const {scamId} = c.req.valid("param");
+	zValidator("param", scamIdParamSchema),
+	async (c) => {
+		const { scamId } = c.req.valid("param");
 
-    const foundScam = scams.find(scam => scam.id === scamId)
+		const foundScam = scams.find((scam) => scam.id === scamId);
 
-    if (isUndefined(foundScam)){
-      return c.json({
-        data:null
-      },400)
-    }
+		if (isUndefined(foundScam)) {
+			return c.json(
+				{
+					data: null,
+				},
+				400,
+			);
+		}
 
 		return c.json({
 			data: foundScam,
