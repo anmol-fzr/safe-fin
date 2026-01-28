@@ -14,7 +14,7 @@ import {
 } from "../api";
 
 const baseQueryKey = "COURSES";
-const { createMsg, updateMsg, deleteMsg } = createToastMessages("Course");
+const { createMsg, updateMsg } = createToastMessages("Course");
 
 const useCreateCourse = () => {
 	const toast = useResourceActionToast();

@@ -1,6 +1,6 @@
 import type { LinkComponentProps } from "@tanstack/react-router";
-import { Book } from "iconsax-reactjs";
 import {
+	Book,
 	CircleQuestionMark,
 	LifeBuoy,
 	type LucideIcon,

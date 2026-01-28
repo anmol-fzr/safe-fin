@@ -1,16 +1,7 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { Add, ArrowDown, ArrowUp, Edit2, Trash } from "iconsax-reactjs";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import * as Yup from "yup";
-import { DraftPublishSwitch } from "@/components/DraftPublishSwitch";
-import { convertJsonToMarkdown } from "@/components/editor/Editor";
-import { FormEditor } from "@/components/form/form-editor";
-import { FormInput } from "@/components/form/form-input";
-import { FormTextarea } from "@/components/form/form-textarea";
+import { useMemo, useState } from "react";
 import {
 	Accordion,
 	AccordionContent,
@@ -21,130 +12,41 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-	useCreateChapter,
-	useCreateUnit,
 	useDeleteChapter,
 	useDeleteUnit,
 	useReorderChapters,
 	useReorderUnits,
-	useUpdateChapter,
 } from "../hooks/mutations";
-import { getCourseOpts } from "../hooks/queries";
-import { newUnitSchema } from "../schema/unit.schema";
+import { useGetCourse } from "../hooks/queries";
+import { NewChapterForm } from "./chapter-form/NewChapterForm";
+import { useToggle } from "@/pkg/ui";
+import type { ResourceId } from "@/services/api/types";
+import { NewUnitForm } from "./unit-form/NewUnitForm";
 
 interface CurriculumBuilderProps {
-	courseId: string;
+	courseId: ResourceId;
 }
-
-// Schema for creating a new chapter
-const newChapterSchema = Yup.object({
-	title: Yup.string().required("Chapter title is required").min(3).max(256),
-	isPublished: Yup.boolean().default(false).label("Published / Draft"),
-});
 
 export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 	const { courseId } = props;
 
 	const [autoAnimateRef] = useAutoAnimate();
-	const [showNewChapterForm, setShowNewChapterForm] = useState(false);
-	const [showNewUnitForm, setShowNewUnitForm] = useState<number | null>(null);
 
-	// Fetch course data with chapters and units
-	const { data: courseData } = useSuspenseQuery(
-		getCourseOpts(Number(props.courseId)),
-	);
-	const course = courseData.data;
+	const {
+		isOpen: isChapterFormOpen,
+		onOpen: openChapterForm,
+		onClose: closeChapterForm,
+	} = useToggle();
+
+	const [newUnitChapterId, setNewUnitChapterId] = useState<number | null>(null);
+
+	const { course } = useGetCourse(courseId);
 
 	// Mutations
-	const { createChapter } = useCreateChapter();
 	const { deleteChapter } = useDeleteChapter();
 	const { reorderChapters } = useReorderChapters();
-	const { createUnit } = useCreateUnit();
 	const { deleteUnit } = useDeleteUnit();
 	const { reorderUnits } = useReorderUnits();
-
-	// Form for new chapter
-	const newChapterForm = useForm({
-		resolver: yupResolver(newChapterSchema),
-		defaultValues: {
-			title: "",
-			isPublished: false,
-		},
-	});
-
-	const newUnitForm = useForm({
-		resolver: yupResolver(newUnitSchema),
-		defaultValues: {
-			title: "",
-			shortDesc: "",
-			content: "",
-			points: 10,
-			isPublished: false,
-		},
-	});
-
-	const handleCreateChapter = newChapterForm.handleSubmit((data) => {
-		const nextIndex = course.chapters?.length || 0;
-
-		createChapter(
-			{
-				courseId: Number(props.courseId),
-				chapters: [{ title: data.title, index: nextIndex }],
-				isPublished: data.isPublished,
-			},
-			{
-				onSuccess: () => {
-					newChapterForm.reset();
-					setShowNewChapterForm(false);
-				},
-			},
-		);
-	});
-
-	// onSubmit={newUnitForm.handleSubmit((data) =>
-	// 	handleCreateUnit(chapter.id, data),
-	// )}
-
-	const handleCreateUnit = (
-		chapterId: number,
-		data: {
-			title: string;
-			shortDesc: string;
-			content: any;
-			points: number;
-			isPublished: boolean;
-		},
-	) => {
-		const chapter = course.chapters?.find((ch) => ch.id === chapterId);
-		const nextIndex = chapter?.units?.length || 0;
-
-		const markdown = convertJsonToMarkdown(data.content);
-
-		createUnit(
-			{
-				chapterId,
-				units: [
-					{
-						title: data.title,
-						shortDesc: data.shortDesc,
-						longDesc: {
-							content: markdown,
-							contentJson: data.content,
-						},
-						points: data.points,
-						index: nextIndex,
-						isPublished: data.isPublished,
-					},
-				],
-			},
-			{
-				onSuccess: () => {
-					newUnitForm.reset();
-					setShowNewUnitForm(null);
-				},
-			},
-		);
-	};
 
 	const handleDeleteChapter = (chapterId: number) => {
 		if (
@@ -192,16 +94,29 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 		reorderUnits(updates);
 	};
 
+	const nextUnitIndex = useMemo(() => {
+		if (newUnitChapterId === null) {
+			return 0;
+		}
+
+		const chapter = course.chapters?.find((ch) => ch.id === newUnitChapterId);
+		const nextIndex = chapter?.units?.length || 0;
+		return nextIndex;
+	}, [course.chapters.length, newUnitChapterId]);
+
+	const nextChapterIndex = useMemo(() => {
+		const nextIndex = course.chapters?.length || 0;
+
+		return nextIndex;
+	}, [course.chapters.length]);
+
 	return (
 		<div className="w-full max-w-4xl mx-auto">
 			<Card>
 				<CardHeader>
 					<div className="flex justify-between items-center">
 						<CardTitle>Course Curriculum</CardTitle>
-						<Button
-							variant="outline"
-							onClick={() => setShowNewChapterForm(!showNewChapterForm)}
-						>
+						<Button variant="outline" onClick={openChapterForm}>
 							<Add className="w-4 h-4 mr-2" />
 							Add Chapter
 						</Button>
@@ -210,34 +125,14 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 				<CardContent>
 					<div ref={autoAnimateRef} className="space-y-4">
 						{/* New Chapter Form */}
-						{showNewChapterForm && (
+						{isChapterFormOpen && (
 							<Card className="border-2 border-dashed">
 								<CardContent className="pt-6">
-									<form onSubmit={handleCreateChapter}>
-										<FormProvider {...newChapterForm}>
-											<div className="space-y-4">
-												<FormInput
-													name="title"
-													label="Chapter Title"
-													placeholder="e.g., Introduction to Finance"
-												/>
-												<DraftPublishSwitch />
-												<div className="flex gap-2">
-													<Button type="submit">Create Chapter</Button>
-													<Button
-														type="button"
-														variant="outline"
-														onClick={() => {
-															setShowNewChapterForm(false);
-															newChapterForm.reset();
-														}}
-													>
-														Cancel
-													</Button>
-												</div>
-											</div>
-										</FormProvider>
-									</form>
+									<NewChapterForm
+										index={nextChapterIndex}
+										courseId={courseId}
+										onCancel={closeChapterForm}
+									/>
 								</CardContent>
 							</Card>
 						)}
@@ -401,60 +296,16 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 														</p>
 													)}
 
-													{/* New Unit Form */}
-													{showNewUnitForm === chapter.id ? (
+													{newUnitChapterId === chapter.id ? (
 														<Card className="border-2 border-dashed ml-4">
 															<CardContent className="pt-6">
-																<form
-																	className="w-full"
-																	onSubmit={newUnitForm.handleSubmit((data) =>
-																		handleCreateUnit(chapter.id, data),
-																	)}
-																>
-																	<FormProvider {...newUnitForm}>
-																		<div className="space-y-4">
-																			<FormInput
-																				name="title"
-																				label="Unit Title"
-																				placeholder="e.g., Understanding Budgets"
-																			/>
-																			<FormTextarea
-																				name="shortDesc"
-																				label="Short Description"
-																				placeholder="Brief description of this unit"
-																			/>
-																			<FormEditor
-																				name="content"
-																				label="Content"
-																				placeholder="Main content of the unit"
-																				rows={4}
-																			/>
-																			<DraftPublishSwitch />
-																			<FormInput
-																				name="points"
-																				label="Points"
-																				type="number"
-																				placeholder="10"
-																			/>
-																			<div className="flex gap-2">
-																				<Button type="submit" size="sm">
-																					Create Unit
-																				</Button>
-																				<Button
-																					type="button"
-																					variant="outline"
-																					size="sm"
-																					onClick={() => {
-																						setShowNewUnitForm(null);
-																						newUnitForm.reset();
-																					}}
-																				>
-																					Cancel
-																				</Button>
-																			</div>
-																		</div>
-																	</FormProvider>
-																</form>
+																<NewUnitForm
+																	index={nextUnitIndex}
+																	chapterId={chapter.id}
+																	onCancel={() => {
+																		setNewUnitChapterId(null);
+																	}}
+																/>
 															</CardContent>
 														</Card>
 													) : (
@@ -463,7 +314,7 @@ export const CurriculumBuilder = (props: CurriculumBuilderProps) => {
 															type="button"
 															size="sm"
 															className="ml-4"
-															onClick={() => setShowNewUnitForm(chapter.id)}
+															onClick={() => setNewUnitChapterId(chapter.id)}
 														>
 															<Add className="w-4 h-4 mr-2" />
 															Add Unit

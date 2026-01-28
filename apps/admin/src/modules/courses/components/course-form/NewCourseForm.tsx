@@ -1,9 +1,10 @@
 import { useNavigate } from "@tanstack/react-router";
 import { boolean, mixed, object, string } from "yup";
 import { convertJsonToMarkdown } from "@/components/editor/Editor";
-import { useYupForm } from "@/hooks/form/useYupForm";
 import { useCreateCourse } from "@/modules/courses/hooks/mutations";
 import { CourseForm } from "./CourseForm";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const courseSchema = object({
 	title: string().required().label("Title"),
@@ -17,7 +18,7 @@ const courseSchema = object({
 });
 
 function NewCourseForm() {
-	const form = useYupForm({ schema: courseSchema });
+	const form = useForm({ resolver: yupResolver(courseSchema) });
 
 	const { createCourseAsync } = useCreateCourse();
 	const navigate = useNavigate();
@@ -33,6 +34,7 @@ function NewCourseForm() {
 			longDesc: markdown,
 			longDescJson: jsonString,
 			coverPath: values.coverPath,
+			isPublished: values.isPublished,
 		}).then((resp) => {
 			navigate({
 				to: "/dashboard/courses/$courseId/edit/curriculum",

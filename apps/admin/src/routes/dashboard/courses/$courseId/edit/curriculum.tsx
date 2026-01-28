@@ -36,7 +36,7 @@ function RouteComponent() {
 			</div>
 			<div className="mx-auto">
 				<Suspense fallback={<Loader />}>
-					<CurriculumBuilder courseId={courseId} />
+					<CurriculumBuilder courseId={Number(courseId)} />
 				</Suspense>
 			</div>
 		</div>

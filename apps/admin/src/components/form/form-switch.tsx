@@ -17,8 +17,7 @@ type FormSwitchProps<
 	TFieldValues extends FieldValues = FieldValues,
 	TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = SwitchProps & {
-	labels: [offLabel: string, onLabel: string];
-	placeholder: string;
+	label: string;
 	name: TName;
 	desc?: string;
 };
@@ -29,7 +28,7 @@ export const FormSwitch = <
 >(
 	props: FormSwitchProps<TFieldValues, TName>,
 ) => {
-	const { name, labels } = props;
+	const { name, label } = props;
 	const form = useFormContext();
 	return (
 		<FormField
@@ -37,7 +36,7 @@ export const FormSwitch = <
 			name={name}
 			render={({ field }) => (
 				<FormItem>
-					<FormLabel>{labels[0]}</FormLabel>
+					<FormLabel>{label}</FormLabel>
 					<FormControl>
 						<Switch {...field} />
 					</FormControl>

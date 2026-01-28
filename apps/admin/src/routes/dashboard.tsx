@@ -22,7 +22,7 @@ function Dashboard() {
 	return (
 		<div className="grid grid-rows-[auto_1fr] h-svh">
 			<div className="[--header-height:calc(--spacing(14))]">
-				<SidebarProvider className="flex flex-col">
+				<SidebarProvider className="flex flex-col" defaultOpen={false}>
 					<SiteHeader />
 					<div className="flex flex-1">
 						<AppSidebar />

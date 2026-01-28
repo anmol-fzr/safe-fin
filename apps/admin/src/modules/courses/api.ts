@@ -4,7 +4,7 @@ import type { IResData, ResourceId } from "@/services/api/types";
 import type { IResGetCourse } from "./types/one-course";
 import type { IResGetUnit } from "./types/one-unit";
 
-const { get, postForm, post, patch, delete: del } = ax;
+const { get, post, patch, delete: del } = ax;
 
 interface IReqCreateCourse {
 	title: string;
@@ -12,6 +12,7 @@ interface IReqCreateCourse {
 	longDesc: string;
 	longDescJson: string;
 	coverPath: string;
+	isPublished: boolean;
 }
 
 interface IReqCreateChapter {
@@ -62,7 +63,7 @@ export interface IReqUpdateCourse {
 export const COURSES = {
 	ALL: () => get<unknown, IResGetCourses>(`/courses`),
 	CREATE: (course: IReqCreateCourse) =>
-		postForm<unknown, IResCreateCourse>(`/courses`, course),
+		post<unknown, IResCreateCourse>(`/courses`, course),
 	ONE: (courseId: ResourceId) =>
 		get<unknown, IResGetCourse>(`/courses/${courseId}`),
 	UPDATE: (courseId: ResourceId, payload: IReqUpdateCourse) =>

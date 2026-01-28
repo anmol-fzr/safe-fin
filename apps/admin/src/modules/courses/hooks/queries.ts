@@ -57,6 +57,16 @@ function getCourseOpts(courseId: ResourceId) {
 	});
 }
 
+const useGetCourse = (courseId: ResourceId) => {
+	const opts = getCourseOpts(courseId);
+	const { data, ...rest } = useSuspenseQuery(opts);
+
+	return {
+		course: data.data,
+		...rest,
+	};
+};
+
 function getUnitOpts(unitId: ResourceId) {
 	return queryOptions({
 		queryKey: ["UNITS", unitId] as const,
@@ -72,7 +82,7 @@ const useGetUnit = (unitId: ResourceId) => {
 };
 
 export { getCoursesOpts, getCourseOpts };
-export { useGetCourses };
+export { useGetCourses, useGetCourse };
 
 export { getUnitOpts };
 export { useGetUnit };

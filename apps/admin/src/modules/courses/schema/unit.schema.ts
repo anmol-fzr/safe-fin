@@ -6,9 +6,9 @@ const unitSchema = Yup.object({
 		.required("Short description is required")
 		.min(10)
 		.max(500),
-	content: Yup.mixed(),
+	content: Yup.mixed().required("Content is Required"),
 	points: Yup.number().min(0).default(10),
-	isPublished: Yup.boolean().default(false).label("Published / Draft"),
+	isPublished: Yup.boolean().label("Published / Draft").default(false),
 });
 
 export const newUnitSchema = unitSchema;
