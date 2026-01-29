@@ -28,6 +28,7 @@ import { IconSax } from "@/context/IconContext";
 import { Activity } from "iconsax-react-nativejs";
 import { ANIMATION, colors, getSpringConfig, spacing } from "@/theme";
 import { formatDate } from "@safe-fin/utils";
+import { getEmptyArr } from "@safe-fin/ui/utils";
 
 /* ------------------ Constants ------------------ */
 
@@ -177,11 +178,11 @@ export function ActivityHeatmap() {
 							<Text style={{ color: colors.textDim }} size="xs">
 								Less
 							</Text>
-							<DayItem count={0} />
-							<DayItem count={500} />
-							<DayItem count={1000} />
-							<DayItem count={1500} />
-							<DayItem count={2000} />
+							{getEmptyArr(5).map((_, i) => (
+								<Animated.View entering={FadeIn.delay(100 * i)}>
+									<DayItem count={500 * i} />
+								</Animated.View>
+							))}
 							<Text style={{ color: colors.textDim }} size="xs">
 								More
 							</Text>
@@ -224,23 +225,31 @@ function Heatmap(props: HeatmapProps) {
 			}}
 		>
 			{Array.from({ length: columnCount }).map((_, col) => (
-				<View key={col} style={{ gap: spacing.xxxs }}>
+				<Animated.View
+					entering={FadeIn.delay(50 * col)}
+					key={col}
+					style={{ gap: spacing.xxxs }}
+				>
 					{Array.from({ length: ROW_COUNT }).map((_, row) => {
 						const index = row + col * ROW_COUNT;
 						const item = data[index];
 						if (!item) return null;
 
 						return (
-							<ActivityDayItem
+							<Animated.View
+								entering={FadeIn.delay(50 * (row + col))}
 								key={item.date}
-								index={index}
-								count={item.totalPxEarned}
-								isActive={index === activeIndex}
-								onPress={onSelect}
-							/>
+							>
+								<ActivityDayItem
+									index={index}
+									count={item.totalPxEarned}
+									isActive={index === activeIndex}
+									onPress={onSelect}
+								/>
+							</Animated.View>
 						);
 					})}
-				</View>
+				</Animated.View>
 			))}
 		</ScrollView>
 	);
