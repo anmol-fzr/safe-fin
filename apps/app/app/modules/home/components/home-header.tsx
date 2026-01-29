@@ -8,7 +8,7 @@ import { Text } from "@/components";
 import { useAuthStore } from "@/modules/auth/store";
 import { IconSax } from "@/context/IconContext";
 import { Flash } from "iconsax-react-nativejs";
-import { useToggle } from "@safe-fin/ui/hooks";
+import { useToggle } from "@/pkg/ui";
 import { PressableScale } from "pressto";
 
 export const HomeHeader = memo(() => {

@@ -2,7 +2,7 @@ import { Section } from "@/components/Section";
 import { Button, EmptyState, ListView, Text } from "@/components";
 import { useState } from "react";
 import { Link } from "expo-router";
-import { useToggle } from "@/hooks";
+import { useToggle } from "@/pkg/ui";
 import { Modal, Pressable, TextInput, View } from "react-native";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { PressableScale } from "pressto";
@@ -18,7 +18,6 @@ export const PublicProfileLinksCard = () => {
 		{
 			href: "https://github.com/anmol-fzr",
 		},
-
 		{
 			href: "https://linkedin.com/in/anmol-fzr",
 		},
