@@ -207,7 +207,7 @@ export const AccountIndexScreen = () => {
 					<Animated.View entering={FadeIn.delay(50 * index)}>
 						<Section>
 							<Section.Title>{section.title}</Section.Title>
-							<Section.Body preset="filled">
+							<Section.Body preset="filled" style={{ paddingBottom: 0 }}>
 								<View style={{ flex: 1 }}>
 									<ListView
 										data={section.links}
@@ -232,7 +232,7 @@ export const AccountIndexScreen = () => {
 															<Text size="md">{translate(item.title)}</Text>
 															{item.desc && (
 																<Text
-																	size="sm"
+																	size="xs"
 																	style={{ color: colors.textDim }}
 																>
 																	{translate(item.desc)}
