@@ -2,7 +2,12 @@ import { View, ScrollView, Pressable } from "react-native";
 import { Text } from "@/components";
 import Animated, {
 	FadeIn,
+	FadeInDown,
+	FadeInUp,
 	FadeOut,
+	FadeOutDown,
+	FadeOutUp,
+	FadingTransition,
 	interpolate,
 	interpolateColor,
 	useAnimatedStyle,
@@ -117,32 +122,54 @@ export function ActivityHeatmap() {
 						data={activityData}
 					/>
 
-					<View
+					<Animated.View
 						style={{
 							marginTop: 8,
 						}}
+						layout={FadingTransition}
 					>
 						{activeIndex !== null ? (
-							<View style={{ flexDirection: "row", gap: 6 }}>
-								{activeItem?.totalPxEarned === 0 ? (
-									<>
-										<Text style={{ color: colors.textDim }}>No PX Earned</Text>
-									</>
-								) : (
-									<>
-										<Text style={{ color: colors.textDim }}>Earned</Text>
-										<Text weight="bold">{activeItem?.totalPxEarned} PX</Text>
-									</>
-								)}
+							<Animated.View
+								style={{ flexDirection: "row", gap: 6 }}
+								layout={FadingTransition}
+							>
+								<Text
+									entering={FadeInUp}
+									exiting={FadeOutDown}
+									style={{ color: colors.textDim }}
+									key={
+										activeItem?.totalPxEarned === 0
+											? "No"
+											: activeItem?.totalPxEarned
+									}
+								>
+									{activeItem?.totalPxEarned === 0
+										? "No"
+										: activeItem?.totalPxEarned}
+								</Text>
+								<Text
+									entering={FadeInUp}
+									exiting={FadeOutDown}
+									style={{ color: colors.textDim }}
+								>
+									PX Earned
+								</Text>
 
-								<Text style={{ color: colors.textDim }}>
+								<Text
+									entering={FadeInUp}
+									exiting={FadeOutDown}
+									style={{ color: colors.textDim }}
+									key={formatDate(activeItem?.date)}
+								>
 									{formatDate(activeItem?.date)}
 								</Text>
-							</View>
+							</Animated.View>
 						) : (
-							<Text>Tap any day to see your PX for that day</Text>
+							<Text entering={FadeIn.delay(100)} exiting={FadeOut.delay(100)}>
+								Tap any day to see your PX for that day
+							</Text>
 						)}
-					</View>
+					</Animated.View>
 					<View style={{ marginTop: 8, alignItems: "flex-end" }}>
 						<View
 							style={{ flexDirection: "row", gap: 6, alignItems: "flex-end" }}
