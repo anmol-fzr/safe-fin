@@ -1,20 +1,38 @@
 import { Stack } from "expo-router";
 import { HomeHeader } from "@/modules/home/components/home-header";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomeLayout() {
+	const {
+		themed,
+		theme: { colors, spacing },
+	} = useAppTheme();
+	const { top } = useSafeAreaInsets();
+
 	return (
 		<Stack>
 			<Stack.Screen
-				name="index"
 				options={{
-					header: (props) => (
-						<HomeHeader
-							titleTx="screens:learningList.title"
-							tagLineTx="screens:learningList.tagLine"
-							{...props}
-						/>
-					),
+					headerShown: true,
+					headerTitle: "Welcome",
+					headerStyle: {
+						//marginTop: top,
+						//paddingInline: spacing.sm,
+						//paddingBottom: spacing.sm,
+						//backgroundColor: colors.background,
+					},
 				}}
+				name="index"
+				// options={{
+				// 	header: (props) => (
+				// 		<HomeHeader
+				// 			titleTx="screens:learningList.title"
+				// 			tagLineTx="screens:learningList.tagLine"
+				// 			{...props}
+				// 		/>
+				// 	),
+				// }}
 			/>
 		</Stack>
 	);

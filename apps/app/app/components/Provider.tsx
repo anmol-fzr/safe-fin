@@ -1,7 +1,5 @@
-import type { Notifier } from "@safe-fin/ui/hooks";
 import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
 import { QueryClientProvider } from "@tanstack/react-query";
-import * as Burnt from "burnt";
 import { StatusBar } from "expo-status-bar";
 import { PressablesConfig } from "pressto";
 import type { PropsWithChildren } from "react";

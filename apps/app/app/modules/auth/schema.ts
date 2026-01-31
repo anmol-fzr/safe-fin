@@ -1,7 +1,6 @@
-import { number, object, string } from "yup";
 import * as Yup from "yup";
 
-const phoneNumber = number()
+const phoneNumber = Yup.number()
 	.positive()
 	.integer()
 	.test(
@@ -13,7 +12,7 @@ const phoneNumber = number()
 	.label("Phone Number")
 	.required();
 
-const otp = number()
+const otp = Yup.number()
 	.positive()
 	.integer()
 	.label("OTP")
@@ -28,17 +27,21 @@ const email = Yup.string()
 	.label("Email")
 	.typeError("Enter a valid Email address");
 
-const loginSchema = object().shape({
+const loginSchema = Yup.object().shape({
 	email,
 	//otp,
 });
 
-const registerSchema = object({
-	name: string().required().label("Name"),
+const registerSchema = Yup.object({
+	name: Yup.string().required().label("Name"),
 	email,
 });
 
 //const profileSchema = registerSchema.concat(loginSchema.pick(["phoneNumber"]));
-const profileSchema = registerSchema;
+const profileSchema = registerSchema.concat(
+	Yup.object({
+		image: Yup.string(),
+	}),
+);
 
 export { loginSchema, registerSchema, profileSchema };

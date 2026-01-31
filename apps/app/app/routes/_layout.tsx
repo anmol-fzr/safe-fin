@@ -10,6 +10,7 @@ import { LoadingScreen } from "@/screens";
 import { customFontsToLoad, type ThemeContexts } from "@/theme";
 import { initCrashReporting } from "@/utils/crashReporting";
 import { ThemeProvider, usePersistTheme } from "@/utils/useAppTheme";
+import Animated, { FadingTransition } from "react-native-reanimated";
 
 export {
 	// Catch any errors thrown by the Layout component.

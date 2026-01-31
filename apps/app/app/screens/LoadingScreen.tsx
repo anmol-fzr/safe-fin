@@ -1,18 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { colors } from "@/theme";
+
+const icon = require("assets/icons/app-icons/android/adaptive-icon-transparent-dark.png");
 
 export const LoadingScreen = () => {
 	return (
 		<View style={styles.view}>
-			<Text
-				style={{
-					fontSize: 36,
-					lineHeight: 44,
-					fontFamily: "spaceGroteskBold",
-				}}
-			>
-				SafeFin
-			</Text>
+			<Image
+				source={icon}
+				height={100}
+				width={100}
+				style={{ height: 512, width: 512 }}
+			/>
 		</View>
 	);
 };
@@ -23,9 +22,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		height: "100%",
+		flex: 1,
 		backgroundColor: colors.background,
-	},
-	text: {
-		fontSize: 24,
 	},
 });

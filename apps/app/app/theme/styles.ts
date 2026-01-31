@@ -16,13 +16,13 @@ export const $styles = {
 
 	lowHeaderScreen: {
 		padding: spacing.xs,
-		paddingBottom: spacing.bottom,
+		//paddingBottom: spacing.bottom,
 	} as ViewStyle,
 
 	fullHeaderScreen: {
 		gap: spacing.md,
 		padding: spacing.xs,
-		paddingBottom: spacing.xxl,
+		//paddingBottom: spacing.xxl,
 	} as ViewStyle,
 
 	goBack: {

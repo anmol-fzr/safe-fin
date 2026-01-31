@@ -2,11 +2,9 @@ import { View, ScrollView, Pressable } from "react-native";
 import { Text } from "@/components";
 import Animated, {
 	FadeIn,
-	FadeInDown,
 	FadeInUp,
 	FadeOut,
 	FadeOutDown,
-	FadeOutUp,
 	FadingTransition,
 	interpolate,
 	interpolateColor,
@@ -29,6 +27,7 @@ import { Activity } from "iconsax-react-nativejs";
 import { ANIMATION, colors, getSpringConfig, spacing } from "@/theme";
 import { formatDate } from "@safe-fin/utils";
 import { getEmptyArr } from "@safe-fin/ui/utils";
+import { makeSpringy } from "@/theme";
 
 /* ------------------ Constants ------------------ */
 
@@ -49,6 +48,8 @@ function buildActivity(
 
 	for (const row of rows) {
 		const key = row.date.slice(0, 10); // YYYY-MM-DD
+		console.log("Inserted Key: ", key);
+
 		map.set(key, row);
 	}
 
@@ -66,12 +67,14 @@ function buildActivity(
 
 		const existing = map.get(key);
 
-		result.push(
-			existing ?? {
+		if (existing) {
+			result.push(existing);
+		} else {
+			result.push({
 				date: d.toISOString(),
 				totalPxEarned: 0,
-			},
-		);
+			});
+		}
 	}
 
 	return result;
@@ -90,6 +93,7 @@ export function ActivityHeatmap() {
 		],
 		//{ from: 0, to: 0 },
 	);
+	debugger;
 
 	const activeItem = activeIndex !== null ? activityData[activeIndex] : null;
 
@@ -135,8 +139,8 @@ export function ActivityHeatmap() {
 								layout={FadingTransition}
 							>
 								<Text
-									entering={FadeInUp}
-									exiting={FadeOutDown}
+									entering={makeSpringy(FadeInUp)}
+									exiting={makeSpringy(FadeOutDown)}
 									style={{ color: colors.textDim }}
 									key={
 										activeItem?.totalPxEarned === 0
@@ -149,16 +153,16 @@ export function ActivityHeatmap() {
 										: activeItem?.totalPxEarned}
 								</Text>
 								<Text
-									entering={FadeInUp}
-									exiting={FadeOutDown}
+									entering={makeSpringy(FadeInUp)}
+									exiting={makeSpringy(FadeOutDown)}
 									style={{ color: colors.textDim }}
 								>
 									PX Earned
 								</Text>
 
 								<Text
-									entering={FadeInUp}
-									exiting={FadeOutDown}
+									entering={makeSpringy(FadeInUp)}
+									exiting={makeSpringy(FadeOutDown)}
 									style={{ color: colors.textDim }}
 									key={formatDate(activeItem?.date)}
 								>
@@ -166,7 +170,10 @@ export function ActivityHeatmap() {
 								</Text>
 							</Animated.View>
 						) : (
-							<Text entering={FadeIn.delay(100)} exiting={FadeOut.delay(100)}>
+							<Text
+								entering={makeSpringy(FadeIn.delay(100))}
+								exiting={makeSpringy(FadeOut.delay(100))}
+							>
 								Tap any day to see your PX for that day
 							</Text>
 						)}
@@ -179,7 +186,7 @@ export function ActivityHeatmap() {
 								Less
 							</Text>
 							{getEmptyArr(5).map((_, i) => (
-								<Animated.View entering={FadeIn.delay(100 * i)}>
+								<Animated.View entering={makeSpringy(FadeIn.delay(100 * i))}>
 									<DayItem count={500 * i} />
 								</Animated.View>
 							))}
@@ -226,7 +233,7 @@ function Heatmap(props: HeatmapProps) {
 		>
 			{Array.from({ length: columnCount }).map((_, col) => (
 				<Animated.View
-					entering={FadeIn.delay(50 * col)}
+					entering={makeSpringy(FadeIn.delay(50 * col))}
 					key={col}
 					style={{ gap: spacing.xxxs }}
 				>
@@ -237,7 +244,7 @@ function Heatmap(props: HeatmapProps) {
 
 						return (
 							<Animated.View
-								entering={FadeIn.delay(50 * (row + col))}
+								entering={makeSpringy(FadeIn.delay(50 * (row + col)))}
 								key={item.date}
 							>
 								<ActivityDayItem
@@ -332,8 +339,8 @@ const DayItem = memo(({ count, isActive = false }: DayItemProps) => {
 
 	return (
 		<Animated.View
-			entering={FadeIn}
-			exiting={FadeOut}
+			entering={makeSpringy(FadeIn)}
+			exiting={makeSpringy(FadeOut)}
 			style={[
 				{
 					width: 30,

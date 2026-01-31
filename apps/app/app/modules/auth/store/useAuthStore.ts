@@ -17,6 +17,7 @@ interface AuthStoreEmpty {
 interface AuthStoreWithData {
 	user: {
 		name: string;
+		image: string;
 		id: string;
 		email: string;
 		isAnonymous: boolean;
@@ -26,6 +27,7 @@ interface AuthStoreWithData {
 
 interface AuthStoreActions {
 	setData: (payload: Pick<AuthStoreWithData, "user">) => void;
+	setUserImage: (payload: string) => void;
 	setState: (payload: "register" | "complete") => void;
 	resetData: VoidFunction;
 }
@@ -45,6 +47,14 @@ const useAuthStore = create<AuthStore>()(
 			// 	isAnonymous: false,
 			// },
 			// state: "complete",
+
+			setUserImage(newState) {
+				set((currState) => {
+					if (currState.user) {
+						currState.user.image = newState;
+					}
+				});
+			},
 
 			setState(newState) {
 				set((currState) => {

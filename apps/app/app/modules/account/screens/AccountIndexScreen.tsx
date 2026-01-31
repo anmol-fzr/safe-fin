@@ -28,6 +28,7 @@ import { $styles } from "@/theme";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
 import Animated, { FadeIn } from "react-native-reanimated";
+import { useAuthStore } from "@/modules/auth/store";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 
@@ -260,6 +261,8 @@ export const UserDetailsCard = () => {
 		theme: { colors, spacing },
 	} = useAppTheme();
 
+	const image = useAuthStore((state) => state.user?.image);
+
 	const { currUser } = useSession();
 
 	return (
@@ -280,7 +283,7 @@ export const UserDetailsCard = () => {
 					borderRadius: 100,
 				}}
 				source={{
-					uri: "https://github.com/Sandeepinsa32.png",
+					uri: image,
 				}}
 			/>
 			<View>

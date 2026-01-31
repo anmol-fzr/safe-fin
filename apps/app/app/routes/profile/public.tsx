@@ -1,19 +1,15 @@
-import { Screen, Text, TextProps } from "@/components";
+import { Screen, Text } from "@/components";
 import { UserDetailsCard } from "@/modules/account/screens";
-import { $styles, roundness, spacing } from "@/theme";
-import { PublicProfileLinksCard } from "@/modules/profile/components/PublicProfileLinksCard";
+import { $styles, spacing } from "@/theme";
 import { ActivityHeatmap } from "@/modules/profile/components/activity-heatmap";
 import { View } from "react-native";
-import { IconSax } from "@/context/IconContext";
 import { useAppTheme } from "@/utils/useAppTheme";
 import React, { ReactNode } from "react";
-import { Flashy } from "iconsax-react-nativejs";
+import { useAuthStore } from "@/modules/auth/store";
 
 export default function PublicProfileScreen() {
-	const {
-		theme: { colors, roundness },
-	} = useAppTheme();
-
+	const image = useAuthStore((state) => state.user?.image);
+	console.log({ image });
 	return (
 		<Screen preset="scroll" style={[$styles.container, { gap: 48 }]}>
 			<View style={{ gap: 24 }}>
@@ -33,7 +29,9 @@ export default function PublicProfileScreen() {
 					<Streak title="1400" desc="Total PX" />
 				</View>
 
+				{/*
 				<PublicProfileLinksCard />
+        */}
 
 				<ActivityHeatmap />
 			</View>

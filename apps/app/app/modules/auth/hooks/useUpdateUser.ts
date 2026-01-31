@@ -4,6 +4,7 @@ import { authClient } from "../utils";
 
 type UpdateUserFnPayload = {
 	name: string;
+	image: string;
 	//gender: string;
 };
 
