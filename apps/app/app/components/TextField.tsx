@@ -251,9 +251,9 @@ export const TextField = forwardRef(function TextField(
 const $inputWrapperStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
 	alignItems: "flex-start",
 	borderWidth: 1,
-	borderRadius: roundness,
+	borderRadius: roundness * 2,
 	//backgroundColor: colors.palette.accent200,
-	borderColor: colors.palette.neutral300,
+	borderColor: colors.palette.primary100,
 	overflow: "hidden",
 });
 

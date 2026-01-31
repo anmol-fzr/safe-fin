@@ -1,7 +1,7 @@
-import type { TextProps, ViewProps } from "react-native";
+import type { ViewProps } from "react-native";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { Text } from "@/components";
+import { Text, TextProps } from "@/components";
 import { spacing, type ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 

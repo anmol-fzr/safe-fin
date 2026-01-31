@@ -30,7 +30,7 @@ const email = Yup.string()
 
 const loginSchema = object().shape({
 	email,
-	otp,
+	//otp,
 });
 
 const registerSchema = object({

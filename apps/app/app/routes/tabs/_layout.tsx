@@ -11,7 +11,7 @@ export default function TabsLayout() {
 
 	useEffect(() => {
 		if (!isLogin) {
-			navigate("/auth");
+			navigate("/auth/login");
 		}
 	}, [isLogin, navigate]);
 

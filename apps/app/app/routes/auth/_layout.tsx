@@ -7,8 +7,11 @@ export {
 
 export default function RootLayout() {
 	return (
-		<Stack screenOptions={{ headerShown: false }}>
-			<Stack.Screen name="index" />
+		<Stack
+			screenOptions={{ headerShown: false, animation: "slide_from_right" }}
+		>
+			<Stack.Screen name="login" options={{ animation: "slide_from_left" }} />
+			<Stack.Screen name="verify" options={{ animation: "slide_from_right" }} />
 			<Stack.Screen name="register" />
 		</Stack>
 	);

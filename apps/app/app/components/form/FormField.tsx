@@ -50,7 +50,7 @@ export const FormField = forwardRef(
 	},
 );
 
-const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+export const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	marginBottom: spacing.lg,
 	borderRadius: spacing.xxl,
 });

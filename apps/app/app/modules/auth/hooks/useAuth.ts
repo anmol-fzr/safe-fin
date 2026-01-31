@@ -29,13 +29,13 @@ export const useAuth = () => {
 					resetAuthStore();
 					onLogout();
 					//navigation.popToTop();
-					navigate("/auth");
+					navigate("/auth/login");
 					queryClient.invalidateQueries();
 					toast.success("Logged Out");
 				},
 				onError(err) {
 					console.log(err);
-					navigate("/auth");
+					navigate("/auth/login");
 					toast.loading("Unable to Log Out");
 				},
 			},

@@ -1,4 +1,3 @@
-import { useSafeContext } from "@safe-fin/ui/hooks";
 import type { Icon as IconType } from "iconsax-react-nativejs";
 import {
 	Image,
