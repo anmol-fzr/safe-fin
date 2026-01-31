@@ -1,5 +1,5 @@
 import type { DB } from "@/pkg/db";
-import { eq, richContent, richContentItem, unit } from "@/pkg/db";
+import { getDb, eq, richContent, richContentItem, unit } from "@/pkg/db";
 
 interface CreateUnitData {
 	title: string;

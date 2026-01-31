@@ -7,6 +7,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 type S3Config = {
 	endpoint: string;
+	publicEndpoint: string;
 	accessKeyId: string;
 	secretAccessKey: string;
 	bucket: string;
@@ -17,10 +18,12 @@ export class StorageService {
 	private client: S3Client;
 	private bucket: string;
 	private endpoint: string;
+	private publicEndpoint: string;
 
 	constructor(config: S3Config) {
 		this.bucket = config.bucket;
 		this.endpoint = config.endpoint;
+		this.publicEndpoint = config.publicEndpoint;
 
 		this.client = new S3Client({
 			endpoint: config.endpoint,
@@ -51,7 +54,7 @@ export class StorageService {
 		return {
 			uploadUrl: url,
 			fileUrl: key,
-			publicUrl: `${this.endpoint}/${this.bucket}/${key}`,
+			publicUrl: `${this.publicEndpoint}/${key}`,
 		};
 	}
 

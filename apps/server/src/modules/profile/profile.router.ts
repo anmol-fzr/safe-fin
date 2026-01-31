@@ -1,5 +1,6 @@
 import { createTypedFactory } from "@/factory";
 import {
+	getAvatarObjectUploadUrl,
 	getProfile,
 	getProfileActivity,
 	updateProfile,
@@ -10,6 +11,7 @@ const { createApp } = createTypedFactory();
 const profileRouter = createApp()
 	.get("/", ...getProfile)
 	.get("/activity", ...getProfileActivity)
-	.post("/", ...updateProfile);
+	.post("/", ...updateProfile)
+	.post("/avatar/upload-url", ...getAvatarObjectUploadUrl);
 
 export { profileRouter };

@@ -26,6 +26,7 @@ const s3 = createMiddleware(async (c, next) => {
 	const storage = new StorageService({
 		bucket: S3_BUCKET,
 		endpoint: S3_ENDPOINT,
+		publicEndpoint: S3_PUBLIC_ENDPOINT,
 		accessKeyId: S3_ACCESS_KEY,
 		secretAccessKey: S3_SECRET_KEY,
 	});

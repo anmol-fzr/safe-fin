@@ -1,4 +1,4 @@
-import { env } from "hono/adapter";
+import { env } from "cloudflare:workers";
 import { createTypedFactory } from "@/factory";
 import { type DB, getDevDb, getProdDb } from "@/pkg/db";
 
@@ -9,7 +9,7 @@ const { createMiddleware } = createTypedFactory<{
 }>();
 
 const db = createMiddleware(async (c, next) => {
-	const { DB, DB_URL, DB_TOKEN } = env(c);
+	const { DB, DB_URL, DB_TOKEN } = env;
 
 	if (DB_URL && DB_TOKEN) {
 		c.set("db", getDevDb({ DB_URL, DB_TOKEN }));

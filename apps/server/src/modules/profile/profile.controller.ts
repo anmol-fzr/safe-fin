@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { userDemographics } from "@safe-fin/db/schema";
 import { createTypedFactory } from "@/factory";
-import { authenticate, db } from "@/middleware";
+import { authenticate, db, s3 } from "@/middleware";
 import { isUndefined } from "@/pkg/utils";
 import { PROFILE_CODES } from "./profile.codes";
 import { insertDemoGraphicsSchema } from "./profile.schema";
@@ -89,5 +89,26 @@ export const updateProfile = createHandlers(
 			data,
 			message: PROFILE_CODES.UPDATE.SUCCESS,
 		});
+	},
+);
+
+const uploadSchema = z.object({
+	fileName: z.string(),
+});
+
+export const getAvatarObjectUploadUrl = createHandlers(
+	authenticate,
+	s3,
+	zValidator("json", uploadSchema),
+	async (c) => {
+		const { fileName } = c.req.valid("json");
+		const storage = c.get("storage");
+		const type = "avatar";
+
+		const key = `users/${type}/${crypto.randomUUID()}-${fileName}`;
+
+		const result = await storage.getUploadUrl(key, 600);
+
+		return c.json(result);
 	},
 );

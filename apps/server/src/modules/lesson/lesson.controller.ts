@@ -23,6 +23,7 @@ import {
 	updateCourseSchema,
 } from "./lesson.schema";
 import { LessonService } from "./lesson.service";
+import { UnitService } from "./unit/unit.service";
 
 const { createHandlers } = createTypedFactory();
 
