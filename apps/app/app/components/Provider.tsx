@@ -12,23 +12,8 @@ import { authClient } from "@/modules/auth/utils";
 import { ANIMATION, getSpringConfig } from "@/theme";
 import { queryClient } from "@/utils/lib/query";
 import { useAppTheme } from "@/utils/useAppTheme";
-
-const notifier: Notifier = {
-	loading: (msg) =>
-		Burnt.toast({
-			title: msg,
-		}),
-	success: (msg) =>
-		Burnt.toast({
-			title: msg,
-			preset: "done",
-		}),
-	error: (msg) =>
-		Burnt.toast({
-			title: msg,
-			preset: "error",
-		}),
-};
+import { Toaster } from "sonner-native";
+import { toast } from "sonner-native";
 
 const { damping, stiffness } = getSpringConfig(ANIMATION.spatial.default);
 
@@ -48,7 +33,7 @@ export function Provider({ children }: PropsWithChildren) {
 				<KeyboardProvider>
 					<GestureHandlerRootView>
 						<AuthProvider client={authClient}>
-							<NotifierProvider value={notifier}>
+							<NotifierProvider value={toast}>
 								<PressablesConfig
 									animationType="spring"
 									animationConfig={{ damping, stiffness }}
@@ -58,6 +43,7 @@ export function Provider({ children }: PropsWithChildren) {
 								</PressablesConfig>
 							</NotifierProvider>
 						</AuthProvider>
+						<Toaster />
 					</GestureHandlerRootView>
 				</KeyboardProvider>
 			</QueryClientProvider>
