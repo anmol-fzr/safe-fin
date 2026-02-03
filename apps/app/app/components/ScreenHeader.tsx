@@ -44,21 +44,22 @@ export const ScreenHeader = memo((props: ScreenHeaderProps) => {
 				elevation: 1,
 				marginTop: isInNativeHeader ? top : 0,
 				paddingInline: spacing.sm,
-				paddingBottom: spacing.sm,
+				paddingBottom: spacing.xs,
 				backgroundColor: colors.background,
 			}}
 		>
 			<Text
 				key={`title-${titleTx}`}
 				preset="heading"
-				tx={titleTx}
 				style={themed($title)}
+				tx={titleTx}
 				entering={makeSpringy(FadeInUp)}
 				exiting={FadeOutDown.duration(50)}
 			/>
 			<Text
 				key={`tag-${tagLineTx}`}
 				tx={tagLineTx}
+				size="xs"
 				entering={makeSpringy(FadeInUp).delay(20)}
 				exiting={FadeOutDown.duration(50)}
 			/>
@@ -66,6 +67,7 @@ export const ScreenHeader = memo((props: ScreenHeaderProps) => {
 	);
 });
 
-const $title: ThemedStyle<TextStyle> = ({ spacing }) => ({
-	marginBottom: spacing.xxxs,
+const $title: ThemedStyle<TextStyle> = () => ({
+	fontSize: 30,
+	//marginBottom: spacing.xxxs,
 });
