@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable } from "react-native";
+import { View, ScrollView, Pressable, ViewProps } from "react-native";
 import { Text } from "@/components";
 import Animated, {
 	FadeIn,
@@ -170,8 +170,8 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 							</Animated.View>
 						) : (
 							<Text
-								entering={makeSpringy(FadeIn.delay(100))}
-								exiting={makeSpringy(FadeOut.delay(100))}
+								entering={makeSpringy(FadeIn).delay(100)}
+								exiting={makeSpringy(FadeOut).delay(100)}
 							>
 								Tap any day to see your PX for that day
 							</Text>
@@ -185,8 +185,11 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 								Less
 							</Text>
 							{getEmptyArr(5).map((_, i) => (
-								<Animated.View entering={makeSpringy(FadeIn.delay(100 * i))}>
-									<DayItem count={500 * i} />
+								<Animated.View entering={makeSpringy(FadeIn).delay(100 * i)}>
+									<DayItem
+										count={500 * i}
+										style={{ height: 20, aspectRatio: 1 }}
+									/>
 								</Animated.View>
 							))}
 							<Text style={{ color: colors.textDim }} size="xs">
@@ -232,7 +235,7 @@ function Heatmap(props: HeatmapProps) {
 		>
 			{Array.from({ length: columnCount }).map((_, col) => (
 				<Animated.View
-					entering={makeSpringy(FadeIn.delay(50 * col))}
+					entering={makeSpringy(FadeIn).delay(50 * col)}
 					key={col}
 					style={{ gap: spacing.xxxs }}
 				>
@@ -243,7 +246,7 @@ function Heatmap(props: HeatmapProps) {
 
 						return (
 							<Animated.View
-								entering={makeSpringy(FadeIn.delay(50 * (row + col)))}
+								entering={makeSpringy(FadeIn).delay(50 * (row + col))}
 								key={`activit-${item.date}-${index}`}
 							>
 								<ActivityDayItem
@@ -310,9 +313,12 @@ function interpolateColorsHelper(
 type DayItemProps = {
 	count: number;
 	isActive?: boolean;
+	style?: ViewProps["style"];
 };
 
-const DayItem = memo(({ count, isActive = false }: DayItemProps) => {
+const DayItem = memo((props: DayItemProps) => {
+	const { count, isActive = false, style } = props;
+
 	const {
 		theme: { colors, roundness },
 	} = useAppTheme();
@@ -352,6 +358,7 @@ const DayItem = memo(({ count, isActive = false }: DayItemProps) => {
 					),
 				},
 				rStyle, // Apply the animated styles
+				style,
 			]}
 		/>
 	);
