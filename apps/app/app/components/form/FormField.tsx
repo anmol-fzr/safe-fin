@@ -1,21 +1,18 @@
 import { forwardRef, type Ref } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { type TextInput, View, type ViewStyle } from "react-native";
-import type { ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
+import { type TextInput } from "react-native";
 import { TextField, type TextFieldProps } from "../TextField";
 
-type FormFieldProps = Omit<
-	TextFieldProps,
-	"value" | "onChangeText" | "onBlur"
-> & {
+export interface FormFieldProps
+	extends Omit<TextFieldProps, "value" | "onChangeText" | "onBlur"> {
 	name: string;
-};
+}
 
 export const FormField = forwardRef(
 	(props: FormFieldProps, ref: Ref<TextInput>) => {
+		const { style: $styleOverride, ...rest } = props;
+
 		const { control, formState } = useFormContext();
-		const { themed } = useAppTheme();
 
 		type T = typeof formState.errors;
 
@@ -25,32 +22,21 @@ export const FormField = forwardRef(
 		const error = getValue(formState?.errors, props.name)?.message.toString();
 
 		return (
-			<View>
-				<Controller
-					control={control}
-					render={({ field: { onChange, onBlur, value, disabled } }) => (
-						<TextField
-							ref={ref}
-							value={value}
-							onChangeText={onChange}
-							onBlur={onBlur}
-							containerStyle={themed($textField)}
-							status={disabled ? "disabled" : error ? "error" : undefined}
-							helper={props.helper || error}
-							{...props}
-						/>
-					)}
-					name={props.name}
-				/>
-				{/*
-      <Text preset="error" >{error}</Text>
-      */}
-			</View>
+			<Controller
+				control={control}
+				render={({ field: { onChange, onBlur, value, disabled } }) => (
+					<TextField
+						ref={ref}
+						value={value}
+						onChangeText={onChange}
+						onBlur={onBlur}
+						status={disabled ? "disabled" : error ? "error" : undefined}
+						helper={props.helper || error}
+						{...rest}
+					/>
+				)}
+				name={props.name}
+			/>
 		);
 	},
 );
-
-export const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	marginBottom: spacing.lg,
-	borderRadius: spacing.xxl,
-});

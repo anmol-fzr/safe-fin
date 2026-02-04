@@ -156,7 +156,7 @@ export const TextField = forwardRef(function TextField(
 		? translate(placeholderTx, placeholderTxOptions)
 		: placeholder;
 
-	const $containerStyles = [{ gap: spacing.xs }, $containerStyleOverride];
+	const $containerStyles = [{ gap: spacing.xxs }, $containerStyleOverride];
 
 	const $inputWrapperStyles = [
 		$styles.row,
@@ -251,7 +251,7 @@ export const TextField = forwardRef(function TextField(
 const $inputWrapperStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
 	alignItems: "flex-start",
 	borderWidth: 1,
-	borderRadius: roundness * 2,
+	borderRadius: roundness * 1.7,
 	//backgroundColor: colors.palette.accent200,
 	borderColor: colors.palette.primary100,
 	overflow: "hidden",
