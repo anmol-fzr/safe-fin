@@ -37,6 +37,7 @@ export const useSendOtp = () => {
 				toast.loading(loadingMsg);
 			},
 			onSuccess() {
+				console.info("User Login OTP Sent Successfully");
 				toast.success(successMsg);
 			},
 			onError({ message = errorMsg }) {

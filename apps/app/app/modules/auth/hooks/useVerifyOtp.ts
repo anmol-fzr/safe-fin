@@ -27,11 +27,11 @@ export const useVerifyOtp = () => {
 					toast.loading(loadingMsg);
 				},
 				onSuccess(data) {
-					console.log(data);
 					if (data.data === null) {
 						toast.error(data.error.message ?? errorMsg);
 						return;
 					}
+					console.info("User Logged In Successfully");
 					toast.success(successMsg);
 				},
 				onError(data) {
