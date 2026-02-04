@@ -15,7 +15,7 @@ export default function HomeLayout() {
 			<Stack.Screen
 				options={{
 					headerShown: true,
-					header: () => <HomeHeader />,
+					header: (props) => <HomeHeader {...props} />,
 					// headerTitle: "Welcome",
 					// headerTitleStyle: {
 					// 	fontSize: 36,
