@@ -123,7 +123,7 @@ export default function UnitCompletionScreen() {
 				) : (
 					<CourseRating
 						courseId={courseId}
-						rating={rating.review?.rating ?? 0}
+						rating={rating?.review?.rating ?? 0}
 						rateCount={rateCount}
 					/>
 				)}
