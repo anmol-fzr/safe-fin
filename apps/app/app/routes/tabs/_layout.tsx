@@ -103,6 +103,7 @@ export default function TabsLayout() {
 			<Tabs.Screen
 				name="scams"
 				options={{
+					href: null,
 					title: translate("tabs:scams"),
 					tabBarIcon: (props) => (
 						<TabIcon
