@@ -73,20 +73,6 @@ export default function TabsLayout() {
 			/>
 
 			<Tabs.Screen
-				name="calculators"
-				options={{
-					title: translate("tabs:calculator"),
-					tabBarIcon: (props) => (
-						<TabIcon
-							{...props}
-							source={require("../../../assets/tabs/icons/calculator.png")}
-							selectedSource={require("../../../assets/tabs/icons/calculator-selected.png")}
-						/>
-					),
-				}}
-			/>
-
-			<Tabs.Screen
 				name="learnings"
 				options={{
 					title: translate("tabs:learnings"),
@@ -95,6 +81,20 @@ export default function TabsLayout() {
 							{...props}
 							source={require("../../../assets/tabs/icons/book.png")}
 							selectedSource={require("../../../assets/tabs/icons/book-selected.png")}
+						/>
+					),
+				}}
+			/>
+
+			<Tabs.Screen
+				name="calculators"
+				options={{
+					title: translate("tabs:calculator"),
+					tabBarIcon: (props) => (
+						<TabIcon
+							{...props}
+							source={require("../../../assets/tabs/icons/calculator.png")}
+							selectedSource={require("../../../assets/tabs/icons/calculator-selected.png")}
 						/>
 					),
 				}}
