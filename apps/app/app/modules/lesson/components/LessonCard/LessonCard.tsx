@@ -476,7 +476,6 @@ function LessonCardRating(props: LessonCardRatingProps) {
 	const { themed } = useAppTheme();
 
 	const formattedCount = numberFormatter.format(count);
-	console.log({ rating });
 
 	return (
 		<View style={[$metadataItem, $styleOverride]}>

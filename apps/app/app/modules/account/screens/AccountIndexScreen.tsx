@@ -20,20 +20,15 @@ import { Section } from "@/components/Section";
 import { IconSax } from "@/context/IconContext";
 import { getCountriesOpts } from "@/hooks/queries";
 import { type TxKeyPath, translate } from "@/i18n";
-import {
-	getDemoGraphicsOpts,
-	useSession,
-} from "@/modules/profile/hooks/queries";
+import { getDemoGraphicsOpts } from "@/modules/profile/hooks/queries";
 import { $styles, makeSpringy } from "@/theme";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
 import Animated, {
 	FadeIn,
 	FadeInDown,
-	FadeInLeft,
 	FadeInUp,
 } from "react-native-reanimated";
-import { useAuthStore } from "@/modules/auth/store";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 

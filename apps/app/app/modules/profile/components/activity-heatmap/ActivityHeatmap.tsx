@@ -48,7 +48,6 @@ function buildActivity(
 
 	for (const row of rows) {
 		const key = row.date.slice(0, 10); // YYYY-MM-DD
-		console.log("Inserted Key: ", key);
 
 		map.set(key, row);
 	}

@@ -49,7 +49,6 @@ export function DebugScreen() {
 	const user = useAuthStore((state) => state.user);
 
 	const envsDataList = traverseObj(envs);
-	console.log(JSON.stringify(envsDataList, null, 2));
 	// @ts-expect-error
 	const usingFabric = global.nativeFabricUIManager != null;
 
