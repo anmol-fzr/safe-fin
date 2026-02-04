@@ -21,8 +21,6 @@ export default function ProfileLayout() {
 					),
 				}}
 			/>
-
-			<Stack.Screen name="user-profile" />
 		</Stack>
 	);
 }

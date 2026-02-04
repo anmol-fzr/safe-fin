@@ -1,6 +1,6 @@
 import { formatDate } from "@safe-fin/utils";
-import { Chart, Clock } from "iconsax-react-nativejs";
-import type { ReactNode } from "react";
+import { Chart, Clock, Firstline, InfoCircle } from "iconsax-react-nativejs";
+import { useState, type ReactNode } from "react";
 import {
 	type ImageSourcePropType,
 	ScrollView,
@@ -10,20 +10,24 @@ import {
 	type ViewStyle,
 } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { BaseListItemSeparator, Button, ListView, Tabs } from "@/components";
+import { ListView, Tabs } from "@/components";
 import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
 import { spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Chapter } from "../api-types/course_one";
-import { ChapterBar } from "../components/course-details/ChapterBar";
 import { CourseDetails } from "../components/course-details/CourseDetails";
 import { MarkdowRenderer } from "../components/Lesson";
 import { LessonCertificate } from "../components/LessonCertificate/LessonCertificate";
 import { LessonListItem } from "../components/LessonListItem/LessonListItem";
 import { ChapterList } from "../components/course-details/ChapterList";
 import { getEmptyArr } from "@safe-fin/ui/utils";
-import Animated, { LinearTransition } from "react-native-reanimated";
+import Animated, {
+	FadeInLeft,
+	FadeInRight,
+	LinearTransition,
+} from "react-native-reanimated";
+import { ChipGroup } from "@/components/shared/molecules/animated-chip/Chip";
 
 export interface LessonData {
 	id: string;
@@ -263,7 +267,7 @@ CourseDetailsScreenContent.Loading = () => {
 };
 
 function CourseDetailsScreenLessons(props: CourseDetailsScreenLessonsProps) {
-	const { lessons, levelLabel = "LEVEL 1", onLessonPress } = props;
+	const { lessons, levelLabel = "CHAPTER 1", onLessonPress } = props;
 	const { themed } = useAppTheme();
 
 	return (
@@ -353,22 +357,67 @@ interface CourseDetailsTabsProps {
 function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 	const { chapters, desc } = props;
 
+	const [selected, setSelected] = useState(0);
+
+	const {
+		theme: { colors },
+	} = useAppTheme();
+
+	const chips = [
+		{
+			label: "Chapters",
+			activeColor: colors.palette.neutral900,
+			inActiveBackgroundColor: colors.palette.neutral300,
+			labelColor: selected === 0 ? colors.palette.neutral100 : colors.text,
+			icon: () => (
+				<IconSax
+					icon={Firstline}
+					color={selected === 0 ? colors.palette.neutral100 : colors.textDim}
+				/>
+			),
+		},
+		{
+			label: "Overview",
+			activeColor: colors.palette.neutral900,
+			inActiveBackgroundColor: colors.palette.neutral300,
+			labelColor: selected === 1 ? colors.palette.neutral100 : colors.text,
+			icon: () => (
+				<IconSax
+					icon={InfoCircle}
+					color={selected === 1 ? colors.palette.neutral100 : colors.textDim}
+				/>
+			),
+		},
+	];
+
 	return (
-		<Tabs defaultValue="lessons" className="w-[400px]">
-			<Tabs.List>
-				<Tabs.Trigger value="lessons">Lessons</Tabs.Trigger>
-				<Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-			</Tabs.List>
-			<Tabs.Content value="lessons">
-				<Animated.View layout={LinearTransition}>
-					<ChapterList chapters={chapters} />
-				</Animated.View>
-			</Tabs.Content>
-			<Tabs.Content value="overview">
-				<MarkdowRenderer content={desc} />
-				{/* <CourseDetailsScreenCertificate /> */}
-			</Tabs.Content>
-		</Tabs>
+		<View style={{ marginTop: spacing.md }}>
+			<ChipGroup
+				chips={chips}
+				selectedIndex={selected}
+				onChange={setSelected}
+			/>
+
+			<View style={{ marginTop: spacing.md }}>
+				{selected === 0 ? (
+					<Animated.View
+						layout={LinearTransition}
+						entering={FadeInLeft}
+						key={selected}
+					>
+						<ChapterList chapters={chapters} />
+					</Animated.View>
+				) : (
+					<Animated.View
+						layout={LinearTransition}
+						entering={FadeInRight}
+						key={selected}
+					>
+						<MarkdowRenderer content={desc} />
+					</Animated.View>
+				)}
+			</View>
+		</View>
 	);
 }
 

@@ -15,13 +15,18 @@ export default function HomeLayout() {
 			<Stack.Screen
 				options={{
 					headerShown: true,
-					headerTitle: "Welcome",
-					headerStyle: {
-						//marginTop: top,
-						//paddingInline: spacing.sm,
-						//paddingBottom: spacing.sm,
-						//backgroundColor: colors.background,
-					},
+					header: () => <HomeHeader />,
+					// headerTitle: "Welcome",
+					// headerTitleStyle: {
+					// 	fontSize: 36,
+					// },
+					//headerStyle: {
+					//marginTop: top,
+					//k
+					//paddingInline: spacing.sm,
+					//paddingBottom: spacing.sm,
+					//backgroundColor: colors.background,
+					//},
 				}}
 				name="index"
 				// options={{

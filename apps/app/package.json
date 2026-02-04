@@ -54,12 +54,14 @@
 		"@safe-fin/ui": "workspace:*",
 		"@safe-fin/utils": "workspace:*",
 		"@sentry/react-native": "~7.2.0",
+		"@shopify/react-native-skia": "^2.4.18",
 		"@tanstack/react-query": "^5.90.11",
 		"axios": "^1.13.2",
 		"better-auth": "catalog:",
 		"buffer": "^6.0.3",
 		"expo": "~54.0.32",
 		"expo-application": "~7.0.7",
+		"expo-blur": "^15.0.8",
 		"expo-build-properties": "~1.0.9",
 		"expo-constants": "~18.0.11",
 		"expo-dev-client": "~6.0.18",
@@ -98,7 +100,7 @@
 		"react-native-logs": "^5.5.0",
 		"react-native-mmkv": "^3.3.0",
 		"react-native-otp-entry": "^1.8.5",
-		"react-native-reanimated": "~4.1.1",
+		"react-native-reanimated": "~4.1.6",
 		"react-native-safe-area-context": "~5.6.0",
 		"react-native-screens": "4.16.0",
 		"react-native-skeleton-placeholder": "^5.2.4",
@@ -165,5 +167,10 @@
 		"staticFeatureFlags": {
 			"ENABLE_SHARED_ELEMENT_TRANSITIONS": true
 		}
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@shopify/react-native-skia"
+		]
 	}
 }

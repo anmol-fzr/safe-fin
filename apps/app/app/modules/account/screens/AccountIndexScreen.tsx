@@ -24,10 +24,15 @@ import {
 	getDemoGraphicsOpts,
 	useSession,
 } from "@/modules/profile/hooks/queries";
-import { $styles } from "@/theme";
+import { $styles, makeSpringy } from "@/theme";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
-import Animated, { FadeIn } from "react-native-reanimated";
+import Animated, {
+	FadeIn,
+	FadeInDown,
+	FadeInLeft,
+	FadeInUp,
+} from "react-native-reanimated";
 import { useAuthStore } from "@/modules/auth/store";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
@@ -48,7 +53,7 @@ const DATA: {
 				icon: User,
 				title: "screens:profileList.accountList.userProfile.title",
 				desc: "screens:profileList.accountList.userProfile.desc",
-				href: "/tabs/profile/user-profile",
+				href: "/profile/edit",
 			},
 
 			{
@@ -256,14 +261,17 @@ export const AccountIndexScreen = () => {
 	);
 };
 
-export const UserDetailsCard = () => {
+interface UserDetailsCardProps {
+	name: string;
+	image: string;
+}
+
+export const UserDetailsCard = (props: UserDetailsCardProps) => {
+	const { name = "User", image = "" } = props;
+
 	const {
 		theme: { colors, spacing },
 	} = useAppTheme();
-
-	const image = useAuthStore((state) => state.user?.image);
-
-	const { currUser } = useSession();
 
 	return (
 		<View
@@ -276,7 +284,8 @@ export const UserDetailsCard = () => {
 				paddingTop: 0,
 			}}
 		>
-			<Image
+			<Animated.Image
+				entering={FadeInDown}
 				height={80}
 				width={80}
 				style={{
@@ -287,8 +296,8 @@ export const UserDetailsCard = () => {
 				}}
 			/>
 			<View>
-				<Text size="xxl" weight="medium">
-					{currUser?.name ?? "User"}
+				<Text size="xxl" weight="medium" entering={FadeInUp}>
+					{name}
 				</Text>
 			</View>
 

@@ -450,7 +450,7 @@ interface LessonCardRatingProps {
 	/**
 	 * The rating value
 	 */
-	rating: number;
+	rating: number | string;
 	/**
 	 * The number of ratings
 	 */
@@ -465,19 +465,25 @@ interface LessonCardRatingProps {
 	style?: StyleProp<ViewStyle>;
 }
 
+const numberFormatter = new Intl.NumberFormat("en", {
+	notation: "compact",
+	compactDisplay: "short",
+	maximumFractionDigits: 1,
+});
+
 function LessonCardRating(props: LessonCardRatingProps) {
 	const { rating, count, style: $styleOverride } = props;
 	const { themed } = useAppTheme();
 
-	const formattedCount =
-		count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count.toString();
+	const formattedCount = numberFormatter.format(count);
+	console.log({ rating });
 
 	return (
 		<View style={[$metadataItem, $styleOverride]}>
 			<IconSax icon={Star1} size={18} />
 
 			<Text style={themed($metadataText)} size="xs" weight="semiBold">
-				{rating.toFixed(1)}
+				{rating}
 			</Text>
 			<Text style={themed($ratingCount)} size="xs" weight="normal">
 				({formattedCount})
@@ -613,7 +619,7 @@ LessonCard.MetadataPoints = (props: PointsMetadataProps) => {
 
 	return (
 		<LessonCard.MetadataItem Icon={() => <IconSax icon={Coin1} size={18} />}>
-			{points.toString()} PX
+			{numberFormatter.format(points)} PX
 		</LessonCard.MetadataItem>
 	);
 };

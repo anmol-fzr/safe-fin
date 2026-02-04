@@ -11,7 +11,8 @@ import { useAppTheme } from "@/utils/useAppTheme";
 import { useGetLessons } from "../hooks/api";
 import { LessonCard } from "./LessonCard/LessonCard";
 import Animated, { FadeIn } from "react-native-reanimated";
-import { makeSpringy } from "@/theme";
+import { makeSpringy, spacing } from "@/theme";
+import { View } from "react-native";
 
 export function LessonList() {
 	return (
@@ -76,11 +77,22 @@ function LessonListImpl() {
 									justifyContent: "space-between",
 								}}
 							>
-								<LessonCard.MetadataLevel level={item.level} />
-								<LessonCard.Rating
-									rating={item.avgRating}
-									count={item.rateCount}
-								/>
+								<View
+									style={{
+										display: "flex",
+										flexDirection: "row",
+										gap: spacing.xs,
+									}}
+								>
+									<LessonCard.MetadataLevel level={item.level} />
+									<LessonCard.MetadataPoints points={item.points} />
+								</View>
+								{item.rateCount >= 1 && item.rating >= 1 && (
+									<LessonCard.Rating
+										rating={item.rating.toFixed(1)}
+										count={item.rateCount}
+									/>
+								)}
 							</LessonCard.Metadata>
 						</LessonCard.Body>
 					</LessonCard>

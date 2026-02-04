@@ -15,7 +15,7 @@ export const ForYouLessonCard = (props: ForYouLessonCardProps) => {
 		isSaved = 0,
 		content,
 		level,
-		avgRating,
+		rating,
 		rateCount,
 		coverUrl,
 	} = course;
@@ -45,7 +45,7 @@ export const ForYouLessonCard = (props: ForYouLessonCardProps) => {
 					}}
 				>
 					<LessonCard.MetadataLevel level={level} />
-					<LessonCard.Rating rating={avgRating} count={rateCount} />
+					<LessonCard.Rating rating={rating} count={rateCount} />
 				</LessonCard.Metadata>
 			</LessonCard.Body>
 		</LessonCard>

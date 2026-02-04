@@ -10,6 +10,13 @@ export default function CalculatorLayout() {
 					header: (props) => <GoBack tx="Chapters" {...props} />,
 				}}
 			/>
+
+			<Stack.Screen
+				name="completion"
+				options={{
+					headerShown: false,
+				}}
+			/>
 		</Stack>
 	);
 }

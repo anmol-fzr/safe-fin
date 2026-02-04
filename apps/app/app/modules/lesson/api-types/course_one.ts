@@ -5,7 +5,7 @@ export type IResGetCourse = IResData<Data>;
 interface Data extends ITimestamps {
 	id: number;
 	isPublished: boolean;
-	avgRating: number;
+	rating: number;
 	rateCount: number;
 	coverUrl: string;
 	content: Content;

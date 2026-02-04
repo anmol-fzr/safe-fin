@@ -12,7 +12,9 @@ export const useTypedLocalSearchParams = <T>(schema: z.ZodObject<T>) => {
 		const error = new SearchParamValidationError(
 			"Search Params Validation Failed",
 		);
+		console.error(result.error.message);
 		console.error(error);
+		debugger;
 		throw error;
 	}
 

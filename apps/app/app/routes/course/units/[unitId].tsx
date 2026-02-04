@@ -1,17 +1,19 @@
-import { useRouter } from "expo-router";
 import { Suspense } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { z } from "zod";
-import { Button, Screen, Separator, Text } from "@/components";
+import { Button, ButtonProps, Separator, Text } from "@/components";
 import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { MarkdowRenderer } from "@/modules/lesson/components/Lesson";
 import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
-import { useSaveCourseProgress } from "@/modules/lesson/hooks/mutations";
 import { useGetUnit } from "@/modules/lesson/hooks/units/queries";
-import { isNull } from "@/pkg/utils";
 import { idSchema } from "@/schema";
-import { $styles } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
+import AnimatedScrollProgress from "@/components/shared/micro-interactions/animated-scroll-progress";
+import { CircularProgress } from "@/components/shared/organisms/circular-progress";
+import { useSharedValue } from "react-native-reanimated";
+import { useDimensions } from "@/hooks/use-dimensions";
+import { Link } from "expo-router";
+import { FromCourseCard } from "@/modules/lesson/components/FromCourseCard";
 
 const paramsSchema = z.object({
 	unitId: idSchema,
@@ -21,11 +23,9 @@ export default function UnitScreen() {
 	const params = useTypedLocalSearchParams(paramsSchema);
 
 	return (
-		<Screen preset="auto" contentContainerStyle={$styles.container}>
-			<Suspense fallback={<UnitScreenImpl.Loading />}>
-				<UnitScreenImpl {...params} />
-			</Suspense>
-		</Screen>
+		<Suspense fallback={<UnitScreenImpl.Loading />}>
+			<UnitScreenImpl {...params} />
+		</Suspense>
 	);
 }
 
@@ -39,69 +39,74 @@ function UnitScreenImpl(props: Props) {
 
 	const { unit } = useGetUnit(unitId);
 
-	const { content, chapterId, points, nextUnitId } = unit;
+	const { content, points, nextUnitId, isCompleted } = unit;
 	const { title, shortDesc } = content;
 
-	const { saveCourseProgress } = useSaveCourseProgress();
-	const router = useRouter();
+	const progress = useSharedValue(0);
 
-	function handleCompletion() {
-		saveCourseProgress({ courseId: unit.chapter.course.id, chapterId, unitId });
-
-		if (isNull(nextUnitId)) {
-			router.back();
-		}
-
-		return router.replace(`/course/units/${nextUnitId}`);
-	}
+	const { width } = useDimensions("screen");
 
 	return (
-		<LessonCard.Body>
-			<LessonCard.Title style={{ fontSize: 40, lineHeight: 44 }}>
-				{title}
-			</LessonCard.Title>
-			<LessonCard.Description>{shortDesc}</LessonCard.Description>
-
-			<LessonCard.MetadataPoints points={points} />
-
-			<Separator />
-			<MarkdowRenderer content={content.longDesc.content} />
-			<Separator />
-
-			<View style={{ paddingBlock: 20, gap: spacing.lg }}>
-				<FromCourseCard courseTitle={unit.chapter.course.content.title} />
-
-				<Button
-					onPress={handleCompletion}
-					preset="reversed"
-					style={{
-						backgroundColor: colors.tint,
-						alignItems: "center",
-						justifyContent: "center",
-						alignContent: "center",
-					}}
-				>
-					Next Unit
-				</Button>
-			</View>
-
-			{/*
-				<View style={{ paddingTop: 48, paddingBlock: 24 }}>
-					<Button onPress={handleCompletion}>Mark as Complete</Button>
-
-					<View style={{ gap: spacing.md }}>
-						<LessonCard.Share />
-						<View style={{ paddingBottom: 60, gap: 24 }}>
-							<Text size="xl" weight="medium">
-								Complete this lesson and move one step closer to your course
-								certificate
-							</Text>
-							<Button preset="reversed">Start Quiz</Button>
-						</View>
+		<AnimatedScrollProgress
+			fabWidth={width * 0.9}
+			fabHeight={56}
+			fabBottomOffset={50}
+			endReachedThreshold={90}
+			fabBackgroundColor={colors.tint}
+			fabEndBackgroundColor={colors.palette.neutral900}
+			fabBorderRadius={28}
+			showFabOnScroll
+			fabAppearScrollOffset={50}
+			onScrollProgressChange={(_value) => {
+				progress.value = _value;
+			}}
+			style={{
+				backgroundColor: colors.background,
+			}}
+			renderInitialContent={() => (
+				<View style={styles.fabContent}>
+					<Text size="xs" style={styles.fabTitle}>
+						{unit.content.title}
+					</Text>
+					<View>
+						<CircularProgress progress={progress} size={36} strokeWidth={3} />
 					</View>
 				</View>
-        */}
-		</LessonCard.Body>
+			)}
+			renderEndContent={() =>
+				isCompleted === 0 ? (
+					<CompletionLink unitId={unitId} />
+				) : nextUnitId ? (
+					<NextUnitLink nextUnitId={nextUnitId} />
+				) : (
+					<CourseLink courseId={unit.chapter.course.id} />
+				)
+			}
+		>
+			<View style={{ padding: spacing.xs }}>
+				<LessonCard.Body>
+					<LessonCard.Title style={styles.title}>{title}</LessonCard.Title>
+					<LessonCard.Description>{shortDesc}</LessonCard.Description>
+					<LessonCard.MetadataPoints points={points} />
+
+					<Separator />
+
+					<MarkdowRenderer content={content.longDesc.content} />
+
+					<Separator />
+
+					<View
+						style={{
+							paddingBlock: spacing.sm,
+							gap: spacing.lg,
+							marginBottom: 120,
+						}}
+					>
+						<FromCourseCard courseTitle={unit.chapter.course.content.title} />
+					</View>
+				</LessonCard.Body>
+			</View>
+		</AnimatedScrollProgress>
 	);
 }
 
@@ -114,40 +119,99 @@ UnitScreenImpl.Loading = () => {
 	);
 };
 
-interface FromCourseCardProps {
-	courseTitle: string;
+const styles = StyleSheet.create({
+	fabContent: {
+		flex: 1,
+		width: "100%",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		paddingHorizontal: 0,
+	},
+	continueButton: {
+		backgroundColor: "transparent",
+	},
+	title: { fontSize: 40, lineHeight: 44 },
+	fabTitle: { color: "#fff" },
+});
+
+const ContinueButton = (props: ButtonProps) => {
+	return (
+		<Button
+			{...props}
+			preset="reversed"
+			style={[styles.continueButton, props.style]} // Merge styles if Link passes any
+		>
+			Continue
+		</Button>
+	);
+};
+
+interface CompletionLinkProps {
+	unitId: number;
 }
 
-const FromCourseCard = (props: FromCourseCardProps) => {
-	const { courseTitle } = props;
-
-	const {
-		theme: { colors, spacing, roundness, typography },
-	} = useAppTheme();
+const CompletionLink = (props: CompletionLinkProps) => {
+	const { unitId } = props;
 
 	return (
-		<View style={{ gap: spacing.md }}>
-			<Text
-				weight="medium"
-				style={{
-					color: colors.textDim,
-					fontFamily: typography.secondary?.medium,
-				}}
-			>
-				FROM COURSE
-			</Text>
+		<Link
+			href={{
+				pathname: "/course/units/completion",
+				params: {
+					unitId,
+				},
+			}}
+			asChild
+			replace
+		>
+			<ContinueButton />
+		</Link>
+	);
+};
 
-			<View
-				style={{
-					borderWidth: 1,
-					borderColor: colors.border,
-					padding: spacing.sm,
-					paddingInline: spacing.md,
-					borderRadius: roundness,
-				}}
-			>
-				<Text>{courseTitle}</Text>
-			</View>
-		</View>
+interface NextUnitLinkProps {
+	nextUnitId: number;
+}
+
+const NextUnitLink = (props: NextUnitLinkProps) => {
+	const { nextUnitId } = props;
+
+	return (
+		<Link
+			href={{
+				pathname: "/course/units/[unitId]",
+				params: {
+					unitId: nextUnitId,
+				},
+			}}
+			replace
+			asChild
+		>
+			<ContinueButton />
+		</Link>
+	);
+};
+
+interface CourseLinkProps {
+	courseId: number;
+}
+
+const CourseLink = (props: CourseLinkProps) => {
+	const { courseId } = props;
+
+	return (
+		<Link
+			href={{
+				pathname: "/course/[courseId]",
+				params: {
+					courseId,
+				},
+			}}
+			asChild
+			replace
+		>
+			<ContinueButton />
+		</Link>
 	);
 };

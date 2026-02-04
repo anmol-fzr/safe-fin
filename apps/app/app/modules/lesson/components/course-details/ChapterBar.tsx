@@ -33,7 +33,7 @@ export const ChapterBar = (props: ChapterProps) => {
 						fontFamily: typography.secondary?.medium,
 					}}
 				>
-					LEVEL {index + 1}
+					CHAPTER {index + 1}
 				</Text>
 				{/*
 				{level.type === "pro" && (

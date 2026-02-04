@@ -80,20 +80,20 @@ function buildActivity(
 	return result;
 }
 
-export function ActivityHeatmap() {
+interface ActivityHeatmapProps {
+	activity: ActivityRow[];
+}
+
+export function ActivityHeatmap(props: ActivityHeatmapProps) {
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+	const { activity } = props;
 
 	const activityData = buildActivity(
 		2026,
-		[
-			{
-				date: "2026-01-22T18:30:00.000Z",
-				totalPxEarned: 1400,
-			},
-		],
+		activity,
 		//{ from: 0, to: 0 },
 	);
-	debugger;
 
 	const activeItem = activeIndex !== null ? activityData[activeIndex] : null;
 

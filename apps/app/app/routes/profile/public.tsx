@@ -5,15 +5,38 @@ import { ActivityHeatmap } from "@/modules/profile/components/activity-heatmap";
 import { View } from "react-native";
 import { useAppTheme } from "@/utils/useAppTheme";
 import React, { ReactNode } from "react";
-import { useAuthStore } from "@/modules/auth/store";
+import { FadeInDown, FadeInLeft, FadeInUp } from "react-native-reanimated";
+import { useGetPublicProfile } from "@/modules/profile/hooks/queries";
 
 export default function PublicProfileScreen() {
-	const image = useAuthStore((state) => state.user?.image);
-	console.log({ image });
+	const { data } = useGetPublicProfile();
+	const { user, profile, activity } = data;
+
+	const streaks = [
+		{
+			title: "Current Streak",
+			count: profile.currentStreak,
+		},
+		{
+			title: "Maximum Streak",
+			count: profile.maxStreak,
+		},
+
+		{
+			title: "Courses Completed",
+			count: profile.courses,
+		},
+
+		{
+			title: "Total PX",
+			count: profile.totalPX,
+		},
+	];
+
 	return (
 		<Screen preset="scroll" style={[$styles.container, { gap: 48 }]}>
 			<View style={{ gap: 24 }}>
-				<UserDetailsCard />
+				<UserDetailsCard {...user} />
 				<View
 					style={{
 						flexDirection: "row",
@@ -23,17 +46,16 @@ export default function PublicProfileScreen() {
 						flexWrap: "wrap",
 					}}
 				>
-					<Streak title="12" desc="Current Streak" />
-					<Streak title="30" desc="Maximum Streak" />
-					<Streak title="8" desc="Courses Completed" />
-					<Streak title="1400" desc="Total PX" />
+					{streaks.map((streak) => (
+						<Streak title={streak.count} desc={streak.title} />
+					))}
 				</View>
 
 				{/*
 				<PublicProfileLinksCard />
         */}
 
-				<ActivityHeatmap />
+				<ActivityHeatmap activity={activity} />
 			</View>
 		</Screen>
 	);
@@ -61,10 +83,10 @@ const Streak = (props: StreakProps) => {
 				alignItems: "center",
 			}}
 		>
-			<Text size="lg" weight="semiBold">
+			<Text size="lg" weight="semiBold" entering={FadeInUp}>
 				{title}
 			</Text>
-			<Text style={{ color: colors.textDim }} size="xs">
+			<Text style={{ color: colors.textDim }} size="xs" entering={FadeInUp}>
 				{desc}
 			</Text>
 		</View>

@@ -123,6 +123,9 @@ export const COURSES = {
 		ONE: (unitId: ResourceId) =>
 			get<unknown, IResGetUnit>(`/courses/units/${unitId}`),
 	},
+
+	RATE: (courseId: ResourceId, rating: number) =>
+		post(`/courses/${courseId}/rate`, { rating }),
 };
 
 type IResGetUnit = IResData<{
@@ -134,6 +137,7 @@ type IResGetUnit = IResData<{
 	points: number;
 	index: number;
 	isPublished: boolean;
+	isCompleted: 0 | 1;
 	createdAt: string;
 	updatedAt: string;
 	content: {
@@ -148,6 +152,13 @@ type IResGetUnit = IResData<{
 	chapter: {
 		course: {
 			id: number;
+			rateCount: number;
+			rating: {
+				review: null | {
+					id: number;
+					rating: number;
+				};
+			};
 			content: {
 				title: string;
 			};
@@ -308,8 +319,8 @@ export interface CourseItem {
 	isSaved: 0 | 1;
 	level: CourseLevel;
 	coverUrl: string;
-	points?: number;
-	avgRating: number;
+	points: number;
+	rating: number;
 	rateCount: number;
 	createdAt: string;
 	updatedAt: string;

@@ -1,7 +1,6 @@
 import { axiosInstance, type IResData } from "@/services/axios";
 import { toast } from "sonner-native";
 
-
 const { get, post } = axiosInstance;
 
 interface UserDemoGraphicData {
@@ -38,7 +37,29 @@ export const DEMO_GRAPHICS = {
 
 import { File } from "expo-file-system";
 
+export type IResPubliProfile = IResData<{
+	user: {
+		name: string;
+		image: string;
+		createdAt: string;
+	};
+	profile: {
+		currentStreak: number;
+		maxStreak: number;
+		totalPX: number;
+		courses: number;
+	};
+	activity: Array<{
+		id: number;
+		date: string;
+		totalPxEarned: number;
+	}>;
+}>;
+
 export const PROFILE = {
+	PUBLIC: (userId?: string) =>
+		get<unknown, IResPubliProfile>("/profile/public", { params: { userId } }),
+
 	AVATAR: {
 		UPLOAD: async (file: {
 			uri: string;

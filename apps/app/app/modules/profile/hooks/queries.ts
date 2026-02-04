@@ -5,7 +5,21 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { authClient } from "@/modules/auth/utils";
-import { DEMO_GRAPHICS } from "../api";
+import { DEMO_GRAPHICS, PROFILE } from "../api";
+
+const getPublicProfileOpts = (userId?: string) => {
+	return queryOptions({
+		queryKey: ["USER", "PROFILE", "PUBLIC", userId],
+		queryFn: () => PROFILE.PUBLIC(userId),
+	});
+};
+
+export const useGetPublicProfile = (userId?: string) => {
+	const opts = getPublicProfileOpts(userId);
+	const { data, ...rest } = useSuspenseQuery(opts);
+
+	return { data: data.data, ...rest };
+};
 
 const getDemoGraphicsOpts = () => {
 	return queryOptions({

@@ -1,5 +1,5 @@
 import type { Component } from "react";
-import { View, type ViewProps } from "react-native";
+import { StyleSheet, View, type ViewProps } from "react-native";
 import type { ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -27,7 +27,7 @@ const VerticalSeparator = (props: ViewProps) => {
 
 const $horizontalSeparator: ThemedViewStyle = (theme) => ({
 	backgroundColor: theme.colors.border,
-	height: 1,
+	height: StyleSheet.hairlineWidth,
 	width: "100%",
 	marginTop: 12,
 	marginBottom: 12,

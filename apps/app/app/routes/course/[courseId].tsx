@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { z } from "zod";
-import { Screen, Text } from "@/components";
+import { Screen } from "@/components";
 import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useGetLesson } from "@/modules/lesson/hooks/api";
 import { CourseDetailsScreen } from "@/modules/lesson/screens/LessonDetailScreen";
@@ -44,7 +44,7 @@ function CourseScreenImpl(props: CourseScreenImplProps) {
 					level="Beginner"
 					duration="7h"
 					points={lesson.points}
-					rating={lesson.avgRating}
+					rating={lesson.rating}
 					ratingCount={lesson.rateCount}
 					updatedDate={lesson.updatedAt}
 				/>
