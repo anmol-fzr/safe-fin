@@ -15,8 +15,6 @@ const getProfileActivitySchema = z.object({
 		.number()
 		.int()
 		.positive()
-		.gte(2025)
-		.lte(new Date().getFullYear())
 		.optional()
 		.default(new Date().getFullYear()),
 
