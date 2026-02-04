@@ -5,22 +5,39 @@ import {
 } from "@tanstack/react-query";
 import { authClient } from "@/modules/auth/utils";
 import { DEMO_GRAPHICS } from "../api";
-import { getListSessionsOpts, useSession } from "./queries";
+import { getListSessionsOpts } from "./queries";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import * as Sentry from "@sentry/react-native";
 import { useResourceActionToast } from "@safe-fin/ui/hooks";
 import { useAuthStore } from "@/modules/auth/store";
 
-const getUpdateDemoGraphicsOpts = () => {
-	return mutationOptions({
+const useUpdateDemoGraphics = () => {
+	const toast = useResourceActionToast();
+
+	const loadingMsg = "Updating Profile ...";
+	const successMsg = "Profile Updated Successfully";
+	const errorMsg = "Unable to Update Profile";
+
+	const { mutate, ...rest } = useMutation({
 		mutationKey: ["UPDATE", "DEMO-GRAPHICS"],
 		mutationFn: DEMO_GRAPHICS.UPDATE,
+		onMutate() {
+			toast.loading(loadingMsg);
+		},
+		onSuccess(data) {
+			console.log(data);
+			if (data.data === null) {
+				toast.error(data?.message ?? errorMsg);
+				return;
+			}
+			toast.success(data?.message ?? successMsg);
+		},
+		onError(data) {
+			console.log(data);
+			toast.error(data.message ?? errorMsg);
+		},
 	});
-};
 
-const useUpdateDemoGraphics = () => {
-	const opts = getUpdateDemoGraphicsOpts();
-	const { mutate, ...rest } = useMutation(opts);
 	return {
 		updateDemoGraphics: mutate,
 		...rest,
