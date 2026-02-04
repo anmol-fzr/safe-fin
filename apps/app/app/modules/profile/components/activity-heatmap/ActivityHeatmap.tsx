@@ -244,7 +244,7 @@ function Heatmap(props: HeatmapProps) {
 						return (
 							<Animated.View
 								entering={makeSpringy(FadeIn.delay(50 * (row + col)))}
-								key={item.date}
+								key={`activit-${item.date}-${index}`}
 							>
 								<ActivityDayItem
 									index={index}
