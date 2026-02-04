@@ -1,8 +1,15 @@
 import Slider from "@react-native-community/slider";
-import { memo, useCallback, useMemo, useTransition } from "react";
+import {
+	memo,
+	useCallback,
+	useMemo,
+	useRef,
+	useState,
+	useTransition,
+} from "react";
 import { StyleSheet, type TextStyle, View } from "react-native";
 import { Text, TextField } from "@/components";
-import { spacing, type ThemedStyle } from "@/theme";
+import { type ThemedStyle } from "@/theme";
 import { debounce } from "@/utils/funcs";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -33,27 +40,30 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 
 	const [isPending, startTransition] = useTransition();
 
-	const onValueChange = useCallback(
-		(val: number) => {
-			startTransition(() => {
-				setValue(val);
-			});
-		},
-		[setValue],
-	);
+	const [localValue, setLocalValue] = useState(value.toString());
+	const setValueRef = useRef(setValue);
 
 	const debouncedSetValue = useMemo(
 		() =>
 			debounce((val: number) => {
 				startTransition(() => {
-					setValue(val);
+					setValueRef.current(val);
 				});
 			}, 300),
-		[setValue],
+		[],
+	);
+
+	const onValueChange = useCallback(
+		(val: number) => {
+			setLocalValue(val.toString());
+			debouncedSetValue(val);
+		},
+		[debouncedSetValue],
 	);
 
 	const onInputChange = useCallback(
 		(val: string) => {
+			setLocalValue(val);
 			const numeric = Number(val);
 			if (!Number.isNaN(numeric) && Number.isFinite(numeric)) {
 				debouncedSetValue(numeric);
@@ -72,7 +82,7 @@ export const CalculatorSlider = memo((props: CalculatorSliderProps) => {
 			<View style={styles.labelRow}>
 				<Text weight="semiBold">{label}</Text>
 				<TextField
-					value={value.toString()}
+					value={localValue}
 					LeftAccessory={() => <Text>{prepend}</Text>}
 					RightAccessory={() => <Text>{append}</Text>}
 					status={isPending || disabled ? "disabled" : undefined}

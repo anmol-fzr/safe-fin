@@ -1,6 +1,6 @@
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Parser } from "expr-eval";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
@@ -76,9 +76,14 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		getInitStateFromSliders(sliders),
 	);
 
-	const onSliderChange = (key: string) => (val: number) => {
-		setFormState((prev) => ({ ...prev, [key]: val }));
-	};
+	const onSliderChange = useCallback(
+		(key: string) => {
+			return (val: number) => {
+				setFormState((prev) => ({ ...prev, [key]: val }));
+			};
+		},
+		[setFormState],
+	);
 
 	const resultData = useMemo(
 		() => getInitResultFromConfig({ input: formState, calculate }),
@@ -106,12 +111,14 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		<>
 			<Text
 				preset="heading"
+				size="xl"
 				entering={FadeInUp}
 				exiting={FadeOutDown.duration(50)}
 				text={title}
 			/>
 			<Text
 				preset="subheading"
+				size="md"
 				entering={FadeInUp.delay(50)}
 				exiting={FadeOutDown.duration(50).delay(50)}
 				text={desc}
@@ -147,21 +154,6 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 					/>
 				</Section.Body>
 			</Section>
-
-			{/*
-      {constants?.map((vals) => (
-        <View
-          key={vals.key}
-          style={[
-            sliderRowStyles.labelRow,
-            { marginBottom: spacing.xl, marginTop: spacing.xl },
-          ]}
-        >
-          <Text>{vals.label}</Text>
-          <Text>{vals.value}%</Text>
-        </View>
-      ))}
-      */}
 
 			<Section>
 				<Section.Body>
