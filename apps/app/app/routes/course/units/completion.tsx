@@ -42,10 +42,10 @@ export default function UnitCompletionScreen() {
 
 	const router = useRouter();
 
-	//const { saveCourseProgress } = useSaveCourseProgress();
+	const { saveCourseProgress } = useSaveCourseProgress();
 
 	function handleCompletion() {
-		//saveCourseProgress({ courseId, chapterId, unitId });
+		saveCourseProgress({ courseId, chapterId, unitId });
 
 		if (nextUnitId) {
 			return router.replace({
