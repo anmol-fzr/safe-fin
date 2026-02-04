@@ -19,6 +19,7 @@ import Animated, {
 } from "react-native-reanimated";
 import type { AnimatedProps } from "react-native-reanimated";
 import { useSendOtp } from "../hooks/useSendOtp";
+import { Form } from "@/components/form/Form";
 
 interface LoginFormContextType {
 	handleSubmit: VoidFunction;
@@ -78,8 +79,6 @@ export const LoginFormRoot = (props: LoginFormRootProps) => {
 	);
 };
 
-const emailPlaceholder = getFakeEmail();
-
 const EmailField = () => {
 	//const { handleSubmit } = useLoginFormContext();
 	return (
@@ -87,17 +86,7 @@ const EmailField = () => {
 			entering={makeSpringy(FadeIn)}
 			exiting={makeSpringy(FadeOut)}
 		>
-			<FormField
-				name="email"
-				autoCapitalize="none"
-				autoComplete="email"
-				autoFocus={false}
-				autoCorrect
-				//onEndEditing={handleSubmit}
-				keyboardType="email-address"
-				labelTx="loginScreen:emailFieldLabel"
-				placeholder={emailPlaceholder.toLowerCase()}
-			/>
+			<Form.Email autoFocus={false} autoCorrect />
 		</Animated.View>
 	);
 };
