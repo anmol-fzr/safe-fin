@@ -258,7 +258,7 @@ SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 			{props.children}
 			<Text
 				style={{
-					color: isSelected ? colors.text : colors.textDim,
+					color: isSelected ? colors.textInverse : colors.textDim,
 				}}
 				weight={isSelected ? "medium" : "normal"}
 			>
@@ -280,17 +280,17 @@ export const createIconOptionRenderer = <T extends { Icon: IconType }>(
 	Comp: CompType,
 ) => {
 	return (props: IconOptionRendererProps<T>) => {
-		const {
-			Icon,
-			// isSelected
-		} = props;
+		const { Icon, isSelected } = props;
 		const {
 			theme: { colors },
 		} = useAppTheme();
 
 		return (
 			<Comp {...props}>
-				<Icon color={colors.palette.neutral900} size={20} />
+				<Icon
+					color={isSelected ? colors.textInverse : colors.palette.neutral900}
+					size={20}
+				/>
 				{props.children}
 			</Comp>
 		);
