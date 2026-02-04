@@ -1,4 +1,4 @@
 export * from "./DeleteAccountCard";
 export * from "./DemoGraphicsForm";
-export * from "./ProfileForm";
+export * from "./profile-form";
 export * from "./SessionsCard";

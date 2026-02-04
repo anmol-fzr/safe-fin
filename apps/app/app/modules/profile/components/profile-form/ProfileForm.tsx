@@ -1,0 +1,146 @@
+import { useForm, useFormContext, UseFormProps } from "react-hook-form";
+import { FormField, FormFieldProps } from "@/components/form/FormField";
+import { profileSchema } from "@/modules/auth/schema";
+import { useAuthStore } from "@/modules/auth/store";
+import * as ImagePicker from "expo-image-picker";
+import { Alert, Image } from "react-native";
+import { PressableScale } from "pressto";
+import { IconSax } from "@/context/IconContext";
+import { User } from "iconsax-react-nativejs";
+import { colors } from "@/theme";
+import { View } from "react-native";
+import { PROFILE } from "../../api";
+import * as Yup from "yup";
+import { faker } from "@faker-js/faker/locale/en";
+import { ComponentProps, useMemo } from "react";
+import { Form } from "@/components/form/Form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Text } from "@/components";
+
+type ProfileFormValues = Yup.InferType<typeof profileSchema>;
+
+export const useProfileForm = (props?: UseFormProps<ProfileFormValues>) => {
+	const form = useForm({
+		resolver: yupResolver(profileSchema),
+		...props,
+	});
+
+	return form;
+};
+
+function ProfileFormRoot(props: ComponentProps<typeof Form>) {
+	const { children, ...form } = props;
+
+	return <Form {...form}>{children}</Form>;
+}
+
+ProfileFormRoot.Avatar = () => {
+	const userImage = useAuthStore((state) => state.user?.image ?? "");
+	const setUserImage = useAuthStore((state) => state.setUserImage);
+	const form = useFormContext();
+
+	const pickImage = async () => {
+		const permissionResult =
+			await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+		if (!permissionResult.granted) {
+			Alert.alert(
+				"Permission required",
+				"Permission to access the media library is required.",
+			);
+			return;
+		}
+
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ["images"],
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		});
+
+		if (!result.canceled) {
+			const asset = result.assets[0];
+			setUserImage(asset.uri);
+
+			const { publicUrl } = await PROFILE.AVATAR.UPLOAD({
+				uri: asset.uri,
+				fileName: asset.fileName,
+				type: asset.mimeType,
+			});
+
+			setUserImage(publicUrl);
+			form.setValue("image", publicUrl);
+		}
+	};
+
+	return (
+		<View
+			style={{
+				alignItems: "center",
+			}}
+		>
+			<PressableScale
+				onPress={pickImage}
+				style={{
+					width: 100,
+					aspectRatio: 1,
+					margin: "auto",
+					borderRadius: 50,
+					backgroundColor: colors.palette.neutral200,
+					alignItems: "center",
+					justifyContent: "center",
+				}}
+			>
+				{userImage ? (
+					<Image
+						source={{ uri: userImage }}
+						width={100}
+						height={100}
+						style={{ borderRadius: 50, flex: 1 }}
+					/>
+				) : (
+					<IconSax icon={User} size={40} />
+				)}
+			</PressableScale>
+
+			<Text size="xxs" preset="default">
+				Click the {userImage ? "Image" : "User Icon"} to{" "}
+				{userImage ? "Update" : "Upload"} the avatar
+			</Text>
+		</View>
+	);
+};
+
+type ProfileFormFieldProps = Partial<FormFieldProps>;
+
+ProfileFormRoot.Name = (props: ProfileFormFieldProps) => {
+	const placeholder = useMemo(() => faker.person.fullName(), []);
+
+	return (
+		<FormField name="name" label="Name" placeholder={placeholder} {...props} />
+	);
+};
+
+ProfileFormRoot.Email = Form.Email;
+
+ProfileFormRoot.Bio = (props: ProfileFormFieldProps) => {
+	const placeholder = useMemo(() => faker.person.bio(), []);
+
+	return (
+		<FormField
+			name="bio"
+			label="Bio"
+			placeholder={placeholder}
+			multiline
+			numberOfLines={4}
+			{...props}
+		/>
+	);
+};
+
+ProfileFormRoot.Fields = Form.Fields;
+ProfileFormRoot.Actions = Form.Actions;
+
+export const ProfileForm = Object.assign(ProfileFormRoot, {
+	Root: ProfileFormRoot,
+});
