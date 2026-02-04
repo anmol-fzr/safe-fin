@@ -14,6 +14,7 @@ import { useSharedValue } from "react-native-reanimated";
 import { useDimensions } from "@/hooks/use-dimensions";
 import { Link } from "expo-router";
 import { FromCourseCard } from "@/modules/lesson/components/FromCourseCard";
+import { ellipsize } from "@safe-fin/ui/utils";
 
 const paramsSchema = z.object({
 	unitId: idSchema,
@@ -66,7 +67,7 @@ function UnitScreenImpl(props: Props) {
 			renderInitialContent={() => (
 				<View style={styles.fabContent}>
 					<Text size="xs" style={styles.fabTitle} numberOfLines={1}>
-						{unit.content.title}
+						{ellipsize(unit.content.title, 35)}
 					</Text>
 					<CircularProgress progress={progress} size={36} strokeWidth={3} />
 				</View>

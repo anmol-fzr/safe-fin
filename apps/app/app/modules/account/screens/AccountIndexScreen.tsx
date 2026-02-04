@@ -14,7 +14,7 @@ import {
 	LikeDislike,
 } from "iconsax-react-nativejs";
 import { useEffect } from "react";
-import { Image, Platform, View } from "react-native";
+import { Image, Platform, StyleSheet, View } from "react-native";
 import { ListView, PressableIcon, Screen, Text } from "@/components";
 import { Section } from "@/components/Section";
 import { IconSax } from "@/context/IconContext";
@@ -29,6 +29,7 @@ import Animated, {
 	FadeInDown,
 	FadeInUp,
 } from "react-native-reanimated";
+import { ellipsize } from "@/pkg/ui";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 
@@ -271,11 +272,13 @@ export const UserDetailsCard = (props: UserDetailsCardProps) => {
 	return (
 		<View
 			style={{
-				flexDirection: "row",
+				//flexDirection: "row",
 				gap: spacing.md,
 				padding: spacing.sm,
-				borderBottomWidth: 1,
+				//borderBottomWidth: StyleSheet.hairlineWidth,
 				borderBottomColor: colors.border,
+				//backgroundColor: "red",
+				alignItems: "center",
 				paddingTop: 0,
 			}}
 		>
@@ -290,19 +293,23 @@ export const UserDetailsCard = (props: UserDetailsCardProps) => {
 					uri: image,
 				}}
 			/>
-			<View>
-				<Text size="xxl" weight="medium" entering={FadeInUp}>
-					{name}
-				</Text>
-			</View>
+			<Text size="xxl" weight="medium" entering={FadeInUp} numberOfLines={1}>
+				{ellipsize(name, 15)}
+			</Text>
 
+			{/*
 			<Link href="/profile/edit" asChild>
 				<PressableIcon
 					icon={Edit}
 					size={20}
-					style={{ position: "absolute", top: 0, right: 8 }}
+					style={{
+						position: "absolute",
+						top: 0,
+						right: 8,
+					}}
 				/>
 			</Link>
+      */}
 		</View>
 	);
 };
