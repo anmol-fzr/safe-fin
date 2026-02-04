@@ -96,7 +96,14 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 					type: "boolean",
 					defaultValue: true,
 				},
+				bio: {
+					type: "string",
+					input: true,
+				},
 			},
+		},
+		experimental: {
+			joins: true,
 		},
 		advanced: {
 			disableOriginCheck: true,

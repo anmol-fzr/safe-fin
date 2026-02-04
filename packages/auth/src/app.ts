@@ -5,7 +5,7 @@ import {
 	emailOTPClient,
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
-import type { auth } from "./server";
+import type { ServerAuth } from "./server";
 
 interface CreateAppAuthClientOpts {
 	baseURL: string;
@@ -27,7 +27,7 @@ const createAppAuthClient = (opts: CreateAppAuthClientOpts) => {
 				storage,
 			}),
 			emailOTPClient(),
-			inferAdditionalFields<typeof auth>(),
+			inferAdditionalFields<ServerAuth>(),
 			anonymousClient(),
 		],
 	});
