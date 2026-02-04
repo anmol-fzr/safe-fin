@@ -62,10 +62,10 @@ const VerifyFormRoot = ({ children, email }: VerifyFormRootProps) => {
 			},
 			{
 				onSuccess: (data) => {
-					setAuthData({ user: data?.data?.user as any });
-					console.log("verifyOtpSuccess");
-					console.log({ data });
-					router.navigate("/tabs/home");
+					if (data.error === null) {
+						setAuthData({ user: data?.data?.user as any });
+						router.navigate("/tabs/home");
+					}
 				},
 			},
 		);
@@ -137,6 +137,9 @@ const OtpField = () => {
 								index={i}
 								focusedSlotStyles={{
 									borderColor: colors.tint,
+								}}
+								slotTextStyles={{
+									color: colors.text,
 								}}
 							/>
 						))}
