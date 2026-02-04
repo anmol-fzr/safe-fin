@@ -65,12 +65,10 @@ function UnitScreenImpl(props: Props) {
 			}}
 			renderInitialContent={() => (
 				<View style={styles.fabContent}>
-					<Text size="xs" style={styles.fabTitle}>
+					<Text size="xs" style={styles.fabTitle} numberOfLines={1}>
 						{unit.content.title}
 					</Text>
-					<View>
-						<CircularProgress progress={progress} size={36} strokeWidth={3} />
-					</View>
+					<CircularProgress progress={progress} size={36} strokeWidth={3} />
 				</View>
 			)}
 			renderEndContent={() =>
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	title: { fontSize: 40, lineHeight: 44 },
-	fabTitle: { color: "#fff" },
+	fabTitle: { color: "#fff", flex: 1, paddingRight: 12 },
 });
 
 const ContinueButton = (props: ButtonProps) => {
