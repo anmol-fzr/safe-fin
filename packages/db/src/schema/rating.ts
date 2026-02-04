@@ -6,7 +6,6 @@ import { user } from "./auth";
 export const rating = sqliteTable("rating", {
 	id,
 	rating: integer({ mode: "number" }).notNull(), // rating b/w 0 -> 5
-	review: text(), // rating b/w 0 -> 5
 	userId: text("user_id")
 		.references(() => user.id)
 		.notNull(),

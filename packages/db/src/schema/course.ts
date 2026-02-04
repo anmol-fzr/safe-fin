@@ -24,7 +24,7 @@ export const course = sqliteTable("course", {
 		.default("beginner")
 		.notNull(),
 	isPublished: integer("is_published", { mode: "boolean" }).default(false),
-	avgRating: integer("avg_rating").default(0),
+	ratingSum: integer("ratingSum").default(0),
 	rateCount: integer("rate_count").default(0),
 
 	createdAt: timestamp.createdAt,

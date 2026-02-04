@@ -21,6 +21,14 @@ export const courseRelations = relations(course, ({ one, many }) => ({
 		fields: [course.contentId],
 		references: [richContent.id],
 	}),
+	progress: one(courseProgress, {
+		fields: [course.id],
+		references: [courseProgress.courseId],
+	}),
+	rating: one(courseRating, {
+		fields: [course.id],
+		references: [courseRating.courseId],
+	}),
 }));
 
 export const chapterRelations = relations(chapter, ({ one, many }) => ({
@@ -29,6 +37,10 @@ export const chapterRelations = relations(chapter, ({ one, many }) => ({
 		references: [course.id],
 	}),
 	units: many(unit),
+	progress: one(courseProgress, {
+		fields: [chapter.id],
+		references: [courseProgress.currChapterId],
+	}),
 }));
 
 export const unitRelations = relations(unit, ({ one }) => ({
@@ -39,6 +51,10 @@ export const unitRelations = relations(unit, ({ one }) => ({
 	content: one(richContent, {
 		fields: [unit.contentId],
 		references: [richContent.id],
+	}),
+	progress: one(courseProgress, {
+		fields: [unit.id],
+		references: [courseProgress.currUnitId],
 	}),
 }));
 
