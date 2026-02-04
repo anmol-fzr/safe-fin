@@ -14,9 +14,10 @@ import { User } from "iconsax-react-nativejs";
 import { colors } from "@/theme";
 import { View } from "react-native";
 import { PROFILE } from "../api";
+import { useSession } from "../hooks/queries";
 
 export const ProfileForm = () => {
-	const user = useAuthStore((state) => state.user);
+	const { currUser } = useSession();
 	const userImage = useAuthStore((state) => state.user?.image ?? "");
 	const setUserImage = useAuthStore((state) => state.setUserImage);
 
@@ -24,9 +25,9 @@ export const ProfileForm = () => {
 		schema: profileSchema,
 		defaultValues: async () => {
 			return {
-				name: user?.name ?? "",
-				email: user?.email ?? "",
-				image: "",
+				name: currUser?.name ?? "",
+				email: currUser?.email ?? "",
+				image: currUser?.image ?? "",
 			};
 		},
 	});
