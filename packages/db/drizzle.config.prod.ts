@@ -2,6 +2,7 @@ import { defineConfig } from "drizzle-kit";
 import { envs } from "./src/envs";
 
 export default defineConfig({
+	strict: true,
 	out: "./migrations/prod",
 	schema: "./src/schema/index.ts",
 	dialect: "sqlite",
