@@ -45,7 +45,9 @@ export const ForYouLessonCard = (props: ForYouLessonCardProps) => {
 					}}
 				>
 					<LessonCard.MetadataLevel level={level} />
-					<LessonCard.Rating rating={rating} count={rateCount} />
+					{rateCount >= 1 && rating >= 1 && (
+						<LessonCard.Rating rating={rating.toFixed(1)} count={rateCount} />
+					)}
 				</LessonCard.Metadata>
 			</LessonCard.Body>
 		</LessonCard>

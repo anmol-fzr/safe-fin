@@ -473,13 +473,21 @@ const numberFormatter = new Intl.NumberFormat("en", {
 
 function LessonCardRating(props: LessonCardRatingProps) {
 	const { rating, count, style: $styleOverride } = props;
-	const { themed } = useAppTheme();
+	const {
+		themed,
+		theme: { colors },
+	} = useAppTheme();
 
 	const formattedCount = numberFormatter.format(count);
 
 	return (
 		<View style={[$metadataItem, $styleOverride]}>
-			<IconSax icon={Star1} size={18} />
+			<IconSax
+				icon={Star1}
+				size={18}
+				variant="Bold"
+				color={colors.palette.warning}
+			/>
 
 			<Text style={themed($metadataText)} size="xs" weight="semiBold">
 				{rating}
@@ -563,6 +571,7 @@ const $metadataText: ThemedStyle<TextStyle> = (theme) => ({
 
 const $ratingCount: ThemedStyle<TextStyle> = (theme) => ({
 	color: theme.colors.textDim,
+	fontFamily: theme.typography.fonts.courier.normal,
 });
 
 LessonCard.Image = LessonCardImage;
