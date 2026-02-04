@@ -17,8 +17,9 @@ const { damping, stiffness } = getSpringConfig(ANIMATION.spatial.default);
 
 export function Provider({ children }: PropsWithChildren) {
 	const {
-		theme: { colors },
+		theme: { colors, spacing },
 		actualTheme,
+		themeContext,
 	} = useAppTheme();
 
 	return (
@@ -41,7 +42,12 @@ export function Provider({ children }: PropsWithChildren) {
 								</PressablesConfig>
 							</NotifierProvider>
 						</AuthProvider>
-						<Toaster />
+						<Toaster
+							style={{ borderRadius: 500 }}
+							theme={themeContext}
+							gap={spacing.xxs}
+							richColors
+						/>
 					</GestureHandlerRootView>
 				</KeyboardProvider>
 			</QueryClientProvider>
