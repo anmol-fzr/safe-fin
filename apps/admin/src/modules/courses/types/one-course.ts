@@ -3,7 +3,7 @@ import type { IResData } from "@/services/api/types";
 export type IResGetCourse = IResData<{
 	id: number;
 	isPublished: boolean;
-	avgRating: number;
+	ratingSum: number;
 	coverUrl: string;
 	rateCount: number;
 	createdAt: string;

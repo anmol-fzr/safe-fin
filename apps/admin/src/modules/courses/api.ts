@@ -159,7 +159,7 @@ type IResCreateCourse = IResData<{
 	id: number;
 	contentId: number;
 	isPublished: boolean;
-	avgRating: number;
+	ratingSum: number;
 	rateCount: number;
 	createdAt: string;
 	updatedAt: string;
@@ -168,7 +168,7 @@ type IResCreateCourse = IResData<{
 export interface CourseItem {
 	id: number;
 	isPublished: boolean;
-	avgRating: number;
+	ratingSum: number;
 	rateCount: number;
 	createdAt: string;
 	updatedAt: string;
