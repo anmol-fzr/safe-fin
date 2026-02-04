@@ -38,10 +38,11 @@ const registerSchema = Yup.object({
 });
 
 //const profileSchema = registerSchema.concat(loginSchema.pick(["phoneNumber"]));
-const profileSchema = registerSchema.concat(
-	Yup.object({
-		image: Yup.string(),
-	}),
-);
+const profileSchema = Yup.object({
+	name: Yup.string().required().label("Name"),
+	email,
+	image: Yup.string(),
+	bio: Yup.string().required().label("Bio"),
+});
 
 export { loginSchema, registerSchema, profileSchema };
