@@ -8,7 +8,9 @@ import {
 	and,
 	course,
 	courseProgress,
+	courseRating,
 	eq,
+	rating,
 	saved,
 	sql,
 	unit,
@@ -297,5 +299,60 @@ export const getCourseObjectUploadUrl = createHandlers(
 		const result = await storage.getUploadUrl(key, 600);
 
 		return c.json(result);
+	},
+);
+
+const rateCourseSchema = z.object({
+	rating: z.number().min(1).max(5),
+});
+
+export const rateCourseById = createHandlers(
+	authenticate,
+	db,
+	zValidator("param", courseIdParamSchema),
+	zValidator("json", rateCourseSchema),
+	async (c) => {
+		const { rating: starRating } = c.req.valid("json");
+		const { courseId } = c.req.valid("param");
+
+		const { id: userId } = c.get("user");
+
+		const db = c.get("db");
+
+		try {
+			const ratingResult = await db
+				.insert(rating)
+				.values({
+					rating: starRating,
+					userId,
+				})
+				.returning();
+			console.log(ratingResult);
+
+			const courseRatingQuery = db.insert(courseRating).values({
+				ratingId: ratingResult[0].id,
+				courseId,
+			});
+
+			const courseUpdateQuery = await db
+				.update(course)
+				.set({
+					ratingSum: sql`${course.ratingSum} + ${starRating}`,
+					rateCount: sql`${course.rateCount} + 1`,
+				})
+				.where(eq(course.id, courseId));
+
+			await Promise.all([courseRatingQuery, courseUpdateQuery]);
+		} catch (error) {
+			console.log(error);
+		}
+
+		return c.json(
+			{
+				success: true,
+				data: null,
+			},
+			202,
+		);
 	},
 );

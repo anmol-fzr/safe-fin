@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import type { DB } from "@safe-fin/db";
+import type { DB } from "@/pkg/db";
 import { z } from "zod";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, userRole } from "@/middleware";
@@ -45,8 +45,7 @@ export const getUnitById = createHandlers(
 		const db = c.get("db");
 		const { unitId } = c.req.valid("param");
 
-		const isAdmin = user.role === "admin";
-		const unit = await UnitService.getById(db, unitId, isAdmin);
+		const unit = await UnitService.getById(db, unitId, user);
 
 		if (!unit) {
 			return c.json({ error: "Unit not found" }, 404);

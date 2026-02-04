@@ -66,6 +66,15 @@ export class LessonService {
 
 		const lessons = await db.query.course.findMany({
 			extras: {
+				rating:
+					sql`CAST(${course.ratingSum} AS REAL) / ${course.rateCount} `.as(
+						"rating",
+					),
+				points:
+					sql<number>`COALESCE( ( SELECT SUM(unit.points) FROM chapter JOIN unit ON unit.chapter_id = chapter.id WHERE chapter.course_id = course.id), 0)`.as(
+						"points",
+					),
+
 				isSaved:
 					sql<boolean>` EXISTS ( SELECT 1 FROM saved WHERE saved.entity_type = 'course' AND saved.entity_id = course.id AND saved.user_id = ${userId}) `.as(
 						"is_saved",
@@ -82,7 +91,7 @@ export class LessonService {
 				id: true,
 				isPublished: isAdmin,
 				level: true,
-				avgRating: true,
+				ratingSum: false,
 				rateCount: true,
 				createdAt: isAdmin,
 				updatedAt: true,
@@ -189,7 +198,7 @@ export class LessonService {
 			columns: {
 				id: true,
 				isPublished: true,
-				avgRating: true,
+				ratingSum: true,
 				rateCount: true,
 				createdAt: true,
 				updatedAt: true,

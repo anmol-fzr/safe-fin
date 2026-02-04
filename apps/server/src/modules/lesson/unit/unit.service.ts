@@ -1,5 +1,16 @@
 import type { DB } from "@/pkg/db";
-import { getDb, eq, richContent, richContentItem, unit } from "@/pkg/db";
+import {
+	getDb,
+	eq,
+	richContent,
+	richContentItem,
+	unit,
+	courseProgress,
+	sql,
+	rating,
+	courseRating,
+} from "@/pkg/db";
+import type { User } from "@safe-fin/auth";
 
 interface CreateUnitData {
 	title: string;
@@ -69,8 +80,16 @@ export class UnitService {
 		return units;
 	}
 
-	static async getById(db: DB, unitId: number, isAdmin = false) {
+	static async getById(db: DB, unitId: number, user: User) {
+		const isAdmin = user.role === "admin";
+
 		const foundUnit = await db.query.unit.findFirst({
+			extras: {
+				isCompleted:
+					sql`EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.curr_unit_id = ${unitId} AND course_progress.user_id = ${user.id})`.as(
+						"is_completed",
+					),
+			},
 			where: (u, { eq, and }) => {
 				const conditions = [eq(u.id, unitId)];
 				if (!isAdmin) {
@@ -82,28 +101,27 @@ export class UnitService {
 				content: {
 					with: {
 						longDesc: {
-							columns: {
-								content: true,
-								contentJson: isAdmin,
-							},
+							columns: { content: true, contentJson: isAdmin },
 						},
 					},
 				},
 				chapter: {
-					columns: {
-						course: true,
-					},
+					columns: { course: true },
 					with: {
 						course: {
-							columns: {
-								id: true,
-								content: true,
-							},
+							columns: { id: true, content: true, rateCount: true },
 							with: {
-								content: {
-									columns: {
-										title: true,
+								rating: {
+									columns: { review: true }, // Make sure this column exists on the join table if you are querying it
+									with: {
+										review: {
+											columns: { id: true, rating: true },
+											where: (reviews, { eq }) => eq(reviews.userId, user.id),
+										},
 									},
+								},
+								content: {
+									columns: { title: true },
 								},
 							},
 						},

@@ -9,6 +9,7 @@ import {
 	getUserLessons,
 	likeCourseHandler,
 	publishLesson,
+	rateCourseById,
 	saveCourseProgressHandler,
 	updateLesson,
 } from "./lesson.controller";
@@ -28,6 +29,7 @@ const lessonRouter = createApp()
 	.patch("/:courseId/publish", ...publishLesson)
 	.route("/", chapterRouter)
 	.route("/", unitRouter)
-	.post("/upload-url", ...getCourseObjectUploadUrl);
+	.post("/upload-url", ...getCourseObjectUploadUrl)
+	.post("/:courseId/rate", ...rateCourseById);
 
 export { lessonRouter };
