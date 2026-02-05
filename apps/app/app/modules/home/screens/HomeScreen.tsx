@@ -16,6 +16,7 @@ import {
 	QuickActions,
 	ProfileCompletionBanner,
 	InProgressCourseCard,
+	UpdateAvailableCard,
 } from "../components";
 
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -67,19 +68,13 @@ export function HomeScreen() {
 			contentContainerStyle={$styles.fullHeaderScreen}
 			safeAreaEdges={["bottom"]}
 		>
-			{/*
-			<HomeHeader
-				titleTx="screens:learningList.title"
-				tagLineTx="screens:learningList.tagLine"
-				navigation={true}
-			/>
-      */}
 			<ProfileCompletionBanner />
 			<QuickActions />
+
 			<InProgressCourseCard />
 
 			<ForYouLessons />
-
+			<UpdateAvailableCard />
 			{/*
 			<BottomSheet
 				ref={bottomSheetRef}
