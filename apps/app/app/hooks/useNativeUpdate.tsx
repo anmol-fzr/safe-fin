@@ -1,5 +1,6 @@
 import * as Application from "expo-application";
 import * as FileSystem from "expo-file-system";
+import * as FileSystemLegacy from "expo-file-system/legacy";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as Semver from "semver";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -117,8 +118,10 @@ export function useNativeUpdate() {
 		const info = finalFile.info();
 		if (!info.exists) return;
 
+		const contentUri = await FileSystemLegacy.getContentUriAsync(info.uri);
+
 		await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
-			data: info.uri,
+			data: contentUri,
 			flags: 1,
 			type: "application/vnd.android.package-archive",
 		});

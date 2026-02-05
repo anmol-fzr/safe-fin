@@ -1,7 +1,9 @@
 import { PromoCardImpl } from "@/components/promo-card";
-import { Button } from "@/components";
+import { Button, Text } from "@/components";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useNativeUpdate } from "@/hooks/useNativeUpdate";
+import { View } from "react-native";
+import { AnimatedProgressBar } from "@/components/shared/organisms/progress/AnimatedProgress";
 
 export function UpdateAvailableCard() {
 	return <UpdateAvailableCardImpl />;
@@ -9,12 +11,13 @@ export function UpdateAvailableCard() {
 
 function UpdateAvailableCardImpl() {
 	const {
-		theme: { colors },
+		theme: { colors, spacing },
 	} = useAppTheme();
 
 	const update = useNativeUpdate();
+	const { isDownloading, isDownloaded, isUpdateAvailable } = update;
 
-	if (!update.isUpdateAvailable) return null;
+	if (!isUpdateAvailable) return null;
 
 	return (
 		<PromoCardImpl.Root
@@ -31,14 +34,19 @@ function UpdateAvailableCardImpl() {
 				>
 					A better way to learn is here
 				</PromoCardImpl.Title>
+
 				<Button
 					style={{
 						backgroundColor: colors.palette.secondary500,
 						borderColor: colors.palette.secondary500,
 					}}
-					onPress={update.isDownloaded ? update.install : update.download}
+					onPress={isDownloaded ? update.install : update.download}
 				>
-					{update.isDownloaded ? "Update Now" : "Download Update"}
+					{isDownloading
+						? "Downloading ..."
+						: isDownloaded
+							? "Update Now"
+							: "Download Update"}
 				</Button>
 			</PromoCardImpl.Body>
 		</PromoCardImpl.Root>

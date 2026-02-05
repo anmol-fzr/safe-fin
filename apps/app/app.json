@@ -3,7 +3,7 @@
 		"name": "Safe Fin",
 		"slug": "safeFin",
 		"scheme": "safefin",
-		"version": "1.0.0",
+		"version": "1.2.0",
 		"orientation": "portrait",
 		"userInterfaceStyle": "automatic",
 		"icon": "./assets/icons/app-icon.png",
@@ -22,7 +22,10 @@
 			},
 			"package": "com.safefin",
 			"allowBackup": false,
-			"permissions": ["android.permission.RECORD_AUDIO"]
+			"permissions": [
+				"android.permission.RECORD_AUDIO",
+				"android.permission.REQUEST_INSTALL_PACKAGES"
+			]
 		},
 		"ios": {
 			"icon": "./assets/images/app-icon-ios.png",
@@ -97,4 +100,3 @@
 		"runtimeVersion": "1.0.0"
 	}
 }
-
