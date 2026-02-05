@@ -302,6 +302,7 @@ function LessonCardTitle(props: LessonCardTitleProps) {
 			style={[themed($title), $styleOverride]}
 			size="lg"
 			weight="semiBold"
+			numberOfLines={2}
 		>
 			{children}
 		</Text>

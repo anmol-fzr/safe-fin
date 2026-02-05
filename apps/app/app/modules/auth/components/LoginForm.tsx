@@ -5,10 +5,8 @@ import React, { createContext, type PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet, ViewProps, type ViewStyle } from "react-native";
 import { Button, Text } from "@/components";
-import { FormField } from "@/components/form/FormField";
 import { loginSchema } from "@/modules/auth/schema";
 import { makeSpringy, type ThemedStyle } from "@/theme";
-import { getFakeEmail } from "@/utils/faker/fields";
 import { useAppTheme } from "@/utils/useAppTheme";
 import Animated, {
 	FadeIn,

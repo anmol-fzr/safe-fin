@@ -21,6 +21,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { z } from "zod";
 import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useCallback } from "react";
+import { View } from "react-native";
 
 const useLoginScreenParams = () => {
 	const params = useTypedLocalSearchParams(
@@ -52,6 +53,10 @@ export default function LoginScreen() {
 		}, []),
 	);
 
+	const {
+		theme: { spacing },
+	} = useAppTheme();
+
 	return (
 		<Screen
 			preset="fixed"
@@ -62,8 +67,10 @@ export default function LoginScreen() {
 
 			<KeyboardAvoidingView style={themed($formContainer)}>
 				<LoginForm.Root email={email}>
-					<LoginForm.Email />
-					<LoginForm.Info />
+					<View style={{ gap: spacing.xl + spacing.xxs }}>
+						<LoginForm.Email />
+						<LoginForm.Info />
+					</View>
 
 					<LoginForm.Actions>
 						<LoginForm.Submit />
@@ -79,7 +86,6 @@ export default function LoginScreen() {
 const $formContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 	flex: 1,
 	margin: spacing.lg,
-	marginTop: 0,
 	gap: spacing.md,
 });
 
