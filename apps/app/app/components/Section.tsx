@@ -42,7 +42,7 @@ const presetXStyles = {
 	filled: $sectionBodyFilled,
 } as const;
 
-interface SectionBodyProps extends ViewProps {
+export interface SectionBodyProps extends ViewProps {
 	preset?: SectionPreset;
 }
 

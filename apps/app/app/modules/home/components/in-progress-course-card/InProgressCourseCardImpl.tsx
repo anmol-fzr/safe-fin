@@ -1,58 +1,54 @@
 import { Button, ButtonProps, Text } from "@/components";
-import { Section } from "@/components/Section";
+import { PromoCardImpl } from "@/components/promo-card";
+import {
+	PromoCardBodyProps,
+	PromoCardTitleProps,
+} from "@/components/promo-card/promo-card";
 import { AnimatedProgressBar } from "@/components/shared/organisms/progress/AnimatedProgress";
 import { IconSax } from "@/context/IconContext";
+import { colors, spacing } from "@/theme";
 import { ResourceId } from "@/types";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { InfiniteQueryPageParamsOptions } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import { Play } from "iconsax-react-nativejs";
-import { extend } from "node_modules/zod/v4/core/util.cjs";
 import { PropsWithChildren } from "react";
+import { s } from "../../../../../../../packages/db/dist/index-FWGwJAh7.mjs";
 import { View } from "react-native";
-import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 
 function InProgressCourseCardRoot(props: PropsWithChildren) {
 	const { children } = props;
 
-	return <Section.Body preset="filled">{children}</Section.Body>;
-}
-
-InProgressCourseCardRoot.Badge = () => {
 	const {
-		theme: { colors, spacing, roundness },
+		theme: { colors },
 	} = useAppTheme();
 
 	return (
-		<Text
-			size="xs"
+		<PromoCardImpl.Root
 			style={{
-				backgroundColor: colors.palette.neutral100,
-				padding: spacing.xxs,
-				paddingInline: spacing.sm,
-				borderRadius: roundness * 2,
-				width: 104,
-				textAlign: "center",
-				marginBottom: 4,
+				backgroundColor: colors.palette.accent300,
+			}}
+		>
+			{children}
+		</PromoCardImpl.Root>
+	);
+}
+
+InProgressCourseCardRoot.Badge = () => {
+	return (
+		<PromoCardImpl.Badge
+			style={{
+				backgroundColor: colors.palette.accent100,
 			}}
 		>
 			In progress
-		</Text>
+		</PromoCardImpl.Badge>
 	);
 };
 
-interface InProgressCourseCardTitleProps {
-	title: string;
-}
+type InProgressCourseCardTitleProps = PromoCardTitleProps;
 
 InProgressCourseCardRoot.Title = (props: InProgressCourseCardTitleProps) => {
-	const { title } = props;
-
-	return (
-		<Section.Title numberOfLines={1} size="md">
-			{title}
-		</Section.Title>
-	);
+	return <PromoCardImpl.Title numberOfLines={2} {...props} />;
 };
 
 interface InProgressCourseCardProgressProps {
@@ -68,13 +64,22 @@ InProgressCourseCardRoot.Progress = (
 	} = useAppTheme();
 
 	return (
-		<AnimatedProgressBar
-			progress={progress}
-			showPercentage
-			width="90%"
-			progressColor={colors.tint}
-			borderRadius={12}
-		/>
+		<View
+			style={{
+				flexDirection: "row",
+				gap: spacing.xs,
+				flex: 1,
+			}}
+		>
+			<AnimatedProgressBar
+				progress={progress}
+				width="90%"
+				progressColor={colors.tint}
+				trackColor={colors.palette.accent100}
+				borderRadius={12}
+			/>
+			<Text>{progress * 100}%</Text>
+		</View>
 	);
 };
 
@@ -83,7 +88,7 @@ interface InProgressCourseCardActionProps extends ButtonProps {
 }
 
 InProgressCourseCardRoot.Action = (props: InProgressCourseCardActionProps) => {
-	const { courseId, ...rest } = props;
+	const { courseId, style: $styleOverride, ...rest } = props;
 	const {
 		theme: { colors },
 	} = useAppTheme();
@@ -100,14 +105,9 @@ InProgressCourseCardRoot.Action = (props: InProgressCourseCardActionProps) => {
 		>
 			<Button
 				preset="reversed"
-				LeftAccessory={() => (
-					<IconSax
-						icon={Play}
-						variant="Bold"
-						color={colors.tint}
-						style={{ marginRight: 4 }}
-					/>
-				)}
+				style={{
+					backgroundColor: colors.tint,
+				}}
 				{...rest}
 			>
 				Continue Course
@@ -116,12 +116,8 @@ InProgressCourseCardRoot.Action = (props: InProgressCourseCardActionProps) => {
 	);
 };
 
-InProgressCourseCardRoot.Body = (props: ViewProps) => {
-	const {
-		theme: { spacing },
-	} = useAppTheme();
-
-	return <View style={{ gap: spacing.lg }} {...props} />;
+InProgressCourseCardRoot.Body = (props: PromoCardBodyProps) => {
+	return <PromoCardImpl.Body {...props} />;
 };
 
 export const InProgressCourseCardImpl = Object.assign(
