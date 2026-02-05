@@ -25,7 +25,7 @@ import { LoginForm } from "./LoginForm";
 import { useVerifyOtp } from "../hooks/useVerifyOtp";
 import { useSendOtp } from "../hooks/useSendOtp";
 import { useRouter } from "expo-router";
-import { setAuthData, useAuthStore } from "../store";
+import { setAuthData } from "../store";
 
 interface VerifyFormContextType {
 	handleSubmit: VoidFunction;
