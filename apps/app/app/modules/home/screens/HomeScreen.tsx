@@ -12,8 +12,11 @@ import { getLessonsOpts } from "@/modules/lesson/hooks/api";
 import { getScamsOpts } from "@/modules/scam/hooks/queries";
 import { $styles } from "@/theme";
 import { ForYouLessons } from "../components/lessons/ForYouLessons";
-import { QuickActions } from "../components/quick-actions";
-import { ProfileCompletionBanner } from "../components/profile-banner";
+import {
+	QuickActions,
+	ProfileCompletionBanner,
+	InProgressCourseCard,
+} from "../components";
 
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { StyleSheet } from "react-native";
@@ -21,7 +24,7 @@ import { useNavigation } from "expo-router";
 import { PressableScale } from "pressto";
 import { IconSax } from "@/context/IconContext";
 import { Flash } from "iconsax-react-nativejs";
-import { StreakSheetView } from "../components/StreakSheetView";
+//import { StreakSheetView } from "../components/StreakSheetView";
 
 export function HomeScreen() {
 	const queryClient = useQueryClient();
@@ -34,29 +37,29 @@ export function HomeScreen() {
 
 	const navigation = useNavigation();
 
-	const bottomSheetRef = useRef<BottomSheet>(null);
-
-	const snapPoints = useMemo(() => ["50%", "77%"], []);
-
-	const toggleBottomSheet = useCallback(() => {
-		bottomSheetRef.current?.expand();
-	}, []);
-
-	useLayoutEffect(() => {
-		navigation.setOptions({
-			headerRight: () => (
-				<PressableScale
-					onPress={toggleBottomSheet}
-					style={{
-						padding: 4,
-						borderRadius: 8,
-					}}
-				>
-					<IconSax icon={Flash} />
-				</PressableScale>
-			),
-		});
-	}, [navigation, toggleBottomSheet]);
+	// const bottomSheetRef = useRef<BottomSheet>(null);
+	//
+	// const snapPoints = useMemo(() => ["50%", "77%"], []);
+	//
+	// const toggleBottomSheet = useCallback(() => {
+	// 	bottomSheetRef.current?.expand();
+	// }, []);
+	//
+	// useLayoutEffect(() => {
+	// 	navigation.setOptions({
+	// 		headerRight: () => (
+	// 			<PressableScale
+	// 				onPress={toggleBottomSheet}
+	// 				style={{
+	// 					padding: 4,
+	// 					borderRadius: 8,
+	// 				}}
+	// 			>
+	// 				<IconSax icon={Flash} />
+	// 			</PressableScale>
+	// 		),
+	// 	});
+	// }, [navigation, toggleBottomSheet]);
 
 	return (
 		<Screen
@@ -73,8 +76,11 @@ export function HomeScreen() {
       */}
 			<ProfileCompletionBanner />
 			<QuickActions />
+			<InProgressCourseCard />
+
 			<ForYouLessons />
 
+			{/*
 			<BottomSheet
 				ref={bottomSheetRef}
 				index={-1}
@@ -88,6 +94,7 @@ export function HomeScreen() {
 					<StreakSheetView />
 				</BottomSheetView>
 			</BottomSheet>
+      */}
 		</Screen>
 	);
 }

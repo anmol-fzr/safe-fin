@@ -7,7 +7,7 @@ import { QuickActionCard, type QuickActionType } from "./quick-action-card";
 const learnActionImage = require("assets/icons/home/learn-action.png");
 const calculateActionImage = require("assets/icons/home/calculate-action.png");
 //const scamActionImage = require("assets/icons/home/scam-action.png");
-const moreActionImage = require("assets/icons/home/more-action.png");
+//const moreActionImage = require("assets/icons/home/more-action.png");
 
 export function QuickActions() {
 	const {
@@ -33,12 +33,12 @@ export function QuickActions() {
 		// 	to: "/tabs/scams",
 		// 	bg: colors.palette.warningBackground,
 		// },
-		{
-			labelTx: "screens:homeScreen.actions.more",
-			image: moreActionImage,
-			to: "/tabs/profile",
-			bg: colors.palette.neutral200,
-		},
+		// {
+		// 	labelTx: "screens:homeScreen.actions.more",
+		// 	image: moreActionImage,
+		// 	to: "/tabs/profile",
+		// 	bg: colors.palette.neutral200,
+		// },
 	];
 
 	return (

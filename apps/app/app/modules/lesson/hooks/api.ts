@@ -10,6 +10,20 @@ import { COURSES, LESSON, TOPIC } from "../api";
 
 const baseQueryKey = "COURSES";
 
+function getLastLeftCourse() {
+	return queryOptions({
+		queryKey: [baseQueryKey, "LEFT", "IN_PROGRESS"],
+		queryFn: COURSES.PROGRESS.LAST,
+	});
+}
+
+export const useGetLastLeftCourse = () => {
+	const opts = getLastLeftCourse();
+	const { data, ...rest } = useSuspenseQuery(opts);
+
+	return { course: data.data, ...rest };
+};
+
 function getForYouCoursesOpts() {
 	return queryOptions({
 		queryKey: [baseQueryKey, "FOR_YOU"],

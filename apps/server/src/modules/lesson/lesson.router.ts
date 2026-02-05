@@ -5,6 +5,7 @@ import {
 	deleteLesson,
 	forYouLessons,
 	getCourseObjectUploadUrl,
+	getLastInteractedCourse,
 	getLessonById,
 	getUserLessons,
 	likeCourseHandler,
@@ -22,6 +23,7 @@ const lessonRouter = createApp()
 	.post("/", ...createLessonHandler)
 	.get("/for-you", ...forYouLessons)
 	.post("/progress", ...saveCourseProgressHandler)
+	.get("/progress/last", ...getLastInteractedCourse)
 	.get("/:courseId", ...getLessonById)
 	.patch("/:courseId", ...updateLesson)
 	.post("/:courseId/toggle-like", ...likeCourseHandler)

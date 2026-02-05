@@ -13,7 +13,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { Text } from "@/components";
 import { type TxKeyPath, translate } from "@/i18n";
-import { makeSpringy, spacing, type ThemedStyle } from "@/theme";
+import {
+	makeSpringy,
+	spacing,
+	ThemedViewStyle,
+	type ThemedStyle,
+} from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 export interface QuickActionType {
@@ -35,7 +40,7 @@ export const QuickActionCard = (action: QuickActionCardProps) => {
 	return (
 		<PressableScale
 			onPress={handlePress}
-			style={[styles.quickAction, { backgroundColor: action.bg }]}
+			style={[themed($quickAction), { backgroundColor: action.bg }]}
 		>
 			<Text
 				preset="subheading"
@@ -53,20 +58,17 @@ export const QuickActionCard = (action: QuickActionCardProps) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	quickAction: {
-		//width: "90%",
-		height: 100,
-		alignItems: "center",
-		marginInline: 4,
-		position: "relative",
-		justifyContent: "center",
-		borderRadius: 12,
-	},
-});
-
 const $actionTitle: ThemedStyle<TextStyle> = ({ spacing }) => ({
 	position: "absolute",
 	top: spacing.xs,
 	left: spacing.md,
+});
+
+const $quickAction: ThemedViewStyle = (theme) => ({
+	height: 100,
+	alignItems: "center",
+	marginInline: 4,
+	position: "relative",
+	justifyContent: "center",
+	borderRadius: theme.roundness * 1.2,
 });

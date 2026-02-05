@@ -6,11 +6,14 @@ import { authenticate, db, paginate, userRole } from "@/middleware";
 import { s3 } from "@/middleware/s3";
 import {
 	and,
+	chapter,
 	course,
 	courseProgress,
 	courseRating,
+	desc,
 	eq,
 	rating,
+	richContent,
 	saved,
 	sql,
 	unit,
@@ -174,6 +177,99 @@ export const saveCourseProgressHandler = createHandlers(
 			});
 
 		return c.json({ data: { success: true } }, 201);
+	},
+);
+
+export const getLastInteractedCourse = createHandlers(
+	authenticate,
+	db,
+	async (c) => {
+		const user = c.get("user");
+		const db = c.get("db");
+
+		/**
+		 * STEP 1:
+		 * Find the most recently interacted course
+		 * that is NOT fully completed
+		 */
+		const [row] = await db
+			.select({
+				courseId: course.id,
+				lastInteractedAt: sql<Date>`max(${courseProgress.createdAt})`,
+				totalUnits: sql<number>`count(distinct ${unit.id})`,
+				completedUnits: sql<number>`
+					count(distinct ${courseProgress.currUnitId})
+				`,
+			})
+			.from(courseProgress)
+			.innerJoin(course, eq(course.id, courseProgress.courseId))
+			.innerJoin(chapter, eq(chapter.courseId, course.id))
+			.innerJoin(unit, eq(unit.chapterId, chapter.id))
+			.where(eq(courseProgress.userId, user.id))
+			.groupBy(course.id)
+			.having(
+				sql`
+					count(distinct ${courseProgress.currUnitId})
+					<
+					count(distinct ${unit.id})
+				`,
+			)
+			.orderBy(sql`max(${courseProgress.createdAt}) desc`)
+			.limit(1);
+
+		/**
+		 * No unfinished course found
+		 */
+		if (!row) {
+			return c.json({ data: null });
+		}
+
+		/**
+		 * STEP 2:
+		 * Hydrate course + richContent
+		 */
+		const courseData = await db.query.course.findFirst({
+			where: (c, { eq }) => eq(c.id, row.courseId),
+			with: {
+				content: {
+					columns: {
+						title: true,
+					},
+				},
+			},
+			columns: {
+				id: true,
+			},
+		});
+
+		if (!courseData) {
+			return c.json({ data: null });
+		}
+
+		/**
+		 * STEP 3:
+		 * Compute percentage
+		 */
+		const percentage =
+			row.totalUnits === 0
+				? 0
+				: Number((row.completedUnits / row.totalUnits).toFixed(2));
+
+		/**
+		 * STEP 4:
+		 * Final response (frontend-friendly)
+		 */
+		return c.json({
+			data: {
+				course: courseData,
+				progress: {
+					//totalUnits: row.totalUnits,
+					//completedUnits: row.completedUnits,
+					percentage,
+					//lastInteractedAt: row.lastInteractedAt,
+				},
+			},
+		});
 	},
 );
 

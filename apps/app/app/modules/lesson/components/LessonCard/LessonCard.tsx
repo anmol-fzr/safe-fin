@@ -215,7 +215,7 @@ const $bookmarkButton: ThemedStyle<ViewStyle> = (theme) => ({
 	right: theme.spacing.sm,
 	width: 36,
 	height: 36,
-	borderRadius: theme.roundness,
+	borderRadius: theme.roundness * 0.8,
 	backgroundColor: "rgba(20,20,20,0.5)",
 	//backgroundColor: theme.colors.palette.neutral400,
 	justifyContent: "center",

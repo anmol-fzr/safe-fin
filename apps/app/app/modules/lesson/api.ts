@@ -108,6 +108,7 @@ export const COURSES = {
 	PROGRESS: {
 		SAVE: (payload: IReqSaveCourseProgress) =>
 			post<unknown, IResSaveCourseProgress>(`/courses/progress`, payload),
+		LAST: () => get<unknown, IResGetLastCourse>(`/courses/progress/last`),
 	},
 
 	SAVED: {
@@ -127,6 +128,18 @@ export const COURSES = {
 	RATE: (courseId: ResourceId, rating: number) =>
 		post(`/courses/${courseId}/rate`, { rating }),
 };
+
+type IResGetLastCourse = IResData<{
+	course: {
+		id: number;
+		content: {
+			title: string;
+		};
+	};
+	progress: {
+		percentage: number;
+	};
+} | null>;
 
 type IResGetUnit = IResData<{
 	id: number;
