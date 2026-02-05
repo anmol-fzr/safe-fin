@@ -28,9 +28,9 @@ export function Card() {
 		<InProgressCourseCardImpl>
 			<InProgressCourseCardImpl.Badge />
 			<View style={{ gap: spacing.lg }}>
-				<InProgressCourseCardImpl.Title
-					title={course?.course?.content?.title}
-				/>
+				<InProgressCourseCardImpl.Title>
+					{course?.course?.content?.title}
+				</InProgressCourseCardImpl.Title>
 				<InProgressCourseCardImpl.Progress
 					progress={course?.progress?.percentage}
 				/>
