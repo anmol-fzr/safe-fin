@@ -1,17 +1,15 @@
-import { Screen, Text } from "@/components";
-import { UserDetailsCard } from "@/modules/account/screens";
-import { $styles, spacing } from "@/theme";
-import { ActivityHeatmap } from "@/modules/profile/components/activity-heatmap";
+import { User } from "iconsax-react-nativejs";
+import type { ReactNode } from "react";
 import { View } from "react-native";
-import { useAppTheme } from "@/utils/useAppTheme";
-import React, { ReactNode } from "react";
-import Animated, {
-	FadeInDown,
-	FadeInLeft,
-	FadeInUp,
-} from "react-native-reanimated";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import { Screen, Text } from "@/components";
+import { IconSax } from "@/context/IconContext";
+import { ActivityHeatmap } from "@/modules/profile/components/activity-heatmap";
+import { PublicProfileLinksCard } from "@/modules/profile/components/PublicProfileLinksCard";
 import { useGetPublicProfile } from "@/modules/profile/hooks/queries";
-import { ellipsize } from "@safe-fin/ui/utils";
+import { ellipsize } from "@/pkg/ui";
+import { $styles } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export default function PublicProfileScreen() {
 	const { data } = useGetPublicProfile();
@@ -55,17 +53,29 @@ export default function PublicProfileScreen() {
 						paddingTop: 0,
 					}}
 				>
-					<Animated.Image
-						entering={FadeInDown}
-						height={100}
-						width={100}
-						style={{
-							borderRadius: 100,
-						}}
-						source={{
-							uri: user.image,
-						}}
-					/>
+					{user.image ? (
+						<Animated.Image
+							entering={FadeInDown}
+							height={100}
+							width={100}
+							style={{
+								borderRadius: 100,
+							}}
+							source={{
+								uri: user.image,
+							}}
+						/>
+					) : (
+						<IconSax
+							icon={User}
+							size={40}
+							style={{
+								borderRadius: 100,
+								height: 100,
+								width: 100,
+							}}
+						/>
+					)}
 					<Text
 						size="xxl"
 						weight="medium"
@@ -76,17 +86,17 @@ export default function PublicProfileScreen() {
 					</Text>
 
 					{/*
-			<Link href="/profile/edit" asChild>
-				<PressableIcon
-					icon={Edit}
-					size={20}
-					style={{
-						position: "absolute",
-						top: 0,
-						right: 8,
-					}}
-				/>
-			</Link>
+      <Link href="/profile/edit" asChild>
+        <PressableIcon
+          icon={Edit}
+          size={20}
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 8,
+          }}
+        />
+      </Link>
       */}
 				</View>
 				<View
@@ -103,9 +113,7 @@ export default function PublicProfileScreen() {
 					))}
 				</View>
 
-				{/*
 				<PublicProfileLinksCard />
-        */}
 
 				<ActivityHeatmap activity={activity} />
 			</View>

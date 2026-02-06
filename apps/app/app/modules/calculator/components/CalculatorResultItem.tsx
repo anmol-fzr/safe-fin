@@ -1,6 +1,12 @@
 import { StyleSheet, View } from "react-native";
+import Animated, {
+	FadeInUp,
+	FadeOutDown,
+	FadingTransition,
+} from "react-native-reanimated";
 import { Text } from "@/components";
-import { spacing, typography } from "@/theme";
+import { RollingCounter } from "@/components/shared/organisms/rolling-counter";
+import { makeSpringy, spacing, typography } from "@/theme";
 import { currenctFmt } from "@/utils/funcs";
 
 type CalculatorResultItemProps = {
@@ -14,9 +20,16 @@ export const CalculatorResultItem = ({
 }: CalculatorResultItemProps) => {
 	//const { themeContext } = useAppTheme();
 	return (
-		<View style={styles.resultRow}>
+		<Animated.View layout={FadingTransition} style={styles.resultRow}>
 			<Text style={styles.label}>{label}:</Text>
-			<Text style={styles.resultText}>{currenctFmt.format(value)}</Text>
+			<Text
+				entering={makeSpringy(FadeInUp)}
+				exiting={makeSpringy(FadeOutDown)}
+				style={styles.resultText}
+				key={value}
+			>
+				{currenctFmt.format(value)}
+			</Text>
 
 			{/*
         <AnimatedRollingNumber
@@ -31,13 +44,14 @@ export const CalculatorResultItem = ({
           spinningAnimationConfig={{ duration: 300, easing: Easing.bounce }}
         />
         */}
-		</View>
+		</Animated.View>
 	);
 };
 
 const styles = StyleSheet.create({
 	label: {
 		fontFamily: typography.fonts.spaceGrotesk.semiBold,
+		flex: 1,
 	},
 	resultsContainer: {
 		marginTop: spacing.xl,
