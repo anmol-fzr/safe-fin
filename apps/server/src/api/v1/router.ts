@@ -6,6 +6,7 @@ import { lessonRouter } from "@/modules/lesson";
 import { profileRouter } from "@/modules/profile";
 import { savedRouter } from "@/modules/saved";
 import { scamRouter } from "@/modules/scam";
+import { streakRouter } from "@/modules/streak";
 
 //import { quizRouter } from "@/modules/quiz";
 
@@ -21,6 +22,7 @@ v1Router
 	.route("/saved", savedRouter)
 	.route("/profile", profileRouter)
 	.route("/address", addressRouter)
-	.route("/scam", scamRouter);
+	.route("/scam", scamRouter)
+	.route("/streak", streakRouter);
 
 export { v1Router };

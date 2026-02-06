@@ -4,7 +4,7 @@ import { category } from "./category";
 import { chapter, course, courseProgress, courseRating, unit } from "./course";
 import { exercise, option, question } from "./exercise";
 import { exerciseResult, questionResult } from "./exercise-result";
-import { userActivityLog, publicUserProfile } from "./gamification";
+import { userActivityLog, publicUserProfile, streak } from "./gamification";
 import { profile } from "./profile";
 import { rating } from "./rating";
 import { richContent, richContentItem } from "./rich-content";
@@ -237,7 +237,7 @@ export const ratingRelations = relations(rating, ({ one }) => ({
 /**
  * Auth Relations
  */
-export const userRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(user, ({ many, one }) => ({
 	sessions: many(session),
 	accounts: many(account),
 	profiles: many(profile),
@@ -247,6 +247,7 @@ export const userRelations = relations(user, ({ many }) => ({
 	courseProgress: many(courseProgress),
 	exerciseResults: many(exerciseResult),
 	likes: many(saved),
+	streak: one(streak),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -266,6 +267,13 @@ export const accountRelations = relations(account, ({ one }) => ({
 export const savedRelations = relations(saved, ({ one }) => ({
 	user: one(user, {
 		fields: [saved.userId],
+		references: [user.id],
+	}),
+}));
+
+export const streakRelations = relations(streak, ({ one }) => ({
+	user: one(user, {
+		fields: [streak.userId],
 		references: [user.id],
 	}),
 }));
