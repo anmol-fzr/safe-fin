@@ -1,21 +1,20 @@
-import { useForm, useFormContext, UseFormProps } from "react-hook-form";
-import { FormField, FormFieldProps } from "@/components/form/FormField";
+import { faker } from "@faker-js/faker/locale/en";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as ImagePicker from "expo-image-picker";
+import { User } from "iconsax-react-nativejs";
+import { PressableScale } from "pressto";
+import { type ComponentProps, useMemo } from "react";
+import { type UseFormProps, useForm, useFormContext } from "react-hook-form";
+import { Alert, Image, View } from "react-native";
+import type * as Yup from "yup";
+import { Text } from "@/components";
+import { Form } from "@/components/form/Form";
+import { FormField, type FormFieldProps } from "@/components/form/FormField";
+import { IconSax } from "@/context/IconContext";
 import { profileSchema } from "@/modules/auth/schema";
 import { useAuthStore } from "@/modules/auth/store";
-import * as ImagePicker from "expo-image-picker";
-import { Alert, Image } from "react-native";
-import { PressableScale } from "pressto";
-import { IconSax } from "@/context/IconContext";
-import { User } from "iconsax-react-nativejs";
 import { colors } from "@/theme";
-import { View } from "react-native";
 import { PROFILE } from "../../api";
-import * as Yup from "yup";
-import { faker } from "@faker-js/faker/locale/en";
-import { ComponentProps, useMemo } from "react";
-import { Form } from "@/components/form/Form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Text } from "@/components";
 
 type ProfileFormValues = Yup.InferType<typeof profileSchema>;
 
@@ -51,7 +50,7 @@ ProfileFormRoot.Avatar = () => {
 			return;
 		}
 
-		let result = await ImagePicker.launchImageLibraryAsync({
+		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ["images"],
 			allowsEditing: true,
 			aspect: [1, 1],

@@ -1,12 +1,13 @@
 import { useSafeContext } from "@safe-fin/ui/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Chart, Coin1, Heart, Share, Star1 } from "iconsax-react-nativejs";
 import {
+	type ComponentProps,
 	createContext,
 	type ReactNode,
 	useCallback,
 	useMemo,
-	ComponentProps,
 } from "react";
 import {
 	Pressable as PressableScale,
@@ -24,9 +25,8 @@ import { IconSax } from "@/context/IconContext";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { CourseLevel } from "../../api";
-import { useToggleCourseSave } from "../../hooks/mutations";
-import { useQueryClient } from "@tanstack/react-query";
 import { getLessonOpts } from "../../hooks/api";
+import { useToggleCourseSave } from "../../hooks/mutations";
 
 type SkeletonPlaceholderItemProps = ComponentProps<
 	typeof SkeletonPlaceholder.Item

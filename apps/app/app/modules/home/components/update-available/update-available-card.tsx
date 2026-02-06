@@ -1,9 +1,7 @@
+import { Button } from "@/components";
 import { PromoCardImpl } from "@/components/promo-card";
-import { Button, Text } from "@/components";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { useNativeUpdate } from "@/hooks/useNativeUpdate";
-import { View } from "react-native";
-import { AnimatedProgressBar } from "@/components/shared/organisms/progress/AnimatedProgress";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export function UpdateAvailableCard() {
 	return <UpdateAvailableCardImpl />;
@@ -11,7 +9,7 @@ export function UpdateAvailableCard() {
 
 function UpdateAvailableCardImpl() {
 	const {
-		theme: { colors, spacing },
+		theme: { colors },
 	} = useAppTheme();
 
 	const update = useNativeUpdate();

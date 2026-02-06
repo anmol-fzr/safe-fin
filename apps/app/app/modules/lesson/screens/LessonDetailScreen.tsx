@@ -1,6 +1,7 @@
+import { getEmptyArr } from "@safe-fin/ui/utils";
 import { formatDate } from "@safe-fin/utils";
 import { Chart, Clock, Firstline, InfoCircle } from "iconsax-react-nativejs";
-import { useState, type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import {
 	type ImageSourcePropType,
 	ScrollView,
@@ -9,25 +10,24 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { ListView, Tabs } from "@/components";
-import { Text } from "@/components/Text";
-import { IconSax } from "@/context/IconContext";
-import { spacing, type ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
-import type { Chapter } from "../api-types/course_one";
-import { CourseDetails } from "../components/course-details/CourseDetails";
-import { MarkdowRenderer } from "../components/Lesson";
-import { LessonCertificate } from "../components/LessonCertificate/LessonCertificate";
-import { LessonListItem } from "../components/LessonListItem/LessonListItem";
-import { ChapterList } from "../components/course-details/ChapterList";
-import { getEmptyArr } from "@safe-fin/ui/utils";
 import Animated, {
 	FadeInLeft,
 	FadeInRight,
 	LinearTransition,
 } from "react-native-reanimated";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { ListView, Tabs } from "@/components";
 import { ChipGroup } from "@/components/shared/molecules/animated-chip/Chip";
+import { Text } from "@/components/Text";
+import { IconSax } from "@/context/IconContext";
+import { spacing, type ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import type { Chapter } from "../api-types/course_one";
+import { ChapterList } from "../components/course-details/ChapterList";
+import { CourseDetails } from "../components/course-details/CourseDetails";
+import { MarkdowRenderer } from "../components/Lesson";
+import { LessonCertificate } from "../components/LessonCertificate/LessonCertificate";
+import { LessonListItem } from "../components/LessonListItem/LessonListItem";
 
 export interface LessonData {
 	id: string;
