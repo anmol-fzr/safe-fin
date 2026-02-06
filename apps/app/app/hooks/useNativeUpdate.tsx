@@ -2,8 +2,9 @@ import * as Application from "expo-application";
 import * as FileSystem from "expo-file-system";
 import * as FileSystemLegacy from "expo-file-system/legacy";
 import * as IntentLauncher from "expo-intent-launcher";
-import * as Semver from "semver";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import * as Semver from "semver";
+import { envs } from "@/utils/envs";
 
 const APK_PREFIX = "safe-fin";
 
@@ -45,9 +46,7 @@ export function useNativeUpdate() {
 		if (!installedVersion) return;
 
 		try {
-			const res = await fetch(
-				"https://api.github.com/repos/anmol-fzr/safe-fin/releases/latest",
-			);
+			const res = await fetch(envs.GITHUB_RELEASE_URL);
 			if (!res.ok) return;
 
 			const release = await res.json();
