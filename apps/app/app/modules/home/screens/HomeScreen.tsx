@@ -1,30 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
-import {
-	useCallback,
-	useEffect,
-	useLayoutEffect,
-	useMemo,
-	useRef,
-} from "react";
+import { useNavigation } from "expo-router";
+import { useEffect } from "react";
+import { StyleSheet } from "react-native";
 import { Screen } from "@/components";
 import { getCalculatorsOpts } from "@/modules/calculator/hooks/queries";
 import { getLessonsOpts } from "@/modules/lesson/hooks/api";
 import { getScamsOpts } from "@/modules/scam/hooks/queries";
 import { $styles } from "@/theme";
-import { ForYouLessons } from "../components/lessons/ForYouLessons";
 import {
-	QuickActions,
-	ProfileCompletionBanner,
 	InProgressCourseCard,
+	ProfileCompletionBanner,
+	QuickActions,
+	ShareAppCard,
 	UpdateAvailableCard,
 } from "../components";
-
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { StyleSheet } from "react-native";
-import { useNavigation } from "expo-router";
-import { PressableScale } from "pressto";
-import { IconSax } from "@/context/IconContext";
-import { Flash } from "iconsax-react-nativejs";
+import { ForYouLessons } from "../components/lessons/ForYouLessons";
 //import { StreakSheetView } from "../components/StreakSheetView";
 
 export function HomeScreen() {
@@ -75,6 +65,8 @@ export function HomeScreen() {
 
 			<ForYouLessons />
 			<UpdateAvailableCard />
+			<ShareAppCard />
+
 			{/*
 			<BottomSheet
 				ref={bottomSheetRef}

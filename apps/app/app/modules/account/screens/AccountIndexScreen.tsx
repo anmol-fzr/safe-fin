@@ -4,44 +4,77 @@ import {
 	ArrowRight2,
 	Danger,
 	DocumentText1,
-	Edit,
 	type Icon as IconType,
 	Lifebuoy,
+	LikeDislike,
 	Profile,
+	Share as ShareIcon,
 	Star1,
 	User,
 	WalletMoney,
-	LikeDislike,
 } from "iconsax-react-nativejs";
 import { useEffect } from "react";
-import { Image, Platform, StyleSheet, View } from "react-native";
-import { ListView, PressableIcon, Screen, Text } from "@/components";
-import { Section } from "@/components/Section";
-import { IconSax } from "@/context/IconContext";
-import { getCountriesOpts } from "@/hooks/queries";
-import { type TxKeyPath, translate } from "@/i18n";
-import { getDemoGraphicsOpts } from "@/modules/profile/hooks/queries";
-import { $styles, makeSpringy } from "@/theme";
-import { envs } from "@/utils/envs";
-import { useAppTheme } from "@/utils/useAppTheme";
+import { Platform, Pressable, Share, View } from "react-native";
 import Animated, {
 	FadeIn,
 	FadeInDown,
 	FadeInUp,
 } from "react-native-reanimated";
+import { ListView, Screen, Text } from "@/components";
+import { Section } from "@/components/Section";
+import { IconSax } from "@/context/IconContext";
+import { getCountriesOpts } from "@/hooks/queries";
+import { type TxKeyPath, translate } from "@/i18n";
+import { getDemoGraphicsOpts } from "@/modules/profile/hooks/queries";
 import { ellipsize } from "@/pkg/ui";
+import { $styles } from "@/theme";
+import { APP } from "@/utils/const";
+import { envs } from "@/utils/envs";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 
-const DATA: {
+export async function shareApp() {
+	try {
+		await Share.share({
+			message:
+				`Stay financially safe with ${APP.NAME}.\n` +
+				`${APP.DESC}\n\n` +
+				"Check scams, understand fraud, and protect your money.\n\n" +
+				`Download here:\n${envs.APK_URL}`,
+		});
+	} catch (error) {
+		console.error("Share failed:", error);
+	}
+}
+
+interface ListItemBaseItem {
+	title: TxKeyPath;
+	desc?: TxKeyPath;
+	icon: IconType;
+}
+
+interface ListItemActionItem {
+	href: LinkProps["href"];
+}
+
+interface ListItemLinkItem {
+	action: VoidFunction;
+}
+
+type ListItemAction = ListItemBaseItem &
+	(ListItemActionItem | ListItemLinkItem);
+
+type ListItemActions = ListItemAction[];
+
+type ListItem = {
 	title: string;
-	links: {
-		title: TxKeyPath;
-		desc?: TxKeyPath;
-		href: LinkProps["href"];
-		icon: IconType;
-	}[];
-}[] = [
+	links: ListItemActions;
+};
+
+type ListItems = ListItem[];
+
+const DATA: ListItems = [
 	{
 		title: "Personal Info",
 		links: [
@@ -127,17 +160,18 @@ const DATA: {
 				}),
 			},
 			{
+				icon: ShareIcon,
+				title: "screens:profileList.appInfoList.shareApp.title",
+				desc: "screens:profileList.appInfoList.shareApp.desc",
+				action: shareApp,
+				//href: "/tabs/profile/financials",
+			},
+			{
 				icon: LikeDislike,
 				title: "screens:profileList.appInfoList.feedback.title",
 				desc: "screens:profileList.appInfoList.feedback.desc",
 				href: "/extras/feedback",
 			},
-			// {
-			// 	icon: Share,
-			// 	title: "screens:profileList.appInfoList.shareApp",
-			// 	//desc: "Share App with you friends",
-			// 	href: "/tabs/profile/financials",
-			// },
 		],
 	},
 ];
@@ -217,33 +251,63 @@ export const AccountIndexScreen = () => {
 										contentContainerStyle={{ gap: spacing.md }}
 										renderItem={({ item, index }) => (
 											<Animated.View entering={FadeIn.delay(50 * index)}>
-												<Link href={item.href}>
-													<View
-														style={{
-															flexDirection: "row",
-															alignItems: "center",
-															gap: spacing.md,
-														}}
-													>
-														<IconSax
-															icon={item.icon}
-															size={24}
-															color={colors.text}
-														/>
-														<View style={{ flex: 1 }}>
-															<Text size="md">{translate(item.title)}</Text>
-															{item.desc && (
-																<Text
-																	size="xs"
-																	style={{ color: colors.textDim }}
-																>
-																	{translate(item.desc)}
-																</Text>
-															)}
+												{item.href ? (
+													<Link href={item.href}>
+														<View
+															style={{
+																flexDirection: "row",
+																alignItems: "center",
+																gap: spacing.md,
+															}}
+														>
+															<IconSax
+																icon={item.icon}
+																size={24}
+																color={colors.text}
+															/>
+															<View style={{ flex: 1 }}>
+																<Text size="md">{translate(item.title)}</Text>
+																{item.desc && (
+																	<Text
+																		size="xs"
+																		style={{ color: colors.textDim }}
+																	>
+																		{translate(item.desc)}
+																	</Text>
+																)}
+															</View>
+															<IconSax icon={ArrowRight2} />
 														</View>
-														<IconSax icon={ArrowRight2} />
-													</View>
-												</Link>
+													</Link>
+												) : (
+													<Pressable onPress={item.action}>
+														<View
+															style={{
+																flexDirection: "row",
+																alignItems: "center",
+																gap: spacing.md,
+															}}
+														>
+															<IconSax
+																icon={item.icon}
+																size={24}
+																color={colors.text}
+															/>
+															<View style={{ flex: 1 }}>
+																<Text size="md">{translate(item.title)}</Text>
+																{item.desc && (
+																	<Text
+																		size="xs"
+																		style={{ color: colors.textDim }}
+																	>
+																		{translate(item.desc)}
+																	</Text>
+																)}
+															</View>
+															<IconSax icon={ArrowRight2} />
+														</View>
+													</Pressable>
+												)}
 											</Animated.View>
 										)}
 									/>

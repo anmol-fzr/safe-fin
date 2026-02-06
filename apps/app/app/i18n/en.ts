@@ -53,7 +53,10 @@ const en = {
 			},
 			appInfoList: {
 				aboutUs: "About Us",
-				shareApp: "Share the app",
+				shareApp: {
+					title: "Share the app",
+					desc: "Help others master thier money",
+				},
 				rateApp: {
 					title: "Rate the app",
 					desc: "Review our app on Playstore",

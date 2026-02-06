@@ -32,4 +32,11 @@ export const envs = Object.freeze({
 		POLICY: (env.EXPO_PUBLIC_METADATA_POLICY_URL ??
 			"https://safefin.framer.website/privacy-policy") as ExternalPathString,
 	}),
+
+	APK_URL:
+		env.EXPO_PUBLIC_APK_URL ??
+		"https://github.com/anmol-fzr/safe-fin/releases/download/v1.1.1/app.apk",
+	GITHUB_RELEASE_URL:
+		env.EXPO_PUBLIC_GITHUB_RELEASE_URL ??
+		"https://api.github.com/repos/anmol-fzr/safe-fin/releases/latest",
 });
