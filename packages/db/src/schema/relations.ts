@@ -37,6 +37,10 @@ export const chapterRelations = relations(chapter, ({ one, many }) => ({
 		references: [course.id],
 	}),
 	units: many(unit),
+	exercise: one(exercise, {
+		fields: [chapter.id],
+		references: [exercise.chapterId],
+	}),
 	progress: one(courseProgress, {
 		fields: [chapter.id],
 		references: [courseProgress.currChapterId],
@@ -102,9 +106,9 @@ export const richContentRelations = relations(richContent, ({ one }) => ({
  * Exercise Relations
  */
 export const exerciseRelations = relations(exercise, ({ one, many }) => ({
-	unit: one(unit, {
-		fields: [exercise.unitId],
-		references: [unit.id],
+	chapter: one(chapter, {
+		fields: [exercise.chapterId],
+		references: [chapter.id],
 	}),
 	questions: many(question),
 }));

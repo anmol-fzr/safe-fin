@@ -9,15 +9,15 @@ import { DataTable } from "@/components/table/DataTable";
 import { ResourceProvider } from "@/context/resource.context";
 import { getQuizzesOpts } from "@/hooks/api/quiz";
 import { pageSearchSchema } from "@/schema/page";
+import { getExercisesOpts } from "@/modules/exercise/hooks/queries";
+import { ExerciseTable } from "@/modules/exercise/components/exercise-table/ExerciseTable";
 
 export const Route = createFileRoute("/dashboard/quiz/")({
 	component: RouteComponent,
 	validateSearch: zodValidator(pageSearchSchema),
 	loaderDeps: ({ search: { query } }) => ({ query }),
-	loader: ({ context, deps }) => {
-		context.queryClient.prefetchInfiniteQuery(
-			getQuizzesOpts({ query: deps.query }),
-		);
+	loader: ({ context }) => {
+		context.queryClient.prefetchInfiniteQuery(getExercisesOpts());
 	},
 });
 
@@ -32,7 +32,7 @@ function RouteComponent() {
 				<Page.Content>
 					<ViewTransition>
 						<Suspense fallback={<DataTable.Loading columns={6} />}>
-							<QuizTable />
+							<ExerciseTable />
 						</Suspense>
 					</ViewTransition>
 				</Page.Content>

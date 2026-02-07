@@ -12,6 +12,7 @@ import {
 	courseRating,
 	desc,
 	eq,
+	getDb,
 	rating,
 	richContent,
 	saved,

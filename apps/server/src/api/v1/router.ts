@@ -7,6 +7,7 @@ import { profileRouter } from "@/modules/profile";
 import { savedRouter } from "@/modules/saved";
 import { scamRouter } from "@/modules/scam";
 import { streakRouter } from "@/modules/streak";
+import { exerciseRouter } from "@/modules/exercise";
 
 //import { quizRouter } from "@/modules/quiz";
 
@@ -18,6 +19,7 @@ v1Router
 	.route("/auth", authRouter)
 	//.route("/quiz", quizRouter)
 	.route("/courses", lessonRouter)
+	.route("/exercise", exerciseRouter)
 	.route("/calculator", calculatorRouter)
 	.route("/saved", savedRouter)
 	.route("/profile", profileRouter)

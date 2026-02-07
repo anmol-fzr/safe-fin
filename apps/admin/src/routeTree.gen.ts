@@ -23,12 +23,13 @@ import { Route as DashboardCoursesIndexRouteImport } from './routes/dashboard/co
 import { Route as DashboardSettingsCustomizationRouteImport } from './routes/dashboard/settings/customization'
 import { Route as DashboardSettingsAccountRouteImport } from './routes/dashboard/settings/account'
 import { Route as DashboardQuizAddRouteImport } from './routes/dashboard/quiz/add'
-import { Route as DashboardQuizQuizIdRouteImport } from './routes/dashboard/quiz/$quizId'
 import { Route as DashboardCoursesAddRouteImport } from './routes/dashboard/courses/add'
+import { Route as DashboardQuizExerciseIdIndexRouteImport } from './routes/dashboard/quiz/$exerciseId/index'
 import { Route as DashboardUnitsUnitIdEditRouteImport } from './routes/dashboard/units/$unitId/edit'
 import { Route as DashboardCoursesCourseIdViewRouteImport } from './routes/dashboard/courses/$courseId.view'
 import { Route as DashboardCoursesCourseIdUpdateRouteImport } from './routes/dashboard/courses/$courseId.update'
 import { Route as DashboardCoursesCourseIdEditIndexRouteImport } from './routes/dashboard/courses/$courseId/edit/index'
+import { Route as DashboardQuizExerciseIdEditCurriculumRouteImport } from './routes/dashboard/quiz/$exerciseId/edit/curriculum'
 import { Route as DashboardCoursesCourseIdEditCurriculumRouteImport } from './routes/dashboard/courses/$courseId/edit/curriculum'
 
 const DashboardRoute = DashboardRouteImport.update({
@@ -103,16 +104,17 @@ const DashboardQuizAddRoute = DashboardQuizAddRouteImport.update({
   path: '/add',
   getParentRoute: () => DashboardQuizRoute,
 } as any)
-const DashboardQuizQuizIdRoute = DashboardQuizQuizIdRouteImport.update({
-  id: '/$quizId',
-  path: '/$quizId',
-  getParentRoute: () => DashboardQuizRoute,
-} as any)
 const DashboardCoursesAddRoute = DashboardCoursesAddRouteImport.update({
   id: '/add',
   path: '/add',
   getParentRoute: () => DashboardCoursesRoute,
 } as any)
+const DashboardQuizExerciseIdIndexRoute =
+  DashboardQuizExerciseIdIndexRouteImport.update({
+    id: '/$exerciseId/',
+    path: '/$exerciseId/',
+    getParentRoute: () => DashboardQuizRoute,
+  } as any)
 const DashboardUnitsUnitIdEditRoute =
   DashboardUnitsUnitIdEditRouteImport.update({
     id: '/$unitId/edit',
@@ -137,6 +139,12 @@ const DashboardCoursesCourseIdEditIndexRoute =
     path: '/$courseId/edit/',
     getParentRoute: () => DashboardCoursesRoute,
   } as any)
+const DashboardQuizExerciseIdEditCurriculumRoute =
+  DashboardQuizExerciseIdEditCurriculumRouteImport.update({
+    id: '/$exerciseId/edit/curriculum',
+    path: '/$exerciseId/edit/curriculum',
+    getParentRoute: () => DashboardQuizRoute,
+  } as any)
 const DashboardCoursesCourseIdEditCurriculumRoute =
   DashboardCoursesCourseIdEditCurriculumRouteImport.update({
     id: '/$courseId/edit/curriculum',
@@ -154,7 +162,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/users': typeof DashboardUsersRouteWithChildren
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/courses/add': typeof DashboardCoursesAddRoute
-  '/dashboard/quiz/$quizId': typeof DashboardQuizQuizIdRoute
   '/dashboard/quiz/add': typeof DashboardQuizAddRoute
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
@@ -164,7 +171,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/courses/$courseId/update': typeof DashboardCoursesCourseIdUpdateRoute
   '/dashboard/courses/$courseId/view': typeof DashboardCoursesCourseIdViewRoute
   '/dashboard/units/$unitId/edit': typeof DashboardUnitsUnitIdEditRoute
+  '/dashboard/quiz/$exerciseId': typeof DashboardQuizExerciseIdIndexRoute
   '/dashboard/courses/$courseId/edit/curriculum': typeof DashboardCoursesCourseIdEditCurriculumRoute
+  '/dashboard/quiz/$exerciseId/edit/curriculum': typeof DashboardQuizExerciseIdEditCurriculumRoute
   '/dashboard/courses/$courseId/edit': typeof DashboardCoursesCourseIdEditIndexRoute
 }
 export interface FileRoutesByTo {
@@ -173,7 +182,6 @@ export interface FileRoutesByTo {
   '/dashboard/units': typeof DashboardUnitsRouteWithChildren
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/courses/add': typeof DashboardCoursesAddRoute
-  '/dashboard/quiz/$quizId': typeof DashboardQuizQuizIdRoute
   '/dashboard/quiz/add': typeof DashboardQuizAddRoute
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
@@ -183,7 +191,9 @@ export interface FileRoutesByTo {
   '/dashboard/courses/$courseId/update': typeof DashboardCoursesCourseIdUpdateRoute
   '/dashboard/courses/$courseId/view': typeof DashboardCoursesCourseIdViewRoute
   '/dashboard/units/$unitId/edit': typeof DashboardUnitsUnitIdEditRoute
+  '/dashboard/quiz/$exerciseId': typeof DashboardQuizExerciseIdIndexRoute
   '/dashboard/courses/$courseId/edit/curriculum': typeof DashboardCoursesCourseIdEditCurriculumRoute
+  '/dashboard/quiz/$exerciseId/edit/curriculum': typeof DashboardQuizExerciseIdEditCurriculumRoute
   '/dashboard/courses/$courseId/edit': typeof DashboardCoursesCourseIdEditIndexRoute
 }
 export interface FileRoutesById {
@@ -197,7 +207,6 @@ export interface FileRoutesById {
   '/dashboard/users': typeof DashboardUsersRouteWithChildren
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/courses/add': typeof DashboardCoursesAddRoute
-  '/dashboard/quiz/$quizId': typeof DashboardQuizQuizIdRoute
   '/dashboard/quiz/add': typeof DashboardQuizAddRoute
   '/dashboard/settings/account': typeof DashboardSettingsAccountRoute
   '/dashboard/settings/customization': typeof DashboardSettingsCustomizationRoute
@@ -207,7 +216,9 @@ export interface FileRoutesById {
   '/dashboard/courses/$courseId/update': typeof DashboardCoursesCourseIdUpdateRoute
   '/dashboard/courses/$courseId/view': typeof DashboardCoursesCourseIdViewRoute
   '/dashboard/units/$unitId/edit': typeof DashboardUnitsUnitIdEditRoute
+  '/dashboard/quiz/$exerciseId/': typeof DashboardQuizExerciseIdIndexRoute
   '/dashboard/courses/$courseId/edit/curriculum': typeof DashboardCoursesCourseIdEditCurriculumRoute
+  '/dashboard/quiz/$exerciseId/edit/curriculum': typeof DashboardQuizExerciseIdEditCurriculumRoute
   '/dashboard/courses/$courseId/edit/': typeof DashboardCoursesCourseIdEditIndexRoute
 }
 export interface FileRouteTypes {
@@ -222,7 +233,6 @@ export interface FileRouteTypes {
     | '/dashboard/users'
     | '/dashboard/'
     | '/dashboard/courses/add'
-    | '/dashboard/quiz/$quizId'
     | '/dashboard/quiz/add'
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
@@ -232,7 +242,9 @@ export interface FileRouteTypes {
     | '/dashboard/courses/$courseId/update'
     | '/dashboard/courses/$courseId/view'
     | '/dashboard/units/$unitId/edit'
+    | '/dashboard/quiz/$exerciseId'
     | '/dashboard/courses/$courseId/edit/curriculum'
+    | '/dashboard/quiz/$exerciseId/edit/curriculum'
     | '/dashboard/courses/$courseId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -241,7 +253,6 @@ export interface FileRouteTypes {
     | '/dashboard/units'
     | '/dashboard'
     | '/dashboard/courses/add'
-    | '/dashboard/quiz/$quizId'
     | '/dashboard/quiz/add'
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
@@ -251,7 +262,9 @@ export interface FileRouteTypes {
     | '/dashboard/courses/$courseId/update'
     | '/dashboard/courses/$courseId/view'
     | '/dashboard/units/$unitId/edit'
+    | '/dashboard/quiz/$exerciseId'
     | '/dashboard/courses/$courseId/edit/curriculum'
+    | '/dashboard/quiz/$exerciseId/edit/curriculum'
     | '/dashboard/courses/$courseId/edit'
   id:
     | '__root__'
@@ -264,7 +277,6 @@ export interface FileRouteTypes {
     | '/dashboard/users'
     | '/dashboard/'
     | '/dashboard/courses/add'
-    | '/dashboard/quiz/$quizId'
     | '/dashboard/quiz/add'
     | '/dashboard/settings/account'
     | '/dashboard/settings/customization'
@@ -274,7 +286,9 @@ export interface FileRouteTypes {
     | '/dashboard/courses/$courseId/update'
     | '/dashboard/courses/$courseId/view'
     | '/dashboard/units/$unitId/edit'
+    | '/dashboard/quiz/$exerciseId/'
     | '/dashboard/courses/$courseId/edit/curriculum'
+    | '/dashboard/quiz/$exerciseId/edit/curriculum'
     | '/dashboard/courses/$courseId/edit/'
   fileRoutesById: FileRoutesById
 }
@@ -383,19 +397,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardQuizAddRouteImport
       parentRoute: typeof DashboardQuizRoute
     }
-    '/dashboard/quiz/$quizId': {
-      id: '/dashboard/quiz/$quizId'
-      path: '/$quizId'
-      fullPath: '/dashboard/quiz/$quizId'
-      preLoaderRoute: typeof DashboardQuizQuizIdRouteImport
-      parentRoute: typeof DashboardQuizRoute
-    }
     '/dashboard/courses/add': {
       id: '/dashboard/courses/add'
       path: '/add'
       fullPath: '/dashboard/courses/add'
       preLoaderRoute: typeof DashboardCoursesAddRouteImport
       parentRoute: typeof DashboardCoursesRoute
+    }
+    '/dashboard/quiz/$exerciseId/': {
+      id: '/dashboard/quiz/$exerciseId/'
+      path: '/$exerciseId'
+      fullPath: '/dashboard/quiz/$exerciseId'
+      preLoaderRoute: typeof DashboardQuizExerciseIdIndexRouteImport
+      parentRoute: typeof DashboardQuizRoute
     }
     '/dashboard/units/$unitId/edit': {
       id: '/dashboard/units/$unitId/edit'
@@ -424,6 +438,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/courses/$courseId/edit'
       preLoaderRoute: typeof DashboardCoursesCourseIdEditIndexRouteImport
       parentRoute: typeof DashboardCoursesRoute
+    }
+    '/dashboard/quiz/$exerciseId/edit/curriculum': {
+      id: '/dashboard/quiz/$exerciseId/edit/curriculum'
+      path: '/$exerciseId/edit/curriculum'
+      fullPath: '/dashboard/quiz/$exerciseId/edit/curriculum'
+      preLoaderRoute: typeof DashboardQuizExerciseIdEditCurriculumRouteImport
+      parentRoute: typeof DashboardQuizRoute
     }
     '/dashboard/courses/$courseId/edit/curriculum': {
       id: '/dashboard/courses/$courseId/edit/curriculum'
@@ -459,15 +480,18 @@ const DashboardCoursesRouteWithChildren =
   DashboardCoursesRoute._addFileChildren(DashboardCoursesRouteChildren)
 
 interface DashboardQuizRouteChildren {
-  DashboardQuizQuizIdRoute: typeof DashboardQuizQuizIdRoute
   DashboardQuizAddRoute: typeof DashboardQuizAddRoute
   DashboardQuizIndexRoute: typeof DashboardQuizIndexRoute
+  DashboardQuizExerciseIdIndexRoute: typeof DashboardQuizExerciseIdIndexRoute
+  DashboardQuizExerciseIdEditCurriculumRoute: typeof DashboardQuizExerciseIdEditCurriculumRoute
 }
 
 const DashboardQuizRouteChildren: DashboardQuizRouteChildren = {
-  DashboardQuizQuizIdRoute: DashboardQuizQuizIdRoute,
   DashboardQuizAddRoute: DashboardQuizAddRoute,
   DashboardQuizIndexRoute: DashboardQuizIndexRoute,
+  DashboardQuizExerciseIdIndexRoute: DashboardQuizExerciseIdIndexRoute,
+  DashboardQuizExerciseIdEditCurriculumRoute:
+    DashboardQuizExerciseIdEditCurriculumRoute,
 }
 
 const DashboardQuizRouteWithChildren = DashboardQuizRoute._addFileChildren(

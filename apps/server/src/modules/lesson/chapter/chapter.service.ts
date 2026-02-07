@@ -50,6 +50,16 @@ export class ChapterService {
 				return and(...conditions);
 			},
 			with: {
+				course: {
+					columns: {},
+					with: {
+						content: {
+							columns: {
+								title: true,
+							},
+						},
+					},
+				},
 				units: {
 					columns: {
 						id: true,

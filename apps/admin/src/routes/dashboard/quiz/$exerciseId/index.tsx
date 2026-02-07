@@ -5,7 +5,7 @@ import { Page } from "@/components/page";
 import { getQuizOpts } from "@/hooks/api/quiz";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/dashboard/quiz/$quizId")({
+export const Route = createFileRoute("/dashboard/quiz/$exerciseId/")({
 	component: RouteComponent,
 	loader: async ({ context, params }) => {
 		const quizId = params.quizId;
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/dashboard/quiz/$quizId")({
 		return {
 			crumb: `Quiz: ${quiz.data.title}`,
 			quiz,
-		};
+		}
 	},
 });
 
@@ -74,5 +74,5 @@ function RouteComponent() {
 				</div>
 			</Page.Content>
 		</Page>
-	);
+	)
 }

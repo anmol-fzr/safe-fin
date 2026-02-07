@@ -1,11 +1,12 @@
 import { showRoutes } from "hono/dev";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
-import { appCors, paginate } from "@/middleware";
+import { appCors } from "@/middleware";
 import { v1Router } from "./api/v1/router";
 import { createTypedFactory } from "./factory";
+import { setupMonitoring } from "./config/monitoring";
 
-const { createApp, createMiddleware } = createTypedFactory();
+const { createApp } = createTypedFactory();
 const app = createApp();
 
 app
@@ -23,7 +24,7 @@ app
 	.use(appCors);
 
 app.use("*", async (c, next) => {
-	c.header("Cache-Control", "public max-age=86400");
+	//c.header("Cache-Control", "public max-age=86400");
 	await next();
 });
 
@@ -47,4 +48,4 @@ showRoutes(app, {
 	colorize: true,
 });
 
-export default app;
+export default setupMonitoring(app);

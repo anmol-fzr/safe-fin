@@ -2,6 +2,7 @@ import {
 	infiniteQueryOptions,
 	queryOptions,
 	useMutation,
+	useQuery,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
@@ -13,7 +14,7 @@ import {
 } from "@/hooks/api/defaults";
 import type { ICreateLessonReq } from "@/services/api";
 import type { IReqParams, ResourceId } from "@/services/api/types";
-import { COURSES, UNITS } from "../api";
+import { CHAPTERS, COURSES, UNITS } from "../api";
 
 const baseQueryKey = "COURSES";
 const { createMsg, updateMsg, deleteMsg } = createToastMessages("Lesson");
@@ -81,8 +82,22 @@ const useGetUnit = (unitId: ResourceId) => {
 	return { unit: data, ...rest };
 };
 
+function getChapterOpts(chapterId: ResourceId) {
+	return queryOptions({
+		queryKey: ["CHAPTERS", chapterId],
+		queryFn: () => CHAPTERS.ONE(chapterId),
+	});
+}
+
+const useGetChapter = (chapterId: ResourceId) => {
+	const opts = getChapterOpts(chapterId);
+	const { data, ...rest } = useQuery({ ...opts, enabled: !!chapterId });
+
+	return { chapter: data?.data, ...rest };
+};
+
 export { getCoursesOpts, getCourseOpts };
-export { useGetCourses, useGetCourse };
+export { useGetCourses, useGetCourse, useGetChapter };
 
 export { getUnitOpts };
 export { useGetUnit };

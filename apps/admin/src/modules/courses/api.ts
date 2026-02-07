@@ -105,6 +105,9 @@ export const COURSES = {
 } as const;
 
 export const CHAPTERS = {
+	ONE: (chapterId: ResourceId) =>
+		get<unknown, IResOneChapter>(`/courses/chapters/${chapterId}`),
+
 	GET_BY_COURSE: (courseId: ResourceId) =>
 		get<unknown, IResData<Chapter[]>>(`/courses/${courseId}/chapters`),
 	CREATE: (courseId: ResourceId, payload: IReqCreateChapter) =>
@@ -128,6 +131,34 @@ export const CHAPTERS = {
 			payload,
 		),
 } as const;
+
+type IResOneChapter = IResData<{
+	id: number;
+	courseId: number;
+	title: string;
+	index: number;
+	isPublished: boolean;
+	createdAt: string;
+	updatedAt: string;
+	course: {
+		content: {
+			title: string;
+		};
+	};
+	units: Array<{
+		id: number;
+		coverPath: any;
+		points: number;
+		index: number;
+		isPublished: boolean;
+		createdAt: string;
+		updatedAt: string;
+		content: {
+			title: string;
+			shortDesc: string;
+		};
+	}>;
+}>;
 
 export const UNITS = {
 	ONE: (unitId: ResourceId) =>

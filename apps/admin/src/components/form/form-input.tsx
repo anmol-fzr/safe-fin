@@ -29,7 +29,7 @@ const FormInput = <
 >(
 	props: FormInputProps<TFieldValues, TName>,
 ) => {
-	const { name, label, placeholder } = props;
+	const { name, label, ...rest } = props;
 	const form = useFormContext();
 	return (
 		<FormField
@@ -39,7 +39,7 @@ const FormInput = <
 				<FormItem>
 					<FormLabel>{label}</FormLabel>
 					<FormControl>
-						<Input placeholder={placeholder} {...field} />
+						<Input {...rest} {...field} />
 					</FormControl>
 					<FormDescription>{props?.desc}</FormDescription>
 					<FormMessage />

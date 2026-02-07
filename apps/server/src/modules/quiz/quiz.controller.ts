@@ -5,7 +5,7 @@ import {
 	quizQuestionOption,
 	quizQuestionResult,
 	userQuizResult,
-} from "@safe-fin/db/schema";
+} from "@/pkg/db";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, userRole } from "@/middleware";
 import { eq } from "@/pkg/db";

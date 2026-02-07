@@ -4,6 +4,7 @@ import {
 	createLessonHandler,
 	deleteLesson,
 	forYouLessons,
+	getAdminCourseOptions,
 	getCourseObjectUploadUrl,
 	getLastInteractedCourse,
 	getLessonById,
