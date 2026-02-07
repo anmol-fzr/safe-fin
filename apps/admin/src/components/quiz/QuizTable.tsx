@@ -57,7 +57,7 @@ const columns: ColumnDef<IQuiz>[] = [
 			return (
 				<QuizHoverCard {...{ id, title, desc }}>
 					<Link
-						to="/dashboard/quiz/$quizId"
+						to="/dashboard/exercises/$exerciseId"
 						params={{ quizId: id }}
 						className="hover:underline"
 					>
@@ -98,7 +98,7 @@ const columns: ColumnDef<IQuiz>[] = [
 			return (
 				<TableColActions>
 					<TableColActions.Edit
-						to="/dashboard/quiz/$quizId"
+						to="/dashboard/exercises/$exerciseId"
 						params={{ quizId }}
 					/>
 
@@ -173,7 +173,7 @@ function QuizHoverCard({ id, title, desc, children }: QuizHoverCardProps) {
 						</div>
 					</div>
 					<Link
-						to="/dashboard/quiz/$quizId"
+						to="/dashboard/exercises/$exerciseId"
 						params={{ quizId }}
 						className="hover:underline ml-auto mr-0 inline-flex items-center justify-center gap-1"
 					>

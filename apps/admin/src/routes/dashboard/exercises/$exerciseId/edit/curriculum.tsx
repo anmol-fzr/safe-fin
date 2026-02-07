@@ -7,7 +7,7 @@ import { CurriculumBuilder } from "@/modules/courses/components/CurriculumBuilde
 import { ExerciseBuilder } from "@/modules/exercise/components/exercise-builder";
 
 export const Route = createFileRoute(
-	"/dashboard/quiz/$exerciseId/edit/curriculum",
+	"/dashboard/exercises/$exerciseId/edit/curriculum",
 )({
 	component: RouteComponent,
 	loader: async ({ context, params }) => {
@@ -21,7 +21,7 @@ export const Route = createFileRoute(
 		return {
 			crumb: `${context.label.single} Builder`,
 			lessonId: id,
-		};
+		}
 	},
 });
 
@@ -41,5 +41,5 @@ function RouteComponent() {
 				</Suspense>
 			</div>
 		</div>
-	);
+	)
 }

@@ -5,14 +5,14 @@ import { Page } from "@/components/page";
 import { getQuizOpts } from "@/hooks/api/quiz";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/dashboard/quiz/$exerciseId/")({
+export const Route = createFileRoute("/dashboard/exercises/$exerciseId/")({
 	component: RouteComponent,
 	loader: async ({ context, params }) => {
 		const quizId = params.quizId;
 		const id = Number(quizId);
 
 		if (!Number.isInteger(id)) {
-			throw redirect({ to: "/dashboard/quiz" });
+			throw redirect({ to: "/dashboard/exercises" });
 		}
 
 		const quiz = await context.queryClient.ensureQueryData(getQuizOpts(id));
@@ -33,7 +33,7 @@ function RouteComponent() {
 	return (
 		<Page>
 			<Page.Header className="flex flex-col mb-4 items-start">
-				<BackButton to="/dashboard/quiz" resource="Quiz" />
+				<BackButton to="/dashboard/exercises" resource="Quiz" />
 				<Page.Title title={quiz.title} />
 			</Page.Header>
 			<Page.Content>

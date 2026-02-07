@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/dashboard/quiz")({
+export const Route = createFileRoute("/dashboard/exercises")({
 	component: Outlet,
 	beforeLoad: () => {
 		return {

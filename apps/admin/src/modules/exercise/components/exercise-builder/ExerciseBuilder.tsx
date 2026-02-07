@@ -1,6 +1,13 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Link } from "@tanstack/react-router";
-import { Add, ArrowDown, ArrowUp, Edit2, Trash } from "iconsax-reactjs";
+import {
+	Add,
+	ArrowDown,
+	ArrowUp,
+	Edit2,
+	InfoCircle,
+	Trash,
+} from "iconsax-reactjs";
 import { useMemo, useState } from "react";
 import {
 	Accordion,
@@ -29,6 +36,12 @@ import {
 } from "../question-form/NewQuestionForm";
 import { NewOptionForm, useNewOptionForm } from "../option-form/NewOptionForm";
 import { useCreateOption, useCreateQuestion } from "../../hooks/mutations";
+import { cn } from "@/lib/utils";
+import {
+	Tooltip,
+	TooltipTrigger,
+	TooltipContent,
+} from "@/components/ui/tooltip";
 
 interface CurriculumBuilderProps {
 	exerciseId: ResourceId;
@@ -186,7 +199,10 @@ export const ExerciseBuilder = (props: CurriculumBuilderProps) => {
 										<AccordionItem
 											key={question.id}
 											value={`chapter-${question.id}`}
-											className="border rounded-lg"
+											className={cn(
+												"border rounded-lg ",
+												//question.answerId ? "" : "border-2 border-red-400",
+											)}
 										>
 											<AccordionTrigger className="px-4 hover:no-underline">
 												<div className="flex items-center justify-between w-full pr-4">
@@ -200,6 +216,23 @@ export const ExerciseBuilder = (props: CurriculumBuilderProps) => {
 														<span className="text-sm text-muted-foreground">
 															({question.options?.length || 0} Options)
 														</span>
+
+														{question.answerId ? (
+															""
+														) : (
+															<span className="text-sm text-destructive ">
+																(No Answer Selected)
+																<Tooltip>
+																	<TooltipTrigger>
+																		<InfoCircle className="m-auto" />
+																	</TooltipTrigger>
+																	<TooltipContent>
+																		Without any answer selected, this Question
+																		Won't appear to Users in Exercise
+																	</TooltipContent>
+																</Tooltip>
+															</span>
+														)}
 													</div>
 													<ButtonGroup className="group-hover:opacity-100 transition-opacity">
 														<Button

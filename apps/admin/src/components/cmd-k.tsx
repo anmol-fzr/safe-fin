@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/command";
 import { useSafeContext } from "@/context/helper";
 import { Card } from "./ui/card";
+import { Book } from "iconsax-reactjs";
 
 type ListItem = {
 	icon: LucideIcon;
@@ -33,23 +34,16 @@ const list: List = [
 		title: "Navigation",
 		list: [
 			{
-				icon: Users,
-				label: "Users",
-				to: "/dashboard/users",
-				shortDec: "Create, List, Ban, Unban Impersonate, Manage Access",
-				desc: "Create, List, Ban, Unban Impersonate, Manage -- Users",
-			},
-			{
-				icon: Brain,
-				label: "Lessons",
-				to: "/dashboard/lessons",
+				icon: Book,
+				label: "Courses",
+				to: "/dashboard/courses",
 				shortDec: "Create, Update, Delete, Manage -- Lessons",
 				desc: "Create, Update, Delete, Manage -- Lessons",
 			},
 			{
 				icon: CircleQuestionMark,
-				label: "Quizzes",
-				to: "/dashboard/quiz",
+				label: "Exercises",
+				to: "/dashboard/exercises",
 				shortDec: "Create, Update, Delete, Manage -- Quizzes",
 				desc: "Create, Update, Delete, Manage -- Quizzes",
 			},
@@ -68,7 +62,7 @@ const list: List = [
 			{
 				icon: Sun,
 				label: "Toggle Theme",
-				to: "/dashboard/quiz",
+				to: "/dashboard/exercises",
 				shortDec: "Toggle Theme",
 				desc: "Toggle Theme",
 			},

@@ -16,6 +16,7 @@ import {
 	TableColCreatedAt,
 	TableColUpdatedAt,
 	TableSearch,
+	useTableSearchValue,
 } from "@/components/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useGetExercises } from "../../hooks/queries";
@@ -56,7 +57,7 @@ const columns: ColumnDef<IExercise>[] = [
 			return (
 				<QuizHoverCard {...{ id, title, desc }}>
 					<Link
-						to="/dashboard/quiz/$quizId"
+						to="/dashboard/exercises/$exerciseId"
 						params={{ quizId: id }}
 						className="hover:underline"
 					>
@@ -111,19 +112,19 @@ const columns: ColumnDef<IExercise>[] = [
 		enableHiding: false,
 		cell: ({ row }) => {
 			const id = row.original.id;
-			const quizId = id.toString();
+			const exerciseId = id.toString();
 
 			const handleDeleteLesson = () => console.log(id);
 
 			return (
 				<TableColActions>
 					<TableColActions.Edit
-						to="/dashboard/quiz/$quizId"
-						params={{ quizId }}
+						to="/dashboard/exercises/$exerciseId"
+						params={{ exerciseId }}
 					/>
 
 					<TableColActions.Delete
-						phrase={`quiz/${quizId}`}
+						phrase={`exercise/${exerciseId}`}
 						onDelete={handleDeleteLesson}
 					/>
 				</TableColActions>
@@ -135,9 +136,11 @@ const columns: ColumnDef<IExercise>[] = [
 const searchQueryParamKey = "query";
 
 export function ExerciseTable() {
-	//const searchQuery = useTableSearchValue(searchQueryParamKey);
+	const searchQuery = useTableSearchValue(searchQueryParamKey);
 
-	const { data, isFetching, fetchNextPage } = useGetExercises();
+	const { data, isFetching, fetchNextPage } = useGetExercises({
+		search: searchQuery,
+	});
 
 	const tableOpts = useDefaultTableOpts();
 
@@ -191,7 +194,7 @@ function QuizHoverCard({ id, title, desc, children }: QuizHoverCardProps) {
 						</div>
 					</div>
 					<Link
-						to="/dashboard/quiz/$quizId"
+						to="/dashboard/exercises/$exerciseId"
 						params={{ quizId }}
 						className="hover:underline ml-auto mr-0 inline-flex items-center justify-center gap-1"
 					>

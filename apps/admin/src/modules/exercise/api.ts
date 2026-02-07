@@ -10,8 +10,13 @@ interface IReqCreateExercise {
 	chapterId: number;
 }
 
+interface IReqAllExercise {
+	searchValue?: string;
+}
+
 export const EXERCISE = {
-	ALL: () => get<unknown, IResAllExercise>("/exercise"),
+	ALL: (params: IReqAllExercise) =>
+		get<unknown, IResAllExercise>("/exercise", { params }),
 	CREATE: (data: IReqCreateExercise) =>
 		post<unknown, IResCreateExercise>("/exercise", data),
 	ONE: (exerciseId: ResourceId) =>

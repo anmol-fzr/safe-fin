@@ -9,10 +9,10 @@ import {
 import { useInvalidateResource } from "@/hooks/api/defaults";
 import type { ResourceId } from "@/services/api/types";
 
-function getExercisesOpts() {
+function getExercisesOpts(params: { search: string }) {
 	return infiniteQueryOptions({
-		queryKey: ["EXERCISE"] as const,
-		queryFn: EXERCISE.ALL,
+		queryKey: ["EXERCISE", params] as const,
+		queryFn: () => EXERCISE.ALL({ searchValue: params?.search ?? "" }),
 		initialPageParam: { limit: 10, skip: 0 },
 		getNextPageParam: (lastPage, allPages, lastPageParam) => {
 			const total = allPages[allPages.length - 1].paginate.total;
@@ -30,8 +30,8 @@ function getExercisesOpts() {
 	});
 }
 
-const useGetExercises = () => {
-	const opts = getExercisesOpts();
+const useGetExercises = (params: { search: string }) => {
+	const opts = getExercisesOpts(params);
 	const { data, ...rest } = useSuspenseInfiniteQuery(opts);
 
 	// const exercises = useMemo(
