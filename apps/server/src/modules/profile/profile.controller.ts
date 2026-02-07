@@ -158,16 +158,22 @@ export const getPublicProfile = createHandlers(
 				image: true,
 				createdAt: true,
 			},
+			with: {
+				streak: {
+					columns: {
+						current: true,
+						maximum: true,
+						lastActivityDate: true,
+					},
+				},
+			},
 		});
 
 		const publicUserProfileQuery = db.query.publicUserProfile.findFirst({
 			where: (profiles, { eq }) => eq(profiles.userId, userId),
-			// columns: {
-			// 	name: true,
-			// 	//email: true,
-			// 	image: true,
-			// 	createdAt: true,
-			// },
+			columns: {
+				totalPX: true,
+			},
 		});
 
 		const { year, fromMonth, toMonth } = c.req.valid("query");
@@ -215,8 +221,6 @@ export const getPublicProfile = createHandlers(
 			data: {
 				user: userData,
 				profile: {
-					currentStreak: publicUserProfileData?.currentStreak ?? 0,
-					maxStreak: publicUserProfileData?.maxStreak ?? 0,
 					totalPX: publicUserProfileData?.totalPX ?? 0,
 					courses: userCourseProgressData[0].count,
 				},
