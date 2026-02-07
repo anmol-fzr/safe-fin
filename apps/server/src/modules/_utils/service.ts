@@ -2,6 +2,7 @@ type ResourceId = number;
 interface PaginatePayload {
 	limit: number;
 	offset: number;
+	search?: string;
 }
 
 abstract class ResourceService {
@@ -11,8 +12,8 @@ abstract class ResourceService {
 	count(paginatePayload: PaginatePayload) {}
 
 	getById(id: ResourceId) {}
-	updateById(id: ResourceId) {}
-	deleteById(id: ResourceId) {}
+	async updateById<T>(id: ResourceId, payload: T) {}
+	async deleteById(id: ResourceId) {}
 }
 
 export type { ResourceId, PaginatePayload };

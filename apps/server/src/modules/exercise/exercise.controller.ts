@@ -1,5 +1,5 @@
 import { createTypedFactory } from "@/factory";
-import { paginate } from "@/middleware";
+import { authenticate, paginate, userRole } from "@/middleware";
 import { queryParamSchema } from "@/schema/params";
 import { zValidator } from "@hono/zod-validator";
 import { ExerciseService } from "./exercise.service";
@@ -12,12 +12,14 @@ const { createHandlers } = createTypedFactory();
 const service = new ExerciseService();
 
 export const getExercises = createHandlers(
+	authenticate,
+	userRole("admin"),
 	zValidator("query", queryParamSchema),
 	paginate,
 	async (c) => {
-		const { limit, offset } = c.get("paginate");
+		const { limit, offset, searchValue } = c.get("paginate");
 
-		const result = await service.get({ limit, offset });
+		const result = await service.get({ limit, offset, search: searchValue });
 
 		return result.match(
 			(result) => {
@@ -51,6 +53,8 @@ export const getExercises = createHandlers(
 );
 
 export const createExercise = createHandlers(
+	authenticate,
+	userRole("admin"),
 	zValidator("json", createExerciseSchema),
 	async (c) => {
 		const body = c.req.valid("json");
@@ -76,6 +80,52 @@ export const createExercise = createHandlers(
 );
 
 export const getExerciseById = createHandlers(
+	zValidator("param", exerciseIdParamSchema),
+	async (c) => {
+		const { exerciseId } = c.req.valid("param");
+
+		const result = await service.getById(exerciseId);
+
+		return result.match(
+			(result) => {
+				return c.json({
+					data: result.data,
+				});
+			},
+			(error) => {
+				console.log(error);
+
+				switch (error.reason) {
+					case Reason.UnExpected: {
+						return c.json({
+							data: null,
+							message: "Something Went Wrong",
+						});
+					}
+
+					case Reason.NotFound: {
+						return c.json({
+							data: null,
+							message: CODES.NOT_FOUND,
+						});
+					}
+
+					default: {
+						console.log(error.reason satisfies never);
+						return c.json({
+							data: null,
+							message: "Something Went Wrong",
+						});
+					}
+				}
+			},
+		);
+	},
+);
+
+export const updateExerciseById = createHandlers(
+	authenticate,
+	userRole("admin"),
 	zValidator("param", exerciseIdParamSchema),
 	async (c) => {
 		const { exerciseId } = c.req.valid("param");

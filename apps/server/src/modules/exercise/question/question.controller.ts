@@ -3,12 +3,15 @@ import { zValidator } from "@hono/zod-validator";
 import { QuestionService } from "./question.service";
 import { createQuestionSchema } from "./question.schema";
 import { QUESTION_CODES } from "./question.codes";
+import { authenticate, userRole } from "@/middleware";
 
 const { createHandlers } = createTypedFactory();
 
 const service = new QuestionService();
 
 export const createQuestion = createHandlers(
+	authenticate,
+	userRole("admin"),
 	zValidator("json", createQuestionSchema),
 	async (c) => {
 		const body = c.req.valid("json");

@@ -1,4 +1,4 @@
-import { exercise, getDb, sql, count } from "@/pkg/db";
+import { exercise, getDb, sql, count, eq } from "@/pkg/db";
 import {
 	ResourceService,
 	type PaginatePayload,
@@ -8,6 +8,7 @@ import { errAsync, okAsync, Result } from "neverthrow";
 import { getPaginateRes, paginate } from "@/middleware";
 import { isUndefined } from "@safe-fin/utils";
 import { Reason } from "../_utils/reasons";
+import { QueryBuilder } from "drizzle-orm/sqlite-core";
 
 const db = getDb();
 
@@ -31,6 +32,8 @@ interface CreateExercisePayload {
 	isPublished: boolean;
 	chapterId: number;
 }
+
+type UpdateExercisePayload = Partial<CreateExercisePayload>;
 
 export class ExerciseService extends ResourceService {
 	async create(payload: CreateExercisePayload) {
@@ -56,13 +59,22 @@ export class ExerciseService extends ResourceService {
 		}
 	}
 	async get(paginatePayload: PaginatePayload) {
-		const { offset, limit } = paginatePayload;
+		const { offset, limit, search } = paginatePayload;
 
 		try {
-			const query = exercisePaginated.all({
+			const query = db.query.exercise.findMany({
 				limit,
 				offset,
+				where: search
+					? (exercises, { like }) => like(exercises.title, `%${search}%`)
+					: undefined,
+				with: {
+					chapter: {
+						columns: { title: true },
+					},
+				},
 			});
+
 			const countQuery = countExercises.run();
 
 			const [queryResult, countResult] = await Promise.all([query, countQuery]);
@@ -93,6 +105,55 @@ export class ExerciseService extends ResourceService {
 					},
 				},
 			});
+
+			if (isUndefined(foundExercise)) {
+				return errAsync({
+					reason: Reason.NotFound,
+					error: null,
+				} as const);
+			}
+
+			return okAsync({
+				data: foundExercise,
+			} as const);
+		} catch (error) {
+			return errAsync({
+				reason: Reason.UnExpected,
+				error: error,
+			} as const);
+		}
+	}
+
+	async updateById(exerciseId: ResourceId, payload: UpdateExercisePayload) {
+		try {
+			const updatedExercise = await db
+				.update(exercise)
+				.set(payload)
+				.where(eq(exercise.id, exerciseId));
+
+			if (updatedExercise.rowsAffected === 0) {
+				return errAsync({
+					reason: Reason.NotFound,
+					error: null,
+				} as const);
+			}
+
+			return okAsync({
+				data: updatedExercise,
+			} as const);
+		} catch (error) {
+			return errAsync({
+				reason: Reason.UnExpected,
+				error: error,
+			} as const);
+		}
+	}
+
+	async deleteById(exerciseId: ResourceId) {
+		try {
+			const foundExercise = await db
+				.delete(exercise)
+				.where(eq(exercise.id, exerciseId));
 
 			if (isUndefined(foundExercise)) {
 				return errAsync({

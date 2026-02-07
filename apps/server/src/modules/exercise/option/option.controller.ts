@@ -3,12 +3,15 @@ import { zValidator } from "@hono/zod-validator";
 import { OptionService } from "./option.service";
 import { createOptionSchema } from "./option.schema";
 import { OPTION_CODES } from "./option.codes";
+import { authenticate, userRole } from "@/middleware";
 
 const { createHandlers } = createTypedFactory();
 
 const service = new OptionService();
 
 export const createOption = createHandlers(
+	authenticate,
+	userRole("admin"),
 	zValidator("json", createOptionSchema),
 	async (c) => {
 		const body = c.req.valid("json");

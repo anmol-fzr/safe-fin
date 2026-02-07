@@ -3,6 +3,7 @@ import {
 	createExercise,
 	getExerciseById,
 	getExercises,
+	updateExerciseById,
 } from "./exercise.controller";
 import { questionRouter } from "./question";
 import { optionRouter } from "./option";
@@ -15,6 +16,7 @@ exerciseRouter
 	.get("/", ...getExercises)
 	.post("/", ...createExercise)
 	.get("/:exerciseId", ...getExerciseById)
+	.patch("/:exerciseId", ...updateExerciseById)
 	.route("/question", questionRouter)
 	.route("/option", optionRouter);
 

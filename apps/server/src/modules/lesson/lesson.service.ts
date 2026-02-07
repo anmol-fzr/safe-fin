@@ -229,6 +229,8 @@ export class LessonService {
 					},
 					orderBy: (chapter, { asc }) => [asc(chapter.index)],
 					with: {
+						exercise: true,
+
 						units: {
 							extras: userId
 								? {

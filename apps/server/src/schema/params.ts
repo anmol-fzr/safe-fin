@@ -5,10 +5,11 @@ export const itemIdSchema = z.object({
 });
 
 export const queryParamSchema = z.object({
-	// searchValue: z
-	// 	.string()
-	// 	.optional()
-	// 	.describe('The value to search for. Eg: "some name"'),
+	searchValue: z
+		.string()
+		.optional()
+		.transform((str) => str?.toLowerCase())
+		.describe('The value to search for. Eg: "some name"'),
 	// searchField: z
 	// 	.enum(["email", "name"])
 	// 	.describe(
