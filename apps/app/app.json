@@ -3,7 +3,7 @@
 		"name": "Safe Fin",
 		"slug": "safeFin",
 		"scheme": "safefin",
-		"version": "1.2.0",
+		"version": "1.2.1",
 		"orientation": "portrait",
 		"userInterfaceStyle": "automatic",
 		"icon": "./assets/icons/app-icon.png",
