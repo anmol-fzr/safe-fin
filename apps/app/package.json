@@ -37,6 +37,7 @@
 		"@gorhom/bottom-sheet": "^5.2.7",
 		"@hookform/resolvers": "^5.2.2",
 		"@legendapp/list": "^2.0.16",
+		"@lodev09/react-native-true-sheet": "^3.8.2",
 		"@lottiefiles/dotlottie-react-native": "^0.7.1",
 		"@react-native-async-storage/async-storage": "2.2.0",
 		"@react-native-community/blur": "^4.4.1",

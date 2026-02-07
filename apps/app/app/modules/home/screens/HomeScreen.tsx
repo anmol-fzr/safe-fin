@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation } from "expo-router";
 import { useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { Screen } from "@/components";
+import { Button, Screen } from "@/components";
 import { getCalculatorsOpts } from "@/modules/calculator/hooks/queries";
 import { getLessonsOpts } from "@/modules/lesson/hooks/api";
 import { getScamsOpts } from "@/modules/scam/hooks/queries";
@@ -15,10 +15,14 @@ import {
 	UpdateAvailableCard,
 } from "../components";
 import { ForYouLessons } from "../components/lessons/ForYouLessons";
-//import { StreakSheetView } from "../components/StreakSheetView";
+import { StreakSheet } from "../components/streak-sheet";
+import { useStreakSheetRef } from "../components/streak-sheet/StreakSheet";
+import { useStreak } from "../hooks/useStreak";
 
 export function HomeScreen() {
 	const queryClient = useQueryClient();
+	const ref = useStreakSheetRef();
+	//const streak = useStreak();
 
 	useEffect(() => {
 		queryClient.prefetchInfiniteQuery(getCalculatorsOpts());
@@ -26,31 +30,19 @@ export function HomeScreen() {
 		queryClient.prefetchInfiniteQuery(getLessonsOpts());
 	}, [queryClient.prefetchInfiniteQuery]);
 
-	const navigation = useNavigation();
-
-	// const bottomSheetRef = useRef<BottomSheet>(null);
+	// useEffect(
+	// 	function handleStreak() {
+	// 		if (streak === null) {
+	// 			return;
+	// 		}
+	// 		if (streak.status === "same") {
+	// 			return;
+	// 		}
 	//
-	// const snapPoints = useMemo(() => ["50%", "77%"], []);
-	//
-	// const toggleBottomSheet = useCallback(() => {
-	// 	bottomSheetRef.current?.expand();
-	// }, []);
-	//
-	// useLayoutEffect(() => {
-	// 	navigation.setOptions({
-	// 		headerRight: () => (
-	// 			<PressableScale
-	// 				onPress={toggleBottomSheet}
-	// 				style={{
-	// 					padding: 4,
-	// 					borderRadius: 8,
-	// 				}}
-	// 			>
-	// 				<IconSax icon={Flash} />
-	// 			</PressableScale>
-	// 		),
-	// 	});
-	// }, [navigation, toggleBottomSheet]);
+	// 		ref.current?.present();
+	// 	},
+	// 	[streak?.status],
+	// );
 
 	return (
 		<Screen
@@ -60,28 +52,23 @@ export function HomeScreen() {
 		>
 			<ProfileCompletionBanner />
 			<QuickActions />
-
 			<InProgressCourseCard />
 
 			<ForYouLessons />
 			<UpdateAvailableCard />
 			<ShareAppCard />
 
-			{/*
-			<BottomSheet
-				ref={bottomSheetRef}
-				index={-1}
-				snapPoints={snapPoints}
-				enablePanDownToClose
-				// onChange={(index) => {
-				// 	console.log("Bottom sheet index:", index);
-				// }}
-			>
-				<BottomSheetView style={styles.contentContainer}>
-					<StreakSheetView />
-				</BottomSheetView>
-			</BottomSheet>
-      */}
+			<Button onPress={() => ref.current?.present()}>Present</Button>
+			{/* {streak !== null && streak.status !== "same" && ( 
+			<StreakSheet
+				streak={{
+					current: 200,
+					maximum: 1,
+					status: "reset",
+				}}
+				ref={ref}
+			/>
+		 )} */}
 		</Screen>
 	);
 }

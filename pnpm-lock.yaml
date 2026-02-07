@@ -359,6 +359,9 @@ importers:
       '@legendapp/list':
         specifier: ^2.0.16
         version: 2.0.19(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
+      '@lodev09/react-native-true-sheet':
+        specifier: ^3.8.2
+        version: 3.8.2(98446a2bffa9c40ec26babb189606ab3)
       '@lottiefiles/dotlottie-react-native':
         specifier: ^0.7.1
         version: 0.7.1(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
@@ -3448,6 +3451,25 @@ packages:
     resolution: {integrity: sha512-Fj0j8RnBpo43tVZUVoNK6BV/9AtDUM5S7DF3LB4qTYg1LMSZqi3yeCneUTLJD6XomQJlZzbI4mst89yspVSAnA==}
     cpu: [x64]
     os: [win32]
+
+  '@lodev09/react-native-true-sheet@3.8.2':
+    resolution: {integrity: sha512-Cg8iMviVQw4G7lRsUnGgwBQEUnaLo2wuSBMKyPf/ffewegqZovKTN/lKOjCT35/5w4tq4zPIDTHzuiu/WfOCBw==}
+    peerDependencies:
+      '@gorhom/bottom-sheet': '>=5'
+      '@react-navigation/native': '>=7'
+      react: 19.1.0
+      react-native: 0.81.5
+      react-native-reanimated: '>=4'
+      react-native-worklets: '*'
+    peerDependenciesMeta:
+      '@gorhom/bottom-sheet':
+        optional: true
+      '@react-navigation/native':
+        optional: true
+      react-native-reanimated:
+        optional: true
+      react-native-worklets:
+        optional: true
 
   '@lottiefiles/dotlottie-react-native@0.7.1':
     resolution: {integrity: sha512-AIbbRPWAVA63HzMiB+dtml1eQGGnjt8oPpOK7YgPxI7niFH3oEYDoWABNSEq7lR9Wemr9ckvx9VZ0RbFZlK+hA==}
@@ -15393,6 +15415,16 @@ snapshots:
 
   '@libsql/win32-x64-msvc@0.5.22':
     optional: true
+
+  '@lodev09/react-native-true-sheet@3.8.2(98446a2bffa9c40ec26babb189606ab3)':
+    dependencies:
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0)
+    optionalDependencies:
+      '@gorhom/bottom-sheet': 5.2.8(@types/react@19.1.10)(react-native-gesture-handler@2.28.0(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.6(@babel/core@7.28.6)(react-native-worklets@0.5.1(@babel/core@7.28.6)(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
+      '@react-navigation/native': 7.1.27(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
+      react-native-reanimated: 4.1.6(@babel/core@7.28.6)(react-native-worklets@0.5.1(@babel/core@7.28.6)(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
+      react-native-worklets: 0.5.1(@babel/core@7.28.6)(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
 
   '@lottiefiles/dotlottie-react-native@0.7.1(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)':
     dependencies:
