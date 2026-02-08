@@ -5,9 +5,10 @@ export default defineConfig({
 	strict: true,
 	out: "./migrations/dev",
 	schema: "./src/schema/index.ts",
-	dialect: "turso",
+	dialect: "sqlite",
+	driver: "d1-http",
+	tablesFilter: ["!_cf_KV"],
 	dbCredentials: {
 		url: envs.DB.URL,
-		authToken: envs.DB.TOKEN,
 	},
 });

@@ -1,6 +1,5 @@
 export * from "./auth";
 export * from "./calculator";
-export * from "./category";
 export * from "./course";
 export * from "./exercise";
 export * from "./exercise-result";
@@ -9,6 +8,5 @@ export * from "./profile";
 export * from "./rating";
 export * from "./rich-content";
 export * from "./saved";
-export * from "./scam";
 export * from "./tag";
 export * from "./user-demographics";

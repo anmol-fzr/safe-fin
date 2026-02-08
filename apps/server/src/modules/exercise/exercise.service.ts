@@ -8,7 +8,6 @@ import { errAsync, okAsync, Result } from "neverthrow";
 import { getPaginateRes, paginate } from "@/middleware";
 import { isUndefined } from "@safe-fin/utils";
 import { Reason } from "../_utils/reasons";
-import { QueryBuilder } from "drizzle-orm/sqlite-core";
 
 const db = getDb();
 

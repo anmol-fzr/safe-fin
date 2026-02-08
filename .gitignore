@@ -56,3 +56,4 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+packages/db/.env.dev

@@ -3,11 +3,6 @@ import { drizzle } from "drizzle-orm/d1";
 import * as schema from "./schema";
 import type { D1Database } from "@cloudflare/workers-types";
 
-export interface GetDbOpts {
-	DB_URL: string;
-	DB_TOKEN: string;
-}
-
 let dbInst: ReturnType<typeof drizzle<typeof schema, D1Database>> | null = null;
 
 function getDb(d1: D1Database) {

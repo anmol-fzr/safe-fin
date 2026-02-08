@@ -9,13 +9,9 @@
 			"types": "./dist/main.d.mts",
 			"default": "./dist/main.mjs"
 		},
-		"./db.dev": {
-			"types": "./dist/db_dev.d.mts",
-			"default": "./dist/db_dev.mjs"
-		},
-		"./db.prod": {
-			"types": "./dist/db_prod.d.mts",
-			"default": "./dist/db_prod.mjs"
+		"./db": {
+			"types": "./dist/db.d.mts",
+			"default": "./dist/db.mjs"
 		},
 		"./schema": {
 			"types": "./dist/schema.d.mts",
@@ -29,25 +25,25 @@
 		"format": "biome format --write",
 		"build": "tsdown",
 		"db:dev:generate": "bun run --env-file=.env.dev drizzle-kit generate --config=drizzle.config.dev.ts",
-		"db:prod:generate": "bun run --env-file=.env.prod drizzle-kit generate --config=drizzle.config.prod.ts",
-		"db:dev:migrate": "bun run --env-file=.env drizzle-kit migrate --config=drizzle.config.dev.ts",
-		"db:prod:migrate": "bun run --env-file=.env.prod drizzle-kit migrate --config=drizzle.config.prod.ts",
+		"db:dev:migrate": "bun run --env-file=.env.dev drizzle-kit migrate --config=drizzle.config.dev.ts",
 		"db:dev:pull": "bun run --env-file=.env.dev drizzle-kit pull --config=drizzle.config.dev.ts",
-		"db:prod:pull": "bun run --env-file=.env.prod drizzle-kit pull --config=drizzle.config.prod.ts",
 		"db:dev:push": "bun run --env-file=.env.dev drizzle-kit push --config=drizzle.config.dev.ts",
-		"db:prod:push": "bun run --env-file=.env.prod drizzle-kit push --config=drizzle.config.prod.ts",
 		"db:dev:studio": "bun run --env-file=.env.dev drizzle-kit studio --config=drizzle.config.dev.ts",
-		"db:prod:studio": "bun run --env-file=.env.prod drizzle-kit studio --config=drizzle.config.prod.ts",
-		"db:gen:dbml": "bun run ./dbml.ts"
+		"db:prod:generate": "bun run --env-file=.env.prod drizzle-kit generate --config=drizzle.config.prod.ts",
+		"db:prod:migrate": "bun run --env-file=.env.prod drizzle-kit migrate --config=drizzle.config.prod.ts",
+		"db:prod:pull": "bun run --env-file=.env.prod drizzle-kit pull --config=drizzle.config.prod.ts",
+		"db:prod:push": "bun run --env-file=.env.prod drizzle-kit push --config=drizzle.config.prod.ts",
+		"db:prod:studio": "bun run --env-file=.env.prod drizzle-kit studio --config=drizzle.config.prod.ts"
 	},
 	"dependencies": {
-		"@libsql/client": "^0.15.10",
 		"better-auth": "catalog:",
-		"drizzle-orm": "^0.36.4",
-		"tsdown": "^0.15.12"
+		"drizzle-orm": "^0.36.4"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "catalog:",
-		"drizzle-kit": "^0.30.6"
+		"better-sqlite3": "^12.6.2",
+		"drizzle-kit": "^0.30.6",
+		"tsdown": "^0.15.12"
 	}
 }
+

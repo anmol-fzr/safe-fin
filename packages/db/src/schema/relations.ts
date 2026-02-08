@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import { account, session, user } from "./auth";
-import { category } from "./category";
 import { chapter, course, courseProgress, courseRating, unit } from "./course";
 import { exercise, option, question } from "./exercise";
 import { exerciseResult, questionResult } from "./exercise-result";
@@ -9,8 +8,6 @@ import { profile } from "./profile";
 import { rating } from "./rating";
 import { richContent, richContentItem } from "./rich-content";
 import { saved } from "./saved";
-import { scam, scamTags } from "./scam";
-import { tag } from "./tag";
 
 /**
  * Course Relations
@@ -160,36 +157,6 @@ export const questionResultRelations = relations(questionResult, ({ one }) => ({
 		fields: [questionResult.selectedOption_id],
 		references: [option.id],
 	}),
-}));
-
-/**
- * Scam Relations
- */
-export const scamRelations = relations(scam, ({ one, many }) => ({
-	tags: many(scamTags),
-	category: one(category, {
-		fields: [scam.categoryId],
-		references: [category.id],
-	}),
-}));
-
-export const scamTagsRelations = relations(scamTags, ({ one }) => ({
-	scam: one(scam, {
-		fields: [scamTags.scamId],
-		references: [scam.id],
-	}),
-	tag: one(tag, {
-		fields: [scamTags.tagId],
-		references: [tag.id],
-	}),
-}));
-
-export const tagRelations = relations(tag, ({ many }) => ({
-	scams: many(scamTags),
-}));
-
-export const categoryRelations = relations(category, ({ many }) => ({
-	scams: many(scam),
 }));
 
 /**

@@ -9,43 +9,43 @@ import {
 	emailOTP,
 } from "better-auth/plugins";
 import type { DB } from "@/pkg/db";
-import type { KVNamespace } from "@cloudflare/workers-types";
-import type { SecondaryStorage } from "better-auth";
+// import type { KVNamespace } from "@cloudflare/workers-types";
+// import type { SecondaryStorage } from "better-auth";
 import { sendVerificationOTP } from "./email";
 import { EmailOtps } from "./server";
 
-const createKVSecondaryStorage = (
-	kv: KVNamespace<string>,
-	waitUntil?: (promise: Promise<any>) => void,
-): SecondaryStorage => {
-	const secondaryStorage: SecondaryStorage = {
-		get: (key) => kv.get(key),
-		set: (key, value, ttl) => {
-			const promise = kv.put(key, value, { expirationTtl: ttl });
-			if (waitUntil) {
-				waitUntil(promise);
-				return Promise.resolve();
-			}
-			return promise;
-		},
-		delete: (key) => {
-			const promise = kv.delete(key);
-			if (waitUntil) {
-				waitUntil(promise);
-				return Promise.resolve();
-			}
-			return promise;
-		},
-	};
-	return secondaryStorage;
-};
+// const createKVSecondaryStorage = (
+// 	kv: KVNamespace<string>,
+// 	waitUntil?: (promise: Promise<any>) => void,
+// ): SecondaryStorage => {
+// 	const secondaryStorage: SecondaryStorage = {
+// 		get: (key) => kv.get(key),
+// 		set: (key, value, ttl) => {
+// 			const promise = kv.put(key, value, { expirationTtl: ttl });
+// 			if (waitUntil) {
+// 				waitUntil(promise);
+// 				return Promise.resolve();
+// 			}
+// 			return promise;
+// 		},
+// 		delete: (key) => {
+// 			const promise = kv.delete(key);
+// 			if (waitUntil) {
+// 				waitUntil(promise);
+// 				return Promise.resolve();
+// 			}
+// 			return promise;
+// 		},
+// 	};
+// 	return secondaryStorage;
+// };
 
 const GOOGLE_TEST_PHONE = "9876543210";
 const GOOGLE_TEST_OTP = "123456:0";
 
 interface GetBetterAuthOptions {
 	isDev: boolean;
-	DB: DB;
+	//DB: DB;
 	EMAIL: EmailOtps;
 	//KV?: KVNamespace<string>;
 	//waitUntil?: (promise: Promise<any>) => void;
@@ -57,7 +57,7 @@ interface GetBetterAuthOptions {
  * Docs: https://www.better-auth.com/docs/reference/options
  */
 export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
-	const { DB, isDev } = params;
+	const { isDev } = params;
 
 	//const secondaryStorage = params?.KV ? createKVSecondaryStorage(params.KV, params.waitUntil) : undefined;
 	const secondaryStorage = undefined;
