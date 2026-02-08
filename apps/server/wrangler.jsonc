@@ -18,12 +18,6 @@
   "placement": {
     "mode": "smart"
   },
-  "kv_namespaces": [
-    {
-      "binding": "KV",
-      "id": "2e03d7a48e124a6992fce8146dcbf91c"
-    }
-  ],
   "d1_databases": [
     {
       "binding": "DB",

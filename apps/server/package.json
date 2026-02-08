@@ -4,6 +4,7 @@
 	"scripts": {
 		"cf:typegen": "wrangler types --env-interface CloudflareBindings",
 		"deploy": "pnpm dlx wrangler deploy --env prod && pnpm dlx wrangler secret bulk .dev.vars.production",
+		"deploy:dry-run": "pnpm dlx wrangler deploy --env prod --dry-run && cat .dev.vars.production",
 		"dev": "wrangler dev",
 		"test": "vitest run ",
 		"test:watch": "vitest",

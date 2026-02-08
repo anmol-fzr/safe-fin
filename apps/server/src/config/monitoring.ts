@@ -1,15 +1,13 @@
 import * as Sentry from "@sentry/cloudflare";
 import type { Hono } from "hono";
-import { env } from "cloudflare:workers";
-
-const isDev = env.MODE === "DEV";
+import { envs } from "@/utils/envs";
 
 type AppType = Hono<{
 	Bindings: CloudflareBindings;
 }>;
 
 export function setupMonitoring(app: AppType) {
-	if (isDev) {
+	if (envs.isDev) {
 		return app;
 	}
 
@@ -17,7 +15,7 @@ export function setupMonitoring(app: AppType) {
 		const { id: versionId } = env.CF_VERSION_METADATA;
 
 		return {
-			dsn: env.SENTRY_DSN,
+			dsn: envs.SENTRY.DSN,
 			release: versionId,
 			integrations: [Sentry.consoleIntegration()],
 			sendDefaultPii: true,
