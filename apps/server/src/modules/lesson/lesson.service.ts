@@ -229,7 +229,7 @@ export class LessonService {
 					},
 					orderBy: (chapter, { asc }) => [asc(chapter.index)],
 					with: {
-						exercise: true,
+						exercises: true,
 
 						units: {
 							extras: userId
