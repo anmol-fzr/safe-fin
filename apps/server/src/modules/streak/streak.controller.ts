@@ -8,7 +8,7 @@ const streakService = new StreakService();
 
 export const createStreak = createHandlers(
 	authenticate,
-	//userRole("user"),
+	userRole("user"),
 	async (c) => {
 		const user = c.get("user");
 

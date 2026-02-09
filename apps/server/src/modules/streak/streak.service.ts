@@ -24,12 +24,6 @@ class StreakService {
 		maximum: number;
 		status: StreakCreationStatus;
 	}> {
-		return {
-			current: 1,
-			maximum: 1,
-			status: StreakCreationStatus.Continued,
-		};
-
 		const db = getDb();
 
 		const foundStreak = await db.query.streak.findFirst({
