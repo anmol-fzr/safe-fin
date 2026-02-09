@@ -8,6 +8,7 @@ import { savedRouter } from "@/modules/saved";
 import { scamRouter } from "@/modules/scam";
 import { streakRouter } from "@/modules/streak";
 import { exerciseRouter } from "@/modules/exercise";
+import { sduiRouter } from "@/modules/sdui";
 
 //import { quizRouter } from "@/modules/quiz";
 
@@ -25,6 +26,7 @@ v1Router
 	.route("/profile", profileRouter)
 	.route("/address", addressRouter)
 	.route("/scam", scamRouter)
-	.route("/streak", streakRouter);
+	.route("/streak", streakRouter)
+	.route("/sdui", sduiRouter);
 
 export { v1Router };
