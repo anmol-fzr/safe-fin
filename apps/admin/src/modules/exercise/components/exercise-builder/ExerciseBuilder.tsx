@@ -213,18 +213,18 @@ export const ExerciseBuilder = (props: CurriculumBuilderProps) => {
 														<span className="font-medium">
 															{question.question}
 														</span>
-														<span className="text-sm text-muted-foreground">
+														<span className="text-xs text-muted-foreground">
 															({question.options?.length || 0} Options)
 														</span>
 
 														{question.answerId ? (
 															""
 														) : (
-															<span className="text-sm text-destructive ">
+															<span className="text-xs text-destructive ">
 																(No Answer Selected)
 																<Tooltip>
 																	<TooltipTrigger>
-																		<InfoCircle className="m-auto" />
+																		<InfoCircle className="m-auto" size={16} />
 																	</TooltipTrigger>
 																	<TooltipContent>
 																		Without any answer selected, this Question

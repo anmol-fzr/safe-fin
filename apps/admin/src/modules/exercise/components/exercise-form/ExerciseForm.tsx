@@ -41,17 +41,24 @@ function ExerciseFormRoot({
 }
 
 ExerciseFormRoot.TitleField = () => (
-	<FormInput name="title" label="Title" placeholder="Title" />
+	<FormInput
+		name="title"
+		label="Title"
+		placeholder="Enter a clear title for the exercise (e.g., Chapter 1 Knowledge Check)"
+	/>
 );
 
 ExerciseFormRoot.DescField = () => (
-	<FormTextarea name="desc" label="Description" placeholder="Description" />
+	<FormTextarea
+		name="desc"
+		label="Description"
+		placeholder="Briefly describe what this exercise tests or reinforces"
+	/>
 );
 
 ExerciseFormRoot.ChapterIdField = () => {
 	const form = useFormContext();
-	const chapterId = 13;
-	//form.watch("chapterId");
+	const chapterId = form.watch("chapterId");
 
 	const { chapter, isLoading, isError, error } = useGetChapter(chapterId);
 
@@ -61,7 +68,7 @@ ExerciseFormRoot.ChapterIdField = () => {
 				type="number"
 				name="chapterId"
 				label="Chapter Id"
-				placeholder="Paste chapterId here"
+				placeholder="Paste the chapter this exercise belongs to"
 			/>
 			{isLoading ? (
 				"Searching Chapter"
