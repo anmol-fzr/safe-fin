@@ -1,6 +1,6 @@
 import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth/minimal";
-import { getAuthDrizzleAdapter } from "@/pkg/db";
+import { getAuthDrizzleAdapter, getDb } from "@/pkg/db";
 import { getBetterAuthOptions } from "./options";
 //import studioConfig from "./studio.config";
 import type { D1Database } from "@cloudflare/workers-types";
@@ -37,8 +37,9 @@ export const auth = (opts: AuthOpts) => {
 	} = opts;
 
 	const database = getAuthDrizzleAdapter(DB);
+	const db = getDb(DB);
 
-	const betterAuthOptions = getBetterAuthOptions({ isDev, EMAIL });
+	const betterAuthOptions = getBetterAuthOptions({ isDev, EMAIL, db });
 
 	return betterAuth({
 		...betterAuthOptions,

@@ -8,13 +8,16 @@ import {
 	openAPI,
 	emailOTP,
 } from "better-auth/plugins";
-import { sendVerificationOTP } from "./email";
+import { Emailer, sendVerificationOTP } from "./email";
 import { EmailOtps } from "./server";
+import { DB } from "@safe-fin/db";
+import { verification } from "@safe-fin/db/schema";
 
-const GOOGLE_TEST_PHONE = "9876543210";
+const GOOGLE_TEST_EMAIL = "bot@safefin.app";
 const GOOGLE_TEST_OTP = "123456:0";
 
 interface GetBetterAuthOptions {
+	db: DB;
 	isDev: boolean;
 	EMAIL: EmailOtps;
 }
@@ -25,9 +28,11 @@ interface GetBetterAuthOptions {
  * Docs: https://www.better-auth.com/docs/reference/options
  */
 export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
-	const { isDev } = params;
+	const { isDev, db, EMAIL } = params;
 
 	const secondaryStorage = undefined;
+
+	const emailer = new Emailer(EMAIL);
 
 	return {
 		/**
@@ -105,9 +110,25 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 			multiSession(),
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) {
+					if (email === GOOGLE_TEST_EMAIL) {
+						console.info("! Google Test Bot detected. Skipping SMS.");
+
+						await db
+							.update(verification)
+							.set({
+								value: GOOGLE_TEST_OTP,
+								expiresAt: new Date(Date.now() + 1000 * 60 * 10),
+							})
+							.where(eq(verification.identifier, email));
+
+						console.info({ email, otp: GOOGLE_TEST_OTP, type });
+						return;
+					}
+
 					console.info({ email, otp, type });
+
 					if (!isDev) {
-						await sendVerificationOTP({ email, otp, ...params.EMAIL });
+						await emailer.sendOtp({ email, otp });
 					}
 				},
 			}),
