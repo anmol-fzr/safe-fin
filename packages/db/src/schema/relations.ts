@@ -34,7 +34,7 @@ export const chapterRelations = relations(chapter, ({ one, many }) => ({
 		references: [course.id],
 	}),
 	units: many(unit),
-	exercise: many(exercise),
+	exercises: many(exercise),
 	progress: one(courseProgress, {
 		fields: [chapter.id],
 		references: [courseProgress.currChapterId],

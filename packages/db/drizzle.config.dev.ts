@@ -1,14 +1,10 @@
-import { defineConfig } from "drizzle-kit";
 import { envs } from "./src/envs";
 
-export default defineConfig({
-	strict: true,
-	out: "./migrations/dev",
+export default {
 	schema: "./src/schema/index.ts",
+	out: "./migrations/dev",
 	dialect: "sqlite",
-	driver: "d1-http",
-	tablesFilter: ["!_cf_KV"],
 	dbCredentials: {
 		url: envs.DB.URL,
 	},
-});
+};
