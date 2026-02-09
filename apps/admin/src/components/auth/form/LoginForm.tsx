@@ -95,6 +95,10 @@ export function LoginForm({
 			{...props}
 		>
 			<Card>
+				<img
+					src="/favicon-light.png"
+					className="w-20 aspect-square mx-auto rounded-2xl"
+				/>
 				<LoginForm.Header />
 				<CardContent>
 					<form onSubmit={handleSubmit}>
