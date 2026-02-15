@@ -22,7 +22,6 @@ export const userDemographics = sqliteTable(
 		userId: text("user_id")
 			.unique()
 			.notNull()
-			.unique()
 			.references(() => user.id),
 
 		dob: integer("dob", { mode: "timestamp_ms" }).default(new Date(2000, 0, 1)),

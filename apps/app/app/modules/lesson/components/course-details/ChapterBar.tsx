@@ -5,6 +5,7 @@ import type { Chapter } from "../../api-types/course_one";
 import { UnitBar } from "./UnitBar";
 import { makeSpringy } from "@/theme";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { ExerciseBar } from "./ExerciseBar";
 
 type ChapterProps = {
 	chapter: Chapter;
@@ -16,7 +17,7 @@ export const ChapterBar = (props: ChapterProps) => {
 
 	const chapterIndex = index;
 
-	const { title, units } = chapter;
+	const { title, units, exercises } = chapter;
 
 	const {
 		themed,
@@ -46,24 +47,52 @@ export const ChapterBar = (props: ChapterProps) => {
 				)}
         */}
 			</View>
-			<Text weight="medium" size="md" style={{ marginBottom: 12 }}>
-				{title}
-			</Text>
-			<View style={{ gap: spacing.xs, flex: 1 }}>
-				<ListView
-					data={units}
-					keyExtractor={(item) => item.id.toString()}
-					renderItem={({ item, index }) => (
-						<Animated.View
-							entering={makeSpringy(FadeInUp).delay(
-								50 * (index + chapterIndex),
-							)}
-						>
-							<UnitBar unit={item} />
-						</Animated.View>
-					)}
-					contentContainerStyle={themed($baseListItemSeparatorStyles)}
-				/>
+
+			<View style={{ gap: 6 }}>
+				<Text weight="medium" size="md">
+					{title}
+				</Text>
+
+				<View style={{ gap: spacing.xs, flex: 1 }}>
+					<ListView
+						data={units}
+						keyExtractor={(item) => item.id.toString()}
+						renderItem={({ item, index }) => (
+							<Animated.View
+								entering={makeSpringy(FadeInUp).delay(
+									50 * (index + chapterIndex),
+								)}
+							>
+								<UnitBar unit={item} />
+							</Animated.View>
+						)}
+						contentContainerStyle={themed($baseListItemSeparatorStyles)}
+					/>
+				</View>
+			</View>
+
+			<View style={{ gap: 6 }}>
+				<View style={{ gap: spacing.xs, flex: 1 }}>
+					<ListView
+						data={exercises}
+						keyExtractor={(item) => item.id.toString()}
+						contentContainerStyle={themed($baseListItemSeparatorStyles)}
+						renderItem={({ item, index }) => (
+							<Animated.View
+								entering={makeSpringy(FadeInUp).delay(
+									50 * (index + chapterIndex),
+								)}
+							>
+								<ExerciseBar
+									exercise={{
+										...item,
+										title: `Chapter Test ${index + 1}`,
+									}}
+								/>
+							</Animated.View>
+						)}
+					/>
+				</View>
 			</View>
 		</View>
 	);

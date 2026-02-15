@@ -13,6 +13,7 @@ export const exercise = sqliteTable("exercise", {
 	chapterId: integer("chapter_id")
 		.references(() => chapter.id)
 		.notNull(),
+	points: integer().notNull(),
 	isPublished: integer("is_published", { mode: "boolean" }).default(false),
 
 	createdAt: timestamp.createdAt,

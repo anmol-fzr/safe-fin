@@ -27,7 +27,7 @@ export const ForYouLessonCard = (props: ForYouLessonCardProps) => {
 			id={id}
 			style={{
 				maxWidth,
-				minWidth: 220,
+				minWidth: maxWidth,
 			}}
 		>
 			<LessonCard.Image source={coverUrl}>

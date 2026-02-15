@@ -1,157 +1,111 @@
-import { useAppTheme } from "@/utils/useAppTheme";
-import { TrueSheet } from "@lodev09/react-native-true-sheet";
-import { forwardRef, useImperativeHandle, useRef } from "react";
-import { View } from "react-native";
-import { Button, Text } from "@/components";
-import Animated, { FadeInDown, ZoomInEasyDown } from "react-native-reanimated";
+import { StyleSheet, View } from "react-native";
+import { Text } from "@/components";
+import { FadeInDown, ZoomInEasyDown } from "react-native-reanimated";
 import { makeSpringy } from "@/theme";
 import { StreakData, StreakStatus } from "../../api";
 import { RollingCounter } from "@/components/shared/organisms/rolling-counter";
+import LottieView from "lottie-react-native";
+import { createBottomSheet } from "@/components/BottomSheet";
 
-const trophy = require("assets/images/course/trophy.png");
+const fireLottieJson = require("assets/lottie/streak/fire.json");
 
 interface StreakSheetProps {
-	streak: StreakData;
+	streak?: StreakData;
 }
 
 const SHEET_VIEWS: Record<
 	StreakStatus,
 	{
 		title: string;
-		image: any;
+		lottie: any;
 		desc: string;
-		buttonText: string;
 	}
 > = {
 	new: {
 		title: "Your streak has begun 🎉",
 		desc: "Great start! You’ve completed your first day and officially started a streak.",
-		image: trophy,
-		buttonText: "Continue",
+		lottie: fireLottieJson,
 	},
 	continued: {
 		title: "Streak going strong 🔥",
 		desc: "Nice work! You’ve maintained your streak by staying consistent.",
-		image: trophy,
-		buttonText: "Keep It Going",
+		lottie: fireLottieJson,
 	},
 	reset: {
 		title: "Fresh start, new momentum",
 		desc: "Your streak has reset, but that’s okay. Progress isn’t about perfection.",
-		image: trophy,
-		buttonText: "Start Again",
+		lottie: fireLottieJson,
 	},
 	same: {
 		title: "Your streak has begun 🎉",
 		desc: "Great start! You’ve completed your first day and officially started a streak.",
-		image: trophy,
-		buttonText: "Continue",
+		lottie: fireLottieJson,
 	},
 };
 
-interface StreakSheetRef {
-	present: VoidFunction;
-	dismiss: VoidFunction;
-}
-export const useStreakSheetRef = () => {
-	return useRef<StreakSheetRef | null>(null);
-};
+export const { useSheet: useStreakSheet, Sheet: BottomSheet } =
+	createBottomSheet("streak-sheet");
 
-export const StreakSheet = forwardRef<StreakSheetRef, StreakSheetProps>(
-	(props, ref) => {
-		const { streak } = props;
-		const { status, current } = streak;
+export const StreakSheet = (props: StreakSheetProps) => {
+	const { streak } = props;
 
-		const sheet = useRef<TrueSheet>(null);
+	if (!streak) {
+		return <></>;
+	}
 
-		const dismiss = async () => {
-			await sheet.current?.dismiss();
-		};
+	const { status, current } = streak;
+	const { title, desc, lottie } = SHEET_VIEWS[status];
 
-		useImperativeHandle(ref, () => {
-			return {
-				present: () => {
-					sheet.current?.present();
-				},
-				dismiss: () => {
-					sheet.current?.dismiss();
-				},
-			};
-		}, [sheet]);
-
-		const {
-			theme: { colors, spacing },
-		} = useAppTheme();
-
-		const { title, desc, image, buttonText } = SHEET_VIEWS[status];
-
-		return (
-			<TrueSheet
-				ref={sheet}
-				detents={["auto"]}
-				grabberOptions={{ color: "#000000" }}
+	return (
+		<BottomSheet>
+			<Text
+				size="xl"
+				weight="medium"
+				style={styles.textAlignCenter}
+				entering={makeSpringy(ZoomInEasyDown)}
 			>
-				<View
-					style={{
-						padding: spacing.md,
-						paddingTop: spacing.xl,
-						gap: spacing.md,
+				{title}
+			</Text>
+
+			<LottieView source={lottie} autoPlay loop style={styles.lottie} />
+
+			<View style={{ margin: "auto" }}>
+				<RollingCounter
+					value={current}
+					height={64}
+					width={36}
+					springConfig={{
+						stiffness: 110,
+						damping: 14,
+						mass: 0.5,
 					}}
-				>
-					<Text
-						size="xl"
-						weight="medium"
-						style={{ textAlign: "center" }}
-						entering={makeSpringy(ZoomInEasyDown)}
-					>
-						{title}
-					</Text>
+					fontSize={52}
+				/>
+			</View>
 
-					<Animated.Image
-						source={image}
-						entering={makeSpringy(ZoomInEasyDown).delay(50)}
-						width={100}
-						style={{
-							margin: "auto",
-						}}
-					/>
+			<Text
+				size="md"
+				weight="medium"
+				entering={FadeInDown}
+				style={styles.textAlignCenter}
+			>
+				day streak
+			</Text>
 
-					<View style={{ margin: "auto" }}>
-						<RollingCounter
-							value={current}
-							height={64}
-							width={36}
-							springConfig={{
-								stiffness: 110,
-								damping: 14,
-								mass: 0.5,
-							}}
-							fontSize={52}
-						/>
-					</View>
+			<Text entering={FadeInDown} style={styles.textAlignCenter}>
+				{desc}
+			</Text>
+		</BottomSheet>
+	);
+};
 
-					<Text
-						size="md"
-						weight="medium"
-						entering={FadeInDown}
-						style={{ textAlign: "center" }}
-					>
-						day streak
-					</Text>
-
-					<Text entering={FadeInDown} style={{ textAlign: "center" }}>
-						{desc}
-					</Text>
-
-					<Button
-						onPress={dismiss}
-						preset="reversed"
-						style={{ backgroundColor: colors.tint, marginTop: 24 }}
-					>
-						{buttonText}
-					</Button>
-				</View>
-			</TrueSheet>
-		);
+const styles = StyleSheet.create({
+	lottie: {
+		width: 200,
+		height: 200,
+		alignSelf: "center",
 	},
-);
+	textAlignCenter: {
+		textAlign: "center",
+	},
+});

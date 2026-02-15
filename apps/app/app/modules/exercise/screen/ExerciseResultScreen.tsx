@@ -10,7 +10,7 @@ import { Button, Screen, Text } from "@/components";
 import { $styles, spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Question } from "../components/Question";
-import { useGetQuiz } from "../hooks/queries";
+import { useGetExercise } from "../hooks/queries";
 
 // const markans = {
 // 	"1": 1,
@@ -33,9 +33,9 @@ import { useGetQuiz } from "../hooks/queries";
 // 	});
 // });
 
-export function QuizResultScreen() {
+export function ExerciseResultScreen() {
 	//const markedAnswers = props.route.params?.answers;
-	// const quizId = props.route.params?.quizId;
+	// const exerciseId = props.route.params?.exerciseId;
 	const [activeQuesId, setActiveQuesId] = useState("");
 	const markedAnswers = {
 		"1": 1,
@@ -48,23 +48,23 @@ export function QuizResultScreen() {
 		"8": 31,
 		"9": 35,
 	} as const;
-	const quizId = 1;
+	const exerciseId = 1;
 
 	if (!markedAnswers) {
-		throw new Error("No Answers array param passed on QuizScreen");
+		throw new Error("No Answers array param passed on ExerciseScreen");
 	}
-	if (!quizId) {
-		throw new Error("No QuizId array param passed on QuizScreen");
+	if (!exerciseId) {
+		throw new Error("No ExerciseId array param passed on ExerciseScreen");
 	}
 	const router = useRouter();
 
-	const { quiz, isPending } = useGetQuiz(quizId);
+	const { exercise, isPending } = useGetExercise(exerciseId);
 
-	const activeQues = quiz.questions?.find(
+	const activeQues = exercise.questions?.find(
 		(ques) => ques.id.toString() === activeQuesId,
 	);
 
-	const goToQuizzes = useCallback(
+	const goToExercises = useCallback(
 		() => router.push("/tabs/learnings"),
 		[router],
 	);
@@ -80,7 +80,7 @@ export function QuizResultScreen() {
 					{isPending ? (
 						<Text>Crunching Results ...</Text>
 					) : (
-						quiz.questions?.map((question, index) => {
+						exercise.questions?.map((question, index) => {
 							const isCorrect =
 								markedAnswers[question.id.toString()] === question.answerId;
 							return (
@@ -109,9 +109,9 @@ export function QuizResultScreen() {
 						<Button
 							preset="text"
 							textStyle={{ textDecorationLine: "underline" }}
-							onPress={goToQuizzes}
+							onPress={goToExercises}
 						>
-							More Quizzes
+							More Exercises
 						</Button>
 					</View>
 				) : (

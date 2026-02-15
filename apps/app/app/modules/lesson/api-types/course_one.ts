@@ -30,6 +30,16 @@ export interface Chapter extends ITimestamps {
 	index: number;
 	isPublished: boolean;
 	units: Unit[];
+	exercises: Exercise[];
+}
+
+export interface Exercise extends ITimestamps {
+	id: number;
+	coverPath: any;
+	title: string;
+	desc: string;
+	chapterId: number;
+	isPublished: boolean;
 }
 
 export interface Unit extends ITimestamps {

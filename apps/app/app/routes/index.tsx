@@ -1,3 +1,5 @@
 import { WelcomeScreen } from "@/modules/welcome/screens";
 
-export default WelcomeScreen;
+export default function RootScreen() {
+	return <WelcomeScreen />;
+}

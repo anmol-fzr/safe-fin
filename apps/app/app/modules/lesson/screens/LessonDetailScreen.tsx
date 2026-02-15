@@ -14,9 +14,11 @@ import Animated, {
 	FadeInLeft,
 	FadeInRight,
 	LinearTransition,
+	SlideOutLeft,
+	SlideOutRight,
 } from "react-native-reanimated";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { ListView, Tabs } from "@/components";
+import { ListView } from "@/components";
 import { ChipGroup } from "@/components/shared/molecules/animated-chip/Chip";
 import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
@@ -402,7 +404,10 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 				{selected === 0 ? (
 					<Animated.View
 						layout={LinearTransition}
+						//entering={SlideInLeft}
+						exiting={SlideOutLeft}
 						entering={FadeInLeft}
+						// exiting={FadeOutLeft}
 						key={selected}
 					>
 						<ChapterList chapters={chapters} />
@@ -410,7 +415,10 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 				) : (
 					<Animated.View
 						layout={LinearTransition}
+						//entering={SlideInRight}
+						exiting={SlideOutRight}
 						entering={FadeInRight}
+						// exiting={FadeOutRight}
 						key={selected}
 					>
 						<MarkdowRenderer content={desc} />

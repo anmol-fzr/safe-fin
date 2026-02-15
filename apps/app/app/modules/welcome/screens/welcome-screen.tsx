@@ -6,7 +6,7 @@ import Animated, {
 	SlideInRight,
 	SlideOutLeft,
 } from "react-native-reanimated";
-import { $sizeStyles, Screen, Text } from "@/components";
+import { $sizeStyles, Button, Screen, Text } from "@/components";
 import { useLoopOverArray } from "@/hooks/use-loop-over-array";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { $styles, makeSpringy, type ThemedStyle } from "@/theme";
@@ -17,6 +17,7 @@ import {
 	WelcomeNextButton,
 } from "../components/welcome-action-buttons";
 import { WelcomeActionButton } from "../components/welcome-action-buttons/welcome-action-button";
+import { Link } from "expo-router";
 
 const balanceImage = require("assets/images/start/balance.png");
 const becomingRichImage = require("assets/images/start/becoming-rich.png");
@@ -34,11 +35,6 @@ const exitingAnim = makeSpringy(SlideOutLeft);
 export function WelcomeScreen() {
 	const { themed } = useAppTheme();
 	const { isLogin } = useAuth();
-
-	// const router = useRouter();
-	// useEffect(() => {
-	// 	router.navigate("/profile/public");
-	// }, []);
 
 	const [curr, currIndx] = useLoopOverArray(contents);
 
@@ -78,6 +74,26 @@ export function WelcomeScreen() {
 					</Text>
 				</Animated.View>
 			</Animated.View>
+
+			<Link
+				asChild
+				href={{
+					pathname: "/course/exercise/[exerciseId]",
+					params: { exerciseId: 1 },
+				}}
+			>
+				<Button>Go to Exercise</Button>
+			</Link>
+
+			<Link
+				asChild
+				href={{
+					pathname: "/course/exercise/[exerciseId]/result",
+					params: { exerciseId: 1 },
+				}}
+			>
+				<Button>Go to Exercise Result</Button>
+			</Link>
 
 			<Animated.View entering={FadeInDown}>
 				{isLogin ? <WelcomeNextButton /> : <WelcomeLoginButton />}

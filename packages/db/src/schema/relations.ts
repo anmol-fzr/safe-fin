@@ -2,7 +2,11 @@ import { relations } from "drizzle-orm";
 import { account, session, user } from "./auth";
 import { chapter, course, courseProgress, courseRating, unit } from "./course";
 import { exercise, option, question } from "./exercise";
-import { exerciseResult, questionResult } from "./exercise-result";
+import {
+	exerciseAttempt,
+	exerciseResult,
+	questionResult,
+} from "./exercise-result";
 import { userActivityLog, publicUserProfile, streak } from "./gamification";
 import { profile } from "./profile";
 import { rating } from "./rating";
@@ -129,16 +133,27 @@ export const optionRelations = relations(option, ({ one }) => ({
 /**
  * Exercise Result Relations
  */
-export const exerciseResultRelations = relations(
-	exerciseResult,
-	({ one, many }) => ({
+export const exerciseAttemptRelations = relations(
+	exerciseAttempt,
+	({ one }) => ({
 		user: one(user, {
-			fields: [exerciseResult.userId],
+			fields: [exerciseAttempt.userId],
 			references: [user.id],
 		}),
 		exercise: one(exercise, {
-			fields: [exerciseResult.exerciseId],
+			fields: [exerciseAttempt.exerciseId],
 			references: [exercise.id],
+		}),
+		result: one(exerciseResult),
+	}),
+);
+
+export const exerciseResultRelations = relations(
+	exerciseResult,
+	({ one, many }) => ({
+		attempt: one(exerciseAttempt, {
+			fields: [exerciseResult.attemptId],
+			references: [exerciseAttempt.id],
 		}),
 		questions: many(questionResult),
 	}),
@@ -154,7 +169,7 @@ export const questionResultRelations = relations(questionResult, ({ one }) => ({
 		references: [question.id],
 	}),
 	selectedOption: one(option, {
-		fields: [questionResult.selectedOption_id],
+		fields: [questionResult.selectedOptionId],
 		references: [option.id],
 	}),
 }));
@@ -213,7 +228,8 @@ export const userRelations = relations(user, ({ many, one }) => ({
 	activityLogs: many(userActivityLog),
 	ratings: many(rating),
 	courseProgress: many(courseProgress),
-	exerciseResults: many(exerciseResult),
+	//exerciseResults: many(exerciseResult),
+	exerciseAttemps: many(exerciseAttempt),
 	likes: many(saved),
 	streak: one(streak),
 }));

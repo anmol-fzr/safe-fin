@@ -1,3 +1,3 @@
-import { LessonListScreen } from "@/modules/lesson/screens";
+import { CourseListScreen } from "@/modules/lesson/screens";
 
-export default LessonListScreen;
+export default CourseListScreen;

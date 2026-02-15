@@ -1,0 +1,1 @@
+export { ExerciseDetailScreen } from "./ExerciseDetailScreen";

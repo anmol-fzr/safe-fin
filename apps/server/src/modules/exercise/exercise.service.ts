@@ -1,4 +1,4 @@
-import { exercise, getDb, sql, count, eq } from "@/pkg/db";
+import { exercise, getDb, sql, count, eq, and } from "@/pkg/db";
 import {
 	ResourceService,
 	type PaginatePayload,
@@ -8,6 +8,7 @@ import { errAsync, okAsync, Result } from "neverthrow";
 import { getPaginateRes, paginate } from "@/middleware";
 import { isUndefined } from "@safe-fin/utils";
 import { Reason } from "../_utils/reasons";
+import type { User } from "@/pkg/auth";
 
 const db = getDb();
 
@@ -92,18 +93,76 @@ export class ExerciseService extends ResourceService {
 		}
 	}
 
-	async getById(exerciseId: ResourceId) {
+	async getById(exerciseId: ResourceId, user: User) {
+		const isAdmin = user.role === "admin";
+		const isUser = user.role === "user";
+
 		try {
-			const foundExercise = await db.query.exercise.findFirst({
-				where: (exercises, { eq }) => eq(exercises.id, exerciseId),
+			const filters = [];
+
+			if (isAdmin) {
+				filters.push(eq(exercise.isPublished, true));
+			}
+
+			const foundExerciseQuery = db.query.exercise.findFirst({
+				where: and(...filters, eq(exercise.id, exerciseId)),
+				columns: {
+					coverPath: false,
+					chapterId: isAdmin,
+					isPublished: isAdmin,
+					createdAt: isAdmin,
+					updatedAt: isAdmin,
+				},
 				with: {
-					questions: {
+					chapter: {
+						columns: {},
 						with: {
-							options: true,
+							course: {
+								columns: {},
+								with: {
+									content: {
+										columns: { title: true },
+									},
+								},
+							},
+						},
+					},
+
+					questions: {
+						where: isUser ? eq(exercise.isPublished, true) : undefined,
+						columns: {
+							isPublished: isAdmin,
+							exerciseId: isAdmin,
+							index: isAdmin,
+							answerId: isAdmin,
+							createdAt: isAdmin,
+							updatedAt: isAdmin,
+						},
+						orderBy: (question, { asc }) => asc(question.index),
+						with: {
+							options: {
+								columns: {
+									index: isAdmin,
+									questionId: isAdmin,
+									createdAt: isAdmin,
+									updatedAt: isAdmin,
+								},
+								orderBy: (question, { asc }) => asc(question.index),
+							},
+							answer: {
+								columns: isUser
+									? {
+											id: true,
+											value: true,
+										}
+									: undefined,
+							},
 						},
 					},
 				},
 			});
+
+			const foundExercise = await foundExerciseQuery;
 
 			if (isUndefined(foundExercise)) {
 				return errAsync({

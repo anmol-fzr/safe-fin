@@ -1,2 +1,2 @@
-export * from "./LessonListScreen";
+export * from "./CourseListScreen";
 export * from "./LessonScreen";

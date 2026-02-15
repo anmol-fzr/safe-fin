@@ -27,7 +27,11 @@ function CalculatorListImpl() {
 			keyExtractor={(item) => item.title}
 			ListEmptyComponent={EmptyListView}
 			ListFooterComponent={
-				isFetchingNextPage ? <CalculatorListItemImpl.Loading /> : EndListView
+				calculators.length === 0
+					? undefined
+					: isFetchingNextPage
+						? CalculatorListItemImpl.Loading
+						: EndListView
 			}
 			//onViewableItemsChanged={handleViewableItemsChanged}
 			renderItem={({ item, data, index }) => (

@@ -80,11 +80,13 @@ export const createExercise = createHandlers(
 );
 
 export const getExerciseById = createHandlers(
+	authenticate,
 	zValidator("param", exerciseIdParamSchema),
 	async (c) => {
 		const { exerciseId } = c.req.valid("param");
+		const user = c.get("user");
 
-		const result = await service.getById(exerciseId);
+		const result = await service.getById(exerciseId, user);
 
 		return result.match(
 			(result) => {

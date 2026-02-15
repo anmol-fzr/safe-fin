@@ -17,6 +17,13 @@ export default function CourseLayout() {
 					headerShown: false,
 				}}
 			/>
+
+			<Stack.Screen
+				name="exercise"
+				options={{
+					headerShown: false,
+				}}
+			/>
 		</Stack>
 	);
 }

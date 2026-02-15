@@ -1,9 +1,11 @@
 import { createTypedFactory } from "@/factory";
-import { authHandler } from "./auth.controller";
+import { authHndlr, setupAccountHndlr } from "./auth.controller";
 
 const { createApp } = createTypedFactory();
 const authRouter = createApp();
 
-authRouter.on(["POST", "GET"], "*", ...authHandler);
+authRouter
+	.post("/setup", ...setupAccountHndlr)
+	.on(["POST", "GET"], "*", ...authHndlr);
 
 export { authRouter };

@@ -45,7 +45,7 @@ export default function UnitCompletionScreen() {
 	const { saveCourseProgress } = useSaveCourseProgress();
 
 	function handleCompletion() {
-		saveCourseProgress({ courseId, chapterId, unitId });
+		//saveCourseProgress({ courseId, chapterId, unitId });
 
 		if (nextUnitId) {
 			return router.replace({

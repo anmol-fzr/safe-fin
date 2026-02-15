@@ -1,11 +1,11 @@
 import { Screen } from "@/components";
 import { $styles } from "@/theme";
-import { LessonList } from "../components/LessonList";
+import { CourseList } from "../components/CourseList";
 
-export function LessonListScreen() {
+export function CourseListScreen() {
 	return (
 		<Screen preset="scroll" contentContainerStyle={$styles.container}>
-			<LessonList />
+			<CourseList />
 		</Screen>
 	);
 }

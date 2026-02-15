@@ -24,7 +24,6 @@
 		"lint:fix": "biome lint --write",
 		"format": "biome format --write",
 		"build": "tsdown",
-
 		"db:dev:generate": "bun run --env-file=.env.dev drizzle-kit generate --config=drizzle.config.dev.ts",
 		"db:dev:migrate": "bun run --env-file=.env.dev drizzle-kit migrate --config=drizzle.config.dev.ts",
 		"db:dev:pull": "bun run --env-file=.env.dev drizzle-kit pull --config=drizzle.config.dev.ts",
@@ -45,7 +44,7 @@
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "catalog:",
+		"@types/node": "^25.2.3",
 		"drizzle-kit": "^0.30.6"
 	}
 }
-

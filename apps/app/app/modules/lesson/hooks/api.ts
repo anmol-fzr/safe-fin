@@ -5,8 +5,8 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useMemo } from "react";
-import type { IReqParams, ResourceId } from "@/types";
-import { COURSES, LESSON, TOPIC } from "../api";
+import type { ResourceId } from "@/types";
+import { COURSES, LESSON } from "../api";
 
 const baseQueryKey = "COURSES";
 
@@ -56,7 +56,7 @@ function getLessonsOpts() {
 		queryKey: [baseQueryKey],
 		queryFn: ({ pageParam }) => COURSES.ALL(pageParam),
 		initialPageParam: { limit: 10, page: 1 },
-		getNextPageParam: ({ paginate }, allPages, lastPageParam) => {
+		getNextPageParam: ({ paginate }, _allPages, lastPageParam) => {
 			if (!paginate.hasMore) return null;
 			return {
 				limit: lastPageParam.limit,
@@ -78,19 +78,6 @@ const useGetLessons = () => {
 	return { courses, ...rest };
 };
 
-function getLessonTopicsOpts() {
-	return queryOptions({
-		queryKey: [baseQueryKey, "TOPICS"],
-		queryFn: TOPIC.ALL,
-	});
-}
-
-const useGetLessonTopics = () => {
-	const opts = getLessonTopicsOpts();
-	const { data: topics, ...rest } = useSuspenseQuery(opts);
-	return { topics, ...rest };
-};
-
 function getLastLessonOpts() {
 	return queryOptions({
 		queryKey: [baseQueryKey, "LAST"],
@@ -110,7 +97,7 @@ function getSavedCoursesOpts() {
 		queryKey: [baseQueryKey, "SAVED"],
 		queryFn: COURSES.SAVED.ALL,
 		initialPageParam: { limit: 10, page: 1 },
-		getNextPageParam: ({ paginate }, allPages, lastPageParam) => {
+		getNextPageParam: ({ paginate }, _allPages, lastPageParam) => {
 			if (!paginate.hasMore) return null;
 
 			return {
@@ -134,10 +121,4 @@ export {
 	getSavedCoursesOpts,
 	getForYouCoursesOpts,
 };
-export {
-	useGetLessons,
-	useGetLesson,
-	useGetLessonTopics,
-	useGetLastLesson,
-	useGetSavedCourses,
-};
+export { useGetLessons, useGetLesson, useGetLastLesson, useGetSavedCourses };

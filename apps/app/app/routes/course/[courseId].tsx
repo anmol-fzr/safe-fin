@@ -11,8 +11,12 @@ const paramsSchema = z.object({
 	courseId: idSchema,
 });
 
+const useCourseScreenParams = () => {
+	return useTypedLocalSearchParams(paramsSchema);
+};
+
 export default function CourseScreen() {
-	const { courseId } = useTypedLocalSearchParams(paramsSchema);
+	const { courseId } = useCourseScreenParams();
 
 	return (
 		<Screen preset="scroll">

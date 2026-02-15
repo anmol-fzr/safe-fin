@@ -22,23 +22,13 @@ export const publicUserProfile = sqliteTable("public_user_profile", {
 	id,
 	userId: text("user_id")
 		.references(() => user.id)
+		.unique()
 		.notNull(),
-
-	currentStreak: integer("current_streak").default(0),
-	maxStreak: integer("max_streak").default(0),
-
-	lastActivityDate: integer("last_activity_date", { mode: "timestamp" }),
 	totalPX: integer("total_px"),
 
 	createdAt: timestamp.createdAt,
 	updatedAt: timestamp.updatedAt,
 });
-// table user_streak {
-//   user_id text [pk, ref: > user.id]
-//   current_streak integer
-//   longest_streak integer
-//   last_active_date text
-// }
 
 export const userActivityLog = sqliteTable(
 	"user_activity_log",

@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
 	continueButton: {
 		backgroundColor: "transparent",
 	},
-	title: { fontSize: 40, lineHeight: 44 },
+	title: { fontSize: 32, lineHeight: 36 },
 	fabTitle: { color: "#fff", flex: 1, paddingRight: 12 },
 });
 

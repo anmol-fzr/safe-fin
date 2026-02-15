@@ -1,11 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigation } from "expo-router";
 import { useEffect } from "react";
-import { StyleSheet } from "react-native";
-import { Button, Screen } from "@/components";
+import { Screen } from "@/components";
 import { getCalculatorsOpts } from "@/modules/calculator/hooks/queries";
 import { getLessonsOpts } from "@/modules/lesson/hooks/api";
-import { getScamsOpts } from "@/modules/scam/hooks/queries";
 import { $styles } from "@/theme";
 import {
 	InProgressCourseCard,
@@ -16,33 +13,51 @@ import {
 } from "../components";
 import { ForYouLessons } from "../components/lessons/ForYouLessons";
 import { StreakSheet } from "../components/streak-sheet";
-import { useStreakSheetRef } from "../components/streak-sheet/StreakSheet";
+import { useStreakSheet } from "../components/streak-sheet/StreakSheet";
+import { useHomeUI } from "../hooks/queries";
 import { useStreak } from "../hooks/useStreak";
 
-export function HomeScreen() {
+const componentMap = {
+	ProfileCompletionBanner: ProfileCompletionBanner,
+	QuickActions: QuickActions,
+	InProgressCourseCard: InProgressCourseCard,
+	ForYouLessons: ForYouLessons,
+	UpdateAvailableCard: UpdateAvailableCard,
+	ShareAppCard: ShareAppCard,
+} as const;
+
+const usePreloadOtherTabsData = () => {
 	const queryClient = useQueryClient();
-	const ref = useStreakSheetRef();
-	//const streak = useStreak();
 
-	useEffect(() => {
-		queryClient.prefetchInfiniteQuery(getCalculatorsOpts());
-		queryClient.prefetchInfiniteQuery(getScamsOpts());
-		queryClient.prefetchInfiniteQuery(getLessonsOpts());
-	}, [queryClient.prefetchInfiniteQuery]);
+	useEffect(
+		function preloadOtherTabs() {
+			queryClient.prefetchInfiniteQuery(getCalculatorsOpts());
+			queryClient.prefetchInfiniteQuery(getLessonsOpts());
+		},
+		[queryClient.prefetchInfiniteQuery],
+	);
+};
 
-	// useEffect(
-	// 	function handleStreak() {
-	// 		if (streak === null) {
-	// 			return;
-	// 		}
-	// 		if (streak.status === "same") {
-	// 			return;
-	// 		}
-	//
-	// 		ref.current?.present();
-	// 	},
-	// 	[streak?.status],
-	// );
+export function HomeScreen() {
+	const streak = useStreak();
+	const streakSheet = useStreakSheet();
+	const { data } = useHomeUI();
+
+	usePreloadOtherTabsData();
+
+	useEffect(
+		function handleStreak() {
+			if (!streak) {
+				return;
+			}
+			if (streak?.data?.status === "same") {
+				return;
+			}
+
+			streakSheet.present();
+		},
+		[streak?.data],
+	);
 
 	return (
 		<Screen
@@ -50,38 +65,13 @@ export function HomeScreen() {
 			contentContainerStyle={$styles.fullHeaderScreen}
 			safeAreaEdges={["bottom"]}
 		>
-			<ProfileCompletionBanner />
-			<QuickActions />
-			<InProgressCourseCard />
+			{data.data.map((item) => {
+				const Component = componentMap[item.componentName];
 
-			<ForYouLessons />
-			<UpdateAvailableCard />
-			<ShareAppCard />
+				return <Component key={item.componentName} />;
+			})}
 
-			<Button onPress={() => ref.current?.present()}>Present</Button>
-			{/* {streak !== null && streak.status !== "same" && ( 
-			<StreakSheet
-				streak={{
-					current: 200,
-					maximum: 1,
-					status: "reset",
-				}}
-				ref={ref}
-			/>
-		 )} */}
+			<StreakSheet streak={streak?.data} />
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "grey",
-	},
-	contentContainer: {
-		flex: 1,
-		padding: 12,
-		alignItems: "center",
-		gap: 24,
-	},
-});

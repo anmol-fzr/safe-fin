@@ -1,18 +1,17 @@
-import { useIdleFetch } from "@/hooks/useIdleFetch";
-import { STREAK } from "../api";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
+import { useStreakCreation } from "./mutations";
 
 export const useStreak = () => {
-	const [streakData, setStreakData] = useState<null | {
-		current: number;
-		maximum: number;
-		status: "new" | "reset" | "continued" | "same";
-	}>(null);
+	const { mutate, data: streak } = useStreakCreation();
+	const isCalled = useRef(false);
 
-	useIdleFetch(
-		() => STREAK.SAVE().then((r) => r.data),
-		(data) => setStreakData(data),
-	);
+	useEffect(function recordStreakOnceMount() {
+		if (isCalled.current) {
+			return;
+		}
+		mutate();
+		isCalled.current = true;
+	}, []);
 
-	return streakData;
+	return streak;
 };

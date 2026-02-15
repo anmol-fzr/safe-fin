@@ -7,22 +7,21 @@ import {
 } from "@/components";
 import { ForYouLessonsImpl } from "@/modules/home/components/lessons/ForYouLessonsImpl";
 import { useAppTheme } from "@/utils/useAppTheme";
-//import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 import { useGetLessons } from "../hooks/api";
 import { LessonCard } from "./LessonCard/LessonCard";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { makeSpringy, spacing } from "@/theme";
 import { View } from "react-native";
 
-export function LessonList() {
+export function CourseList() {
 	return (
-		<Suspense fallback={<LessonListImpl.Loading />}>
-			<LessonListImpl />
+		<Suspense fallback={<CourseListImpl.Loading />}>
+			<CourseListImpl />
 		</Suspense>
 	);
 }
 
-function LessonListImpl() {
+function CourseListImpl() {
 	const {
 		courses,
 		isRefetching,
@@ -54,7 +53,7 @@ function LessonListImpl() {
 				courses.length === 0
 					? undefined
 					: isFetchingNextPage
-						? LessonListImpl.Loading
+						? CourseListImpl.Loading
 						: EndListView
 			}
 			contentContainerStyle={themed($baseListItemSeparatorStyles)}
@@ -102,39 +101,4 @@ function LessonListImpl() {
 	);
 }
 
-// function LessonListImpl() {
-// 	const { lessons, isRefetching, isFetchingNextPage, fetchNextPage, refetch } =
-// 		useGetLessons();
-// 	// const handleViewableItemsChanged = usePrefetchListItem({
-// 	// 	prefetchQueryFn: getLessonOpts,
-// 	// });
-//
-// 	//const handleEndReached = useCallback(() => fetchNextPage(), [fetchNextPage]);
-//
-// 	return (
-// 		<ListView
-// 			data={lessons}
-// 			refreshing={isRefetching}
-// 			onRefresh={refetch}
-// 			estimatedItemSize={105}
-// 			keyExtractor={(item) => item.id.toString()}
-// 			//onEndReached={handleEndReached}
-// 			ListEmptyComponent={EmptyListView}
-// 			//onViewableItemsChanged={handleViewableItemsChanged}
-// 			ListFooterComponent={
-// 				isFetchingNextPage ? <LessonListImpl.Loading /> : undefined
-// 			}
-// 			renderItem={({ item, index, data }) => (
-// 				<LessonListItem
-// 					isFirst={index === 0}
-// 					isLast={index === data.length - 1}
-// 					title={item.title}
-// 					desc={item.desc}
-// 					id={item.id}
-// 				/>
-// 			)}
-// 		/>
-// 	);
-// }
-
-LessonListImpl.Loading = ForYouLessonsImpl.Loading;
+CourseListImpl.Loading = ForYouLessonsImpl.Loading;

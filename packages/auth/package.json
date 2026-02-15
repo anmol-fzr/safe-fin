@@ -1,7 +1,7 @@
 {
 	"name": "@safe-fin/auth",
 	"version": "0.0.0",
-	"description": "Authentication package for Scam Vault",
+	"description": "Authentication package for Safe Fin",
 	"main": "./src/index.ts",
 	"types": "./src/index.ts",
 	"exports": {
@@ -24,4 +24,3 @@
 		"@cloudflare/workers-types": "catalog:"
 	}
 }
-

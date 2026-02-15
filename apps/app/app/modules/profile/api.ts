@@ -82,6 +82,7 @@ export const PROFILE = {
 				// Use modern File API from expo-file-system
 				const expoFile = new File(file.uri);
 				const arrayBuffer = await expoFile.arrayBuffer();
+				console.log({ uploadUrl });
 
 				// Upload using fetch with ArrayBuffer
 				const uploadRes = await fetch(uploadUrl, {
