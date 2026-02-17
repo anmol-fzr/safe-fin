@@ -4,7 +4,7 @@ import { Text } from "@/components";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
-export const CourseCompleteBadge = memo(() => {
+export const CompletedBadge = memo(() => {
 	const { themed } = useAppTheme();
 
 	return (

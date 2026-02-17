@@ -6,7 +6,10 @@ import {
 } from "iconsax-react-nativejs";
 import { Suspense, useMemo } from "react";
 import { View } from "react-native";
-import { EnrichedMarkdownText } from "react-native-enriched-markdown";
+import {
+	EnrichedMarkdownText,
+	EnrichedMarkdownTextProps,
+} from "react-native-enriched-markdown";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { $sizeStyles } from "@/components";
 import { useDimensions } from "@/hooks/use-dimensions";
@@ -56,15 +59,17 @@ function LessonImpl({ id }: LessonProps) {
 	);
 }
 
-type LessonRendererProps = {
-	content: string;
-};
+interface LessonRendererProps extends EnrichedMarkdownTextProps {}
 
 export function MarkdowRenderer(props: LessonRendererProps) {
-	const { content } = props;
+	const {
+		markdown,
+		markdownStyle,
+		containerStyle = { flex: 1, height: "100%" },
+		...rest
+	} = props;
 	const { theme } = useAppTheme();
 	const { colors, spacing } = theme;
-	const { width } = useDimensions();
 
 	const styles = useMemo(
 		() => ({
@@ -123,17 +128,15 @@ export function MarkdowRenderer(props: LessonRendererProps) {
 		[colors, spacing],
 	);
 
-	// const modified = (content ?? "")
-	// 	.replaceAll("<u>", "[")
-	// 	?.replaceAll("</u>", "]()");
-
-	//return <EnrichedMarkdownText markdown={content} />;
-	//
-
-	const fixedContent = content.replace(/(!\[.*?\]\(.*?\))/g, "\n\n$1\n\n");
+	const content = markdown.replace(/(!\[.*?\]\(.*?\))/g, "\n\n$1\n\n");
 
 	return (
-		<EnrichedMarkdownText markdownStyle={styles} markdown={fixedContent} />
+		<EnrichedMarkdownText
+			containerStyle={containerStyle}
+			markdownStyle={markdownStyle ?? styles}
+			markdown={content}
+			{...rest}
+		/>
 	);
 }
 

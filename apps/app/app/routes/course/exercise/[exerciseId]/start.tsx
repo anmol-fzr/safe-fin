@@ -1,21 +1,21 @@
-import { Screen } from "@/components";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useGetExercise } from "@/modules/exercise/hooks/queries";
 import { useNavigation } from "expo-router";
 import { Suspense, useLayoutEffect } from "react";
 import z from "zod";
 import { ExerciseDetailScreen } from "@/modules/exercise/screen";
+import { createRoute } from "@/factory/route";
+import { idSchema } from "@/schema";
 
-const schema = z.object({
-	exerciseId: z.coerce.number(),
+const paramSchema = z.object({
+	exerciseId: idSchema,
 });
 
-const useExerciseScreenParams = () => {
-	return useTypedLocalSearchParams(schema);
-};
+const Route = createRoute({
+	paramSchema,
+});
 
 export default function ExerciseScreen() {
-	const params = useExerciseScreenParams();
+	const params = Route.useParams();
 	const { exerciseId } = params;
 
 	const { exercise } = useGetExercise(exerciseId);
@@ -28,14 +28,10 @@ export default function ExerciseScreen() {
 	}, []);
 
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={{ flex: 1 }}
-			safeAreaEdges={["bottom"]}
-		>
+		<Route.Screen>
 			<Suspense fallback={<ExerciseDetailScreen.Loading />}>
-				<ExerciseDetailScreen {...params} />
+				<ExerciseDetailScreen exerciseId={exerciseId} />
 			</Suspense>
-		</Screen>
+		</Route.Screen>
 	);
 }

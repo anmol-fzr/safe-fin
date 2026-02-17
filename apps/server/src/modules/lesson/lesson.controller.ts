@@ -30,6 +30,7 @@ import {
 } from "./lesson.schema";
 import { LessonService } from "./lesson.service";
 import { UnitService } from "./unit/unit.service";
+import { LESSON_CODES as CODES } from "./lesson.codes";
 
 const { createHandlers } = createTypedFactory();
 
@@ -98,12 +99,18 @@ export const getLessonById = createHandlers(
 			db,
 			courseId,
 			includeUnpublished,
-			user.id,
+			user,
 			s3Config,
 		);
 
 		if (!lesson) {
-			return c.json({ error: "Lesson not found" }, 404);
+			return c.json(
+				{
+					error: CODES.NOT_FOUND,
+					message: CODES.NOT_FOUND,
+				},
+				404,
+			);
 		}
 
 		return c.json({ data: lesson });

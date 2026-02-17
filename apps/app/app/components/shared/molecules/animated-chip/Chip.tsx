@@ -5,44 +5,44 @@ import type { ChipGroupProps, ChipItem } from "./Chip.types";
 import { AnimatedChip } from "./AnimatedChip";
 
 export const ChipGroup: React.FC<ChipGroupProps<ChipItem>> = ({
-  chips,
-  onChange,
-  containerStyle,
-  selectedIndex,
+	chips,
+	onChange,
+	containerStyle,
+	selectedIndex,
 }) => {
-  const [internalIndex, setInternalIndex] = useState(0);
-  const activeIndex = selectedIndex ?? internalIndex;
+	const [internalIndex, setInternalIndex] = useState(0);
+	const activeIndex = selectedIndex ?? internalIndex;
 
-  const handlePress = (index: number) => {
-    if (selectedIndex === undefined) {
-      setInternalIndex(index);
-    }
-    onChange?.(index);
-  };
-  return (
-    <Animated.View
-      style={[styles.container, containerStyle]}
-      layout={LinearTransition}
-    >
-      {chips.map((item, index) => (
-        <AnimatedChip
-          key={index}
-          label={item.label}
-          inActiveBackgroundColor={item.inActiveBackgroundColor}
-          activeColor={item.activeColor}
-          icon={item.icon}
-          labelColor={item.labelColor}
-          isActive={activeIndex === index}
-          onPress={() => handlePress(index)}
-        />
-      ))}
-    </Animated.View>
-  );
+	const handlePress = (index: number) => {
+		if (selectedIndex === undefined) {
+			setInternalIndex(index);
+		}
+		onChange?.(index);
+	};
+	return (
+		<Animated.View
+			style={[styles.container, containerStyle]}
+			layout={LinearTransition}
+		>
+			{chips.map((item, index) => (
+				<AnimatedChip
+					key={index}
+					label={item.label}
+					inActiveBackgroundColor={item.inActiveBackgroundColor}
+					activeColor={item.activeColor}
+					icon={item.icon}
+					labelColor={item.labelColor}
+					isActive={activeIndex === index}
+					onPress={() => handlePress(index)}
+				/>
+			))}
+		</Animated.View>
+	);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    gap: 8,
-  },
+	container: {
+		flexDirection: "row",
+		gap: 8,
+	},
 });

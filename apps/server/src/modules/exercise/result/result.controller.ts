@@ -142,6 +142,7 @@ export const getExerciseResult = createHandlers(
 									columns: {
 										id: true,
 										question: true,
+										reason: true,
 									},
 									with: {
 										options: {

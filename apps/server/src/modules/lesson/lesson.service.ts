@@ -3,15 +3,21 @@ import type { BucketConfig } from "@/middleware/s3";
 import type { DB } from "@/pkg/db";
 import {
 	and,
+	chapter,
 	count,
 	course,
+	courseProgress,
 	eq,
+	exercise,
+	exerciseAttempt,
+	exists,
 	richContent,
 	richContentItem,
 	sql,
 	unit,
 } from "@/pkg/db";
 import type { CourseLevel } from "./lesson.schema";
+import type { User } from "@safe-fin/auth";
 
 // ============================================
 // Types
@@ -64,7 +70,7 @@ export class LessonService {
 			whereConditions.push(eq(course.isPublished, true));
 		}
 
-		const lessons = await db.query.course.findMany({
+		const lessonsQuery = db.query.course.findMany({
 			extras: {
 				rating:
 					sql`CAST(${course.ratingSum} AS REAL) / ${course.rateCount} `.as(
@@ -123,8 +129,26 @@ export class LessonService {
 		if (whereConditions.length > 0) {
 			countQuery.where(and(...whereConditions));
 		}
-		const countRes = await countQuery;
+
+		const [lessons, countRes] = await Promise.all([lessonsQuery, countQuery]);
 		const total = countRes[0].count;
+
+		// const nextUnit = await db.query.unit.findFirst({
+		// 	where: (u, { eq, and, gt }) => {
+		// 		const conditions = [
+		// 			eq(u.chapterId, foundUnit.chapterId),
+		// 			gt(u.index, foundUnit.index),
+		// 		];
+		// 		if (!isAdmin) {
+		// 			conditions.push(eq(u.isPublished, true));
+		// 		}
+		// 		return and(...conditions);
+		// 	},
+		// 	orderBy: (u, { asc }) => [asc(u.index)],
+		// 	columns: {
+		// 		id: true,
+		// 	},
+		// });
 
 		return {
 			data: lessons,
@@ -169,22 +193,34 @@ export class LessonService {
 		db: DB,
 		courseId: number,
 		includeUnpublished = false,
-		userId: string,
+		user: User,
 		s3: BucketConfig,
 	) {
 		const { ENDPOINT } = s3;
+		const { id: userId } = user;
+
+		const isAdmin = user.role === "admin";
+		const isUser = user.role === "user";
 
 		const foundCourse = await db.query.course.findFirst({
 			extras: {
-				coverUrl: sql<string>`CONCAT(${ENDPOINT}, '/', course.cover_path)`.as(
+				coverUrl: sql`CONCAT(${ENDPOINT}, '/', course.cover_path)`.as(
 					"cover_url",
 				),
-				isCompleted:
-					sql<boolean>`EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.user_id = ${userId} AND course_progress.course_id = ${courseId} AND course_progress.is_completed = true )`.as(
-						"is_completed",
-					),
+				isCompleted: exists(
+					db
+						.select()
+						.from(courseProgress)
+						.where(
+							and(
+								eq(courseProgress.userId, userId),
+								eq(courseProgress.courseId, courseId),
+								eq(courseProgress.isCompleted, true),
+							),
+						),
+				).as("is_completed"),
 				points:
-					sql<number>`COALESCE( ( SELECT SUM(unit.points) FROM chapter JOIN unit ON unit.chapter_id = chapter.id WHERE chapter.course_id = course.id), 0)`.as(
+					sql`COALESCE( ( SELECT SUM(unit.points) FROM chapter JOIN unit ON unit.chapter_id = chapter.id WHERE chapter.course_id = course.id), 0)`.as(
 						"points",
 					),
 			},
@@ -197,23 +233,25 @@ export class LessonService {
 			},
 			columns: {
 				id: true,
-				isPublished: true,
+				isPublished: isAdmin,
 				ratingSum: true,
 				rateCount: true,
-				createdAt: true,
-				updatedAt: true,
+				createdAt: isAdmin,
+				updatedAt: isAdmin,
 			},
 			with: {
 				content: {
 					columns: {
 						id: false,
 						longDescRichId: false,
+						createdAt: isAdmin,
+						updatedAt: isAdmin,
 					},
 					with: {
 						longDesc: {
 							columns: {
 								content: true,
-								contentJson: true,
+								contentJson: isAdmin,
 							},
 						},
 					},
@@ -222,31 +260,107 @@ export class LessonService {
 					columns: {
 						id: true,
 						title: true,
-						index: true,
-						isPublished: true,
-						createdAt: true,
-						updatedAt: true,
+						index: isAdmin,
+						isPublished: isAdmin,
+						createdAt: isAdmin,
+						updatedAt: isAdmin,
 					},
 					orderBy: (chapter, { asc }) => [asc(chapter.index)],
+					where: (exercises, { eq }) =>
+						isAdmin ? undefined : eq(exercises.isPublished, true),
 					with: {
-						exercises: true,
+						exercises: {
+							extras: {
+								status: sql<"COMPLETED" | "LOCKED" | "UNLOCKED">`
+            CASE
+                -- 1. Check if Completed (Look in exercise_attempt)
+                WHEN EXISTS (
+                    SELECT 1 FROM exercise_attempt ea
+                    WHERE ea.user_id = ${userId}
+                    AND ea.exercise_id = ${exercise.id}
+                ) THEN 'COMPLETED'
+
+                -- 2. Check if Locked (Is there an unfinished previous exercise in this chapter?)
+                WHEN EXISTS (
+                    SELECT 1
+                    FROM exercise prev_e
+                    WHERE prev_e.chapter_id = ${chapter.id} -- Same chapter
+                    AND prev_e.is_published = 1             -- Ignore hidden/unpublished exercises
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM exercise_attempt ea
+                        WHERE ea.user_id = ${userId}
+                        AND ea.exercise_id = prev_e.id
+                    )
+                ) THEN 'LOCKED'
+
+                -- 3. Default to Unlocked
+                ELSE 'UNLOCKED'
+            END
+        `.as("status"),
+							},
+
+							columns: {
+								chapterId: isAdmin,
+								isPublished: isAdmin,
+								createdAt: isAdmin,
+								updatedAt: isAdmin,
+							},
+
+							where: (exercises, { eq }) =>
+								isAdmin ? undefined : eq(exercises.isPublished, true),
+							orderBy: (exercise, { desc }) => [desc(exercise.createdAt)], // Ensure correct order for index logic
+						},
 
 						units: {
 							extras: userId
 								? {
-										isCompleted:
-											sql<boolean>` EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.user_id = ${userId} AND course_progress.course_id = ${courseId} AND course_progress.curr_unit_id = ${unit.id}) `.as(
-												"is_completed",
-											),
+										status: sql<"COMPLETED" | "LOCKED" | "UNLOCKED">`
+            CASE
+                -- 1. Check if Completed
+                WHEN EXISTS (
+                    SELECT 1 FROM course_progress cp
+                    WHERE cp.user_id = ${userId}
+                    AND cp.curr_unit_id = ${unit.id}
+                ) THEN 'COMPLETED'
+
+                -- 2. Check if Locked (Predecessor logic)
+                WHEN EXISTS (
+                    SELECT 1
+                    FROM unit u
+                    JOIN chapter c ON c.id = u.chapter_id
+                    WHERE c.course_id = ${courseId}
+                    AND u."index" < ${unit.index} -- Check strictly previous units
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM course_progress cp
+                        WHERE cp.user_id = ${userId}
+                        AND cp.curr_unit_id = u.id
+                    )
+                ) THEN 'LOCKED'
+
+                -- 3. Default to Unlocked (Available to start)
+                ELSE 'UNLOCKED'
+            END
+        `.as("status"),
 									}
 								: undefined,
 							columns: {
 								chapterId: false,
+								index: isAdmin,
+								isPublished: isAdmin,
+								contentId: isAdmin,
+								createdAt: isAdmin,
+								updatedAt: isAdmin,
 							},
+							where: (units, { eq }) =>
+								isAdmin ? undefined : eq(units.isPublished, true),
 							with: {
 								content: {
 									columns: {
 										longDescRichId: false,
+										createdAt: isAdmin,
+										updatedAt: isAdmin,
 									},
 									with: {
 										longDesc: {
@@ -375,3 +489,17 @@ export class LessonService {
 		return db.delete(course).where(eq(course.id, courseId));
 	}
 }
+
+// const isCompleted =
+// exists(
+// db
+// .select()
+// .from(courseProgress)
+// .where(
+// and(
+// eq(courseProgress.userId, user.id),
+// eq(courseProgress.courseId, courseId)
+// )
+// )
+// )
+// .as( "is_completed")

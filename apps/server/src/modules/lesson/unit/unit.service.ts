@@ -9,6 +9,8 @@ import {
 	sql,
 	rating,
 	courseRating,
+	exists,
+	and,
 } from "@/pkg/db";
 import type { User } from "@safe-fin/auth";
 
@@ -85,10 +87,17 @@ export class UnitService {
 
 		const foundUnit = await db.query.unit.findFirst({
 			extras: {
-				isCompleted:
-					sql`EXISTS ( SELECT 1 FROM course_progress WHERE course_progress.curr_unit_id = ${unitId} AND course_progress.user_id = ${user.id})`.as(
-						"is_completed",
-					),
+				isCompleted: exists(
+					db
+						.select()
+						.from(courseProgress)
+						.where(
+							and(
+								eq(courseProgress.currUnitId, unitId),
+								eq(courseProgress.userId, user.id),
+							),
+						),
+				).as("is_completed"),
 			},
 			where: (u, { eq, and }) => {
 				const conditions = [eq(u.id, unitId)];
@@ -97,8 +106,20 @@ export class UnitService {
 				}
 				return and(...conditions);
 			},
+			columns: {
+				contentId: isAdmin,
+				createdAt: isAdmin,
+				isPublished: isAdmin,
+				updatedAt: isAdmin,
+			},
 			with: {
 				content: {
+					columns: {
+						id: isAdmin,
+						longDescRichId: isAdmin,
+						createdAt: isAdmin,
+						updatedAt: isAdmin,
+					},
 					with: {
 						longDesc: {
 							columns: { content: true, contentJson: isAdmin },
@@ -106,20 +127,20 @@ export class UnitService {
 					},
 				},
 				chapter: {
-					columns: { course: true },
+					columns: {},
 					with: {
 						course: {
-							columns: { id: true, content: true, rateCount: true },
+							columns: { id: true, contentId: isAdmin, rateCount: isAdmin },
 							with: {
-								rating: {
-									columns: { review: true }, // Make sure this column exists on the join table if you are querying it
-									with: {
-										review: {
-											columns: { id: true, rating: true },
-											where: (reviews, { eq }) => eq(reviews.userId, user.id),
-										},
-									},
-								},
+								// rating: {
+								// 	columns: { review: true }, // Make sure this column exists on the join table if you are querying it
+								// 	with: {
+								// 		review: {
+								// 			columns: { id: true, rating: true },
+								// 			where: (reviews, { eq }) => eq(reviews.userId, user.id),
+								// 		},
+								// 	},
+								// },
 								content: {
 									columns: { title: true },
 								},

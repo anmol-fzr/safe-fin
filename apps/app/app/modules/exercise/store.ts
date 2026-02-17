@@ -50,13 +50,6 @@ const useExerciseStore = create<ExerciseStore>()(
 				max: 0,
 			},
 
-			setupStore: ({ exerciseId, questionsLen }) => {
-				set((currState) => {
-					currState.exerciseId = exerciseId;
-					currState.progress.max = questionsLen;
-				});
-			},
-
 			results: {},
 			setResults: (newState) => {
 				set((currState) => {
@@ -69,10 +62,18 @@ const useExerciseStore = create<ExerciseStore>()(
 				});
 			},
 
+			setupStore: ({ exerciseId, questionsLen }) => {
+				set((currState) => {
+					currState.exerciseId = exerciseId;
+					currState.progress.max = questionsLen;
+				});
+			},
+
 			resetStore: () => {
 				set((currState) => {
 					currState.results = {};
 					currState.exerciseId = null;
+					currState.progress.max = 0;
 				});
 			},
 		})),

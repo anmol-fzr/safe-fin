@@ -1,25 +1,22 @@
 import { Link } from "expo-router";
-import { Play, TickCircle } from "iconsax-react-nativejs";
-import { StyleSheet, View } from "react-native";
-import { Text } from "@/components/Text";
-import { IconSax } from "@/context/IconContext";
-import { useAppTheme } from "@/utils/useAppTheme";
 import type { Unit } from "../../api-types/course_one";
 import { usePrefetchUnit } from "../../hooks/units/queries";
-import { CourseCompleteBadge } from "../CourseCompletedBadge";
+import { ItemCard } from "../ItemCard";
+import { Pressable, View } from "react-native";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { Text } from "@/components";
+import { toast } from "sonner-native";
 
 type UnitProps = {
 	unit: Unit;
+	index: number;
 };
 
 export const UnitBar = (props: UnitProps) => {
-	const { unit } = props;
+	const { unit, index } = props;
 
-	const { id, content, points, isCompleted } = unit;
-
-	const {
-		theme: { colors, spacing },
-	} = useAppTheme();
+	const { id, content, points, status } = unit;
+	const { title } = content;
 
 	const { prefetchUnit } = usePrefetchUnit();
 
@@ -27,10 +24,25 @@ export const UnitBar = (props: UnitProps) => {
 		prefetchUnit(id);
 	}
 
-	return (
+	const {
+		theme: { colors },
+	} = useAppTheme();
+
+	const isUnlocked = status === "UNLOCKED";
+
+	const handleLockedPress = () => {
+		toast.error("Locked !!", { richColors: false });
+		//Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+	};
+	console.info({ status });
+
+	return status === "LOCKED" ? (
+		<Pressable onPress={handleLockedPress}>
+			<ItemCard {...{ title, points, status }} />
+		</Pressable>
+	) : (
 		<Link
 			onPressIn={handlePrefetchUnit}
-			//href="/course/units/temp"
 			href={{
 				pathname: "/course/units/[unitId]",
 				params: {
@@ -39,72 +51,46 @@ export const UnitBar = (props: UnitProps) => {
 			}}
 		>
 			<View
-				style={{
-					flexDirection: "row",
-					alignItems: "center",
-					padding: 12,
-					borderWidth: 1,
-					borderColor: isCompleted ? colors.success : "#E0E0E0",
-					borderRadius: 12,
-				}}
+				style={[
+					{
+						flex: 1,
+						width: "100%",
+					},
+					isUnlocked
+						? {
+								borderWidth: 4,
+								borderColor: colors.tint,
+								position: "relative",
+								borderRadius: 16,
+								alignItems: "center",
+								//paddingBlock: 8,
+							}
+						: undefined,
+				]}
 			>
-				{/*
-				<View style={styles.iconWrapper}>
-					<Image
-						source={{
-							uri: "https://img.icons8.com/color/96/design.png",
+				{isUnlocked && (
+					<Text
+						style={{
+							position: "absolute",
+							bottom: 0,
+							//left: 0,
+							zIndex: 2,
+							color: colors.textInverse,
+							backgroundColor: colors.tint,
+							paddingInline: 12,
+							paddingTop: 2,
+							borderRadius: 1,
+							borderTopLeftRadius: 12,
+							borderTopRightRadius: 12,
 						}}
-						style={styles.icon}
-					/>
-				</View>
-        */}
-				<View style={styles.textWrapper}>
-					<Text weight="medium" size="sm">
-						{content.title}
+						size="sm"
+						weight="bold"
+					>
+						{index === 0 ? "Start " : "Continue "} here
 					</Text>
-
-					<View style={{ flexDirection: "row", gap: spacing.md }}>
-						<Text style={{ color: colors.textDim }} size="xs" weight="semiBold">
-							{points} PX
-						</Text>
-						{isCompleted === 1 && <CourseCompleteBadge />}
-					</View>
-				</View>
-
-				{isCompleted === 1 ? (
-					<IconSax icon={TickCircle} color={colors.success} />
-				) : (
-					<IconSax icon={Play} color={colors.tint} />
 				)}
+				<ItemCard {...{ title, points, status }} />
 			</View>
 		</Link>
 	);
 };
-
-const styles = StyleSheet.create({
-	cardContainer: {
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 12,
-		borderWidth: 1,
-		borderColor: "#E0E0E0",
-		borderRadius: 12,
-	},
-	// iconWrapper: {
-	// 	width: 48,
-	// 	height: 48,
-	// 	backgroundColor: "#F5F5F5",
-	// 	borderRadius: 8,
-	// 	justifyContent: "center",
-	// 	alignItems: "center",
-	// 	marginRight: 12,
-	// },
-	// icon: {
-	// 	width: 24,
-	// 	height: 24,
-	// },
-	textWrapper: {
-		flex: 1,
-		marginRight: 16,
-	},
-});

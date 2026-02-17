@@ -75,6 +75,7 @@ export function WelcomeScreen() {
 				</Animated.View>
 			</Animated.View>
 
+			{/*
 			<Link
 				asChild
 				href={{
@@ -94,6 +95,7 @@ export function WelcomeScreen() {
 			>
 				<Button>Go to Exercise Result</Button>
 			</Link>
+      */}
 
 			<Animated.View entering={FadeInDown}>
 				{isLogin ? <WelcomeNextButton /> : <WelcomeLoginButton />}

@@ -1,4 +1,9 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+	integer,
+	primaryKey,
+	sqliteTable,
+	text,
+} from "drizzle-orm/sqlite-core";
 import { id, timestamp } from "./__utils";
 import { user } from "./auth";
 
@@ -33,21 +38,27 @@ export const publicUserProfile = sqliteTable("public_user_profile", {
 export const userActivityLog = sqliteTable(
 	"user_activity_log",
 	{
-		id,
 		userId: text("user_id")
-			.references(() => user.id)
-			.notNull(),
+			.notNull()
+			.references(() => user.id),
 
-		date: timestamp("date").notNull(),
+		// Store as unix timestamp (recommended for SQLite)
+		date: integer("date", { mode: "timestamp" }).notNull(),
+
 		totalPxEarned: integer("total_px").notNull().default(0),
 
-		createdAt: timestamp.createdAt,
-		updatedAt: timestamp.updatedAt,
+		createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+		updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 	},
-	// (table) => ({
-	// 	userDateUnique: uniqueIndex("user_activity_user_date_idx").on(
-	// 		table.userId,
-	// 		table.date,
-	// 	),
-	// }),
+	(table) => ({
+		pk: primaryKey({
+			columns: [table.userId, table.date],
+			name: "user_activity_user_date_pk",
+		}),
+	}),
 );
+// , (table) => [
+//   primaryKey({ columns: [table.bookId, table.authorId] }),
+//   // Or PK with custom name
+//   primaryKey({ name: 'custom_name', columns: [table.bookId, table.authorId] })
+// ]

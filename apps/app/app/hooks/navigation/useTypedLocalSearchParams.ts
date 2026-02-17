@@ -3,7 +3,7 @@ import type { z } from "zod";
 
 class SearchParamValidationError extends Error {}
 
-export const useTypedLocalSearchParams = <T>(schema: z.ZodObject<T>) => {
+export const useTypedLocalSearchParams = (schema: z.ZodTypeAny) => {
 	const params = useLocalSearchParams();
 
 	const result = schema.safeParse(params);

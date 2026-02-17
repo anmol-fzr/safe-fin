@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { View, StyleSheet } from "react-native";
 import { z } from "zod";
 import { Button, ButtonProps, Separator, Text } from "@/components";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { MarkdowRenderer } from "@/modules/lesson/components/Lesson";
 import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
 import { useGetUnit } from "@/modules/lesson/hooks/units/queries";
@@ -15,13 +14,16 @@ import { useDimensions } from "@/hooks/use-dimensions";
 import { Link } from "expo-router";
 import { FromCourseCard } from "@/modules/lesson/components/FromCourseCard";
 import { ellipsize } from "@safe-fin/ui/utils";
+import { createRoute } from "@/factory/route";
 
-const paramsSchema = z.object({
-	unitId: idSchema,
+const Route = createRoute({
+	paramSchema: z.object({
+		unitId: idSchema,
+	}),
 });
 
 export default function UnitScreen() {
-	const params = useTypedLocalSearchParams(paramsSchema);
+	const params = Route.useParams();
 
 	return (
 		<Suspense fallback={<UnitScreenImpl.Loading />}>
@@ -30,7 +32,7 @@ export default function UnitScreen() {
 	);
 }
 
-type Props = z.infer<typeof paramsSchema>;
+type Props = { unitId: number };
 
 function UnitScreenImpl(props: Props) {
 	const { unitId } = props;
@@ -90,7 +92,7 @@ function UnitScreenImpl(props: Props) {
 
 					<Separator />
 
-					<MarkdowRenderer content={content.longDesc.content} />
+					<MarkdowRenderer markdown={content.longDesc.content} />
 
 					<Separator />
 

@@ -36,13 +36,26 @@ function getExerciseResultOpts(exerciseId: ResourceId) {
 	});
 }
 
+const usePrefetchExerciseResult = () => {
+	const queryClient = useQueryClient();
+
+	async function prefetchExerciseResult(id: ResourceId) {
+		await queryClient.prefetchQuery(getExerciseResultOpts(id));
+	}
+
+	return { prefetchExerciseResult };
+};
+
 const useGetExerciseResult = (exerciseId: ResourceId) => {
 	const opts = getExerciseResultOpts(exerciseId);
 	const { data, ...rest } = useSuspenseQuery(opts);
 
-	//return { results: data.data.results[0].questions, ...rest };
 	return { attempts: data.data, ...rest };
 };
 
 export { getExerciseOpts, useGetExercise, usePrefetchExercise };
-export { getExerciseResultOpts, useGetExerciseResult };
+export {
+	getExerciseResultOpts,
+	useGetExerciseResult,
+	usePrefetchExerciseResult,
+};

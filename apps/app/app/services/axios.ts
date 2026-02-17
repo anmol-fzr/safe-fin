@@ -73,5 +73,7 @@ interface ITimestamps {
 	updatedAt: string;
 }
 
-export type { IResData, ITimestamps };
+type NumericBool = 0 | 1;
+
+export type { IResData, ITimestamps, NumericBool };
 export { axiosInstance };

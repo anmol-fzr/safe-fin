@@ -11,9 +11,9 @@ import {
 	type ViewStyle,
 } from "react-native";
 import Animated, {
-	FadeInLeft,
-	FadeInRight,
 	LinearTransition,
+	SlideInLeft,
+	SlideInRight,
 	SlideOutLeft,
 	SlideOutRight,
 } from "react-native-reanimated";
@@ -22,7 +22,7 @@ import { ListView } from "@/components";
 import { ChipGroup } from "@/components/shared/molecules/animated-chip/Chip";
 import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
-import { spacing, type ThemedStyle } from "@/theme";
+import { makeSpringy, spacing, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Chapter } from "../api-types/course_one";
 import { ChapterList } from "../components/course-details/ChapterList";
@@ -400,31 +400,29 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 				onChange={setSelected}
 			/>
 
-			<View style={{ marginTop: spacing.md }}>
+			<Animated.View
+				layout={LinearTransition}
+				style={{ marginTop: spacing.md }}
+			>
 				{selected === 0 ? (
 					<Animated.View
-						layout={LinearTransition}
-						//entering={SlideInLeft}
-						exiting={SlideOutLeft}
-						entering={FadeInLeft}
-						// exiting={FadeOutLeft}
+						exiting={makeSpringy(SlideOutLeft)}
+						entering={makeSpringy(SlideInLeft)}
 						key={selected}
 					>
 						<ChapterList chapters={chapters} />
 					</Animated.View>
 				) : (
 					<Animated.View
-						layout={LinearTransition}
-						//entering={SlideInRight}
-						exiting={SlideOutRight}
-						entering={FadeInRight}
-						// exiting={FadeOutRight}
+						exiting={makeSpringy(SlideOutRight)}
+						entering={makeSpringy(SlideInRight)}
 						key={selected}
+						style={{ flex: 1, height: "100%" }}
 					>
-						<MarkdowRenderer content={desc} />
+						<MarkdowRenderer markdown={desc} />
 					</Animated.View>
 				)}
-			</View>
+			</Animated.View>
 		</View>
 	);
 }
@@ -501,9 +499,9 @@ const $scrollView: ThemedStyle<ViewStyle> = () => ({
 });
 
 const $scrollContent: ThemedStyle<ViewStyle> = (theme) => ({
-	paddingHorizontal: theme.spacing.md,
-	paddingTop: theme.spacing.lg,
-	paddingBottom: theme.spacing.xl,
+	paddingHorizontal: theme.spacing.xxs,
+	paddingTop: theme.spacing.xs,
+	paddingBottom: theme.spacing.sm,
 });
 
 const $lessonsContainer: ThemedStyle<ViewStyle> = (theme) => ({

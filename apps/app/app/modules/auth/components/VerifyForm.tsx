@@ -64,7 +64,7 @@ const VerifyFormRoot = ({ children, email }: VerifyFormRootProps) => {
 				onSuccess: (data) => {
 					if (data.error === null) {
 						setAuthData({ user: data?.data?.user as any });
-						router.navigate("/tabs/home");
+						router.replace("/tabs/home");
 					}
 				},
 			},

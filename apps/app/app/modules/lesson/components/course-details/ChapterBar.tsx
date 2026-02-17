@@ -63,7 +63,7 @@ export const ChapterBar = (props: ChapterProps) => {
 									50 * (index + chapterIndex),
 								)}
 							>
-								<UnitBar unit={item} />
+								<UnitBar unit={item} index={index} />
 							</Animated.View>
 						)}
 						contentContainerStyle={themed($baseListItemSeparatorStyles)}

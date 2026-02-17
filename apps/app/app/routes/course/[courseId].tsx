@@ -1,31 +1,28 @@
 import { Suspense } from "react";
 import { z } from "zod";
-import { Screen } from "@/components";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useGetLesson } from "@/modules/lesson/hooks/api";
 import { CourseDetailsScreen } from "@/modules/lesson/screens/LessonDetailScreen";
 import { idSchema } from "@/schema";
 import { ErrorBoundary } from "@/screens";
+import { createRoute } from "@/factory/route";
 
-const paramsSchema = z.object({
-	courseId: idSchema,
+const Route = createRoute({
+	paramSchema: z.object({
+		courseId: idSchema,
+	}),
 });
 
-const useCourseScreenParams = () => {
-	return useTypedLocalSearchParams(paramsSchema);
-};
-
 export default function CourseScreen() {
-	const { courseId } = useCourseScreenParams();
+	const { courseId } = Route.useParams();
 
 	return (
-		<Screen preset="scroll">
+		<Route.Screen preset="scroll">
 			<ErrorBoundary catchErrors="always">
 				<Suspense fallback={<CourseScreenImpl.Loading />}>
 					<CourseScreenImpl courseId={courseId} />
 				</Suspense>
 			</ErrorBoundary>
-		</Screen>
+		</Route.Screen>
 	);
 }
 

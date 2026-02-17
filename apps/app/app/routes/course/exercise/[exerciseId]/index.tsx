@@ -8,7 +8,6 @@ import { useGetExercise } from "@/modules/exercise/hooks/queries";
 import { useExerciseStore } from "@/modules/exercise/store";
 import { useNavigation, useRouter } from "expo-router";
 import { useLayoutEffect } from "react";
-import { RotationGestureHandler } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-worklets";
 import z from "zod";
 

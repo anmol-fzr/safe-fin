@@ -18,6 +18,7 @@ const ExerciseScreenHeader = (props: NativeStackHeaderProps) => {
 
 const Header = (props: NativeStackHeaderProps) => {
 	const router = useRouter();
+	const resetStore = useExerciseStore((state) => state.resetStore);
 
 	const handleClose = () => {
 		if (router.canGoBack()) {
@@ -41,6 +42,7 @@ const Header = (props: NativeStackHeaderProps) => {
 				"exerciseId Param Not Found on ExerciseScreenHeader, Falling to Home Screen",
 			);
 		}
+		resetStore();
 	};
 
 	return (
@@ -88,6 +90,7 @@ export default function ExerciseLayout() {
 				}}
 			/>
 			<Stack.Screen name="start" />
+			<Stack.Screen name="result" options={{ headerShown: false }} />
 		</Stack>
 	);
 }

@@ -5,7 +5,6 @@ import { useAppTheme } from "@/utils/useAppTheme";
 import { Question as IQuestion } from "../api";
 import { useSafeContext } from "@safe-fin/ui/hooks";
 import Animated, {
-	AnimatedProps,
 	interpolateColor,
 	useAnimatedStyle,
 	useSharedValue,
@@ -13,7 +12,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-worklets";
-import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 import { useExerciseQuestionResultSheet } from "./ExerciseQuestionResultSheet";
 import * as Haptics from "expo-haptics";
 
@@ -169,67 +167,4 @@ export {
 	QuestionProvider,
 	useQuestionContext,
 	useQuestion,
-};
-
-interface TactileButtonProps extends AnimatedProps<ViewProps> {
-	onPress: VoidFunction;
-}
-
-export const TactileButton = (props: TactileButtonProps) => {
-	const { onPress, style: $styleOverride, ...rest } = props;
-
-	const {
-		theme: { colors, spacing },
-	} = useAppTheme();
-
-	const isActive = true;
-
-	const activeProgress = useSharedValue(isActive ? 1 : 0);
-	const pressProgress = useSharedValue(0);
-
-	useEffect(() => {
-		activeProgress.value = withSpring(isActive ? 1 : 0, {
-			duration: 200,
-		});
-	}, [isActive]);
-
-	const animatedStyle = useAnimatedStyle(() => {
-		return {
-			borderColor: interpolateColor(
-				activeProgress.value,
-				[0, 1],
-				[colors.palette.neutral300, colors.tint],
-			),
-			marginTop: pressProgress.value * 4,
-			borderBottomWidth: 5 - pressProgress.value * 4,
-		};
-	});
-
-	const tap = Gesture.Tap()
-		.onBegin(() => {
-			pressProgress.value = withSpring(1, { duration: 200 });
-		})
-		.onFinalize(() => {
-			pressProgress.value = withSpring(0, { duration: 200 });
-		})
-		.onEnd(() => {
-			runOnJS(onPress)();
-		});
-
-	return (
-		<GestureDetector gesture={tap}>
-			<Animated.View
-				style={[
-					{
-						padding: 12,
-						borderRadius: spacing.xs,
-						borderWidth: 1,
-					},
-					animatedStyle,
-					$styleOverride,
-				]}
-				{...rest}
-			/>
-		</GestureDetector>
-	);
 };

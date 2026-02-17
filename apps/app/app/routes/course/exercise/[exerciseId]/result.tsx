@@ -1,21 +1,20 @@
-import { ListView, Screen, Text } from "@/components";
+import { Text } from "@/components";
 import { Section } from "@/components/Section";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { useProgresFromBoolean } from "@/hooks/reanimated";
-import { useGetExerciseResult } from "@/modules/exercise/hooks/queries";
-import { colors, spacing } from "@/theme";
+import {
+	useGetExerciseResult,
+	usePrefetchExerciseResult,
+} from "@/modules/exercise/hooks/queries";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { formatDate, isNull } from "@safe-fin/utils";
-import { at } from "node_modules/@faker-js/faker/dist/airline-CWrCIUHH";
-import { useMemo, useState } from "react";
-import { Pressable, View } from "react-native";
+import { isNull } from "@/pkg/utils";
+import { makeSpringy } from "@/theme";
+import { Suspense, useCallback, useEffect, useState } from "react";
+import { BackHandler, Pressable, View } from "react-native";
 import Animated, {
 	FadeIn,
 	FadeInDown,
-	FadeInLeft,
 	FadeInRight,
 	FadeOutLeft,
-	FadingTransition,
 	interpolate,
 	interpolateColor,
 	LinearTransition,
@@ -25,6 +24,12 @@ import Animated, {
 } from "react-native-reanimated";
 import z from "zod";
 import { Exercise } from "@/modules/exercise/components/Exercise";
+import { useExerciseStore } from "@/modules/exercise/store";
+import { useSaveExerciseResult } from "@/modules/exercise/hooks/mutations";
+import { createRoute } from "@/factory/route";
+import { idSchema } from "@/schema";
+import { ExerciseResultLoading } from "@/modules/exercise/components/result";
+import { useFocusEffect, useRouter } from "expo-router";
 
 const formatAttemptDate = (date: string) => {
 	return new Intl.DateTimeFormat("en-US", {
@@ -36,40 +41,144 @@ const formatAttemptDate = (date: string) => {
 	}).format(new Date(date));
 };
 
-const paramSchema = z.object({
-	exerciseId: z.coerce.number(),
+const Route = createRoute({
+	paramSchema: z.object({
+		exerciseId: idSchema,
+	}),
 });
 
-const useExerciseResultScreenParams = () => {
-	return useTypedLocalSearchParams(paramSchema);
-};
-
 export default function ExerciseResultScreen() {
-	const { exerciseId } = useExerciseResultScreenParams();
+	const { exerciseId } = Route.useParams();
+
+	const storedExerciseResult = useExerciseStore((s) => s.results);
+	const storedExerciseId = useExerciseStore((s) => s.exerciseId);
+	const resetStore = useExerciseStore((s) => s.resetStore);
+
+	const { saveExerciseResultAsync } = useSaveExerciseResult();
+	const { prefetchExerciseResult } = usePrefetchExerciseResult();
+
+	const shouldSubmit =
+		storedExerciseId !== null && storedExerciseId === exerciseId;
+
+	const [submissionDone, setSubmissionDone] = useState(!shouldSubmit);
+
+	const router = useRouter();
+
+	useFocusEffect(
+		useCallback(() => {
+			const onBackPress = () => {
+				router.navigate("/tabs/learnings");
+
+				return true;
+			};
+
+			const subscription = BackHandler.addEventListener(
+				"hardwareBackPress",
+				onBackPress,
+			);
+
+			return () => subscription.remove();
+		}, []),
+	);
+
+	useEffect(() => {
+		if (!shouldSubmit) return;
+
+		let cancelled = false;
+
+		async function run() {
+			try {
+				const results = Object.values(storedExerciseResult);
+
+				await saveExerciseResultAsync({
+					exerciseId,
+					results,
+				});
+
+				if (cancelled) return;
+
+				resetStore();
+				await prefetchExerciseResult(exerciseId);
+
+				if (cancelled) return;
+
+				resetStore();
+				setSubmissionDone(true);
+			} catch (err) {
+				// TODO: handle error state if needed
+				setSubmissionDone(true);
+			}
+		}
+
+		run();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [shouldSubmit]);
+
+	const canMountResult = submissionDone;
+
+	if (!canMountResult) {
+		return <EvaluatingState />;
+	}
+
+	return (
+		<Suspense fallback={<EvaluatingState />}>
+			<ResultState exerciseId={exerciseId} />
+		</Suspense>
+	);
+}
+
+function EvaluatingState() {
+	return (
+		<Route.Screen>
+			<View
+				style={{
+					flex: 1,
+					alignItems: "center",
+					height: "100%",
+				}}
+			>
+				<ExerciseResultLoading />
+			</View>
+		</Route.Screen>
+	);
+}
+
+interface ResultStateProps {
+	exerciseId: number;
+}
+
+function ResultState(props: ResultStateProps) {
+	const { exerciseId } = props;
+
 	const [currResultIdx, setCurrResultIdx] = useState(0);
 
 	const { attempts } = useGetExerciseResult(exerciseId);
 
 	const currAttempt = attempts[currResultIdx].result;
 
-	const [currQuestionId, setCurrQuestionId] = useState<number | null>(null);
+	const [currQuestionIdx, setCurrQuestionIdx] = useState<number | null>(null);
 	const questionResult = useSharedValue(0);
 
 	const handleResultPress = () => {
 		questionResult.value = withSpring(1);
 	};
 
-	const currQuestion = isNull(currQuestionId)
+	const currQuestion = isNull(currQuestionIdx)
 		? null
-		: currAttempt.questions?.[currQuestionId];
+		: currAttempt.questions?.[currQuestionIdx];
+
+	const {
+		theme: { colors, spacing },
+	} = useAppTheme();
 
 	return (
-		<Screen
-			preset="scroll"
-			contentContainerStyle={{ flex: 1 }}
-			safeAreaEdges={["bottom"]}
-		>
-			<Text preset="subheading">Lets Review your Moves</Text>
+		<Route.Screen safeAreaEdges={["top", "bottom"]}>
+			<Text preset="subheading" style={{ textAlign: "center" }}>
+				Lets Review your Moves
+			</Text>
 			<View style={{ flex: 1 }}>
 				<View
 					style={{
@@ -78,22 +187,24 @@ export default function ExerciseResultScreen() {
 						flexDirection: "row",
 						flexWrap: "wrap",
 						padding: spacing.md,
+						alignItems: "center",
 					}}
 				>
 					{currAttempt.questions.map((result, index) => (
 						<Pressable
 							onPress={() => {
-								setCurrQuestionId((curr) => (curr === index ? null : index));
+								setCurrQuestionIdx((curr) => (curr === index ? null : index));
 								handleResultPress();
 							}}
 							key={index}
 						>
 							<QuestionResult
-								currQuestionId={index}
-								questionId={result.id}
+								currQuestionId={currQuestionIdx}
+								questionId={index}
 								isCorrect={
 									result.selectedOptionId === result.question.answer.id
 								}
+								index={index}
 							/>
 						</Pressable>
 					))}
@@ -101,9 +212,9 @@ export default function ExerciseResultScreen() {
 				<Animated.View layout={LinearTransition}>
 					{currQuestion !== null ? (
 						<Animated.View
-							entering={FadeInRight}
-							exiting={FadeOutLeft}
-							key={currQuestionId}
+							entering={makeSpringy(FadeInRight)}
+							exiting={makeSpringy(FadeOutLeft)}
+							key={currQuestionIdx}
 						>
 							<Exercise>
 								<Exercise.Question question={currQuestion?.question.question} />
@@ -112,71 +223,98 @@ export default function ExerciseResultScreen() {
 										const { selectedOptionId } = currQuestion;
 										const answerId = currQuestion.question.answer.id;
 
+										const isMarked = option.id === selectedOptionId;
+										const isCorrect = answerId === option.id;
+
+										let prefix = "";
+										if (isCorrect) {
+											prefix = "Correct: ";
+										}
+										if (isMarked && !isCorrect) {
+											prefix = "You Chose: ";
+										}
+
+										let backgroundColor = undefined;
+										let borderColor: string = colors.palette.neutral300;
+
+										if (isCorrect) {
+											backgroundColor = colors.successBackground;
+											borderColor = colors.success;
+										}
+										if (isMarked && !isCorrect) {
+											backgroundColor = colors.errorBackground;
+											borderColor = colors.error;
+										}
+
 										return (
 											<Exercise.Option
-												entering={FadeInRight.delay(50 * index)}
-												exiting={FadeOutLeft.delay(40 * index)}
+												entering={makeSpringy(FadeInRight).delay(50 * index)}
+												exiting={makeSpringy(FadeOutLeft).delay(40 * index)}
 												key={option.id}
-												text={option.value}
+												text={`${prefix} ${option.value}`}
 												style={{
-													backgroundColor:
-														selectedOptionId === option.id
-															? selectedOptionId === answerId
-																? colors.successBackground
-																: colors.errorBackground
-															: undefined,
-													borderColor:
-														selectedOptionId === option.id
-															? selectedOptionId === answerId
-																? colors.success
-																: colors.error
-															: colors.palette.neutral300,
+													backgroundColor,
+													borderColor,
 												}}
 											/>
 										);
 									})}
 								</Exercise.Options>
+								<Exercise.Reason>
+									{currQuestion.question.reason}
+								</Exercise.Reason>
 							</Exercise>
 						</Animated.View>
 					) : (
 						<Text
 							style={{ textAlign: "center", width: "80%", margin: "auto" }}
-							entering={FadeInDown}
-							exiting={FadeOutLeft}
+							entering={makeSpringy(FadeInDown)}
+							exiting={makeSpringy(FadeOutLeft)}
 						>
-							Tap a question to see what you chose and what the correct answer
-							was.
+							Tap any question to reveal what you selected and what was correct.
 						</Text>
 					)}
 				</Animated.View>
 			</View>
 
-			<Section>
-				<Section.Title>Other Attempts</Section.Title>
-				<Section.Body>
-					{attempts.map((item, index) => (
-						<Pressable
-							key={item.result.id.toString()}
-							onPress={() => {
-								setCurrResultIdx(index);
-							}}
-						>
-							<Animated.View
-								style={{
-									padding: spacing.xs,
-									backgroundColor:
-										currResultIdx === index
-											? colors.palette.neutral200
-											: undefined,
+			{attempts.length > 1 && (
+				<Section>
+					<Section.Title>Other Attempts</Section.Title>
+					<Section.Body>
+						{attempts.map((item, index) => (
+							<Pressable
+								key={item.result.id.toString()}
+								onPress={() => {
+									setCurrResultIdx(index);
+									setCurrQuestionIdx(0);
 								}}
 							>
-								<Text>{formatAttemptDate(item.result.createdAt)}</Text>
-							</Animated.View>
-						</Pressable>
-					))}
-				</Section.Body>
-			</Section>
-		</Screen>
+								<Animated.View
+									style={{
+										padding: spacing.xs,
+										paddingInline: spacing.md,
+										borderRadius: spacing.xs,
+										backgroundColor:
+											currResultIdx === index ? colors.text : undefined,
+									}}
+								>
+									<Text
+										style={{
+											color:
+												currResultIdx === index
+													? colors.textInverse
+													: undefined,
+										}}
+									>
+										{formatAttemptDate(item.result.createdAt)}
+									</Text>
+								</Animated.View>
+							</Pressable>
+						))}
+					</Section.Body>
+				</Section>
+			)}
+		</Route.Screen>
 	);
 }
 
@@ -184,10 +322,11 @@ interface QuestionResultProps {
 	questionId: number;
 	currQuestionId: number | null;
 	isCorrect: boolean;
+	index: number;
 }
 
 const QuestionResult = (props: QuestionResultProps) => {
-	const { currQuestionId, questionId, isCorrect } = props;
+	const { currQuestionId, questionId, isCorrect, index } = props;
 
 	const isActive = useProgresFromBoolean(currQuestionId === questionId);
 
@@ -196,8 +335,9 @@ const QuestionResult = (props: QuestionResultProps) => {
 	} = useAppTheme();
 
 	const styles = useAnimatedStyle(() => ({
-		borderRadius: interpolate(isActive.value, [0, 1], [spacing.xs, spacing.sm]),
 		borderWidth: 1,
+		borderRadius: interpolate(isActive.value, [0, 1], [spacing.xs, spacing.sm]),
+
 		borderColor: interpolateColor(
 			isActive.value,
 			[0, 1],
@@ -210,6 +350,7 @@ const QuestionResult = (props: QuestionResultProps) => {
 
 	return (
 		<Animated.View
+			entering={FadeIn.delay(75 * index)}
 			style={[
 				styles,
 				{

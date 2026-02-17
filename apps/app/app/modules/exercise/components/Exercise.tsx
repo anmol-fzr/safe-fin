@@ -125,4 +125,32 @@ Exercise.Option = (props: OptionProps) => {
 	);
 };
 
+interface ReasonProps extends TextProps {
+	contentContainerProps?: ViewProps;
+}
+
+Exercise.Reason = (props: ReasonProps) => {
+	const { contentContainerProps = {}, ...rest } = props;
+
+	const { themed } = useAppTheme();
+
+	const { style: $contentContainerStyleOverride, ...contentContainerRest } =
+		contentContainerProps;
+
+	return (
+		<View
+			style={[themed($reasonRoot), $contentContainerStyleOverride]}
+			{...contentContainerRest}
+		>
+			<Text size="md" weight="medium">
+				Why
+			</Text>
+			<Text {...rest} />
+		</View>
+	);
+};
+const $reasonRoot: ThemedViewStyle = (theme) => ({
+	gap: theme.spacing.xxs,
+});
+
 Exercise.QuestionResponseSheet = ExerciseQuestionResultSheet;

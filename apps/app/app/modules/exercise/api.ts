@@ -2,13 +2,15 @@ import type { IResData } from "@/services/axios";
 import { axiosInstance } from "@/services/axios";
 import { ResourceId } from "@/types";
 
-const { get } = axiosInstance;
+const { get, post } = axiosInstance;
 
 export const EXERCISE = {
 	ONE: (id: ResourceId) => get<unknown, IResOneExercise>(`/exercise/${id}`),
 	RESULT: {
 		ONE: (id: ResourceId) =>
 			get<unknown, IResOneExerciseResult>(`/exercise/${id}/result`),
+		SAVE: (id: ResourceId, payload: IReqSaveExerciseResult) =>
+			post<unknown, unknown>(`/exercise/${id}/result`, payload),
 	},
 };
 
@@ -57,6 +59,7 @@ type IResOneExerciseResult = IResData<
 				question: {
 					id: number;
 					options: Option[];
+					reason: string;
 					question: string;
 					answer: Answer;
 				};
@@ -64,3 +67,11 @@ type IResOneExerciseResult = IResData<
 		};
 	}[]
 >;
+
+export type IReqSaveExerciseResult = {
+	results: {
+		questionId: number;
+		selectedOptionId: number;
+		answerId: number;
+	}[];
+};

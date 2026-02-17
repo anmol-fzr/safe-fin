@@ -1,66 +1,53 @@
-import type { IResData, ITimestamps } from "@/services/axios";
+import type { IResData, NumericBool } from "@/services/axios";
 
 export type IResGetCourse = IResData<Data>;
 
-interface Data extends ITimestamps {
+interface Data {
 	id: number;
-	isPublished: boolean;
-	rating: number;
+	ratingSum: number;
 	rateCount: number;
 	coverUrl: string;
+	isCompleted: NumericBool;
+	points: number;
 	content: Content;
 	chapters: Chapter[];
-	points: number;
 }
 
-interface Content extends ITimestamps {
+interface Content {
 	title: string;
 	shortDesc: string;
-	longDesc: LongDesc;
+	longDesc: {
+		content: string;
+	};
 }
 
-interface LongDesc {
-	content: string;
-	contentJson: string;
-}
-
-export interface Chapter extends ITimestamps {
+export interface Chapter {
 	id: number;
 	title: string;
-	index: number;
-	isPublished: boolean;
 	units: Unit[];
 	exercises: Exercise[];
 }
 
-export interface Exercise extends ITimestamps {
-	id: number;
-	coverPath: any;
-	title: string;
-	desc: string;
-	chapterId: number;
-	isPublished: boolean;
-}
-
-export interface Unit extends ITimestamps {
+export interface Exercise {
 	id: number;
 	coverPath: null;
-	contentId: number;
-	exerciseId: null | number;
-	points: number;
-	index: number;
-	isPublished: boolean;
-	isCompleted: 0 | 1;
-	content: Content2;
-}
-
-interface Content2 extends ITimestamps {
-	id: number;
 	title: string;
-	shortDesc: string;
-	longDesc: LongDesc2;
+	desc: string;
+	points: number;
+	status: "LOCKED" | "UNLOCKED" | "COMPLETED";
 }
 
-interface LongDesc2 {
-	content: string;
+export interface Unit {
+	id: number;
+	coverPath: null;
+	points: number;
+	status: "LOCKED" | "UNLOCKED" | "COMPLETED";
+	content: {
+		id: number;
+		title: string;
+		shortDesc: string;
+		longDesc: {
+			content: string;
+		};
+	};
 }

@@ -7,6 +7,7 @@ import { PressableScale } from "pressto";
 import { useEffect } from "react";
 import { useAppTheme } from "@/utils/useAppTheme";
 import * as Haptics from "expo-haptics";
+import { Exercise } from "./Exercise";
 
 const { useSheet, Sheet } = createBottomSheet("option-result-sheet");
 
@@ -23,11 +24,10 @@ export function ExerciseQuestionResultSheet(
 ) {
 	const { isCorrect, handleNextQuestion, reason } = props;
 
-	//const { handleOptnPress } = useQuestionContext();
 	const { dismiss } = useExerciseQuestionResultSheet();
 
 	const {
-		theme: { colors, spacing },
+		theme: { colors },
 	} = useAppTheme();
 
 	useEffect(() => {
@@ -79,12 +79,7 @@ export function ExerciseQuestionResultSheet(
 				</PressableScale>
 			</View>
 
-			<View style={{ gap: spacing.xxs }}>
-				<Text size="md" weight="medium">
-					Why
-				</Text>
-				<Text>{reason}</Text>
-			</View>
+			<Exercise.Reason>{reason}</Exercise.Reason>
 
 			<Pressable
 				onPress={() => {
