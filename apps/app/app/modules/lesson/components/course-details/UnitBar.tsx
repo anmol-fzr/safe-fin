@@ -1,11 +1,16 @@
+import { isUndefined } from "@safe-fin/utils";
+import * as Haptics from "expo-haptics";
 import { Link } from "expo-router";
+import { useRef } from "react";
+import { Pressable, View } from "react-native";
+import { toast } from "sonner-native";
+import { Text } from "@/components";
+import RadiantButton from "@/components/shared/base/radiant-button";
+import { getRandomLockedUnitMessage } from "@/utils/faker/course";
+import { useAppTheme } from "@/utils/useAppTheme";
 import type { Unit } from "../../api-types/course_one";
 import { usePrefetchUnit } from "../../hooks/units/queries";
 import { ItemCard } from "../ItemCard";
-import { Pressable, View } from "react-native";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { Text } from "@/components";
-import { toast } from "sonner-native";
 
 type UnitProps = {
 	unit: Unit;
@@ -28,19 +33,29 @@ export const UnitBar = (props: UnitProps) => {
 		theme: { colors },
 	} = useAppTheme();
 
-	const isUnlocked = status === "UNLOCKED";
-
 	const handleLockedPress = () => {
-		toast.error("Locked !!", { richColors: false });
-		//Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+		const message = getRandomLockedUnitMessage();
+		toast.error(message);
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 	};
-	console.info({ status });
 
-	return status === "LOCKED" ? (
-		<Pressable onPress={handleLockedPress}>
-			<ItemCard {...{ title, points, status }} />
-		</Pressable>
-	) : (
+	if (status === "LOCKED") {
+		return (
+			<Pressable onPress={handleLockedPress}>
+				<ItemCard {...{ title, points, status }} />
+			</Pressable>
+		);
+	}
+
+	if (status === "COMPLETED") {
+		return (
+			<Pressable onPress={handleLockedPress}>
+				<ItemCard {...{ title, points, status }} />
+			</Pressable>
+		);
+	}
+
+	return (
 		<Link
 			onPressIn={handlePrefetchUnit}
 			href={{
@@ -49,48 +64,22 @@ export const UnitBar = (props: UnitProps) => {
 					unitId: id,
 				},
 			}}
+			asChild
 		>
-			<View
-				style={[
-					{
-						flex: 1,
-						width: "100%",
-					},
-					isUnlocked
-						? {
-								borderWidth: 4,
-								borderColor: colors.tint,
-								position: "relative",
-								borderRadius: 16,
-								alignItems: "center",
-								//paddingBlock: 8,
-							}
-						: undefined,
-				]}
+			<RadiantButton
+				// theme={{
+				// 	background: colors.palette.neutral100,
+				// 	backgroundSubtle: colors.tint,
+				// 	highlight: colors.tint,
+				// }}
+				paddingHorizontal={4}
+				paddingVertical={4}
 			>
-				{isUnlocked && (
-					<Text
-						style={{
-							position: "absolute",
-							bottom: 0,
-							//left: 0,
-							zIndex: 2,
-							color: colors.textInverse,
-							backgroundColor: colors.tint,
-							paddingInline: 12,
-							paddingTop: 2,
-							borderRadius: 1,
-							borderTopLeftRadius: 12,
-							borderTopRightRadius: 12,
-						}}
-						size="sm"
-						weight="bold"
-					>
-						{index === 0 ? "Start " : "Continue "} here
-					</Text>
-				)}
-				<ItemCard {...{ title, points, status }} />
-			</View>
+				<ItemCard
+					{...{ title, points, status }}
+					style={{ borderWidth: 0, backgroundColor: "transparent" }}
+				/>
+			</RadiantButton>
 		</Link>
 	);
 };

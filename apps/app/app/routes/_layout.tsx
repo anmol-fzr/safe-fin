@@ -4,13 +4,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { Suspense, useEffect, useMemo } from "react";
 import { Provider } from "@/components/Provider";
 import { ScreenTracker } from "@/components/ScreenTracker";
-import { useToggle } from "@/pkg/ui";
 import { initI18n } from "@/i18n";
+import { useToggle } from "@/pkg/ui";
 import { LoadingScreen } from "@/screens";
 import { customFontsToLoad, type ThemeContexts } from "@/theme";
 import { initCrashReporting } from "@/utils/crashReporting";
 import { ThemeProvider, usePersistTheme } from "@/utils/useAppTheme";
-import Animated, { FadingTransition } from "react-native-reanimated";
 
 export {
 	// Catch any errors thrown by the Layout component.

@@ -393,7 +393,7 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 	];
 
 	return (
-		<View style={{ marginTop: spacing.md }}>
+		<View style={{ marginTop: spacing.md, flex: 1 }}>
 			<ChipGroup
 				chips={chips}
 				selectedIndex={selected}
@@ -402,12 +402,13 @@ function CourseDetailsScreenTabs(props: CourseDetailsTabsProps) {
 
 			<Animated.View
 				layout={LinearTransition}
-				style={{ marginTop: spacing.md }}
+				style={{ marginTop: spacing.md, flex: 1 }}
 			>
 				{selected === 0 ? (
 					<Animated.View
 						exiting={makeSpringy(SlideOutLeft)}
 						entering={makeSpringy(SlideInLeft)}
+						style={{ flex: 1 }}
 						key={selected}
 					>
 						<ChapterList chapters={chapters} />

@@ -1,19 +1,18 @@
 import { Lock1, Play, TickCircle } from "iconsax-react-nativejs";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, type ViewProps } from "react-native";
 import { Text } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { CompletedBadge } from "./CompletedBadge";
-import { NumericBool } from "@/services/axios";
 
-type ItemCardProps = {
+interface ItemCardProps extends ViewProps {
 	title: string;
 	points: number;
 	status: "LOCKED" | "UNLOCKED" | "COMPLETED";
-};
+}
 
 export function ItemCard(props: ItemCardProps) {
-	const { title, points, status } = props;
+	const { title, points, status, style: $styleOverride, ...rest } = props;
 
 	const isLocked = status === "LOCKED";
 	const isCompleted = status === "COMPLETED";
@@ -24,15 +23,19 @@ export function ItemCard(props: ItemCardProps) {
 
 	return (
 		<View
-			style={{
-				flexDirection: "row",
-				alignItems: "center",
-				padding: 12,
-				borderWidth: 1,
-				backgroundColor: colors.palette.neutral100,
-				borderColor: isCompleted ? colors.success : colors.palette.neutral200,
-				borderRadius: 12,
-			}}
+			style={[
+				{
+					flexDirection: "row",
+					alignItems: "center",
+					padding: 12,
+					borderWidth: 1,
+					backgroundColor: colors.palette.neutral100,
+					borderColor: isCompleted ? colors.success : colors.palette.neutral200,
+					borderRadius: 12,
+				},
+				$styleOverride,
+			]}
+			{...rest}
 		>
 			<View style={styles.textWrapper}>
 				<Text

@@ -1,3 +1,4 @@
+import type { User } from "@safe-fin/auth";
 import { getPaginateRes } from "@/middleware";
 import type { BucketConfig } from "@/middleware/s3";
 import type { DB } from "@/pkg/db";
@@ -17,7 +18,6 @@ import {
 	unit,
 } from "@/pkg/db";
 import type { CourseLevel } from "./lesson.schema";
-import type { User } from "@safe-fin/auth";
 
 // ============================================
 // Types
@@ -346,8 +346,10 @@ export class LessonService {
 									}
 								: undefined,
 							columns: {
+								id: true,
 								chapterId: false,
 								index: isAdmin,
+								points: true,
 								isPublished: isAdmin,
 								contentId: isAdmin,
 								createdAt: isAdmin,
@@ -359,6 +361,7 @@ export class LessonService {
 								content: {
 									columns: {
 										longDescRichId: false,
+										title: true,
 										createdAt: isAdmin,
 										updatedAt: isAdmin,
 									},

@@ -4,6 +4,7 @@ import { Image } from "react-native";
 import { translate } from "@/i18n";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle";
 
 function TabIcon({
 	focused,

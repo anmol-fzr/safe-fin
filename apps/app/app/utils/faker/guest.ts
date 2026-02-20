@@ -1,4 +1,4 @@
-//import { faker } from "@faker-js/faker/locale/en";
+import { getRandomizer } from ".";
 
 const guestModeMessages = [
 	"You’re exploring as a guest 👀. Log in to unlock the cool stuff and make the most of the app!",
@@ -6,10 +6,6 @@ const guestModeMessages = [
 	"Hey there, guest! 🚪 Some doors stay locked till you log in. Wanna open them?",
 	"You’re just visiting right now. Log in to personalize your experience and go full access mode 🔓.",
 	"Guest mode = limited mode. Sign in to level up and use all the good stuff ✨.",
-] as const;
+];
 
-export const getGuestMessage = () => {
-	const idx = Math.round(Math.random() * 4);
-	return guestModeMessages[idx];
-	//return faker.helpers.arrayElement(guestModeMessages);
-};
+export const getGuestMessage = getRandomizer(guestModeMessages);
