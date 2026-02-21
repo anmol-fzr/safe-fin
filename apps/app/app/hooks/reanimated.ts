@@ -21,7 +21,7 @@ export const useProgresFromBoolean = (isActive = false) => {
 
 	useEffect(() => {
 		progress.value = withSpring(isActive ? 1 : 0);
-	}, [isActive]);
+	}, [isActive, progress]);
 
 	return progress;
 };

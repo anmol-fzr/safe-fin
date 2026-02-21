@@ -1,12 +1,13 @@
 import type { ImageStyle, ViewStyle } from "react-native";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
 import Animated, {
 	FadeIn,
 	FadeInDown,
 	SlideInRight,
 	SlideOutLeft,
 } from "react-native-reanimated";
-import { $sizeStyles, Button, Screen, Text } from "@/components";
+import { $sizeStyles, Screen, Text } from "@/components";
+import { createRoute } from "@/factory/route";
 import { useLoopOverArray } from "@/hooks/use-loop-over-array";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { $styles, makeSpringy, type ThemedStyle } from "@/theme";
@@ -17,7 +18,6 @@ import {
 	WelcomeNextButton,
 } from "../components/welcome-action-buttons";
 import { WelcomeActionButton } from "../components/welcome-action-buttons/welcome-action-button";
-import { Link } from "expo-router";
 
 const balanceImage = require("assets/images/start/balance.png");
 const becomingRichImage = require("assets/images/start/becoming-rich.png");
@@ -44,7 +44,7 @@ export function WelcomeScreen() {
 			safeAreaEdges={["top", "bottom"]}
 			contentContainerStyle={$styles.flex1}
 		>
-			<Animated.View style={themed($topContainer)}>
+			<View style={themed($topContainer)}>
 				<Text
 					preset="bold"
 					style={{ textAlign: "center", ...$sizeStyles.xxl }}
@@ -73,39 +73,17 @@ export function WelcomeScreen() {
 						{curr.text}
 					</Text>
 				</Animated.View>
-			</Animated.View>
-
-			{/*
-			<Link
-				asChild
-				href={{
-					pathname: "/course/exercise/[exerciseId]",
-					params: { exerciseId: 1 },
-				}}
-			>
-				<Button>Go to Exercise</Button>
-			</Link>
-
-			<Link
-				asChild
-				href={{
-					pathname: "/course/exercise/[exerciseId]/result",
-					params: { exerciseId: 1 },
-				}}
-			>
-				<Button>Go to Exercise Result</Button>
-			</Link>
-      */}
+			</View>
 
 			<Animated.View entering={FadeInDown}>
 				{isLogin ? <WelcomeNextButton /> : <WelcomeLoginButton />}
+				{envs.isDev && (
+					<WelcomeActionButton
+						href="/extras/debug"
+						labelTx="demoDebugScreen:title"
+					/>
+				)}
 			</Animated.View>
-			{envs.isDev && (
-				<WelcomeActionButton
-					href="/extras/debug"
-					labelTx="demoDebugScreen:title"
-				/>
-			)}
 		</Screen>
 	);
 }

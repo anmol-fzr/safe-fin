@@ -1,10 +1,3 @@
-import { Button, Screen, Text } from "@/components";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
-import { CourseRating } from "@/modules/lesson/components/CourseRating";
-import { useSaveCourseProgress } from "@/modules/lesson/hooks/mutations";
-import { useGetUnit } from "@/modules/lesson/hooks/units/queries";
-import { $styles, ANIMATION, makeSpringy } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { isNull } from "@safe-fin/utils";
 import { useRouter } from "expo-router";
 import Animated, {
@@ -13,15 +6,24 @@ import Animated, {
 	ZoomInEasyDown,
 } from "react-native-reanimated";
 import { z } from "zod";
+import { Button, Screen, Text } from "@/components";
+import { createRoute } from "@/factory/route";
+import { CourseRating } from "@/modules/lesson/components/CourseRating";
+import { useSaveCourseProgress } from "@/modules/lesson/hooks/mutations";
+import { useGetUnit } from "@/modules/lesson/hooks/units/queries";
+import { $styles, ANIMATION, makeSpringy } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 const trophy = require("assets/images/course/trophy.png");
 
-const paramSchema = z.object({
-	unitId: z.coerce.number(),
+const Route = createRoute({
+	paramSchema: z.object({
+		unitId: z.coerce.number(),
+	}),
 });
 
 export default function UnitCompletionScreen() {
-	const params = useTypedLocalSearchParams(paramSchema);
+	const params = Route.useParams();
 	const { unitId } = params;
 
 	const { unit } = useGetUnit(unitId);

@@ -17,7 +17,6 @@ import {
 	type LayoutChangeEvent,
 	Pressable,
 	StyleSheet,
-	Text,
 	View,
 } from "react-native";
 import Animated, {
@@ -27,8 +26,10 @@ import Animated, {
 	useDerivedValue,
 	useSharedValue,
 	withRepeat,
+	withSpring,
 	withTiming,
 } from "react-native-reanimated";
+import { Text } from "@/components";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { BORDER_GLOW_SHADER } from "./conf";
 import { createDotShaderSource, hexToRgb } from "./helpers";
@@ -42,7 +43,7 @@ export const RadiantButton: React.FC<IRadiantButton> &
 		children,
 		onPress,
 		style,
-		textStyle,
+		textProps = {},
 		borderRadius = 12,
 		borderWidth = 2,
 		duration = 3000,
@@ -71,7 +72,6 @@ export const RadiantButton: React.FC<IRadiantButton> &
 
 		const {
 			theme: { colors },
-			actualTheme,
 		} = useAppTheme();
 
 		const defaultTheme = useMemo(
@@ -79,8 +79,8 @@ export const RadiantButton: React.FC<IRadiantButton> &
 				background: colors.palette.neutral100,
 				backgroundSubtle: colors.palette.neutral500,
 				foreground: colors.palette.neutral900,
-				highlight: colors.palette.primary300,
-				highlightSubtle: colors.palette.primary500,
+				highlight: colors.palette.primary500,
+				highlightSubtle: colors.palette.primary300,
 			}),
 			[colors.palette],
 		);
@@ -116,7 +116,7 @@ export const RadiantButton: React.FC<IRadiantButton> &
 						dotSpacing,
 						dotRadius,
 						dotOpacity,
-						actualTheme !== "light",
+						true,
 					),
 				);
 			} catch {
@@ -221,10 +221,11 @@ export const RadiantButton: React.FC<IRadiantButton> &
 		const glowTransform = useDerivedValue(() => [{ scale: glowScale.value }]);
 
 		const handlePressIn = () => {
-			pressed.value = withTiming<number>(1, { duration: 300 });
+			pressed.value = withSpring<number>(1);
 		};
 		const handlePressOut = () => {
-			pressed.value = withTiming<number>(0, { duration: 600 });
+			pressed.value = withSpring<number>(0);
+			//pressed.value = withTiming<number>(0, { duration: 600 });
 		};
 
 		const animatedPressStyle = useAnimatedStyle(() => ({
@@ -234,10 +235,12 @@ export const RadiantButton: React.FC<IRadiantButton> &
 		const shimmerSize = Math.max(width, height) * 1.5;
 		const hasLayout = width > 0 && height > 0;
 
+		const { style: $textStyleOverride, ...restTextProps } = textProps;
+
 		const renderChildren = () => {
 			if (typeof children === "string") {
 				return (
-					<Text style={[styles.text, { color: theme.foreground }, textStyle]}>
+					<Text style={[styles.text, $textStyleOverride]} {...restTextProps}>
 						{children}
 					</Text>
 				);

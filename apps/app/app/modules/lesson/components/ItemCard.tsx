@@ -30,7 +30,7 @@ export function ItemCard(props: ItemCardProps) {
 					padding: 12,
 					borderWidth: 1,
 					backgroundColor: colors.palette.neutral100,
-					borderColor: isCompleted ? colors.success : colors.palette.neutral200,
+					borderColor: isCompleted ? colors.success : colors.palette.neutral300,
 					borderRadius: 12,
 				},
 				$styleOverride,

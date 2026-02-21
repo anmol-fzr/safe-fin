@@ -3,15 +3,6 @@ import { axiosInstance } from "@/services/axios";
 import type { IReqParams, ResourceId } from "@/types";
 import type { IResGetCourse } from "./api-types/course_one";
 
-export const fallbackData = {
-	data: [],
-	paginate: {
-		total: 0,
-		nextPage: null,
-		hasMore: false,
-	},
-};
-
 export type ILesson = {
 	id: number;
 	title: string;
@@ -33,41 +24,9 @@ interface Quiz {
 	quiz: { title: string };
 }
 
-type IResAllLessons = IResData<ILesson[], true>;
-type IResLesson = IResData<ILessonQuizzes>;
-type IResLastLesson = IResData<{
-	title: string;
-	updatedAt: string;
-	readMinutes: number;
-} | null>;
-
-export const LESSON = {
-	ALL: async (params: IReqParams): Promise<IResAllLessons> => {
-		const data = await axiosInstance.get("/lessons", {
-			params,
-		});
-		return data;
-
-		// return safeApiParse({
-		// 	endpoint: "GET /lessons",
-		// 	schema: lessonsResSchema,
-		// 	data,
-		// 	fallback: fallbackData,
-		// });
-	},
-	ONE: (lessonId: ResourceId) =>
-		axiosInstance.get<unknown, IResLesson>(`/lessons/${lessonId}`),
-	LAST: () => axiosInstance.get<unknown, IResLastLesson>(`/lessons/last`),
-	// Might get replaced by something else in future ( like posthog etc. )
-	UPDATE_STATUS: (lessonId: ResourceId) =>
-		axiosInstance.post<unknown, null>(`/lessons/${lessonId}/status`, {
-			params: { status: "seen" },
-		}),
-} as const;
-
 const { get, post } = axiosInstance;
 
-interface IReqSaveCourseProgress {
+export interface IReqSaveCourseProgress {
 	courseId: ResourceId;
 	chapterId: ResourceId;
 	unitId: ResourceId;
@@ -170,7 +129,7 @@ type IResToggleSavedCourse = IResSuccess;
 
 type IResSuccess = IResData<{ success: boolean }>;
 
-type IResGetCourses = IResData<CourseItem[], true>;
+export type IResGetCourses = IResData<CourseItem[], true>;
 
 export type CourseLevel = "beginner" | "intermediate" | "advanced";
 
@@ -213,10 +172,10 @@ interface Chapter {
 
 interface Unit {
 	id: number;
-	coverPath: any;
+	coverPath: null;
 	contentId: number;
 	chapterId: number;
-	exerciseId: any;
+	exerciseId: null | number;
 	points: number;
 	index: number;
 	isPublished: boolean;

@@ -1,10 +1,7 @@
-import { isUndefined } from "@safe-fin/utils";
 import * as Haptics from "expo-haptics";
 import { Link } from "expo-router";
-import { useRef } from "react";
-import { Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import { toast } from "sonner-native";
-import { Text } from "@/components";
 import RadiantButton from "@/components/shared/base/radiant-button";
 import { getRandomLockedUnitMessage } from "@/utils/faker/course";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -18,7 +15,7 @@ type UnitProps = {
 };
 
 export const UnitBar = (props: UnitProps) => {
-	const { unit, index } = props;
+	const { unit } = props;
 
 	const { id, content, points, status } = unit;
 	const { title } = content;
@@ -29,23 +26,39 @@ export const UnitBar = (props: UnitProps) => {
 		prefetchUnit(id);
 	}
 
-	const {
-		theme: { colors },
-	} = useAppTheme();
-
 	const handleLockedPress = () => {
 		const message = getRandomLockedUnitMessage();
 		toast.error(message);
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 	};
 
-	if (status === "LOCKED") {
+	if (status === "UNLOCKED") {
 		return (
-			<Pressable onPress={handleLockedPress}>
-				<ItemCard {...{ title, points, status }} />
-			</Pressable>
+			<Link
+				onPressIn={handlePrefetchUnit}
+				href={{
+					pathname: "/course/units/[unitId]",
+					params: {
+						unitId: id,
+					},
+				}}
+				asChild
+			>
+				<RadiantButton paddingHorizontal={4} paddingVertical={4}>
+					<ItemCard
+						{...{ title, points, status }}
+						style={{ borderWidth: 0, backgroundColor: "transparent" }}
+					/>
+				</RadiantButton>
+			</Link>
 		);
 	}
+
+	return (
+		<Pressable onPress={handleLockedPress}>
+			<ItemCard {...{ title, points, status }} />
+		</Pressable>
+	);
 
 	if (status === "COMPLETED") {
 		return (
@@ -66,15 +79,7 @@ export const UnitBar = (props: UnitProps) => {
 			}}
 			asChild
 		>
-			<RadiantButton
-				// theme={{
-				// 	background: colors.palette.neutral100,
-				// 	backgroundSubtle: colors.tint,
-				// 	highlight: colors.tint,
-				// }}
-				paddingHorizontal={4}
-				paddingVertical={4}
-			>
+			<RadiantButton paddingHorizontal={4} paddingVertical={4}>
 				<ItemCard
 					{...{ title, points, status }}
 					style={{ borderWidth: 0, backgroundColor: "transparent" }}

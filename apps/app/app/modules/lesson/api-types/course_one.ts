@@ -1,8 +1,8 @@
 import type { IResData, NumericBool } from "@/services/axios";
 
-export type IResGetCourse = IResData<Data>;
+export type IResGetCourse = IResData<SingleCourse>;
 
-interface Data {
+export interface SingleCourse {
 	id: number;
 	ratingSum: number;
 	rateCount: number;

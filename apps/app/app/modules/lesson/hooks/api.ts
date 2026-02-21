@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { useMemo } from "react";
 import type { ResourceId } from "@/types";
-import { COURSES, LESSON } from "../api";
+import { COURSES } from "../api";
 
 const baseQueryKey = "COURSES";
 
@@ -53,7 +53,7 @@ const useGetLesson = (lessonId: ResourceId) => {
 
 function getLessonsOpts() {
 	return infiniteQueryOptions({
-		queryKey: [baseQueryKey],
+		queryKey: [baseQueryKey] as const,
 		queryFn: ({ pageParam }) => COURSES.ALL(pageParam),
 		initialPageParam: { limit: 10, page: 1 },
 		getNextPageParam: ({ paginate }, _allPages, lastPageParam) => {
@@ -76,20 +76,6 @@ const useGetLessons = () => {
 	);
 
 	return { courses, ...rest };
-};
-
-function getLastLessonOpts() {
-	return queryOptions({
-		queryKey: [baseQueryKey, "LAST"],
-		queryFn: LESSON.LAST,
-	});
-}
-
-const useGetLastLesson = () => {
-	const opts = getLastLessonOpts();
-	const { data, ...rest } = useSuspenseQuery(opts);
-
-	return { lesson: data?.data || null, ...rest };
 };
 
 function getSavedCoursesOpts() {
@@ -121,4 +107,4 @@ export {
 	getSavedCoursesOpts,
 	getForYouCoursesOpts,
 };
-export { useGetLessons, useGetLesson, useGetLastLesson, useGetSavedCourses };
+export { useGetLessons, useGetLesson, useGetSavedCourses };

@@ -47,8 +47,8 @@ export const userActivityLog = sqliteTable(
 
 		totalPxEarned: integer("total_px").notNull().default(0),
 
-		createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-		updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+		createdAt: timestamp.createdAt,
+		updatedAt: timestamp.updatedAt,
 	},
 	(table) => ({
 		pk: primaryKey({
