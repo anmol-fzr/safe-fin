@@ -1,34 +1,72 @@
 import * as Sentry from "@sentry/react-native";
 import { useMutation } from "@tanstack/react-query";
 import { produce } from "immer";
+import { isInvalidIndex } from "@/pkg/utils";
 import type { ResourceId } from "@/types";
 import { COURSES, type IReqSaveCourseProgress } from "../api";
 import type { SingleCourse } from "../api-types/course_one";
 import { getForYouCoursesOpts, getLessonOpts, getLessonsOpts } from "./api";
 
-function makeUnitComplete(data: SingleCourse, payload: IReqSaveCourseProgress) {
+const captureUnitCompleteException = (
+	msg: string,
+	extra?: Record<string, unknown>,
+) => {
+	const err = new Error(msg);
+
+	Sentry.captureException(err, {
+		level: "error",
+		tags: {
+			feature: "course",
+			mutation: "save-progress",
+		},
+		extra,
+	});
+};
+
+function courseProgressPost(
+	data: SingleCourse,
+	payload: IReqSaveCourseProgress,
+) {
 	const { chapterId, unitId } = payload;
 
 	const updatedCourse = produce(data, (course) => {
-		const foundChapter = course.chapters.find((ch) => ch.id === chapterId);
+		const { chapters } = course;
 
-		if (foundChapter !== undefined) {
-			const { units } = foundChapter;
-
-			const foundUnitIndx = units.findIndex((unit) => unit.id === unitId);
-
-			if (foundUnitIndx > -1) {
-				const foundUnit = units[foundUnitIndx];
-				foundUnit.status = "COMPLETED";
-
-				const nextUnitIndx = foundUnitIndx + 1;
-
-				if (nextUnitIndx <= units.length - 1) {
-					const nextUnit = units[nextUnitIndx];
-					nextUnit.status = "UNLOCKED";
-				}
-			}
+		const chapterIndex = chapters.findIndex((ch) => ch.id === chapterId);
+		if (isInvalidIndex(chapterIndex)) {
+			captureUnitCompleteException("Chapter index not found");
+			return;
 		}
+
+		const chapter = chapters[chapterIndex];
+
+		const unitIndex = chapter.units.findIndex((unit) => unit.id === unitId);
+		if (isInvalidIndex(unitIndex)) {
+			captureUnitCompleteException("Unit index not found");
+			return;
+		}
+
+		chapter.units[unitIndex].status = "COMPLETED";
+
+		const nextUnitIndex = unitIndex + 1;
+
+		if (nextUnitIndex < chapter.units.length) {
+			chapter.units[nextUnitIndex].status = "UNLOCKED";
+			return;
+		}
+
+		const nextChapterIndex = chapterIndex + 1;
+
+		if (nextChapterIndex < chapters.length) {
+			const nextChapter = chapters[nextChapterIndex];
+
+			if (nextChapter.units.length > 0) {
+				nextChapter.units[0].status = "UNLOCKED";
+			}
+			return;
+		}
+
+		course.isCompleted = 1;
 	});
 
 	return updatedCourse;
@@ -45,7 +83,7 @@ const useSaveCourseProgress = () => {
 
 			const course = context.client.getQueryData(queryOpts.queryKey);
 			if (course !== undefined) {
-				const updatedCourse = makeUnitComplete(course.data, payload);
+				const updatedCourse = courseProgressPost(course.data, payload);
 				const updatedData = {
 					data: updatedCourse,
 					message: course.message,
@@ -68,32 +106,21 @@ const useSaveCourseProgress = () => {
 		},
 		onError: (err, payload, onMutateResult, context) => {
 			if (err) {
-				Sentry.captureException(err, {
-					level: "error",
-					tags: {
-						feature: "course",
-						mutation: "save-progress",
-					},
-				});
+				captureUnitCompleteException(err.message);
+
 				return;
 			}
 
 			const queryOpts = getLessonOpts(payload.courseId);
 
 			if (!onMutateResult) {
-				const error = new Error("Optimistic rollback failed: missing context");
-
-				Sentry.captureException(error, {
-					level: "warning",
-					tags: {
-						feature: "course",
-						mutation: "save-progress",
-					},
-					extra: {
+				captureUnitCompleteException(
+					"Optimistic rollback failed: missing context",
+					{
 						payload,
 						queryKey: queryOpts.queryKey,
 					},
-				});
+				);
 
 				return;
 			}
@@ -101,19 +128,13 @@ const useSaveCourseProgress = () => {
 			const { newData } = onMutateResult;
 
 			if (newData === null) {
-				const error = new Error("Optimistic rollback failed: missing data");
-
-				Sentry.captureException(error, {
-					level: "warning",
-					tags: {
-						feature: "course",
-						mutation: "save-progress",
-					},
-					extra: {
+				captureUnitCompleteException(
+					"Optimistic rollback failed: missing data",
+					{
 						payload,
 						queryKey: queryOpts.queryKey,
 					},
-				});
+				);
 
 				return;
 			}
@@ -166,7 +187,7 @@ const useToggleCourseSave = () => {
 				newForYouCourses,
 			};
 		},
-		onError: (err, courseId, onMutateResult, context) => {
+		onError: (_err, _courseId, onMutateResult, context) => {
 			context.client.setQueryData(
 				queryOpts.queryKey,
 				onMutateResult?.prevCourses,
