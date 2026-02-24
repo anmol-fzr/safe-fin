@@ -42,7 +42,7 @@ importers:
         version: 1.3.6(@tanstack/query-core@5.90.17)(@tanstack/react-query@5.90.17(react@19.1.0))(better-auth@1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@daveyplate/better-auth-ui':
         specifier: 3.3.12
-        version: 3.3.12(5711194aba0ba8926bc2c27ee4cfdb63)
+        version: 3.3.12(67276875473bbf0bbaa587e0b669c930)
       '@faker-js/faker':
         specifier: ^10.0.0
         version: 10.2.0
@@ -304,7 +304,7 @@ importers:
         version: 4.7.0(vite@6.4.1(@types/node@22.19.6)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.97.2)(sass@1.97.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)
+        version: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
       jsdom:
         specifier: ^27.0.0
         version: 27.4.0
@@ -350,9 +350,6 @@ importers:
       '@futurejj/react-native-visibility-sensor':
         specifier: ^1.4.5
         version: 1.4.6(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      '@gorhom/bottom-sheet':
-        specifier: ^5.2.7
-        version: 5.2.8(@types/react@19.1.10)(react-native-gesture-handler@2.28.0(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.6(@babel/core@7.28.6)(react-native-worklets@0.5.1(@babel/core@7.28.6)(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.71.1(react@19.1.0))
@@ -409,7 +406,7 @@ importers:
         version: 5.90.17(react@19.1.0)
       axios:
         specifier: ^1.13.2
-        version: 1.13.2(debug@4.4.3)
+        version: 1.13.2
       better-auth:
         specifier: 1.4.7
         version: 1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -581,9 +578,6 @@ importers:
       ua-parser-js:
         specifier: ^2.0.6
         version: 2.0.8
-      yup:
-        specifier: ^1.7.1
-        version: 1.7.1
       zod:
         specifier: ^4.1.13
         version: 4.3.5
@@ -13953,15 +13947,15 @@ snapshots:
       expo-linking: 8.0.11(expo@54.0.33)(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
       expo-web-browser: 15.0.10(expo@54.0.33)(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))
 
-  '@better-auth/passkey@1.4.12(@better-auth/core@1.4.7(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.3.5))(jose@6.1.3)(kysely@0.28.9)(nanostores@1.1.0))(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-auth@1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(better-call@1.1.7(zod@4.3.5))(nanostores@1.1.0)':
+  '@better-auth/passkey@1.4.12(@better-auth/core@1.4.7(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.5(zod@4.3.5))(jose@6.1.3)(kysely@0.28.9)(nanostores@1.1.0))(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-auth@1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(better-call@1.1.5(zod@4.3.5))(nanostores@1.1.0)':
     dependencies:
-      '@better-auth/core': 1.4.7(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.3.5))(jose@6.1.3)(kysely@0.28.9)(nanostores@1.1.0)
+      '@better-auth/core': 1.4.7(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.5(zod@4.3.5))(jose@6.1.3)(kysely@0.28.9)(nanostores@1.1.0)
       '@better-auth/utils': 0.3.0
       '@better-fetch/fetch': 1.1.21
       '@simplewebauthn/browser': 13.2.2
       '@simplewebauthn/server': 13.2.2
       better-auth: 1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      better-call: 1.1.7(zod@4.3.5)
+      better-call: 1.1.5(zod@4.3.5)
       nanostores: 1.1.0
       zod: 4.3.5
 
@@ -14104,9 +14098,9 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@daveyplate/better-auth-ui@3.3.12(5711194aba0ba8926bc2c27ee4cfdb63)':
+  '@daveyplate/better-auth-ui@3.3.12(67276875473bbf0bbaa587e0b669c930)':
     dependencies:
-      '@better-auth/passkey': 1.4.12(@better-auth/core@1.4.7(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.3.5))(jose@6.1.3)(kysely@0.28.9)(nanostores@1.1.0))(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-auth@1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(better-call@1.1.7(zod@4.3.5))(nanostores@1.1.0)
+      '@better-auth/passkey': 1.4.12(@better-auth/core@1.4.7(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.5(zod@4.3.5))(jose@6.1.3)(kysely@0.28.9)(nanostores@1.1.0))(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-auth@1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(better-call@1.1.5(zod@4.3.5))(nanostores@1.1.0)
       '@better-fetch/fetch': 1.1.21
       '@captchafox/react': 1.10.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@daveyplate/better-auth-tanstack': 1.3.6(@tanstack/query-core@5.90.17)(@tanstack/react-query@5.90.17(react@19.1.0))(better-auth@1.4.7(better-sqlite3@12.6.2)(drizzle-kit@0.31.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -15038,12 +15032,14 @@ snapshots:
       react-native-reanimated: 4.1.6(@babel/core@7.28.6)(react-native-worklets@0.5.1(@babel/core@7.28.6)(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
     optionalDependencies:
       '@types/react': 19.1.10
+    optional: true
 
   '@gorhom/portal@1.0.14(react-native@0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)':
     dependencies:
       nanoid: 3.3.11
       react: 19.1.0
       react-native: 0.81.5(@babel/core@7.28.6)(@react-native-community/cli@20.1.0(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.28.6))(@types/react@19.1.10)(react@19.1.0)
+    optional: true
 
   '@hapi/hoek@9.3.0': {}
 
@@ -15247,6 +15243,41 @@ snapshots:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
       slash: 3.0.0
+
+  '@jest/core@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))':
+    dependencies:
+      '@jest/console': 29.7.0
+      '@jest/reporters': 29.7.0
+      '@jest/test-result': 29.7.0
+      '@jest/transform': 29.7.0
+      '@jest/types': 29.6.3
+      '@types/node': 22.19.6
+      ansi-escapes: 4.3.2
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      exit: 0.1.2
+      graceful-fs: 4.2.11
+      jest-changed-files: 29.7.0
+      jest-config: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
+      jest-haste-map: 29.7.0
+      jest-message-util: 29.7.0
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-resolve-dependencies: 29.7.0
+      jest-runner: 29.7.0
+      jest-runtime: 29.7.0
+      jest-snapshot: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      jest-watcher: 29.7.0
+      micromatch: 4.0.8
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-ansi: 6.0.1
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
+      - ts-node
 
   '@jest/core@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.2))':
     dependencies:
@@ -19093,6 +19124,14 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
+  axios@1.13.2:
+    dependencies:
+      follow-redirects: 1.15.11
+      form-data: 4.0.5
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
   axios@1.13.2(debug@4.4.3):
     dependencies:
       follow-redirects: 1.15.11(debug@4.4.3)
@@ -19788,13 +19827,13 @@ snapshots:
 
   country-state-city@3.2.1: {}
 
-  create-jest@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0):
+  create-jest@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2)):
     dependencies:
       '@jest/types': 29.6.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
-      jest-config: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.2))
+      jest-config: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
       jest-util: 29.7.0
       prompts: 2.4.2
     transitivePeerDependencies:
@@ -21168,6 +21207,8 @@ snapshots:
 
   flow-enums-runtime@0.0.6: {}
 
+  follow-redirects@1.15.11: {}
+
   follow-redirects@1.15.11(debug@4.4.3):
     optionalDependencies:
       debug: 4.4.3
@@ -21813,16 +21854,16 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-cli@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0):
+  jest-cli@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2)):
     dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.2))
+      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
       chalk: 4.1.2
-      create-jest: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)
+      create-jest: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
       exit: 0.1.2
       import-local: 3.2.0
-      jest-config: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.2))
+      jest-config: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
       jest-util: 29.7.0
       jest-validate: 29.7.0
       yargs: 17.7.2
@@ -21850,6 +21891,37 @@ snapshots:
       - babel-plugin-macros
       - supports-color
       - ts-node
+
+  jest-config@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2)):
+    dependencies:
+      '@babel/core': 7.28.6
+      '@jest/test-sequencer': 29.7.0
+      '@jest/types': 29.6.3
+      babel-jest: 29.7.0(@babel/core@7.28.6)
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.7.0(babel-plugin-macros@3.1.0)
+      jest-environment-node: 29.7.0
+      jest-get-type: 29.6.3
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-runner: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      micromatch: 4.0.8
+      parse-json: 5.2.0
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    optionalDependencies:
+      '@types/node': 22.19.6
+      ts-node: 10.9.2(@types/node@22.19.6)(typescript@5.9.2)
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
 
   jest-config@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.2)):
     dependencies:
@@ -22235,12 +22307,12 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0):
+  jest@29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2)):
     dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.2))
+      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
       '@jest/types': 29.6.3
       import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)
+      jest-cli: 29.7.0(@types/node@22.19.6)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -25001,6 +25073,25 @@ snapshots:
       jest-util: 30.0.5
 
   ts-key-enum@3.0.13: {}
+
+  ts-node@10.9.2(@types/node@22.19.6)(typescript@5.9.2):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.12
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 22.19.6
+      acorn: 8.15.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 5.9.2
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    optional: true
 
   ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.2):
     dependencies:

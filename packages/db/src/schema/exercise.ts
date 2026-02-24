@@ -20,6 +20,15 @@ export const exercise = sqliteTable("exercise", {
 	updatedAt: timestamp.updatedAt,
 });
 
+export type SelectExercise = Omit<
+	typeof exercise.$inferSelect,
+	"createdAt" | "updatedAt"
+>;
+export type InsertExercise = Omit<
+	typeof exercise.$inferInsert,
+	"createdAt" | "updatedAt"
+>;
+
 export const question = sqliteTable("question", {
 	id,
 	exerciseId: integer("exercise_id")

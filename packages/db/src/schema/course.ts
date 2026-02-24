@@ -9,7 +9,6 @@ import { id, timestamp } from "./__utils";
 import { user } from "./auth";
 import { rating } from "./rating";
 import { richContent } from "./rich-content";
-import { exercise } from "./exercise";
 
 // Course -> Chapter -> Unit
 export const course = sqliteTable("course", {

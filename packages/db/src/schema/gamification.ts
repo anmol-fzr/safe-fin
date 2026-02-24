@@ -57,8 +57,14 @@ export const userActivityLog = sqliteTable(
 		}),
 	}),
 );
-// , (table) => [
-//   primaryKey({ columns: [table.bookId, table.authorId] }),
-//   // Or PK with custom name
-//   primaryKey({ name: 'custom_name', columns: [table.bookId, table.authorId] })
-// ]
+
+export const userProfileLink = sqliteTable("user_profile_link", {
+	id,
+	userId: text("user_id")
+		.notNull()
+		.references(() => user.id),
+
+	link: text().notNull(),
+
+	createdAt: timestamp.createdAt,
+});

@@ -7,7 +7,12 @@ import {
 	exerciseResult,
 	questionResult,
 } from "./exercise-result";
-import { userActivityLog, publicUserProfile, streak } from "./gamification";
+import {
+	publicUserProfile,
+	streak,
+	userActivityLog,
+	userProfileLink,
+} from "./gamification";
 import { profile } from "./profile";
 import { rating } from "./rating";
 import { richContent, richContentItem } from "./rich-content";
@@ -232,6 +237,7 @@ export const userRelations = relations(user, ({ many, one }) => ({
 	exerciseAttemps: many(exerciseAttempt),
 	likes: many(saved),
 	streak: one(streak),
+	links: one(userProfileLink),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -261,3 +267,13 @@ export const streakRelations = relations(streak, ({ one }) => ({
 		references: [user.id],
 	}),
 }));
+
+export const userProfileLinkRelations = relations(
+	userProfileLink,
+	({ one }) => ({
+		user: one(user, {
+			fields: [userProfileLink.userId],
+			references: [user.id],
+		}),
+	}),
+);
