@@ -1,27 +1,23 @@
 import { zValidator } from "@hono/zod-validator";
-import type { DB } from "@/pkg/db";
 import { z } from "zod";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, paginate, userRole } from "@/middleware";
 import { s3 } from "@/middleware/s3";
+import type { DB } from "@/pkg/db";
 import {
-	and,
 	chapter,
 	course,
 	courseProgress,
 	courseRating,
-	desc,
 	eq,
-	getDb,
 	rating,
-	richContent,
-	saved,
 	sql,
 	unit,
 	userActivityLog,
 } from "@/pkg/db";
-import { dbIdSchema, idParamSchema } from "@/schema";
+import { idParamSchema } from "@/schema";
 import { SavedService } from "../saved/saved.service";
+import { LESSON_CODES as CODES } from "./lesson.codes";
 import {
 	createCourseSchema,
 	getLessonsQueryParamSchema,
@@ -29,8 +25,6 @@ import {
 	updateCourseSchema,
 } from "./lesson.schema";
 import { LessonService } from "./lesson.service";
-import { UnitService } from "./unit/unit.service";
-import { LESSON_CODES as CODES } from "./lesson.codes";
 
 const { createHandlers } = createTypedFactory();
 
@@ -88,20 +82,12 @@ export const getLessonById = createHandlers(
 	db,
 	s3,
 	zValidator("param", courseIdParamSchema),
+
 	async (c) => {
 		const { courseId } = c.req.valid("param");
 		const user = c.get("user");
-		const db = c.get("db");
-		const s3Config = c.get("s3");
 
-		const includeUnpublished = user.role === "admin";
-		const lesson = await LessonService.getById(
-			db,
-			courseId,
-			includeUnpublished,
-			user,
-			s3Config,
-		);
+		const lesson = await LessonService.getById(courseId, user);
 
 		if (!lesson) {
 			return c.json(
@@ -144,7 +130,7 @@ export const saveCourseProgressHandler = createHandlers(
 			})
 			.onConflictDoNothing();
 
-		if (courseProgressInsertResult.rowsAffected === 0) {
+		if (courseProgressInsertResult.meta?.rows_written === 0) {
 			return c.json({ data: { success: true } }, 201);
 		}
 

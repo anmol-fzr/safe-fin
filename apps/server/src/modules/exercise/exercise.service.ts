@@ -1,28 +1,16 @@
-import { exercise, getDb, sql, count, eq, and } from "@/pkg/db";
+import { isUndefined } from "@safe-fin/utils";
+import { errAsync, okAsync } from "neverthrow";
+import { getPaginateRes } from "@/middleware";
 import {
-	ResourceService,
 	type PaginatePayload,
 	type ResourceId,
+	ResourceService,
 } from "@/modules/_utils/service";
-import { errAsync, okAsync, Result } from "neverthrow";
-import { getPaginateRes, paginate } from "@/middleware";
-import { isUndefined } from "@safe-fin/utils";
-import { Reason } from "../_utils/reasons";
 import type { User } from "@/pkg/auth";
+import { and, count, eq, exercise, getDb, type SelectExercise } from "@/pkg/db";
+import { Reason } from "../_utils/reasons";
 
 const db = getDb();
-
-const exercisePaginated = db.query.exercise
-	.findMany({
-		limit: sql.placeholder("limit"),
-		offset: sql.placeholder("offset"),
-		with: {
-			chapter: {
-				columns: { title: true },
-			},
-		},
-	})
-	.prepare();
 
 const countExercises = db.select({ count: count() }).from(exercise).prepare();
 
@@ -35,7 +23,11 @@ interface CreateExercisePayload {
 
 type UpdateExercisePayload = Partial<CreateExercisePayload>;
 
-export class ExerciseService extends ResourceService {
+export class ExerciseService extends ResourceService<
+	SelectExercise,
+	CreateExercisePayload,
+	UpdateExercisePayload
+> {
 	async create(payload: CreateExercisePayload) {
 		try {
 			const result = await db.insert(exercise).values(payload).returning();
@@ -189,7 +181,7 @@ export class ExerciseService extends ResourceService {
 				.set(payload)
 				.where(eq(exercise.id, exerciseId));
 
-			if (updatedExercise.rowsAffected === 0) {
+			if (updatedExercise.meta.rows_written === 0) {
 				return errAsync({
 					reason: Reason.NotFound,
 					error: null,
@@ -216,7 +208,7 @@ export class ExerciseService extends ResourceService {
 			if (isUndefined(foundExercise)) {
 				return errAsync({
 					reason: Reason.NotFound,
-					error: null,
+					error: Reason.NotFound,
 				} as const);
 			}
 

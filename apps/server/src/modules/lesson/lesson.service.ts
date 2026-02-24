@@ -1,5 +1,5 @@
 import type { User } from "@safe-fin/auth";
-import { getPaginateRes } from "@/middleware";
+import { getPaginateRes, getS3Config } from "@/middleware";
 import type { BucketConfig } from "@/middleware/s3";
 import type { DB } from "@/pkg/db";
 import {
@@ -12,11 +12,13 @@ import {
 	exercise,
 	exerciseAttempt,
 	exists,
+	getDb,
 	richContent,
 	richContentItem,
 	sql,
 	unit,
 } from "@/pkg/db";
+import type { ResourceId } from "../_utils/service";
 import type { CourseLevel } from "./lesson.schema";
 
 // ============================================
@@ -51,6 +53,8 @@ interface UpdateCourseData {
 	coverPath: string;
 	isPublished?: boolean;
 }
+
+const db = getDb();
 
 export class LessonService {
 	// ========== GET OPERATIONS ==========
@@ -189,18 +193,11 @@ export class LessonService {
 		};
 	}
 
-	static async getById(
-		db: DB,
-		courseId: number,
-		includeUnpublished = false,
-		user: User,
-		s3: BucketConfig,
-	) {
-		const { ENDPOINT } = s3;
+	static async getById(courseId: ResourceId, user: User) {
+		const { ENDPOINT } = getS3Config();
 		const { id: userId } = user;
 
 		const isAdmin = user.role === "admin";
-		const isUser = user.role === "user";
 
 		const foundCourse = await db.query.course.findFirst({
 			extras: {
@@ -226,7 +223,7 @@ export class LessonService {
 			},
 			where: (c, { eq, and }) => {
 				const conditions = [eq(c.id, courseId)];
-				if (!includeUnpublished) {
+				if (isAdmin) {
 					conditions.push(eq(c.isPublished, true));
 				}
 				return and(...conditions);
@@ -237,7 +234,7 @@ export class LessonService {
 				ratingSum: true,
 				rateCount: true,
 				createdAt: isAdmin,
-				updatedAt: isAdmin,
+				updatedAt: true,
 			},
 			with: {
 				content: {
@@ -257,6 +254,39 @@ export class LessonService {
 					},
 				},
 				chapters: {
+					extras: userId
+						? {
+								status: sql<"COMPLETED" | "ONGOING" | "LOCKED">`
+        CASE
+            -- All units completed
+            WHEN NOT EXISTS (
+                SELECT 1
+                FROM unit u
+                WHERE u.chapter_id = ${chapter.id}
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM course_progress cp
+                    WHERE cp.user_id = ${userId}
+                    AND cp.curr_unit_id = u.id
+                )
+            ) THEN 'COMPLETED'
+
+            -- Any unit completed
+            WHEN EXISTS (
+                SELECT 1
+                FROM unit u
+                JOIN course_progress cp
+                    ON cp.curr_unit_id = u.id
+                WHERE cp.user_id = ${userId}
+                AND u.chapter_id = ${chapter.id}
+            ) THEN 'ONGOING'
+
+            ELSE 'LOCKED'
+        END
+      `.as("status"),
+							}
+						: undefined,
+
 					columns: {
 						id: true,
 						title: true,
@@ -383,8 +413,6 @@ export class LessonService {
 
 		return foundCourse;
 	}
-
-	// ========== CREATE OPERATIONS ==========
 
 	static async create(db: DB, data: CreateCourseData) {
 		const [insertedRichContentItem] = await db

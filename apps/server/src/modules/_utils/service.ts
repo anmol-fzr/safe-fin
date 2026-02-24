@@ -1,20 +1,44 @@
+import type { User } from "@safe-fin/auth";
+import { ResultAsync } from "neverthrow";
+import { Reason } from "./reasons";
+
 type ResourceId = number;
+
 interface PaginatePayload {
 	limit: number;
 	offset: number;
 	search?: string;
 }
 
-abstract class ResourceService {
-	create<T>(payload: T) {}
+type ServiceError = {
+	reason: (typeof Reason)[keyof typeof Reason];
+	error: unknown;
+};
 
-	async get(paginatePayload: PaginatePayload) {}
-	count(paginatePayload: PaginatePayload) {}
+abstract class ResourceService<Entity, CreatePayload, UpdatePayload> {
+	abstract create(
+		payload: CreatePayload,
+	): ResultAsync<{ data: Entity }, ServiceError>;
 
-	getById(id: ResourceId) {}
-	async updateById<T>(id: ResourceId, payload: T) {}
-	async deleteById(id: ResourceId) {}
+	abstract get(
+		paginatePayload: PaginatePayload,
+	): ResultAsync<{ data: Entity[]; paginate: unknown }, ServiceError>;
+
+	abstract getById(
+		id: ResourceId,
+		user: User,
+		context?: unknown,
+	): ResultAsync<{ data: Entity }, ServiceError>;
+
+	abstract updateById(
+		id: ResourceId,
+		payload: UpdatePayload,
+	): ResultAsync<{ data: Entity }, ServiceError>;
+
+	abstract deleteById(
+		id: ResourceId,
+	): ResultAsync<{ data: Entity }, ServiceError>;
 }
 
-export type { ResourceId, PaginatePayload };
+export type { ResourceId, PaginatePayload, ServiceError };
 export { ResourceService };

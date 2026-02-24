@@ -1,5 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { db, getPaginateRes, paginate } from "@/middleware";
+import { isUndefined } from "@/pkg/utils";
 import { queryParamSchema } from "@/schema/params";
 import { createTypedFactory } from "../../factory";
 import { CALCULATOR_CODES, CalculatorErrors } from "./calculator.codes";
@@ -8,7 +9,6 @@ import {
 	calculatorMetadataSchema,
 } from "./calculator.schema";
 import { CalculatorService } from "./calculator.service";
-import { isUndefined } from "@/pkg/utils";
 
 const { createHandlers } = createTypedFactory();
 
@@ -569,7 +569,7 @@ export const deleteCalculatorById = createHandlers(
 
 		const foundCalculator = await CalculatorService.delete(db, calculatorId);
 
-		if (foundCalculator.rowsAffected === 0) {
+		if (foundCalculator.meta.rows_written === 0) {
 			return CalculatorErrors.NotFound();
 		}
 
