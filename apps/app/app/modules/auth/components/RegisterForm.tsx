@@ -1,8 +1,7 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSafeContext } from "@safe-fin/ui/hooks";
 import { useRouter } from "expo-router";
-import React, { createContext, type PropsWithChildren } from "react";
+import { createContext, type PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import type { ViewStyle } from "react-native";
 import { Button, Text } from "@/components";
@@ -36,10 +35,10 @@ const useRegisterFormContext = () => {
 
 export const RegisterFormRoot = ({ children }: PropsWithChildren) => {
 	const methods = useForm({
-		resolver: yupResolver(registerSchema),
+		resolver: zodResolver(registerSchema),
 		defaultValues: {
 			name: "",
-			gender: "",
+			//gender: "",
 		},
 	});
 
@@ -83,14 +82,12 @@ const NameField = () => {
 
 const GenderField = () => {
 	return (
-		<BottomSheetModalProvider>
-			<FormSelectField
-				name="gender"
-				label="Gender"
-				placeholder="e.g. Male"
-				options={genderOpts}
-			/>
-		</BottomSheetModalProvider>
+		<FormSelectField
+			name="gender"
+			label="Gender"
+			placeholder="e.g. Male"
+			options={genderOpts}
+		/>
 	);
 };
 

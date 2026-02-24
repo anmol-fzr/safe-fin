@@ -1,18 +1,17 @@
 import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
 import { QueryClientProvider } from "@tanstack/react-query";
+import * as Haptics from "expo-haptics";
 import { StatusBar } from "expo-status-bar";
 import { PressablesConfig } from "pressto";
-import * as Haptics from "expo-haptics";
 import type { PropsWithChildren } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { Toaster, toast } from "sonner-native";
 import { IconProvider } from "@/context/IconContext";
 import { authClient } from "@/modules/auth/utils";
 import { ANIMATION, getSpringConfig } from "@/theme";
 import { queryClient } from "@/utils/lib/query";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { Toaster } from "sonner-native";
-import { toast } from "sonner-native";
 
 const { damping, stiffness } = getSpringConfig(ANIMATION.spatial.default);
 
@@ -53,6 +52,7 @@ export function Provider({ children }: PropsWithChildren) {
 							theme={themeContext}
 							gap={spacing.xxs}
 							richColors
+							duration={2_000}
 						/>
 					</GestureHandlerRootView>
 				</KeyboardProvider>

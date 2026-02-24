@@ -1,23 +1,13 @@
-import {
-	BottomSheetBackdrop,
-	BottomSheetFlatList,
-	BottomSheetFooter,
-	BottomSheetModal,
-} from "@gorhom/bottom-sheet";
-import type { ThemedStyle } from "app/theme";
+import { spacing, type ThemedStyle } from "app/theme";
 import { useAppTheme } from "app/utils/useAppTheme";
-import {
-	forwardRef,
-	type Ref,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from "react";
-import { TouchableOpacity, View, type ViewStyle } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button } from "./Button";
-import { Icon } from "./Icon";
+import { ArrowRight2 } from "iconsax-react-nativejs";
+import { forwardRef, type Ref, useCallback, useImperativeHandle } from "react";
+import { FlatList, TouchableOpacity, View, type ViewStyle } from "react-native";
+import { IconSax } from "@/context/IconContext";
+import { createBottomSheet } from "./BottomSheet";
 import { ListItem } from "./ListItem";
+import { ListView } from "./ListView";
+import { Text } from "./Text";
 import { TextField, type TextFieldProps } from "./TextField";
 
 export interface Option {
@@ -25,24 +15,21 @@ export interface Option {
 	value: string;
 }
 
-export type Options = Option[];
-
 export interface SelectFieldProps
 	extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange"> {
+	name: string;
 	value: string;
 	renderValue: (value: string) => string;
 	onSelect: (newValue: string) => void;
 	multiple?: boolean;
-	options: { label: string; value: string }[];
+	options: Option[];
+	sheetTitle: string;
 }
+
 export interface SelectFieldRef {
 	presentOptions: () => void;
 	dismissOptions: () => void;
 }
-
-// function without<T>(array: T[], value: T) {
-// 	return array.filter((v) => v !== value);
-// }
 
 export const SelectField = forwardRef(function SelectField(
 	props: SelectFieldProps,
@@ -54,11 +41,10 @@ export const SelectField = forwardRef(function SelectField(
 		renderValue,
 		options = [],
 		multiple = false,
+		sheetTitle,
 		...TextFieldProps
 	} = props;
 
-	const sheet = useRef<BottomSheetModal>(null);
-	const { bottom } = useSafeAreaInsets();
 	const {
 		themed,
 		theme: { colors },
@@ -67,28 +53,34 @@ export const SelectField = forwardRef(function SelectField(
 	const disabled =
 		TextFieldProps.editable === false || TextFieldProps.status === "disabled";
 
-	useImperativeHandle(ref, () => ({ presentOptions, dismissOptions }));
+	const { Sheet: BottomSheet, useSheet: useBottomSheet } = createBottomSheet(
+		`select-field-${props.name}`,
+	);
 
-	const valueString = renderValue(value);
+	console.log(`select-field-${props.name}`);
+
+	const bottomSheet = useBottomSheet();
+
+	useImperativeHandle(ref, () => ({
+		presentOptions,
+		dismissOptions,
+	}));
 
 	const presentOptions = useCallback(() => {
 		if (disabled) return;
+		bottomSheet.present();
+	}, [disabled, bottomSheet]);
 
-		sheet.current?.present();
-	}, [disabled]);
+	const dismissOptions = () => {
+		bottomSheet.dismiss();
+	};
 
-	function dismissOptions() {
-		sheet.current?.dismiss();
-	}
-
-	function updateValue(optionValue: string) {
+	const updateValue = (optionValue: string) => {
 		onSelect(optionValue);
-		dismissOptions();
-	}
+		if (!multiple) dismissOptions();
+	};
 
-	const {
-		theme: { spacing },
-	} = useAppTheme();
+	const valueString = renderValue(value);
 
 	return (
 		<>
@@ -98,69 +90,83 @@ export const SelectField = forwardRef(function SelectField(
 						{...TextFieldProps}
 						value={valueString}
 						RightAccessory={(props) => (
-							<Icon icon="caretRight" containerStyle={props.style} />
+							<IconSax
+								icon={ArrowRight2}
+								color={colors.textDim}
+								size={18}
+								style={props.style}
+							/>
 						)}
 					/>
 				</View>
 			</TouchableOpacity>
 
-			<BottomSheetModal
-				ref={sheet}
-				snapPoints={["50%"]}
-				stackBehavior="replace"
-				enableDismissOnClose
-				backdropComponent={(props) => (
-					<BottomSheetBackdrop
-						{...props}
-						appearsOnIndex={0}
-						disappearsOnIndex={-1}
-					/>
-				)}
-				footerComponent={
-					!multiple
-						? undefined
-						: (props) => (
-								<BottomSheetFooter
-									{...props}
-									style={themed($bottomSheetFooter)}
-									bottomInset={bottom}
-								>
-									<Button
-										text="Dismiss"
-										preset="reversed"
-										onPress={dismissOptions}
-									/>
-								</BottomSheetFooter>
-							)
-				}
+			<BottomSheet
+				//detents={["auto", 0.69, 1]}
+				//initialDetentIndex={1}
+				//initialDetentAnimated
+				contentContainerStyle={{
+					padding: 0,
+					paddingBlock: 0,
+					paddingInline: 0,
+					width: "100%",
+					// alignItems: "center",
+					// justifyContent: "center",
+				}}
 			>
-				<BottomSheetFlatList
+				<Text
+					size="lg"
+					weight="medium"
 					style={{
-						marginBottom: bottom + (multiple ? spacing.xl * 2 : 0),
+						textTransform: "capitalize",
+						paddingInline: spacing.md,
 					}}
-					data={options}
-					keyExtractor={(o) => o.value}
-					renderItem={({ item, index }) => (
-						<ListItem
-							text={item.label}
-							topSeparator={index !== 0}
-							style={themed($listItem)}
-							rightIcon={value.includes(item.value) ? "check" : undefined}
-							rightIconColor={colors.success}
-							onPress={() => updateValue(item.value)}
-						/>
-					)}
-				/>
-			</BottomSheetModal>
+				>
+					{sheetTitle}
+				</Text>
+				<View
+					style={{
+						height: 400,
+						borderTopWidth: 1,
+						borderColor: colors.palette.neutral400,
+					}}
+				>
+					<ListView
+						data={options}
+						nestedScrollEnabled
+						keyExtractor={(o) => o.value}
+						showsVerticalScrollIndicator={false}
+						renderItem={({ item, index }) => {
+							const isCorrect = value.includes(item.value);
+
+							const handleItemPress = () => updateValue(item.value);
+
+							return (
+								<ListItem
+									text={item.label}
+									topSeparator={index !== 0}
+									style={themed(
+										isCorrect ? $listItemActive : $listItemInActive,
+									)}
+									textStyle={isCorrect ? { color: colors.success } : undefined}
+									rightIcon={isCorrect ? "check" : undefined}
+									rightIconColor={colors.success}
+									onPress={handleItemPress}
+								/>
+							);
+						}}
+					/>
+				</View>
+			</BottomSheet>
 		</>
 	);
 });
 
-const $bottomSheetFooter: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	paddingHorizontal: spacing.lg,
-	paddingBottom: spacing.xs,
+const $listItemActive: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+	paddingHorizontal: spacing.md,
+	backgroundColor: colors.successBackground,
 });
 
-const $listItem: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	paddingHorizontal: spacing.lg,
+const $listItemInActive: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+	paddingHorizontal: spacing.sm,
 });

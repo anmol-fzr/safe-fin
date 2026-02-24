@@ -1,37 +1,33 @@
-import { BackHandler, StyleSheet, type ViewStyle } from "react-native";
+import { Link, useFocusEffect, useRouter } from "expo-router";
+import { useCallback } from "react";
+import { BackHandler, StyleSheet, View, type ViewStyle } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import Animated, {
 	FadeInDown,
 	FadeInUp,
 	FadeOutDown,
 	FadeOutUp,
 } from "react-native-reanimated";
+import { z } from "zod";
 import { Screen, Text } from "@/components";
+import { createRoute } from "@/factory/route";
 import { LoginForm } from "@/modules/auth/components";
 import {
 	$styles,
 	makeSpringy,
-	ThemedTextStyle,
 	type ThemedStyle,
+	type ThemedTextStyle,
 } from "@/theme";
 import { APP } from "@/utils/const";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { Link, useFocusEffect, useRouter } from "expo-router";
 import { envs } from "@/utils/envs";
-import { KeyboardAvoidingView } from "react-native-keyboard-controller";
-import { z } from "zod";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
-import { useCallback } from "react";
-import { View } from "react-native";
+import { useAppTheme } from "@/utils/useAppTheme";
 
-const useLoginScreenParams = () => {
-	const params = useTypedLocalSearchParams(
-		z.object({ email: z.string().email().optional() }),
-	);
-	return params;
-};
+const { useParams } = createRoute({
+	paramSchema: z.object({ email: z.email().optional() }),
+});
 
 export default function LoginScreen() {
-	const { email } = useLoginScreenParams();
+	const { email } = useParams();
 
 	const { themed } = useAppTheme();
 
@@ -50,7 +46,7 @@ export default function LoginScreen() {
 			);
 
 			return () => subscription.remove();
-		}, []),
+		}, [router.dismissTo]),
 	);
 
 	const {

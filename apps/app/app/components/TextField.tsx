@@ -16,8 +16,8 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-import { useToggle } from "@/pkg/ui";
 import { isRTL, translate } from "@/i18n";
+import { useToggle } from "@/pkg/ui";
 import type { ThemedStyle, ThemedStyleArray } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { $styles, roundness, spacing } from "../theme";
@@ -276,6 +276,7 @@ const $inputStyle: ThemedStyle<ViewStyle> = ({
 });
 
 const $rightAccessoryStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+	margin: "auto",
 	marginEnd: spacing.xs,
 	height: 40,
 	justifyContent: "center",

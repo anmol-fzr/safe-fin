@@ -1,19 +1,23 @@
-import { FormField } from "@/components/form/FormField";
-import { useYupForm } from "@/hooks";
-import { FormProvider } from "react-hook-form";
-import { View } from "react-native";
-import * as Yup from "yup";
-import { useSubmitFeedback } from "../../hooks/mutations";
-import { Button } from "@/components";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
+import { FormProvider, useForm } from "react-hook-form";
+import { View } from "react-native";
+import { z } from "zod";
+import { Button } from "@/components";
+import { FormField } from "@/components/form/FormField";
+import { useSubmitFeedback } from "../../hooks/mutations";
 
-const feedbackSchema = Yup.object({
-	message: Yup.string().required().label("Message"),
+const feedbackSchema = z.object({
+	message: z
+		.string({
+			error: "Message is required",
+		})
+		.describe("Message"),
 });
 
 export const FeedbackForm = () => {
-	const form = useYupForm({
-		schema: feedbackSchema,
+	const form = useForm({
+		resolver: zodResolver(feedbackSchema),
 	});
 
 	const { submitFeedback, isSubmittingFeedback } = useSubmitFeedback();

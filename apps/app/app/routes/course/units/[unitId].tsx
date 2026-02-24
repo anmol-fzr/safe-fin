@@ -1,20 +1,20 @@
+import { ellipsize } from "@safe-fin/ui/utils";
+import { Link } from "expo-router";
 import { Suspense } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
 import { z } from "zod";
-import { Button, ButtonProps, Separator, Text } from "@/components";
+import { Button, type ButtonProps, Separator, Text } from "@/components";
+import AnimatedScrollProgress from "@/components/shared/micro-interactions/animated-scroll-progress";
+import { CircularProgress } from "@/components/shared/organisms/circular-progress";
+import { createRoute } from "@/factory/route";
+import { useDimensions } from "@/hooks/use-dimensions";
+import { FromCourseCard } from "@/modules/lesson/components/FromCourseCard";
 import { MarkdowRenderer } from "@/modules/lesson/components/Lesson";
 import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
 import { useGetUnit } from "@/modules/lesson/hooks/units/queries";
 import { idSchema } from "@/schema";
 import { useAppTheme } from "@/utils/useAppTheme";
-import AnimatedScrollProgress from "@/components/shared/micro-interactions/animated-scroll-progress";
-import { CircularProgress } from "@/components/shared/organisms/circular-progress";
-import { useSharedValue } from "react-native-reanimated";
-import { useDimensions } from "@/hooks/use-dimensions";
-import { Link } from "expo-router";
-import { FromCourseCard } from "@/modules/lesson/components/FromCourseCard";
-import { ellipsize } from "@safe-fin/ui/utils";
-import { createRoute } from "@/factory/route";
 
 const Route = createRoute({
 	paramSchema: z.object({

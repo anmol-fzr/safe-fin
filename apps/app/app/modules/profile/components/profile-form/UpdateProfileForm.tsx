@@ -2,8 +2,6 @@ import { Button } from "@/components";
 import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
 import { authClient } from "@/modules/auth/utils";
 import { ProfileForm, useProfileForm } from "./ProfileForm";
-import { IconSax } from "@/context/IconContext";
-import { Check, ShieldTick } from "iconsax-react-nativejs";
 
 const useUpdateProfileForm = () => {
 	const form = useProfileForm({

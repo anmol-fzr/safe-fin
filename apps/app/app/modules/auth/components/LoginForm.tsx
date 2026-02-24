@@ -1,13 +1,10 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSafeContext } from "@safe-fin/ui/hooks";
 import { useRouter } from "expo-router";
-import React, { createContext, type PropsWithChildren } from "react";
+import { createContext, type PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { StyleSheet, ViewProps, type ViewStyle } from "react-native";
-import { Button, Text } from "@/components";
-import { loginSchema } from "@/modules/auth/schema";
-import { makeSpringy, type ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
+import { StyleSheet, type ViewProps, type ViewStyle } from "react-native";
+import type { AnimatedProps } from "react-native-reanimated";
 import Animated, {
 	FadeIn,
 	FadeInDown,
@@ -15,9 +12,12 @@ import Animated, {
 	FadeOut,
 	FadeOutDown,
 } from "react-native-reanimated";
-import type { AnimatedProps } from "react-native-reanimated";
-import { useSendOtp } from "../hooks/useSendOtp";
+import { Button, Text } from "@/components";
 import { Form } from "@/components/form/Form";
+import { loginSchema } from "@/modules/auth/schema";
+import { makeSpringy, type ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { useSendOtp } from "../hooks/useSendOtp";
 
 interface LoginFormContextType {
 	handleSubmit: VoidFunction;
@@ -43,7 +43,7 @@ export const LoginFormRoot = (props: LoginFormRootProps) => {
 	const router = useRouter();
 
 	const form = useForm({
-		resolver: yupResolver(loginSchema),
+		resolver: zodResolver(loginSchema),
 		defaultValues: {
 			email,
 		},

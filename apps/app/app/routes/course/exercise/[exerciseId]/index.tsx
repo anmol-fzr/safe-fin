@@ -1,29 +1,26 @@
+import { useNavigation, useRouter } from "expo-router";
+import { useLayoutEffect } from "react";
+import { runOnJS } from "react-native-worklets";
+import z from "zod";
 import { Screen } from "@/components";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
+import { createRoute } from "@/factory/route";
 import { Exercise } from "@/modules/exercise/components/Exercise";
 import { useExerciseQuestionResultSheet } from "@/modules/exercise/components/ExerciseQuestionResultSheet";
 import { useExerciseRender } from "@/modules/exercise/components/ExerciseRender";
 import { useQuestion } from "@/modules/exercise/components/Question";
 import { useGetExercise } from "@/modules/exercise/hooks/queries";
 import { useExerciseStore } from "@/modules/exercise/store";
-import { useNavigation, useRouter } from "expo-router";
-import { useLayoutEffect } from "react";
-import { runOnJS } from "react-native-worklets";
-import z from "zod";
-
-const schema = z.object({
-	exerciseId: z.coerce.number(),
-});
-
-const useExerciseScreenParams = () => {
-	return useTypedLocalSearchParams(schema);
-};
 
 const { resetStore, setupStore, updateResults } = useExerciseStore.getState();
 
+const { useParams } = createRoute({
+	paramSchema: z.object({
+		exerciseId: z.coerce.number(),
+	}),
+});
+
 export default function ExerciseScreen() {
-	const params = useExerciseScreenParams();
-	const { exerciseId } = params;
+	const { exerciseId } = useParams();
 
 	const { exercise } = useGetExercise(exerciseId);
 
@@ -35,7 +32,7 @@ export default function ExerciseScreen() {
 			exerciseId,
 			questionsLen: exercise.questions.length,
 		});
-	}, [exerciseId]);
+	}, [exerciseId, exercise.questions.length]);
 
 	useSetScreenOptions({
 		title: exercise.chapter.course.content.title,
@@ -129,5 +126,5 @@ const useSetScreenOptions = (opts: Partial<{}>) => {
 
 	useLayoutEffect(() => {
 		navigation.setOptions(opts);
-	}, []);
+	}, [opts, navigation]);
 };

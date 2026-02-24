@@ -1,86 +1,86 @@
-import * as yup from "yup";
-import { type InferType, object, string } from "yup";
+import { z } from "zod";
 
-const demoGraphicsSchema = object({
-	gender: string().required().label("Gender"),
-	country: string().required().label("Country"),
-	state: string().required().label("State"),
-	city: string().required().label("City"),
-	occupation: string().required().label("Occupation"),
-	educationLevel: string().required().label("Education Level"),
+const demoGraphicsSchema = z.object({
+	gender: z.string({ error: "Gender is Required" }),
+	country: z.string({ error: "Country is Required" }),
+	state: z.string({ error: "State is Required" }),
+	city: z.string({ error: "City is Required" }),
+	occupation: z.string({ error: "Occupation is Required" }),
+	educationLevel: z.string({
+		error: "Education Level is Required",
+	}),
 });
 
-// Income & Stability
-const stabilityValues = [
+const stabilityEnum = z.enum([
 	"unstable",
 	"moderate_low",
 	"stable",
 	"moderate_high",
 	"independent",
-];
-const incomeRangeValues = [
+]);
+
+const incomeRangeEnum = z.enum([
 	"unstable",
 	"moderate_low",
 	"stable",
 	"moderate_high",
 	"independent",
-];
+]);
 
-const boolValues = ["true", "false"];
-const spendingFrequencyValues = ["often", "sometimes", "rarely"];
-const spendingCatValues = ["food", "rent", "luxury", "travel", "subscriptions"];
+const boolEnum = z.enum(["true", "false"]);
 
-const savingsHabitValues = ["regular", "occasional", "none"];
+const spendingFrequencyEnum = z.enum(["often", "sometimes", "rarely"]);
 
-const debtsValues = ["credit_card", "student_loan", "personal_loan", "no_debt"];
+const spendingCatEnum = z.enum([
+	"food",
+	"rent",
+	"luxury",
+	"travel",
+	"subscriptions",
+]);
 
-const financialDetailsFormSchema = yup.object({
-	stability: yup
-		.string()
-		.oneOf(stabilityValues, "Invalid financial stability selection.")
-		.required("Financial stability is required."),
+const savingsHabitEnum = z.enum(["regular", "occasional", "none"]);
 
-	income_range: yup
-		.string()
-		.oneOf(incomeRangeValues, "Invalid income range selection.")
-		.required("Income range is required."),
+const debtsEnum = z.enum([
+	"credit_card",
+	"student_loan",
+	"personal_loan",
+	"no_debt",
+]);
 
-	// Corresponds to the second `name="stablity"` (Do you track expenses?)
-	track_expenses: yup
-		.string()
-		.oneOf(boolValues, "Please select if you track expenses.")
-		.required("Tracking expenses is required."),
+/* -----------------------------
+   Financial Details (Zod)
+------------------------------ */
 
-	spending_frequency: yup
-		.string()
-		.oneOf(spendingFrequencyValues, "Invalid spending frequency selection.")
-		.required("Spending frequency is required."),
+const financialDetailsFormSchema = z.object({
+	stability: stabilityEnum,
 
-	spending_cats: yup
-		.array()
-		.of(yup.string().oneOf(spendingCatValues))
-		.min(1, "Please select at least one spending category.")
-		.required("Spending categories are required."),
+	income_range: incomeRangeEnum,
 
-	savings_habit: yup
-		.string()
-		.oneOf(savingsHabitValues, "Invalid savings habit selection.")
-		.required("Savings habit is required."),
+	track_expenses: boolEnum,
 
-	emergency_fund_months: yup
-		.number()
+	spending_frequency: spendingFrequencyEnum,
+
+	spending_cats: z
+		.array(spendingCatEnum)
+		.min(1, "Please select at least one spending category."),
+
+	savings_habit: savingsHabitEnum,
+
+	emergency_fund_months: z
+		.number({
+			error: "Emergency fund months selection is required.",
+		})
 		.min(0, "Value must be 0 or more.")
-		.max(12, "Value cannot exceed 12.")
-		.required("Emergency fund months selection is required."),
+		.max(12, "Value cannot exceed 12."),
 
-	debts: yup
-		.array()
-		.of(yup.string().oneOf(debtsValues))
-		.required("Please select all applicable debts (or 'No Debt')."),
+	debts: z
+		.array(debtsEnum)
+		.min(1, "Please select all applicable debts (or 'No Debt')."),
 });
 
-type DemoGraphicsSchema = InferType<typeof demoGraphicsSchema>;
-type FinancialDetailsSchema = InferType<typeof financialDetailsFormSchema>;
+type DemoGraphicsSchema = z.infer<typeof demoGraphicsSchema>;
+type FinancialDetailsSchema = z.infer<typeof financialDetailsFormSchema>;
 
 export type { DemoGraphicsSchema, FinancialDetailsSchema };
 export { demoGraphicsSchema, financialDetailsFormSchema };

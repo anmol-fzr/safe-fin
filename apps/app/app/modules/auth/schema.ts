@@ -1,48 +1,27 @@
-import * as Yup from "yup";
+import { z } from "zod";
 
-const phoneNumber = Yup.number()
-	.positive()
-	.integer()
-	.test(
-		"is-of-10-length",
-		"Invalid Phone Number",
-		(value) => value?.toString().length === 10,
-	)
-	.typeError("Enter a valid Phone Number")
-	.label("Phone Number")
-	.required();
-
-const otp = Yup.number()
-	.positive()
-	.integer()
-	.label("OTP")
-	.typeError("Enter a valid OTP");
-// .test("is-of-6-length", "OTP must be of 6 digits", (value) => {
-// 	return value?.toString().length === 6;
-// });
-
-const email = Yup.string()
-	.email()
-	.required()
-	.label("Email")
-	.typeError("Enter a valid Email address");
-
-const loginSchema = Yup.object().shape({
-	email,
-	//otp,
+const email = z.email({
+	error: "Email is Required",
 });
 
-const registerSchema = Yup.object({
-	name: Yup.string().required().label("Name"),
+const name = z.string({
+	error: "Name is Required",
+});
+
+const loginSchema = z.object({
 	email,
 });
 
-//const profileSchema = registerSchema.concat(loginSchema.pick(["phoneNumber"]));
-const profileSchema = Yup.object({
-	name: Yup.string().required().label("Name"),
+const registerSchema = z.object({
+	name,
 	email,
-	image: Yup.string(),
-	bio: Yup.string().required().label("Bio"),
+});
+
+const profileSchema = z.object({
+	name,
+	email,
+	image: z.string(),
+	bio: z.string({ error: "Bio is Required" }),
 });
 
 export { loginSchema, registerSchema, profileSchema };

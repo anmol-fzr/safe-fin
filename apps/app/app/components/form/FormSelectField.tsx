@@ -8,7 +8,12 @@ import { SelectField, type SelectFieldProps } from "../SelectField";
 
 type FormFieldProps = Omit<
 	SelectFieldProps,
-	"value" | "onChangeText" | "onBlur" | "renderValue" | "onSelect"
+	| "value"
+	| "onChangeText"
+	| "onBlur"
+	| "renderValue"
+	| "onSelect"
+	| "sheetTitle"
 > & {
 	name: string;
 };
@@ -40,6 +45,7 @@ export const FormSelectField = (props: FormFieldProps) => {
 						}
 						helper={props.helper || error}
 						{...props}
+						sheetTitle={`Select Your ${props.name}`}
 						renderValue={(value) => {
 							const foundOption = props.options.find(
 								(option) => option.value === value,

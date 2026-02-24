@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useScrollToTop } from "@react-navigation/native";
 import {
 	StatusBar,
@@ -162,7 +161,7 @@ function useAutoPreset(props: AutoScreenProps): {
 	 * @param {number} w - The width of the content.
 	 * @param {number} h - The height of the content.
 	 */
-	function onContentSizeChange(w: number, h: number) {
+	function onContentSizeChange(_w: number, h: number) {
 		// update scroll-view content height
 		scrollViewContentHeight.current = h;
 		updateScrollState();
@@ -203,7 +202,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
 					contentContainerStyle,
 				]}
 			>
-				<BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+				{children}
 			</View>
 		</View>
 	);
@@ -253,7 +252,7 @@ function ScreenWithScrolling(props: ScreenProps) {
 				contentContainerStyle,
 			]}
 		>
-			<BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+			{children}
 		</KeyboardAwareScrollView>
 	);
 }

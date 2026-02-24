@@ -1,6 +1,6 @@
 import { forwardRef, type Ref } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { type TextInput } from "react-native";
+import type { TextInput } from "react-native";
 import { TextField, type TextFieldProps } from "../TextField";
 
 export interface FormFieldProps
@@ -10,7 +10,7 @@ export interface FormFieldProps
 
 export const FormField = forwardRef(
 	(props: FormFieldProps, ref: Ref<TextInput>) => {
-		const { style: $styleOverride, ...rest } = props;
+		const { name, helper, ...rest } = props;
 
 		const { control, formState } = useFormContext();
 
@@ -19,11 +19,11 @@ export const FormField = forwardRef(
 		const getValue = (obj: T, path: string) =>
 			path.split(".").reduce((acc, key) => acc && acc[key], obj);
 
-		const error = getValue(formState?.errors, props.name)?.message.toString();
+		const error = getValue(formState?.errors, name)?.message.toString();
 
 		return (
 			<Controller
-				control={control}
+				{...{ control, name }}
 				render={({ field: { onChange, onBlur, value, disabled } }) => (
 					<TextField
 						ref={ref}
@@ -31,11 +31,10 @@ export const FormField = forwardRef(
 						onChangeText={onChange}
 						onBlur={onBlur}
 						status={disabled ? "disabled" : error ? "error" : undefined}
-						helper={props.helper || error}
+						helper={helper || error}
 						{...rest}
 					/>
 				)}
-				name={props.name}
 			/>
 		);
 	},

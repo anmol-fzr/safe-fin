@@ -1,11 +1,11 @@
-import { StyleSheet, View } from "react-native";
-import { Text } from "@/components";
-import { FadeInDown, ZoomInEasyDown } from "react-native-reanimated";
-import { makeSpringy } from "@/theme";
-import { StreakData, StreakStatus } from "../../api";
-import { RollingCounter } from "@/components/shared/organisms/rolling-counter";
 import LottieView from "lottie-react-native";
+import { StyleSheet, View } from "react-native";
+import { FadeInDown, ZoomInEasyDown } from "react-native-reanimated";
+import { Text } from "@/components";
 import { createBottomSheet } from "@/components/BottomSheet";
+import { RollingCounter } from "@/components/shared/organisms/rolling-counter";
+import { makeSpringy } from "@/theme";
+import type { StreakData, StreakStatus } from "../../api";
 
 const fireLottieJson = require("assets/lottie/streak/fire.json");
 
@@ -43,8 +43,10 @@ const SHEET_VIEWS: Record<
 	},
 };
 
-export const { useSheet: useStreakSheet, Sheet: BottomSheet } =
+const { useSheet: useStreakSheet, Sheet: BottomSheet } =
 	createBottomSheet("streak-sheet");
+
+export { useStreakSheet };
 
 export const StreakSheet = (props: StreakSheetProps) => {
 	const { streak } = props;

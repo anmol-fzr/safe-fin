@@ -120,9 +120,7 @@ export default function UnitCompletionScreen() {
 					</Text>
 				</Animated.View>
 
-				{rating?.review?.rating ? (
-					<></>
-				) : (
+				{!rating?.review?.rating && (
 					<CourseRating
 						courseId={courseId}
 						rating={rating?.review?.rating ?? 0}

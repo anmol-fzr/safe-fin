@@ -1,10 +1,10 @@
-import { ListView } from "@/components";
-import { Chapter } from "../../api-types/course_one";
-import { ChapterBar } from "./ChapterBar";
-import { makeSpringy, ThemedViewStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { View } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { ListView } from "@/components";
+import { makeSpringy, type ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import type { Chapter } from "../../api-types/course_one";
+import { ChapterBar } from "./ChapterBar";
 
 interface ChapterListProps {
 	chapters: Chapter[];

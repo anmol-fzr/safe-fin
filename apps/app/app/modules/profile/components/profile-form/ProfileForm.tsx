@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker/locale/en";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as ImagePicker from "expo-image-picker";
 import { User } from "iconsax-react-nativejs";
 import { PressableScale } from "pressto";
 import { type ComponentProps, useMemo } from "react";
 import { type UseFormProps, useForm, useFormContext } from "react-hook-form";
 import { Alert, Image, View } from "react-native";
-import type * as Yup from "yup";
+import type { z } from "zod";
 import { Text } from "@/components";
 import { Form } from "@/components/form/Form";
 import { FormField, type FormFieldProps } from "@/components/form/FormField";
@@ -16,15 +16,15 @@ import { useAuthStore } from "@/modules/auth/store";
 import { colors } from "@/theme";
 import { PROFILE } from "../../api";
 
-type ProfileFormValues = Yup.InferType<typeof profileSchema>;
+type ProfileFormValues = z.Infer<typeof profileSchema>;
 
 export const useProfileForm = (props?: UseFormProps<ProfileFormValues>) => {
-	const form = useForm({
-		resolver: yupResolver(profileSchema),
+	debugger;
+
+	return useForm<ProfileFormValues>({
+		resolver: zodResolver(profileSchema),
 		...props,
 	});
-
-	return form;
 };
 
 function ProfileFormRoot(props: ComponentProps<typeof Form>) {

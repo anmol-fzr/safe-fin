@@ -1,7 +1,7 @@
-import { Alert, TextProps, View, ViewProps } from "react-native";
+import { Alert, type TextProps, View, type ViewProps } from "react-native";
 
-import { Button, ButtonProps, Text } from "@/components";
-import { $styles, ThemedViewStyle } from "@/theme";
+import { Button, type ButtonProps, Text } from "@/components";
+import { $styles, type ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { useDeleteAccount } from "../hooks/mutations";
 
@@ -100,7 +100,7 @@ DeleteAccountCardImpl.DeleteAccountButton = (props: ButtonProps) => {
 		<Button
 			onPress={handleDeleteAccount}
 			preset="destructive"
-			style={themed($deleteAccountBtn)}
+			style={[themed($deleteAccountBtn), $styleOverride]}
 			{...rest}
 		>
 			Delete Account

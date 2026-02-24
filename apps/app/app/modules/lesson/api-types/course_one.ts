@@ -11,6 +11,7 @@ export interface SingleCourse {
 	points: number;
 	content: Content;
 	chapters: Chapter[];
+	updatedAt: string;
 }
 
 interface Content {
@@ -24,6 +25,7 @@ interface Content {
 export interface Chapter {
 	id: number;
 	title: string;
+	status: "LOCKED" | "ONGOING" | "COMPLETED";
 	units: Unit[];
 	exercises: Exercise[];
 }

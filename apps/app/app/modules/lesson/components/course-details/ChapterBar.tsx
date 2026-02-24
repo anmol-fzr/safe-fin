@@ -1,11 +1,11 @@
 import { View } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 import { $baseListItemSeparatorStyles, ListView, Text } from "@/components";
+import { makeSpringy } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import type { Chapter } from "../../api-types/course_one";
-import { UnitBar } from "./UnitBar";
-import { makeSpringy } from "@/theme";
-import Animated, { FadeInUp } from "react-native-reanimated";
 import { ExerciseBar } from "./ExerciseBar";
+import { UnitBar } from "./UnitBar";
 
 type ChapterProps = {
 	chapter: Chapter;

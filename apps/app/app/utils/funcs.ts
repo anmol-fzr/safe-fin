@@ -7,7 +7,7 @@ const currenctFmt = new Intl.NumberFormat("en-IN", {
 type DebouncingFunc<T> = (args: T) => void;
 
 export function debounce<A>(func: DebouncingFunc<A>, timeout = 300) {
-	let timer: number;
+	let timer: NodeJS.Timeout;
 
 	const fn: DebouncingFunc<A> = (...args) => {
 		clearTimeout(timer);
