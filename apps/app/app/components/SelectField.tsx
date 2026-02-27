@@ -2,7 +2,7 @@ import { spacing, type ThemedStyle } from "app/theme";
 import { useAppTheme } from "app/utils/useAppTheme";
 import { ArrowRight2 } from "iconsax-react-nativejs";
 import { forwardRef, type Ref, useCallback, useImperativeHandle } from "react";
-import { FlatList, TouchableOpacity, View, type ViewStyle } from "react-native";
+import { TouchableOpacity, View, type ViewStyle } from "react-native";
 import { IconSax } from "@/context/IconContext";
 import { createBottomSheet } from "./BottomSheet";
 import { ListItem } from "./ListItem";

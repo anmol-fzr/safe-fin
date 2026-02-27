@@ -42,7 +42,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(
 		} = useAppTheme();
 
 		const {
-			detents = ["auto", 1],
+			detents = ["auto"],
 			grabberOptions = { color: colors.palette.neutral900 },
 			backgroundColor = colors.background,
 			contentContainerStyle,
