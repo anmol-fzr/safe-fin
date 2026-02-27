@@ -37,6 +37,7 @@ abstract class ResourceService<Entity, CreatePayload, UpdatePayload> {
 
 	abstract deleteById(
 		id: ResourceId,
+		user: User,
 	): ResultAsync<{ data: Entity }, ServiceError>;
 }
 

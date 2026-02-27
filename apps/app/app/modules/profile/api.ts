@@ -1,5 +1,9 @@
-import { axiosInstance, type IResData } from "@/services/axios";
 import { toast } from "sonner-native";
+import {
+	axiosInstance,
+	type IResData,
+	type IResSuccess,
+} from "@/services/axios";
 
 const { get, post } = axiosInstance;
 
@@ -36,29 +40,64 @@ export const DEMO_GRAPHICS = {
 } as const;
 
 import { File } from "expo-file-system";
+import type { ResourceId } from "@/types";
 
 export type IResPubliProfile = IResData<{
 	user: {
+		id: string;
 		name: string;
 		image: string;
+		bio: string;
 		createdAt: string;
+		links: Array<{
+			id: string | number;
+			link: string;
+		}>;
+		streak: {
+			current: number;
+			maximum: number;
+			lastActivityDate: string;
+		};
 	};
 	profile: {
-		currentStreak: number;
-		maxStreak: number;
 		totalPX: number;
 		courses: number;
 	};
-	activity: Array<{
-		id: number;
-		date: string;
-		totalPxEarned: number;
-	}>;
+	activity: {
+		year: Array<{
+			id: number;
+			date: string;
+			totalPxEarned: number;
+		}>;
+		month: Array<{
+			id: number;
+			date: string;
+			totalPxEarned: number;
+		}>;
+	};
 }>;
+
+type IResAddLink = IResData<{
+	id: number;
+	userId: string;
+	link: string;
+	createdAt: string;
+}>;
+
+interface IReqAddLink {
+	link: string;
+}
 
 export const PROFILE = {
 	PUBLIC: (userId?: string) =>
 		get<unknown, IResPubliProfile>("/profile/public", { params: { userId } }),
+
+	LINK: {
+		ADD: (payload: IReqAddLink) =>
+			post<IReqAddLink, IResAddLink>("/profile/link", payload),
+		REMOVE: (id: ResourceId) =>
+			axiosInstance.delete<never, IResSuccess>(`/profile/link/${id}`),
+	},
 
 	AVATAR: {
 		UPLOAD: async (file: {

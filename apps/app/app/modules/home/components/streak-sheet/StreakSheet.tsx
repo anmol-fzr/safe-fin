@@ -4,7 +4,8 @@ import { FadeInDown, ZoomInEasyDown } from "react-native-reanimated";
 import { Text } from "@/components";
 import { createBottomSheet } from "@/components/BottomSheet";
 import { RollingCounter } from "@/components/shared/organisms/rolling-counter";
-import { makeSpringy } from "@/theme";
+import { makeSpringy, type ThemedTextStyle, ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import type { StreakData, StreakStatus } from "../../api";
 
 const fireLottieJson = require("assets/lottie/streak/fire.json");
@@ -51,6 +52,8 @@ export { useStreakSheet };
 export const StreakSheet = (props: StreakSheetProps) => {
 	const { streak } = props;
 
+	const { themed } = useAppTheme();
+
 	if (!streak) {
 		return <></>;
 	}
@@ -94,12 +97,17 @@ export const StreakSheet = (props: StreakSheetProps) => {
 				day streak
 			</Text>
 
-			<Text entering={FadeInDown} style={styles.textAlignCenter}>
+			<Text entering={FadeInDown} style={themed($streakSheetDesc)}>
 				{desc}
 			</Text>
 		</BottomSheet>
 	);
 };
+
+const $streakSheetDesc: ThemedTextStyle = (theme) => ({
+	textAlign: "center",
+	color: theme.colors.textDim,
+});
 
 const styles = StyleSheet.create({
 	lottie: {

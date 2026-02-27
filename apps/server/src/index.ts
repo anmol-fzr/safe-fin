@@ -3,8 +3,8 @@ import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
 import { appCors } from "@/middleware";
 import { v1Router } from "./api/v1/router";
-import { createTypedFactory } from "./factory";
 import { setupMonitoring } from "./config/monitoring";
+import { createTypedFactory } from "./factory";
 
 const { createApp } = createTypedFactory();
 const app = createApp();
@@ -15,33 +15,23 @@ app
 		"*",
 		secureHeaders({
 			contentSecurityPolicy: {
-				//defaultSrc: ["'self'"],
-				//scriptSrc: ["self", "https://cdn.jsdelivr.net/npm/@scalar/api-reference"],
-				//styleSrc: ["https://fonts.scalar.com"],
+				defaultSrc: ["'self'"],
+				scriptSrc: ["self"],
 			},
 		}),
 	)
 	.use(appCors);
 
 app.use("*", async (c, next) => {
-	//c.header("Cache-Control", "public max-age=86400");
+	c.header(
+		"Cache-Control",
+		"public, must-revalidate, s-maxage=300, max-age=300",
+	);
+	c.header("Vary", "Authorization");
 	await next();
 });
 
-app
-	.get("/health", (c) => c.text("Hello Hono!"))
-	.route("/api/v1", v1Router)
-	.notFound((c) => {
-		console.warn("Remove this Generic Not Found !!!");
-		return c.json({
-			data: [],
-			paginate: {
-				total: 0,
-				hasMore: false,
-				nextPage: null,
-			},
-		});
-	});
+app.get("/health", (c) => c.text("Hello Hono!")).route("/api/v1", v1Router);
 
 showRoutes(app, {
 	verbose: true,

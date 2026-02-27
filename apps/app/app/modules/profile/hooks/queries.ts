@@ -7,7 +7,7 @@ import {
 import { authClient } from "@/modules/auth/utils";
 import { DEMO_GRAPHICS, PROFILE } from "../api";
 
-const getPublicProfileOpts = (userId?: string) => {
+export const getPublicProfileOpts = (userId?: string) => {
 	return queryOptions({
 		queryKey: ["USER", "PROFILE", "PUBLIC", userId],
 		queryFn: () => PROFILE.PUBLIC(userId),
@@ -58,11 +58,17 @@ const useListSessions = () => {
 	};
 };
 
-const useSession = () => {
-	const { data, ...rest } = useQuery({
+const getSessionOpts = () => {
+	return queryOptions({
 		queryKey: ["AUTH", "SESSION"],
 		queryFn: () => authClient.getSession(),
 	});
+};
+
+const useSession = () => {
+	const opts = getSessionOpts();
+
+	const { data, ...rest } = useQuery(opts);
 	const currSession = data?.data?.session;
 	const currUser = data?.data?.user;
 
@@ -73,6 +79,7 @@ export { getDemoGraphicsOpts, getListSessionsOpts };
 export {
 	useGetDemoGraphics,
 	useListSessions,
+	getSessionOpts,
 	useSession,
 	usePrefetchUserDemographics,
 };

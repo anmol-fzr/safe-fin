@@ -23,11 +23,11 @@ export const IconProvider = (props: IconProviderProps) => {
 	);
 };
 
-export interface IconCompProps extends IconProps {
+export interface IconSaxProps extends IconProps {
 	icon: BaseIcon;
 }
 
-export const IconSax = (props: IconCompProps) => {
+export const IconSax = (props: IconSaxProps) => {
 	const { icon: Icon, ...rest } = props;
 	const iconOpts = useIcon();
 

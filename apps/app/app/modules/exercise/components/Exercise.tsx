@@ -1,16 +1,16 @@
-import { Text } from "@/components";
-import { AnimatedProgressBar } from "@/components/shared/organisms/progress/AnimatedProgress";
-import type { ThemedTextStyle, ThemedViewStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { View } from "react-native";
 import type { ViewProps } from "react-native";
-import type { TextProps } from "@/components";
+import { View } from "react-native";
 import { interpolateColor, useAnimatedStyle } from "react-native-reanimated";
+import type { TextProps } from "@/components";
+import { Text } from "@/components";
 import {
 	GamifiedButton,
-	GamifiedButtonProps,
+	type GamifiedButtonProps,
 } from "@/components/gamified/GamifiedButton";
+import { AnimatedProgressBar } from "@/components/shared/organisms/progress/AnimatedProgress";
 import { useProgresFromBoolean } from "@/hooks/reanimated";
+import type { ThemedTextStyle, ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { ExerciseQuestionResultSheet } from "./ExerciseQuestionResultSheet";
 
 export const Exercise = (props: ViewProps) => {
@@ -40,7 +40,6 @@ Exercise.ProgressBar = (props: ExerciseProgressBarProps) => {
 		<View style={[themed($progressBarRoot), $styleOverride]} {...rest}>
 			<AnimatedProgressBar
 				progress={progress}
-				width="90%"
 				progressColor={colors.tint}
 				trackColor={colors.palette.accent100}
 				borderRadius={12}

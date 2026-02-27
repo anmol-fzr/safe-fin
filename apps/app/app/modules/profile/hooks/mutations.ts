@@ -1,15 +1,18 @@
+import { useResourceActionToast } from "@safe-fin/ui/hooks";
+import * as Sentry from "@sentry/react-native";
 import {
 	mutationOptions,
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { authClient } from "@/modules/auth/utils";
-import { DEMO_GRAPHICS } from "../api";
-import { getListSessionsOpts } from "./queries";
+import { produce } from "immer";
+import { cache, useId } from "react";
+import { useOptimisticUpdateHelper } from "@/hooks/useOptimisticUpdateHelper";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import * as Sentry from "@sentry/react-native";
-import { useResourceActionToast } from "@safe-fin/ui/hooks";
 import { useAuthStore } from "@/modules/auth/store";
+import { authClient } from "@/modules/auth/utils";
+import { DEMO_GRAPHICS, PROFILE } from "../api";
+import { getListSessionsOpts, getPublicProfileOpts } from "./queries";
 
 const useUpdateDemoGraphics = () => {
 	const toast = useResourceActionToast();
@@ -123,6 +126,142 @@ const useSubmitFeedback = () => {
 	return { submitFeedback: mutate, isSubmittingFeedback: isPending, ...rest };
 };
 
+const useAddProfileLink = () => {
+	const { queryKey } = getPublicProfileOpts();
+	const insertedId = useId();
+
+	const { getCacheOperator } = useOptimisticUpdateHelper();
+
+	const cacheOperator = getCacheOperator(queryKey);
+
+	const { mutate, ...rest } = useMutation({
+		mutationKey: ["PROFILE", "LINK", "ADD"],
+		mutationFn: PROFILE.LINK.ADD,
+		onMutate: async (payload) => {
+			const profile = cacheOperator.get();
+
+			if (profile === undefined) {
+				return {
+					prevData: null,
+					newData: null,
+				} as const;
+			}
+
+			const newProfile = produce(profile, (draftProfile) => {
+				draftProfile.data.user.links.unshift({
+					id: insertedId,
+					link: payload.link,
+				});
+			});
+
+			cacheOperator.set(newProfile);
+
+			return {
+				prevData: profile,
+				newData: newProfile,
+				meta: {
+					insertedId,
+				},
+			} as const;
+		},
+		onSuccess: async (data, _variables, onMutateResult) => {
+			const { newData } = onMutateResult;
+
+			if (newData === null) {
+				return;
+			}
+
+			const fix = produce(newData, (profile) => {
+				const foundLink = profile.data.user.links.find(
+					(link) => link.id === onMutateResult.meta.insertedId,
+				);
+				if (foundLink) {
+					foundLink.id = data.data.id;
+				}
+			});
+
+			cacheOperator.set(fix);
+		},
+		onError: (err, payload, onMutateResult) => {
+			if (err) {
+				console.error(err);
+			}
+
+			if (!onMutateResult?.prevData) {
+				console.info("Optimistic rollback failed: missing data", {
+					payload,
+					queryKey,
+				});
+
+				return;
+			}
+
+			cacheOperator.set(onMutateResult.prevData);
+		},
+	});
+
+	return { addProfileLink: mutate, ...rest };
+};
+
+const useRemoveProfileLink = () => {
+	const { queryKey } = getPublicProfileOpts();
+
+	const { getCacheOperator } = useOptimisticUpdateHelper();
+
+	const cacheOperator = getCacheOperator(queryKey);
+
+	const { mutate, ...rest } = useMutation({
+		mutationKey: ["PROFILE", "LINK", "REMOVE"],
+		mutationFn: PROFILE.LINK.REMOVE,
+		onMutate: async (payload) => {
+			const linkId = payload;
+			const profile = cacheOperator.get();
+
+			if (profile === undefined) {
+				return {
+					prevData: null,
+					newData: null,
+				} as const;
+			}
+
+			const newProfile = produce(profile, (draftProfile) => {
+				const newLinks = draftProfile.data.user.links.filter(
+					(link) => link.id !== linkId,
+				);
+				draftProfile.data.user.links = newLinks;
+			});
+
+			cacheOperator.set(newProfile);
+
+			return {
+				prevData: profile,
+				newData: newProfile,
+				meta: {
+					removedId: linkId,
+				},
+			} as const;
+		},
+		onError: (err, payload, onMutateResult) => {
+			if (err) {
+				console.error(err);
+			}
+
+			if (!onMutateResult?.prevData) {
+				console.info("Optimistic rollback failed: missing data", {
+					payload,
+					queryKey,
+				});
+
+				return;
+			}
+
+			cacheOperator.set(onMutateResult.prevData);
+		},
+	});
+
+	return { removeProfileLink: mutate, ...rest };
+};
+
 export {
 	useUpdateDemoGraphics,
 	useRevokeSession,
@@ -130,3 +269,5 @@ export {
 	useDeleteAccount,
 	useSubmitFeedback,
 };
+
+export { useAddProfileLink, useRemoveProfileLink };

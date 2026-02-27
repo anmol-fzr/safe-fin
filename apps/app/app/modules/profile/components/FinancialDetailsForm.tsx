@@ -1,4 +1,4 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, type UseFormReturn, useForm } from "react-hook-form";
 import { ScrollView } from "react-native";
 import { Button } from "@/components";
@@ -24,7 +24,7 @@ const stabilityOpts = [
 
 const useFinancialDetailsForm = () => {
 	const form = useForm({
-		resolver: yupResolver(financialDetailsFormSchema),
+		resolver: zodResolver(financialDetailsFormSchema),
 	});
 
 	return form;

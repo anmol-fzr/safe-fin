@@ -5,12 +5,12 @@ import { User } from "iconsax-react-nativejs";
 import { PressableScale } from "pressto";
 import { type ComponentProps, useMemo } from "react";
 import { type UseFormProps, useForm, useFormContext } from "react-hook-form";
-import { Alert, Image, View } from "react-native";
+import { Alert, Image, type ImageProps, View } from "react-native";
 import type { z } from "zod";
 import { Text } from "@/components";
 import { Form } from "@/components/form/Form";
 import { FormField, type FormFieldProps } from "@/components/form/FormField";
-import { IconSax } from "@/context/IconContext";
+import { IconSax, type IconSaxProps } from "@/context/IconContext";
 import { profileSchema } from "@/modules/auth/schema";
 import { useAuthStore } from "@/modules/auth/store";
 import { colors } from "@/theme";
@@ -19,8 +19,6 @@ import { PROFILE } from "../../api";
 type ProfileFormValues = z.Infer<typeof profileSchema>;
 
 export const useProfileForm = (props?: UseFormProps<ProfileFormValues>) => {
-	debugger;
-
 	return useForm<ProfileFormValues>({
 		resolver: zodResolver(profileSchema),
 		...props,
@@ -33,7 +31,37 @@ function ProfileFormRoot(props: ComponentProps<typeof Form>) {
 	return <Form {...form}>{children}</Form>;
 }
 
-ProfileFormRoot.Avatar = () => {
+type ProfileFormImageProps = ImageProps;
+
+ProfileFormRoot.Image = (props: ProfileFormImageProps) => {
+	const {
+		width = 100,
+		height = 100,
+		style = { borderRadius: 50, flex: 1 },
+		...rest
+	} = props;
+
+	return <Image {...{ width, height, style }} {...rest} />;
+};
+
+type ProfileFormAvatarProps = {
+	imageUri: string;
+	imageProps?: ImageProps;
+	iconProps?: IconSaxProps;
+};
+
+ProfileFormRoot.Avatar = (props: ProfileFormAvatarProps) => {
+	const { imageUri, imageProps, iconProps } = props;
+	const { icon = User, size = 40, ...restIconProps } = iconProps ?? {};
+
+	return imageUri ? (
+		<ProfileFormRoot.Image source={{ uri: imageUri }} {...imageProps} />
+	) : (
+		<IconSax {...{ icon, size }} {...restIconProps} />
+	);
+};
+
+ProfileFormRoot.AvatarPicker = () => {
 	const userImage = useAuthStore((state) => state.user?.image ?? "");
 	const setUserImage = useAuthStore((state) => state.setUserImage);
 	const form = useFormContext();
@@ -90,16 +118,7 @@ ProfileFormRoot.Avatar = () => {
 					justifyContent: "center",
 				}}
 			>
-				{userImage ? (
-					<Image
-						source={{ uri: userImage }}
-						width={100}
-						height={100}
-						style={{ borderRadius: 50, flex: 1 }}
-					/>
-				) : (
-					<IconSax icon={User} size={40} />
-				)}
+				<ProfileForm.Avatar imageUri={userImage} />
 			</PressableScale>
 
 			<Text size="xxs" preset="default">

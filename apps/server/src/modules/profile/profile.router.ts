@@ -6,6 +6,7 @@ import {
 	getPublicProfile,
 	updateProfile,
 } from "./profile.controller";
+import { profileLinkRouter } from "./profile-link";
 
 const { createApp } = createTypedFactory();
 
@@ -14,6 +15,7 @@ const profileRouter = createApp()
 	.get("/", ...getProfile)
 	.get("/activity", ...getProfileActivity)
 	.post("/", ...updateProfile)
-	.post("/avatar/upload-url", ...getAvatarObjectUploadUrl);
+	.post("/avatar/upload-url", ...getAvatarObjectUploadUrl)
+	.route("/link", profileLinkRouter);
 
 export { profileRouter };

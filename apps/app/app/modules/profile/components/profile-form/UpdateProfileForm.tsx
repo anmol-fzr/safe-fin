@@ -1,13 +1,17 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components";
 import { useUpdateUser } from "@/modules/auth/hooks/useUpdateUser";
-import { authClient } from "@/modules/auth/utils";
+import { getSessionOpts } from "../../hooks/queries";
 import { ProfileForm, useProfileForm } from "./ProfileForm";
 
 const useUpdateProfileForm = () => {
+	const queryClient = useQueryClient();
+
 	const form = useProfileForm({
 		defaultValues: async () => {
-			const session = await authClient.getSession();
-			if (session.error !== null) {
+			const session = await queryClient.ensureQueryData(getSessionOpts());
+
+			if (session.error !== null || session.data === null) {
 				return {
 					name: "",
 					bio: "",
@@ -16,11 +20,13 @@ const useUpdateProfileForm = () => {
 				};
 			}
 
+			const { name, bio = "", email, image } = session.data.user;
+
 			return {
-				name: session.data?.user?.name ?? "",
-				bio: session.data?.user?.bio ?? "",
-				email: session.data?.user?.email ?? "",
-				image: session.data?.user?.image ?? "",
+				name,
+				bio,
+				email,
+				image,
 			};
 		},
 	});
@@ -28,7 +34,7 @@ const useUpdateProfileForm = () => {
 	return form;
 };
 
-export function UpdateProfileForm() {
+const useUpdateProfile = () => {
 	const form = useUpdateProfileForm();
 	const { updateUser, isUpdatingUser } = useUpdateUser();
 
@@ -40,10 +46,20 @@ export function UpdateProfileForm() {
 		});
 	});
 
+	return {
+		form,
+		onSubmit,
+		isUpdatingUser,
+	};
+};
+
+export function UpdateProfileForm() {
+	const { form, onSubmit, isUpdatingUser } = useUpdateProfile();
+
 	return (
 		<ProfileForm.Root {...form}>
 			<ProfileForm.Fields>
-				<ProfileForm.Avatar />
+				<ProfileForm.AvatarPicker />
 				<ProfileForm.Name />
 				<ProfileForm.Bio />
 				<ProfileForm.Email status="disabled" />

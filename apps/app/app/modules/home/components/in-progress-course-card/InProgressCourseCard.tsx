@@ -1,9 +1,9 @@
-import { useAppTheme } from "@/utils/useAppTheme";
-import { View } from "react-native";
-import { InProgressCourseCardImpl } from "./InProgressCourseCardImpl";
-import { Suspense } from "react";
-import { useGetLastLeftCourse } from "@/modules/lesson/hooks/api";
 import { isNull } from "@safe-fin/utils";
+import { Suspense } from "react";
+import { View } from "react-native";
+import { useGetLastLeftCourse } from "@/modules/lesson/hooks/api";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { InProgressCourseCardImpl } from "./InProgressCourseCardImpl";
 
 export function InProgressCourseCard() {
 	return (

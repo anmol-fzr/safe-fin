@@ -1,5 +1,14 @@
-import { View, ScrollView, Pressable, ViewProps } from "react-native";
-import { Text } from "@/components";
+import { getEmptyArr } from "@safe-fin/ui/utils";
+import { formatDate, getDay, getMonth } from "@safe-fin/utils";
+import {
+	type Dispatch,
+	memo,
+	type SetStateAction,
+	useCallback,
+	useMemo,
+	useState,
+} from "react";
+import { Pressable, ScrollView, View, type ViewProps } from "react-native";
 import Animated, {
 	FadeIn,
 	FadeInUp,
@@ -12,22 +21,16 @@ import Animated, {
 	useDerivedValue,
 	withSpring,
 } from "react-native-reanimated";
-import { useAppTheme } from "@/utils/useAppTheme";
-import {
-	Dispatch,
-	memo,
-	SetStateAction,
-	useCallback,
-	useMemo,
-	useState,
-} from "react";
+import { Text } from "@/components";
 import { Section } from "@/components/Section";
-import { IconSax } from "@/context/IconContext";
-import { Activity } from "iconsax-react-nativejs";
-import { ANIMATION, colors, getSpringConfig, spacing } from "@/theme";
-import { formatDate } from "@safe-fin/utils";
-import { getEmptyArr } from "@safe-fin/ui/utils";
-import { makeSpringy } from "@/theme";
+import {
+	ANIMATION,
+	colors,
+	getSpringConfig,
+	makeSpringy,
+	spacing,
+} from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 /* ------------------ Constants ------------------ */
 
@@ -80,18 +83,29 @@ function buildActivity(
 }
 
 interface ActivityHeatmapProps {
-	activity: ActivityRow[];
+	activity: {
+		year: ActivityRow[];
+		month: ActivityRow[];
+	};
 }
 
 export function ActivityHeatmap(props: ActivityHeatmapProps) {
+	const [curr, setCurr] = useState<"year" | "month">("year");
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
 	const { activity } = props;
 
+	const monthIndx = new Date().getMonth();
+
 	const activityData = buildActivity(
 		2026,
-		activity,
-		//{ from: 0, to: 0 },
+		activity[curr],
+		curr === "year"
+			? undefined
+			: {
+					from: monthIndx,
+					to: monthIndx,
+				},
 	);
 
 	const activeItem = activeIndex !== null ? activityData[activeIndex] : null;
@@ -107,15 +121,19 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 						gap: spacing.xs,
 					}}
 				>
-					<IconSax icon={Activity} color={colors.tint} />
-					<Section.Title style={{ color: colors.tint }}>
-						Recent Activity
-					</Section.Title>
+					<Section.Title>Recent Activity</Section.Title>
 				</View>
 
-				<Text size="xs" style={{ color: colors.textDim }}>
-					This Year Activity
-				</Text>
+				<Pressable
+					onPress={() => setCurr((c) => (c === "year" ? "month" : "year"))}
+				>
+					<Text
+						size="xs"
+						style={{ color: colors.textDim, textTransform: "capitalize" }}
+					>
+						This {curr} Activity
+					</Text>
+				</Pressable>
 			</Section.Header>
 
 			<Section.Body preset="filled">
@@ -172,6 +190,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 							<Text
 								entering={makeSpringy(FadeIn).delay(100)}
 								exiting={makeSpringy(FadeOut).delay(100)}
+								style={{ color: colors.textDim }}
 							>
 								Tap any day to see your PX for that day
 							</Text>
@@ -184,8 +203,11 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 							<Text style={{ color: colors.textDim }} size="xs">
 								Less
 							</Text>
-							{getEmptyArr(5).map((_, i) => (
-								<Animated.View entering={makeSpringy(FadeIn).delay(100 * i)}>
+							{getEmptyArr(5).map((i) => (
+								<Animated.View
+									entering={makeSpringy(FadeIn).delay(100 * i)}
+									key={i}
+								>
 									<DayItem
 										count={500 * i}
 										style={{ height: 20, aspectRatio: 1 }}
@@ -217,7 +239,10 @@ function Heatmap(props: HeatmapProps) {
 		theme: { spacing },
 	} = useAppTheme();
 
-	const columnCount = useMemo(() => Math.ceil(data.length / ROW_COUNT), []);
+	const columnCount = useMemo(
+		() => Math.ceil(data.length / ROW_COUNT),
+		[data.length],
+	);
 
 	const onSelect = useCallback(
 		(index: number) => {
@@ -233,33 +258,85 @@ function Heatmap(props: HeatmapProps) {
 				gap: spacing.xxxs,
 			}}
 		>
-			{Array.from({ length: columnCount }).map((_, col) => (
-				<Animated.View
-					entering={makeSpringy(FadeIn).delay(50 * col)}
-					key={col}
-					style={{ gap: spacing.xxxs }}
-				>
-					{Array.from({ length: ROW_COUNT }).map((_, row) => {
-						const index = row + col * ROW_COUNT;
-						const item = data[index];
-						if (!item) return null;
+			{getEmptyArr(columnCount).map((col, colIndx) => {
+				return (
+					<Animated.View
+						entering={makeSpringy(FadeIn).delay(50 * col)}
+						key={col}
+						//style={{ gap: spacing.xxxs }}
+						style={{
+							gap: spacing.xxxs,
+						}}
+					>
+						{getEmptyArr(ROW_COUNT).map((row, rowIndx) => {
+							const index = row + col * ROW_COUNT;
+							const item = data[index];
+							if (!item) return null;
 
-						return (
-							<Animated.View
-								entering={makeSpringy(FadeIn).delay(50 * (row + col))}
-								key={`activit-${item.date}-${index}`}
-							>
-								<ActivityDayItem
-									index={index}
-									count={item.totalPxEarned}
-									isActive={index === activeIndex}
-									onPress={onSelect}
-								/>
-							</Animated.View>
-						);
-					})}
-				</Animated.View>
-			))}
+							if (colIndx > 0 && rowIndx === 0) {
+								console.log({
+									date: data[index].date,
+									month: getMonth(data[index].date),
+								});
+							}
+
+							return (
+								<View
+									key={`activit-${item.date}`}
+									style={{
+										paddingTop: rowIndx === 0 ? 30 : 0,
+									}}
+								>
+									{colIndx > 0 && colIndx % 4 === 1 && rowIndx === 0 && (
+										<Text
+											style={{
+												position: "absolute",
+												flex: 1,
+												width: 4 * 30,
+											}}
+										>
+											{getMonth(data[index].date)}
+										</Text>
+									)}
+									<Animated.View
+										entering={makeSpringy(FadeIn).delay(50 * (row + col))}
+										style={{
+											maxWidth: 30,
+											paddingLeft: colIndx === 0 ? 96 : 30,
+										}}
+									>
+										<Text
+											style={{
+												position: "absolute",
+												minWidth: 30 * 3,
+											}}
+										>
+											{colIndx === 0 ? getDay(data[row].date) : ""}
+										</Text>
+										{/*
+									<Text
+										//style={{ overflow: "visible" }}
+										style={{
+											position: "absolute",
+											minWidth: 30 * 3,
+										}}
+									>
+										{rowIndx % 30 === 0 ? getMonth(data[index].date) : ""}
+									</Text>
+                  */}
+										<ActivityDayItem
+											index={index}
+											count={item.totalPxEarned}
+											isActive={index === activeIndex}
+											onPress={onSelect}
+										/>
+									</Animated.View>
+								</View>
+							);
+						})}
+					</Animated.View>
+				);
+			})}
 		</ScrollView>
 	);
 }
@@ -307,7 +384,7 @@ function interpolateColorsHelper(
 	const g = Math.round(g1 + (g2 - g1) * percent);
 	const b = Math.round(b1 + (b2 - b1) * percent);
 
-	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+	return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
 type DayItemProps = {

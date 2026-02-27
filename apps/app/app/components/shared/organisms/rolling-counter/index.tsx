@@ -1,6 +1,6 @@
-import { Platform, StyleSheet, View, ViewStyle } from "react-native";
-import { Text } from "@/components";
+import { BlurView, type BlurViewProps } from "expo-blur";
 import { type FC, memo, useState } from "react";
+import { Platform, StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
 	Easing,
 	interpolate,
@@ -12,10 +12,11 @@ import Animated, {
 	withSpring,
 	withTiming,
 } from "react-native-reanimated";
-import { BlurView, type BlurViewProps } from "expo-blur";
-import type { ICounter, IReusableDigit } from "./types";
-import { SPRING_CONFIG } from "./const";
 import { scheduleOnRN } from "react-native-worklets";
+import { Text } from "@/components";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { SPRING_CONFIG } from "./const";
+import type { ICounter, IReusableDigit } from "./types";
 
 const AnimatedBlur =
 	Animated.createAnimatedComponent<Partial<BlurViewProps>>(BlurView);
@@ -125,7 +126,6 @@ const RollingCounter: FC<ICounter> = memo(
 		height = 60,
 		width = 40,
 		fontSize = 48,
-		color = "#000",
 		springConfig = SPRING_CONFIG,
 	}: ICounter):
 		| (React.JSX.Element & React.ReactNode & React.ReactElement)
@@ -166,6 +166,8 @@ const RollingCounter: FC<ICounter> = memo(
 			),
 		}));
 
+		const { theme } = useAppTheme();
+
 		return (
 			<Animated.View style={[styles.rowContainer, containerAnimStyle]}>
 				{Array.from({ length: totalDigits }, (_, i) => {
@@ -178,7 +180,7 @@ const RollingCounter: FC<ICounter> = memo(
 							counterValue={animatedValue}
 							height={height}
 							width={width}
-							color={color}
+							color={theme.colors.text}
 							fontSize={fontSize}
 						/>
 					);

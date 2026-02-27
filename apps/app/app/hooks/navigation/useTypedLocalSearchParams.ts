@@ -14,7 +14,6 @@ export const useTypedLocalSearchParams = (schema: z.ZodTypeAny) => {
 		);
 		console.error(result.error.message);
 		console.error(error);
-		debugger;
 		throw error;
 	}
 

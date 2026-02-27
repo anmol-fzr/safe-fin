@@ -1,17 +1,17 @@
 import { expo } from "@better-auth/expo";
+import type { DB } from "@safe-fin/db";
+import { verification } from "@safe-fin/db/schema";
 import type { BetterAuthOptions } from "better-auth";
 import {
 	admin,
 	anonymous,
 	createAuthMiddleware,
+	emailOTP,
 	multiSession,
 	openAPI,
-	emailOTP,
 } from "better-auth/plugins";
-import { Emailer, sendVerificationOTP } from "./email";
-import { EmailOtps } from "./server";
-import { DB } from "@safe-fin/db";
-import { verification } from "@safe-fin/db/schema";
+import { Emailer } from "./email";
+import type { EmailOtps } from "./server";
 
 const GOOGLE_TEST_EMAIL = "bot@safefin.app";
 const GOOGLE_TEST_OTP = "123456:0";

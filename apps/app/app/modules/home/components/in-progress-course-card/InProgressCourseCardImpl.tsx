@@ -1,19 +1,15 @@
-import { Button, ButtonProps, Text } from "@/components";
+import { Link } from "expo-router";
+import type { PropsWithChildren } from "react";
+import { View } from "react-native";
+import { Button, type ButtonProps, Text } from "@/components";
 import { PromoCardImpl } from "@/components/promo-card";
-import {
+import type {
 	PromoCardBodyProps,
 	PromoCardTitleProps,
 } from "@/components/promo-card/promo-card";
 import { AnimatedProgressBar } from "@/components/shared/organisms/progress/AnimatedProgress";
-import { IconSax } from "@/context/IconContext";
-import { colors, spacing } from "@/theme";
-import { ResourceId } from "@/types";
+import type { ResourceId } from "@/types";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { Link } from "expo-router";
-import { Play } from "iconsax-react-nativejs";
-import { PropsWithChildren } from "react";
-import { s } from "../../../../../../../packages/db/dist/index-FWGwJAh7.mjs";
-import { View } from "react-native";
 
 function InProgressCourseCardRoot(props: PropsWithChildren) {
 	const { children } = props;
@@ -34,10 +30,14 @@ function InProgressCourseCardRoot(props: PropsWithChildren) {
 }
 
 InProgressCourseCardRoot.Badge = () => {
+	const {
+		theme: { colors },
+	} = useAppTheme();
 	return (
 		<PromoCardImpl.Badge
 			style={{
 				backgroundColor: colors.palette.accent100,
+				color: colors.palette.accent400,
 			}}
 		>
 			In progress
@@ -60,22 +60,21 @@ InProgressCourseCardRoot.Progress = (
 ) => {
 	const { progress } = props;
 	const {
-		theme: { colors },
+		theme: { colors, spacing },
 	} = useAppTheme();
 
 	return (
 		<View
 			style={{
 				flexDirection: "row",
-				gap: spacing.xs,
+				gap: spacing.sm,
 				flex: 1,
 			}}
 		>
 			<AnimatedProgressBar
 				progress={progress}
-				width="90%"
 				progressColor={colors.tint}
-				trackColor={colors.palette.accent100}
+				trackColor={colors.palette.accent200}
 				borderRadius={12}
 			/>
 			<Text>{progress * 100}%</Text>
@@ -105,9 +104,12 @@ InProgressCourseCardRoot.Action = (props: InProgressCourseCardActionProps) => {
 		>
 			<Button
 				preset="reversed"
-				style={{
-					backgroundColor: colors.tint,
-				}}
+				style={[
+					{
+						backgroundColor: colors.tint,
+					},
+					$styleOverride,
+				]}
 				{...rest}
 			>
 				Continue Course

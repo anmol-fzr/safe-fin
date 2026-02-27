@@ -1,12 +1,12 @@
-import { Text, TextProps } from "@/components";
+import { View } from "react-native";
+import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
+import { Text, type TextProps } from "@/components";
 import {
 	Section,
-	SectionBodyProps,
-	SectionTitleProps,
+	type SectionBodyProps,
+	type SectionTitleProps,
 } from "@/components/Section";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { View } from "react-native";
-import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 
 type PromoCardRootProps = SectionBodyProps;
 

@@ -1,29 +1,36 @@
-type DateTimeStyle = "short" | "full" | "long" | "medium";
+export function formatDateTime(
+	date: string | Date,
+	opts?: Intl.DateTimeFormatOptions,
+) {
+	const { dateStyle = "medium", timeStyle = "medium", ...rest } = opts ?? {};
 
-type DateTimeOpts = {
-	dateStyle: DateTimeStyle;
-	timeStyle: DateTimeStyle;
-};
-
-export function formatDateTime(date: string | Date, opts?: DateTimeOpts) {
 	return new Intl.DateTimeFormat("en-IN", {
-		dateStyle: opts?.dateStyle ?? "medium",
-		timeStyle: opts?.timeStyle ?? "medium",
-	}).format(new Date(date));
+		dateStyle,
+		timeStyle,
+		...rest,
+	}).format(ensureDateType(date));
 }
 
 export function formatDate(date: string | Date) {
-	if (date instanceof Date) {
-		return new Intl.DateTimeFormat("en-US", {
-			month: "short",
-			day: "2-digit",
-			year: "numeric",
-		}).format(date);
-	}
-
-	return new Intl.DateTimeFormat("en-US", {
+	return new Intl.DateTimeFormat("en-IN", {
 		month: "short",
 		day: "2-digit",
 		year: "numeric",
-	}).format(new Date(date));
+	}).format(ensureDateType(date));
+}
+
+function ensureDateType(date: string | Date) {
+	return date instanceof Date ? date : new Date(date);
+}
+
+export function getDay(date: string | Date) {
+	return new Intl.DateTimeFormat("en-IN", { weekday: "long" }).format(
+		ensureDateType(date),
+	);
+}
+
+export function getMonth(date: string | Date) {
+	return new Intl.DateTimeFormat("en-IN", { month: "long" }).format(
+		ensureDateType(date),
+	);
 }

@@ -1,12 +1,19 @@
 import { zValidator } from "@hono/zod-validator";
-import { courseProgress, userDemographics } from "@safe-fin/db/schema";
+import { z } from "zod";
 import { createTypedFactory } from "@/factory";
 import { authenticate, db, s3, weakAuthenticate } from "@/middleware";
+import {
+	and,
+	count,
+	courseProgress,
+	eq,
+	sum,
+	userActivityLog,
+	userDemographics,
+} from "@/pkg/db";
 import { isUndefined } from "@/pkg/utils";
 import { PROFILE_CODES } from "./profile.codes";
 import { insertDemoGraphicsSchema } from "./profile.schema";
-import { z } from "zod";
-import { and, count, eq } from "drizzle-orm";
 
 const { createHandlers } = createTypedFactory();
 
@@ -153,12 +160,21 @@ export const getPublicProfile = createHandlers(
 		const userDataQuery = db.query.user.findFirst({
 			where: (users, { eq }) => eq(users.id, userId),
 			columns: {
+				id: true,
 				name: true,
+				bio: true,
 				//email: true,
 				image: true,
 				createdAt: true,
 			},
 			with: {
+				links: {
+					columns: {
+						id: true,
+						link: true,
+					},
+					orderBy: (links, { desc }) => desc(links.createdAt),
+				},
 				streak: {
 					columns: {
 						current: true,
@@ -169,19 +185,19 @@ export const getPublicProfile = createHandlers(
 			},
 		});
 
-		const publicUserProfileQuery = db.query.publicUserProfile.findFirst({
-			where: (profiles, { eq }) => eq(profiles.userId, userId),
-			columns: {
-				totalPX: true,
-			},
-		});
+		// const publicUserProfileQuery = db.query.publicUserProfile.findFirst({
+		// 	where: (profiles, { eq }) => eq(profiles.userId, userId),
+		// 	columns: {
+		// 		totalPX: true,
+		// 	},
+		// });
 
 		const { year, fromMonth, toMonth } = c.req.valid("query");
 
 		const start = new Date(Date.UTC(year, fromMonth, 1));
 		const end = new Date(Date.UTC(year, toMonth, 31));
 
-		const userActivityQuery = db.query.userActivityLog.findMany({
+		const userYearActivityQuery = db.query.userActivityLog.findMany({
 			where: (activityLogs, { eq, and, gte, lte }) =>
 				and(
 					eq(activityLogs.userId, userId),
@@ -189,7 +205,25 @@ export const getPublicProfile = createHandlers(
 					lte(activityLogs.date, end),
 				),
 			columns: {
-				id: true,
+				date: true,
+				totalPxEarned: true,
+			},
+		});
+
+		const userMonthActivityQuery = db.query.userActivityLog.findMany({
+			where: (activityLogs, { eq, and, gte, lte }) =>
+				and(
+					eq(activityLogs.userId, userId),
+					gte(
+						activityLogs.date,
+						new Date(Date.UTC(year, new Date().getMonth(), 1)),
+					),
+					lte(
+						activityLogs.date,
+						new Date(Date.UTC(year, new Date().getMonth(), 31)),
+					),
+				),
+			columns: {
 				date: true,
 				totalPxEarned: true,
 			},
@@ -205,26 +239,37 @@ export const getPublicProfile = createHandlers(
 				),
 			);
 
+		const userXpQuery = db
+			.select({ value: sum(userActivityLog.totalPxEarned) })
+			.from(userActivityLog)
+			.where(eq(userActivityLog.userId, userId));
+
 		const [
 			userData,
-			publicUserProfileData,
-			userActivityData,
+			userYearActivityData,
+			userMonthActivityData,
 			userCourseProgressData,
+			userXpData,
 		] = await Promise.all([
 			userDataQuery,
-			publicUserProfileQuery,
-			userActivityQuery,
+			userYearActivityQuery,
+			userMonthActivityQuery,
 			userCourseProgress,
+			userXpQuery,
 		]);
+		console.log(userXpData);
 
 		return c.json({
 			data: {
 				user: userData,
 				profile: {
-					totalPX: publicUserProfileData?.totalPX ?? 0,
+					totalPX: Number(userXpData[0].value) ?? 0,
 					courses: userCourseProgressData[0].count,
 				},
-				activity: userActivityData,
+				activity: {
+					year: userYearActivityData,
+					month: userMonthActivityData,
+				},
 			},
 		});
 	},

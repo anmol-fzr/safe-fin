@@ -76,6 +76,7 @@ export function WelcomeScreen() {
 
 			<Animated.View entering={FadeInDown}>
 				{isLogin ? <WelcomeNextButton /> : <WelcomeLoginButton />}
+
 				{envs.isDev && (
 					<WelcomeActionButton
 						href="/extras/debug"

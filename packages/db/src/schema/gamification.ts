@@ -29,7 +29,6 @@ export const publicUserProfile = sqliteTable("public_user_profile", {
 		.references(() => user.id)
 		.unique()
 		.notNull(),
-	totalPX: integer("total_px"),
 
 	createdAt: timestamp.createdAt,
 	updatedAt: timestamp.updatedAt,
@@ -68,3 +67,12 @@ export const userProfileLink = sqliteTable("user_profile_link", {
 
 	createdAt: timestamp.createdAt,
 });
+
+export type SelectUserProfileLink = Omit<
+	typeof userProfileLink.$inferSelect,
+	"updatedAt"
+>;
+export type InsertUserProfileLink = Omit<
+	typeof userProfileLink.$inferInsert,
+	"createdAt" | "updatedAt" | "id"
+>;

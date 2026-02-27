@@ -8,7 +8,6 @@ import type { ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 interface BottomSheetProps extends TrueSheetProps {
-	withOutContainer?: boolean;
 	contentContainerStyle?: ViewStyle;
 }
 
@@ -38,26 +37,25 @@ export const createBottomSheet = (SHEET_NAME: string) => {
 export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(
 	(props, ref) => {
 		const {
-			detents = ["auto"],
-			grabberOptions = styles.grabber,
+			themed,
+			theme: { colors },
+		} = useAppTheme();
+
+		const {
+			detents = ["auto", 1],
+			grabberOptions = { color: colors.palette.neutral900 },
+			backgroundColor = colors.background,
 			contentContainerStyle,
 			children,
-			withOutContainer = false,
 			...rest
 		} = props;
 
-		const { themed } = useAppTheme();
-
-		if (withOutContainer) {
-			return (
-				<TrueSheet ref={ref} {...{ detents, grabberOptions }} {...rest}>
-					{children}
-				</TrueSheet>
-			);
-		}
-
 		return (
-			<TrueSheet ref={ref} {...{ detents, grabberOptions }} {...rest}>
+			<TrueSheet
+				ref={ref}
+				{...{ detents, grabberOptions, backgroundColor }}
+				{...rest}
+			>
 				<View style={[themed($root), contentContainerStyle]}>{children}</View>
 			</TrueSheet>
 		);
@@ -68,10 +66,4 @@ const $root: ThemedViewStyle = (theme) => ({
 	padding: theme.spacing.md,
 	paddingTop: theme.spacing.xl,
 	gap: theme.spacing.md,
-});
-
-const styles = StyleSheet.create({
-	grabber: {
-		color: "#000000",
-	},
 });

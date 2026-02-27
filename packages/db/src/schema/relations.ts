@@ -237,7 +237,7 @@ export const userRelations = relations(user, ({ many, one }) => ({
 	exerciseAttemps: many(exerciseAttempt),
 	likes: many(saved),
 	streak: one(streak),
-	links: one(userProfileLink),
+	links: many(userProfileLink),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

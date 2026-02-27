@@ -82,52 +82,40 @@ const useSaveCourseProgress = () => {
 			const queryOpts = getLessonOpts(courseId);
 
 			const course = context.client.getQueryData(queryOpts.queryKey);
-			if (course !== undefined) {
-				const updatedCourse = courseProgressPost(course.data, payload);
-				const updatedData = {
-					data: updatedCourse,
-					message: course.message,
-				};
-
-				context.client.setQueryData(queryOpts.queryKey, updatedData);
-
+			if (course === undefined) {
 				return {
-					prevData: course,
-					newData: updatedData,
-					courseId,
-				};
+					prevData: null,
+					newData: null,
+					meta: {
+						courseId,
+					},
+				} as const;
 			}
+
+			const updatedCourse = courseProgressPost(course.data, payload);
+			const updatedData = {
+				data: updatedCourse,
+				message: course.message,
+			};
+
+			context.client.setQueryData(queryOpts.queryKey, updatedData);
 
 			return {
 				prevData: course,
-				newData: null,
-				courseId,
-			};
+				newData: updatedData,
+				meta: {
+					courseId,
+				},
+			} as const;
 		},
 		onError: (err, payload, onMutateResult, context) => {
 			if (err) {
 				captureUnitCompleteException(err.message);
-
-				return;
 			}
 
 			const queryOpts = getLessonOpts(payload.courseId);
 
-			if (!onMutateResult) {
-				captureUnitCompleteException(
-					"Optimistic rollback failed: missing context",
-					{
-						payload,
-						queryKey: queryOpts.queryKey,
-					},
-				);
-
-				return;
-			}
-
-			const { newData } = onMutateResult;
-
-			if (newData === null) {
+			if (!onMutateResult?.prevData) {
 				captureUnitCompleteException(
 					"Optimistic rollback failed: missing data",
 					{

@@ -9,7 +9,7 @@ class MissingContextError extends Error {
 }
 
 const useSafeContext = <T>(
-	context: React.Context<T | null>,
+	context: React.Context<T | null> | React.Context<T>,
 	hookName: string,
 	contextComponentName?: string,
 ) => {

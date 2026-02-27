@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Dimensions, Text } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import type React from "react";
+import { useEffect } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Animated, {
-	useSharedValue,
-	useAnimatedStyle,
-	withTiming,
 	Easing,
+	useAnimatedStyle,
+	useSharedValue,
 	withRepeat,
 	withSequence,
+	withTiming,
 } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
 import type { AnimatedProgressBarProps } from "./AnimatedProgress.types";
 
 export const AnimatedProgressBar: React.FC<AnimatedProgressBarProps> = ({
@@ -213,6 +214,8 @@ const styles = StyleSheet.create({
 	container: {
 		alignItems: "center",
 		justifyContent: "center",
+		flex: 1,
+		padding: 0,
 	},
 	track: {
 		justifyContent: "center",

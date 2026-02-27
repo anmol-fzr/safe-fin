@@ -1,4 +1,4 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import {
 	FormProvider,
@@ -37,7 +37,7 @@ const useDemoGraphicsForm = () => {
 	const queryClient = useQueryClient();
 
 	const form = useForm({
-		resolver: yupResolver(demoGraphicsSchema),
+		resolver: zodResolver(demoGraphicsSchema),
 		defaultValues: async () => {
 			const opts = getDemoGraphicsOpts();
 			try {

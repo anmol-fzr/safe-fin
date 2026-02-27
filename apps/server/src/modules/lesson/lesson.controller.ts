@@ -131,7 +131,7 @@ export const saveCourseProgressHandler = createHandlers(
 			.onConflictDoNothing();
 
 		if (courseProgressInsertResult.meta?.rows_written === 0) {
-			return c.json({ data: { success: true } }, 201);
+			return c.json({ data: { success: false } });
 		}
 
 		const foundUnit = await db.query.unit.findFirst({
@@ -141,7 +141,14 @@ export const saveCourseProgressHandler = createHandlers(
 			},
 		});
 
-		const currEarnedPX = foundUnit?.points;
+		if (!foundUnit) {
+			return c.json(
+				{ data: null, error: "Unit Not Found", message: "Unit Not Found" },
+				400,
+			);
+		}
+
+		const currEarnedPX = foundUnit.points;
 
 		const today = new Date();
 		const date = new Date(
