@@ -31,11 +31,12 @@
 	},
 	"pnpm": {
 		"overrides": {
-			"@types/react": "19.1.10",
-			"react": "19.1.0",
-			"react-dom": "19.1.0",
-			"react-native": "0.81.5",
-			"better-auth": "1.4.7",
+			"@types/react": "19.2.10",
+			"@better-auth/epo": "1.4.20",
+			"react": "19.2.0",
+			"react-dom": "19.2.0",
+			"react-native": "0.83.2",
+			"better-auth": "1.4.20",
 			"@cloudflare/workers-types": "^4.20260114.0"
 		},
 		"onlyBuiltDependencies": [

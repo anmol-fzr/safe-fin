@@ -41,6 +41,7 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
 			require("./plugins/withSplashScreen").withSplashScreen,
 			"expo-web-browser",
 			"expo-build-properties",
+			"@sentry/react-native",
 		],
 	};
 };

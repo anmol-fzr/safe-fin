@@ -23,7 +23,6 @@
 		"@safe-fin/utils": "workspace:*",
 		"@sentry/cloudflare": "^10.38.0",
 		"country-state-city": "^3.2.1",
-		"drizzle-orm": "^0.44.3",
 		"drizzle-zod": "^0.8.3",
 		"hono": "^4.10.7",
 		"neverthrow": "^8.2.0",

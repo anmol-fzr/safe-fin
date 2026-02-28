@@ -1,26 +1,21 @@
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
-import { z } from "zod";
-import { View } from "react-native";
-import { Screen, Text } from "@/components";
-import { VerifyForm } from "@/modules/auth/components";
-import { $styles, ThemedViewStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
-import Animated from "react-native-reanimated";
-import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { memo } from "react";
+import { View } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
+import Animated from "react-native-reanimated";
+import { z } from "zod";
+import { Screen, Text } from "@/components";
 import { RoundBackIcon } from "@/components/navigation/RoundBackIcon";
-import { useImperativeApiEmitter } from "expo-router/build/imperative-api";
+import { createRoute } from "@/factory/route";
+import { VerifyForm } from "@/modules/auth/components";
+import { $styles, type ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
-const useVerifyScreenParams = () => {
-	const params = useTypedLocalSearchParams(
-		z.object({ email: z.string().email() }),
-	);
-
-	return params;
-};
+const { useParams } = createRoute({
+	paramSchema: z.object({ email: z.email() }),
+});
 
 export default function VerifyScreen() {
-	const { email } = useVerifyScreenParams();
+	const { email } = useParams();
 
 	const { themed } = useAppTheme();
 

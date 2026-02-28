@@ -30,6 +30,8 @@ interface GetBetterAuthOptions {
 export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 	const { isDev, db, EMAIL } = params;
 
+	console.log(params);
+
 	const secondaryStorage = undefined;
 
 	const emailer = new Emailer(EMAIL);
@@ -78,7 +80,7 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 			joins: true,
 		},
 		advanced: {
-			disableOriginCheck: true,
+			disableOriginCheck: isDev,
 			defaultCookieAttributes: isDev
 				? {
 						httpOnly: true,

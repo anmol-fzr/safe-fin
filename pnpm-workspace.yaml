@@ -1,10 +1,11 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - apps/*
+  - packages/*
 
 catalog:
-  "@types/react": "19.1.10"
-  "react": "19.1.0"
-  "react-dom": "19.1.0"
-  "react-native": "0.81.5"
-  "better-auth": "1.4.7"
+  '@better-auth/expo': 1.4.20
+  '@types/react': 19.2.10
+  better-auth: 1.4.20
+  react: 19.2.0
+  react-dom: 19.2.0
+  react-native: 0.83.2

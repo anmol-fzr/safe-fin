@@ -11,16 +11,16 @@
 		"./admin": "./src/admin.ts"
 	},
 	"scripts": {
-		"auth:generate": "bun x @better-auth/cli generate --config ./better-auth.config.ts --output ../db/src/schema/auth.ts"
+		"auth:generate": "pnpm dlx @better-auth/cli generate --config ./src/better-auth.config.ts --output ../db/src/schema/auth-gen.ts"
 	},
 	"dependencies": {
-		"@better-auth/expo": "^1.4.7",
+		"@better-auth/expo": "catalog:",
 		"@safe-fin/db": "workspace:*",
 		"@simplewebauthn/browser": "^13.2.2",
 		"better-auth": "catalog:"
 	},
 	"devDependencies": {
-		"wrangler": "^4.24.3",
-		"@cloudflare/workers-types": "catalog:"
+		"@cloudflare/workers-types": "catalog:",
+		"wrangler": "^4.24.3"
 	}
 }

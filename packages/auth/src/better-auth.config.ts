@@ -9,18 +9,17 @@ import { getAuthDrizzleAdapter, getDb } from "@/pkg/db";
 import { envs } from "./envs";
 import { getBetterAuthOptions } from "./options";
 
-const { BETTER_AUTH, DB, CORS_URL } = envs;
+const { isDev, BETTER_AUTH, DB, CORS_URL, EMAIL } = envs;
 
 const database = getAuthDrizzleAdapter({
 	DB_URL: DB.URL,
-	DB_TOKEN: DB.TOKEN,
 });
-const db = getDb({
-	DB_URL: DB.URL,
-	DB_TOKEN: DB.TOKEN,
-});
+//
+// const db = getDb({
+// 	DB_URL: DB.URL,
+// });
 
-const betterAuthOptions = getBetterAuthOptions({ db: DB });
+const betterAuthOptions = getBetterAuthOptions({ db: DB, EMAIL, isDev });
 
 export const auth: ReturnType<typeof betterAuth> = betterAuth({
 	...betterAuthOptions,
