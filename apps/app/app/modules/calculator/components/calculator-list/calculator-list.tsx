@@ -1,13 +1,17 @@
 import { getEmptyArr } from "@safe-fin/ui/utils";
+import { Suspense } from "react";
 import { EmptyListView, EndListView, ListView } from "@/components";
-import { WithSuspense } from "@/components/with-suspense";
 //import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 //import { getLessonOpts } from "@/modules/lesson/hooks/api";
 import { useGetCalculators } from "../../hooks/queries";
 import { CalculatorListItemImpl } from "./calculator-list-item";
 
 export const CalculatorList = () => {
-	return <WithSuspense Component={CalculatorListImpl} />;
+	return (
+		<Suspense fallback={CalculatorListImpl.Loading}>
+			<CalculatorListImpl />
+		</Suspense>
+	);
 };
 
 function CalculatorListImpl() {
@@ -24,7 +28,7 @@ function CalculatorListImpl() {
 			estimatedItemSize={113}
 			refreshing={isRefetching}
 			onRefresh={refetch}
-			keyExtractor={(item) => item.title}
+			keyExtractor={(item) => item.id.toString()}
 			ListEmptyComponent={EmptyListView}
 			ListFooterComponent={
 				calculators.length === 0
@@ -49,7 +53,7 @@ function CalculatorListImpl() {
 
 const arr = getEmptyArr(6);
 
-CalculatorListImpl.Loading = () => (
+CalculatorListImpl.Loading = (
 	<ListView
 		data={arr}
 		estimatedItemSize={113}
