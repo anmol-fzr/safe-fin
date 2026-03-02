@@ -14,7 +14,7 @@
 		"auth:generate": "bun x @better-auth/cli generate --config ./better-auth.config.ts --output ../db/src/schema/auth.ts"
 	},
 	"dependencies": {
-		"@better-auth/expo": "^1.4.7",
+		"@better-auth/expo": "catalog:",
 		"@safe-fin/db": "workspace:*",
 		"@simplewebauthn/browser": "^13.2.2",
 		"better-auth": "catalog:"
