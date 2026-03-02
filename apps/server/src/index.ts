@@ -5,13 +5,15 @@ import { appCors } from "@/middleware";
 import { v1Router } from "./api/v1/router";
 import { setupMonitoring } from "./config/monitoring";
 import { createTypedFactory } from "./factory";
+import { envs } from "./utils/envs";
 
 const { createApp } = createTypedFactory();
 const app = createApp();
 
-app
-	.use(logger())
-	.use(
+app.use(logger()).use(appCors);
+
+if (!envs.isDev) {
+	app.use(
 		"*",
 		secureHeaders({
 			contentSecurityPolicy: {
@@ -19,8 +21,8 @@ app
 				scriptSrc: ["self"],
 			},
 		}),
-	)
-	.use(appCors);
+	);
+}
 
 app.use("*", async (c, next) => {
 	c.header(
