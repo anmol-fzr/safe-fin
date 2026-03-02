@@ -1,7 +1,7 @@
+import type { D1Database } from "@cloudflare/workers-types";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "./schema";
-import type { D1Database } from "@cloudflare/workers-types";
 
 let dbInst: ReturnType<typeof drizzle<typeof schema, D1Database>> | null = null;
 

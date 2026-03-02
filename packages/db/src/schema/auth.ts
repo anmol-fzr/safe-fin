@@ -38,6 +38,11 @@ export const user = sqliteTable(
 	}),
 );
 
+export type InsertUser = Omit<
+	typeof user.$inferInsert,
+	"createdAt" | "updatedAt"
+>;
+
 export const session = sqliteTable(
 	"session",
 	{

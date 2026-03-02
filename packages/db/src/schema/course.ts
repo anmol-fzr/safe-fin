@@ -31,6 +31,11 @@ export const course = sqliteTable("course", {
 	updatedAt: timestamp.updatedAt,
 });
 
+export type InsertCourse = Omit<
+	typeof course.$inferInsert,
+	"createdAt" | "updatedAt"
+>;
+
 /*
  * ONE Course can have MANY Chapter
  * */
@@ -49,6 +54,11 @@ export const chapter = sqliteTable("chapter", {
 	createdAt: timestamp.createdAt,
 	updatedAt: timestamp.updatedAt,
 });
+
+export type InsertChapter = Omit<
+	typeof chapter.$inferInsert,
+	"createdAt" | "updatedAt"
+>;
 
 /*
  * ONE Chapter can have MANY Unit
@@ -72,6 +82,11 @@ export const unit = sqliteTable("unit", {
 	createdAt: timestamp.createdAt,
 	updatedAt: timestamp.updatedAt,
 });
+
+export type InsertUnit = Omit<
+	typeof unit.$inferInsert,
+	"createdAt" | "updatedAt"
+>;
 
 export const courseProgress = sqliteTable(
 	"course_progress",

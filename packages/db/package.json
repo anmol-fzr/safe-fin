@@ -28,6 +28,7 @@
 		"db:dev:migrate": "bun run --env-file=.env.dev drizzle-kit migrate --config=drizzle.config.dev.ts",
 		"db:dev:pull": "bun run --env-file=.env.dev drizzle-kit pull --config=drizzle.config.dev.ts",
 		"db:dev:push": "bun run --env-file=.env.dev drizzle-kit push --config=drizzle.config.dev.ts",
+		"db:dev:seed": "bun --env-file=.env.dev ./src/seed/index.ts",
 		"db:dev:studio": "bun run --env-file=.env.dev drizzle-kit studio --config=drizzle.config.dev.ts",
 		"dev": "bun run db:dev:studio",
 		"db:prod:generate": "bun run --env-file=.env.prod drizzle-kit generate --config=drizzle.config.prod.ts",
@@ -44,7 +45,10 @@
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "catalog:",
+		"@faker-js/faker": "^10.3.0",
+		"@types/better-sqlite3": "^7.6.13",
 		"@types/node": "^25.2.3",
+		"better-sqlite3": "^12.6.2",
 		"drizzle-kit": "^0.30.6"
 	}
 }
