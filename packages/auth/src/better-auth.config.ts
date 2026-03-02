@@ -4,7 +4,7 @@
  * Docs: https://www.better-auth.com/docs/concepts/cli
  */
 
-import { betterAuth } from "better-auth";
+import { betterAuth } from "better-auth/minimal";
 import { getAuthDrizzleAdapter, getDb } from "@/pkg/db";
 import { envs } from "./envs";
 import { getBetterAuthOptions } from "./options";
