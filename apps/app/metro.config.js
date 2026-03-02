@@ -27,6 +27,7 @@ config.resolver.nodeModulesPaths = [
 
 config.resolver.unstable_enableSymlinks = true;
 config.resolver.unstable_enablePackageExports = true;
+config.resolver.unstable_transformImportMeta = true;
 
 // 4. Handle Lottie Files (.lottie)
 // We add 'lottie' to the existing assetExts list directly.
