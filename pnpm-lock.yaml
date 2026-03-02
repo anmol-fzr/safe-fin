@@ -305,7 +305,7 @@ importers:
         version: 4.7.0(vite@6.4.1(@types/node@22.19.13)(jiti@2.6.1)(lightningcss@1.31.1)(sass-embedded@1.97.3)(sass@1.97.3)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
+        version: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)
       jsdom:
         specifier: ^27.0.0
         version: 27.4.0(@noble/hashes@2.0.1)
@@ -695,8 +695,8 @@ importers:
         specifier: ^3.971.0
         version: 3.1000.0
       '@hono/zod-validator':
-        specifier: ^0.7.5
-        version: 0.7.6(hono@4.12.3)(zod@3.25.76)
+        specifier: ^0.7.6
+        version: 0.7.6(hono@4.12.3)(zod@4.3.6)
       '@safe-fin/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -712,21 +712,18 @@ importers:
       country-state-city:
         specifier: ^3.2.1
         version: 3.2.1
-      drizzle-orm:
-        specifier: ^0.44.3
-        version: 0.44.7(@cloudflare/workers-types@4.20260228.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.15.15)(@opentelemetry/api@1.9.0)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(bun-types@1.3.9)(gel@2.2.0)(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))
       drizzle-zod:
         specifier: ^0.8.3
-        version: 0.8.3(drizzle-orm@0.44.7(@cloudflare/workers-types@4.20260228.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.15.15)(@opentelemetry/api@1.9.0)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(bun-types@1.3.9)(gel@2.2.0)(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2)))(zod@3.25.76)
+        version: 0.8.3(drizzle-orm@0.44.7(@cloudflare/workers-types@4.20260228.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.15.15)(@opentelemetry/api@1.9.0)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(bun-types@1.3.9)(gel@2.2.0)(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2)))(zod@4.3.6)
       hono:
-        specifier: ^4.10.7
+        specifier: ^4.12.3
         version: 4.12.3
       neverthrow:
         specifier: ^8.2.0
         version: 8.2.0
       zod:
-        specifier: 3.25.76
-        version: 3.25.76
+        specifier: 4.3.6
+        version: 4.3.6
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20260114.0
@@ -14752,7 +14749,7 @@ snapshots:
       wrap-ansi: 7.0.0
       ws: 8.19.0
     optionalDependencies:
-      expo-router: 6.0.23(15d396a24714167b5c9068fbd96d5e57)
+      expo-router: 6.0.23(2679cec412639a6155505213152cba32)
       react-native: 0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0)
     transitivePeerDependencies:
       - bufferutil
@@ -15045,10 +15042,10 @@ snapshots:
       hono: 4.11.4
     optional: true
 
-  '@hono/zod-validator@0.7.6(hono@4.12.3)(zod@3.25.76)':
+  '@hono/zod-validator@0.7.6(hono@4.12.3)(zod@4.3.6)':
     dependencies:
       hono: 4.12.3
-      zod: 3.25.76
+      zod: 4.3.6
 
   '@hookform/devtools@4.4.0(@types/react@19.1.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
@@ -15224,41 +15221,6 @@ snapshots:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
       slash: 3.0.0
-
-  '@jest/core@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))':
-    dependencies:
-      '@jest/console': 29.7.0
-      '@jest/reporters': 29.7.0
-      '@jest/test-result': 29.7.0
-      '@jest/transform': 29.7.0
-      '@jest/types': 29.6.3
-      '@types/node': 22.19.13
-      ansi-escapes: 4.3.2
-      chalk: 4.1.2
-      ci-info: 3.9.0
-      exit: 0.1.2
-      graceful-fs: 4.2.11
-      jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
-      jest-haste-map: 29.7.0
-      jest-message-util: 29.7.0
-      jest-regex-util: 29.6.3
-      jest-resolve: 29.7.0
-      jest-resolve-dependencies: 29.7.0
-      jest-runner: 29.7.0
-      jest-runtime: 29.7.0
-      jest-snapshot: 29.7.0
-      jest-util: 29.7.0
-      jest-validate: 29.7.0
-      jest-watcher: 29.7.0
-      micromatch: 4.0.8
-      pretty-format: 29.7.0
-      slash: 3.0.0
-      strip-ansi: 6.0.1
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
 
   '@jest/core@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2))':
     dependencies:
@@ -17288,7 +17250,9 @@ snapshots:
       metro-runtime: 0.83.4
     transitivePeerDependencies:
       - '@babel/core'
+      - bufferutil
       - supports-color
+      - utf-8-validate
 
   '@react-native/normalize-colors@0.74.89': {}
 
@@ -18310,7 +18274,7 @@ snapshots:
       recast: 0.23.11
       source-map: 0.7.6
       tsx: 4.21.0
-      zod: 3.25.76
+      zod: 3.25.1
     transitivePeerDependencies:
       - supports-color
 
@@ -18405,19 +18369,6 @@ snapshots:
       redent: 3.0.0
     optionalDependencies:
       jest: 29.7.0(@types/node@25.3.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2))
-
-  '@testing-library/react-native@13.2.2(jest@29.7.0(@types/node@25.3.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2)))(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react-test-renderer@19.2.4(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      chalk: 4.1.2
-      jest-matcher-utils: 30.2.0
-      pretty-format: 30.2.0
-      react: 19.1.0
-      react-native: 0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0)
-      react-test-renderer: 19.2.4(react@19.1.0)
-      redent: 3.0.0
-    optionalDependencies:
-      jest: 29.7.0(@types/node@25.3.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2))
-    optional: true
 
   '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.1.10))(@types/react@19.1.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
@@ -19965,13 +19916,13 @@ snapshots:
 
   country-state-city@3.2.1: {}
 
-  create-jest@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2)):
+  create-jest@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0):
     dependencies:
       '@jest/types': 29.6.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
-      jest-config: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
+      jest-config: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2))
       jest-util: 29.7.0
       prompts: 2.4.2
     transitivePeerDependencies:
@@ -20266,10 +20217,10 @@ snapshots:
       drizzle-orm: 0.44.7(@cloudflare/workers-types@4.20260228.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.15.15)(@opentelemetry/api@1.9.0)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(bun-types@1.3.9)(gel@2.2.0)(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))
       zod: 3.25.1
 
-  drizzle-zod@0.8.3(drizzle-orm@0.44.7(@cloudflare/workers-types@4.20260228.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.15.15)(@opentelemetry/api@1.9.0)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(bun-types@1.3.9)(gel@2.2.0)(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2)))(zod@3.25.76):
+  drizzle-zod@0.8.3(drizzle-orm@0.44.7(@cloudflare/workers-types@4.20260228.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.15.15)(@opentelemetry/api@1.9.0)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(bun-types@1.3.9)(gel@2.2.0)(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2)))(zod@4.3.6):
     dependencies:
       drizzle-orm: 0.44.7(@cloudflare/workers-types@4.20260228.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.15.15)(@opentelemetry/api@1.9.0)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(bun-types@1.3.9)(gel@2.2.0)(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.10)(better-sqlite3@12.6.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))
-      zod: 3.25.76
+      zod: 4.3.6
 
   dts-resolver@2.1.3: {}
 
@@ -21003,51 +20954,6 @@ snapshots:
     dependencies:
       expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
       react: 19.1.0
-
-  expo-router@6.0.23(15d396a24714167b5c9068fbd96d5e57):
-    dependencies:
-      '@expo/metro-runtime': 6.1.2(expo@54.0.33)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      '@expo/schema-utils': 0.1.8
-      '@radix-ui/react-slot': 1.2.0(@types/react@19.1.10)(react@19.1.0)
-      '@radix-ui/react-tabs': 1.1.13(@types/react-dom@19.2.3(@types/react@19.1.10))(@types/react@19.1.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@react-navigation/bottom-tabs': 7.15.2(efc3773776ffc2cf4b496121af3115a4)
-      '@react-navigation/native': 7.1.31(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      '@react-navigation/native-stack': 7.14.2(efc3773776ffc2cf4b496121af3115a4)
-      client-only: 0.0.1
-      debug: 4.4.3
-      escape-string-regexp: 4.0.0
-      expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      expo-constants: 18.0.13(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))
-      expo-linking: 8.0.11(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      expo-server: 1.0.5
-      fast-deep-equal: 3.1.3
-      invariant: 2.2.4
-      nanoid: 3.3.11
-      query-string: 7.1.3
-      react: 19.1.0
-      react-fast-compare: 3.2.2
-      react-native: 0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0)
-      react-native-is-edge-to-edge: 1.2.1(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      react-native-safe-area-context: 5.6.2(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      react-native-screens: 4.16.0(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      semver: 7.6.3
-      server-only: 0.0.1
-      sf-symbols-typescript: 2.2.0
-      shallowequal: 1.1.0
-      use-latest-callback: 0.2.6(react@19.1.0)
-      vaul: 1.1.2(@types/react-dom@19.2.3(@types/react@19.1.10))(@types/react@19.1.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-    optionalDependencies:
-      '@testing-library/react-native': 13.2.2(jest@29.7.0(@types/node@25.3.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2)))(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react-test-renderer@19.2.4(react@19.1.0))(react@19.1.0)
-      react-dom: 19.1.0(react@19.1.0)
-      react-native-gesture-handler: 2.28.0(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      react-native-reanimated: 4.1.6(@babel/core@7.29.0)(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.1.2(typescript@5.9.2))(@react-native/metro-config@0.82.1(@babel/core@7.29.0))(@types/react@19.1.10)(react@19.1.0))(react@19.1.0)
-      react-native-web: 0.21.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-    transitivePeerDependencies:
-      - '@react-native-masked-view/masked-view'
-      - '@types/react'
-      - '@types/react-dom'
-      - supports-color
-    optional: true
 
   expo-router@6.0.23(2679cec412639a6155505213152cba32):
     dependencies:
@@ -22053,16 +21959,16 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-cli@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2)):
+  jest-cli@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0):
     dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
+      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2))
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
       chalk: 4.1.2
-      create-jest: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
+      create-jest: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)
       exit: 0.1.2
       import-local: 3.2.0
-      jest-config: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
+      jest-config: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2))
       jest-util: 29.7.0
       jest-validate: 29.7.0
       yargs: 17.7.2
@@ -22090,37 +21996,6 @@ snapshots:
       - babel-plugin-macros
       - supports-color
       - ts-node
-
-  jest-config@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2)):
-    dependencies:
-      '@babel/core': 7.29.0
-      '@jest/test-sequencer': 29.7.0
-      '@jest/types': 29.6.3
-      babel-jest: 29.7.0(@babel/core@7.29.0)
-      chalk: 4.1.2
-      ci-info: 3.9.0
-      deepmerge: 4.3.1
-      glob: 7.2.3
-      graceful-fs: 4.2.11
-      jest-circus: 29.7.0(babel-plugin-macros@3.1.0)
-      jest-environment-node: 29.7.0
-      jest-get-type: 29.6.3
-      jest-regex-util: 29.6.3
-      jest-resolve: 29.7.0
-      jest-runner: 29.7.0
-      jest-util: 29.7.0
-      jest-validate: 29.7.0
-      micromatch: 4.0.8
-      parse-json: 5.2.0
-      pretty-format: 29.7.0
-      slash: 3.0.0
-      strip-json-comments: 3.1.1
-    optionalDependencies:
-      '@types/node': 22.19.13
-      ts-node: 10.9.2(@types/node@22.19.13)(typescript@5.9.2)
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - supports-color
 
   jest-config@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2)):
     dependencies:
@@ -22506,12 +22381,12 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2)):
+  jest@29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0):
     dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
+      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2))
       '@jest/types': 29.6.3
       import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2))
+      jest-cli: 29.7.0(@types/node@22.19.13)(babel-plugin-macros@3.1.0)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -25546,25 +25421,6 @@ snapshots:
       jest-util: 30.0.5
 
   ts-key-enum@3.0.13: {}
-
-  ts-node@10.9.2(@types/node@22.19.13)(typescript@5.9.2):
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.12
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 22.19.13
-      acorn: 8.16.0
-      acorn-walk: 8.3.5
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.4
-      make-error: 1.3.6
-      typescript: 5.9.2
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    optional: true
 
   ts-node@10.9.2(@types/node@25.3.2)(typescript@5.9.2):
     dependencies:
