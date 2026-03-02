@@ -18,9 +18,15 @@ export {
 
 SplashScreen.preventAutoHideAsync();
 
+const useI18NInit = () => {
+	const { isOpen, onOpen } = useToggle();
+
+	return { isI18nInitialized: isOpen, onI18nInitialized: onOpen };
+};
+
 export default function RootLayout() {
 	const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad);
-	const { isOpen: isI18nInitialized, onOpen: onI18nInitialized } = useToggle();
+	const { isI18nInitialized, onI18nInitialized } = useI18NInit();
 
 	const [theme, setTheme] = usePersistTheme();
 
