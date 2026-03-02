@@ -164,10 +164,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/courses/$courseId/update': typeof DashboardCoursesCourseIdUpdateRoute
   '/dashboard/courses/$courseId/view': typeof DashboardCoursesCourseIdViewRoute
   '/dashboard/units/$unitId/edit': typeof DashboardUnitsUnitIdEditRoute
-  '/dashboard/exercises/$exerciseId': typeof DashboardExercisesExerciseIdIndexRoute
+  '/dashboard/exercises/$exerciseId/': typeof DashboardExercisesExerciseIdIndexRoute
   '/dashboard/courses/$courseId/edit/curriculum': typeof DashboardCoursesCourseIdEditCurriculumRoute
   '/dashboard/exercises/$exerciseId/edit/curriculum': typeof DashboardExercisesExerciseIdEditCurriculumRoute
-  '/dashboard/courses/$courseId/edit': typeof DashboardCoursesCourseIdEditIndexRoute
+  '/dashboard/courses/$courseId/edit/': typeof DashboardCoursesCourseIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -233,10 +233,10 @@ export interface FileRouteTypes {
     | '/dashboard/courses/$courseId/update'
     | '/dashboard/courses/$courseId/view'
     | '/dashboard/units/$unitId/edit'
-    | '/dashboard/exercises/$exerciseId'
+    | '/dashboard/exercises/$exerciseId/'
     | '/dashboard/courses/$courseId/edit/curriculum'
     | '/dashboard/exercises/$exerciseId/edit/curriculum'
-    | '/dashboard/courses/$courseId/edit'
+    | '/dashboard/courses/$courseId/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -390,7 +390,7 @@ declare module '@tanstack/react-router' {
     '/dashboard/exercises/$exerciseId/': {
       id: '/dashboard/exercises/$exerciseId/'
       path: '/$exerciseId'
-      fullPath: '/dashboard/exercises/$exerciseId'
+      fullPath: '/dashboard/exercises/$exerciseId/'
       preLoaderRoute: typeof DashboardExercisesExerciseIdIndexRouteImport
       parentRoute: typeof DashboardExercisesRoute
     }
@@ -418,7 +418,7 @@ declare module '@tanstack/react-router' {
     '/dashboard/courses/$courseId/edit/': {
       id: '/dashboard/courses/$courseId/edit/'
       path: '/$courseId/edit'
-      fullPath: '/dashboard/courses/$courseId/edit'
+      fullPath: '/dashboard/courses/$courseId/edit/'
       preLoaderRoute: typeof DashboardCoursesCourseIdEditIndexRouteImport
       parentRoute: typeof DashboardCoursesRoute
     }
