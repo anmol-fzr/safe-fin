@@ -110,7 +110,7 @@ export const courseProgress = sqliteTable(
 	},
 
 	(t) => ({
-		saved_pk: primaryKey({
+		pk: primaryKey({
 			columns: [t.userId, t.courseId, t.currChapterId, t.currUnitId],
 		}),
 		userEntityIdx: index("user_course_progress_idx").on(

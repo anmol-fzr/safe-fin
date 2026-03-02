@@ -4,6 +4,7 @@ import {
 	ArrowRight2,
 	Danger,
 	DocumentText1,
+	Heart,
 	type Icon as IconType,
 	Lifebuoy,
 	LikeDislike,
@@ -13,6 +14,7 @@ import {
 	User,
 	WalletMoney,
 } from "iconsax-react-nativejs";
+import { PressableScale } from "pressto";
 import { useEffect } from "react";
 import { Platform, Pressable, Share, View } from "react-native";
 import Animated, {
@@ -189,30 +191,38 @@ const Box = (props: BoxProps) => {
 	} = useAppTheme();
 
 	return (
-		<Link href={href} push style={{ flex: 1 }}>
-			<View
-				style={{
-					backgroundColor: colors.palette.neutral200,
-					padding: spacing.md,
-					borderRadius: roundness,
-					flex: 1,
-					flexDirection: "row",
-					alignItems: "center",
-					gap: 8,
-				}}
-			>
-				<View
-					style={{
-						padding: 8,
-						backgroundColor: colors.palette.primary100,
-						borderRadius: 20,
-					}}
-				>
-					<IconSax icon={icon} color={colors.tint} />
-				</View>
-				<Text>{title}</Text>
-			</View>
-		</Link>
+		<View
+			style={{
+				flex: 1,
+			}}
+		>
+			<Link href={href} asChild>
+				<PressableScale>
+					<View
+						style={{
+							backgroundColor: colors.palette.neutral200,
+							flex: 1,
+							padding: spacing.md,
+							borderRadius: roundness,
+							flexDirection: "row",
+							alignItems: "center",
+							gap: 8,
+						}}
+					>
+						<View
+							style={{
+								padding: 8,
+								backgroundColor: colors.palette.primary100,
+								borderRadius: 20,
+							}}
+						>
+							<IconSax icon={icon} color={colors.tint} />
+						</View>
+						<Text>{title}</Text>
+					</View>
+				</PressableScale>
+			</Link>
+		</View>
 	);
 };
 
@@ -234,7 +244,19 @@ export const AccountIndexScreen = () => {
 			safeAreaEdges={["bottom"]}
 			contentContainerStyle={$styles.fullHeaderScreen}
 		>
-			<Box title="Public Profile" icon={Profile} href="/profile/public" />
+			<View
+				style={{
+					flex: 1,
+					flexDirection: "row",
+					flexWrap: "wrap",
+					justifyContent: "space-between",
+					gap: spacing.sm,
+				}}
+			>
+				<Box title="Public Profile" icon={Profile} href="/profile/public" />
+				<Box title="Saved" icon={Heart} href="/saved" />
+			</View>
+
 			<ListView
 				data={DATA}
 				keyExtractor={(item) => item.title}

@@ -1,7 +1,7 @@
-import {
+import type {
 	//LegendList,
 	//type LegendListProps,
-	type LegendListRef,
+	LegendListRef,
 } from "@legendapp/list";
 import {
 	AnimatedLegendList,
@@ -15,16 +15,16 @@ import type {
 	RefObject,
 } from "react";
 import { forwardRef, memo, useId } from "react";
-import { StyleSheet, View, ViewProps } from "react-native";
-import { Text } from "@/components/Text";
-import { getGenericEmptyState } from "@/utils/faker/emptyState";
-import { getGenericEndState } from "@/utils/faker/endState";
-import { makeSpringy, ThemedViewStyle } from "@/theme";
+import { StyleSheet, View, type ViewProps } from "react-native";
 import Animated, {
 	BounceIn,
 	FadeIn,
 	FadeInDown,
 } from "react-native-reanimated";
+import { Text } from "@/components/Text";
+import { makeSpringy, type ThemedViewStyle } from "@/theme";
+import { getGenericEmptyState } from "@/utils/faker/emptyState";
+import { getGenericEndState } from "@/utils/faker/endState";
 
 export type ListViewRef = LegendListRef;
 

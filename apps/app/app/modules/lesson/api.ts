@@ -116,11 +116,13 @@ type IResGetUnit = IResData<{
 
 type IResGetSavedCourse = IResData<
 	{
-		entityType: string;
-		entityId: number;
-		userId: string;
-		createdAt: string;
-		updatedAt: string;
+		id: number;
+		type: "course";
+		entity: {
+			id: number;
+			coverPath: string;
+			content: Pick<Content, "title" | "shortDesc">;
+		};
 	}[],
 	true
 >;

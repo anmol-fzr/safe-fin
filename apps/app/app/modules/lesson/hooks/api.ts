@@ -98,7 +98,12 @@ const useGetSavedCourses = () => {
 	const opts = getSavedCoursesOpts();
 	const { data, ...rest } = useSuspenseInfiniteQuery(opts);
 
-	return { courses: data, ...rest };
+	const savedCourses = useMemo(
+		() => data.pages.flatMap((page) => page.data),
+		[data],
+	);
+
+	return { savedCourses, ...rest };
 };
 
 export {

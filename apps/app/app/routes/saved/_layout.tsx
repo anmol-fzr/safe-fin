@@ -1,14 +1,10 @@
 import { Stack } from "expo-router";
+import { ProfileScreenHeader } from "../tabs/profile/_layout";
 
 export default function SavedLayout() {
 	return (
-		<Stack>
-			<Stack.Screen
-				name="index"
-				// options={{
-				// 	headerShown: false,
-				// }}
-			/>
+		<Stack screenOptions={{ header: ProfileScreenHeader }}>
+			<Stack.Screen name="index" />
 		</Stack>
 	);
 }
