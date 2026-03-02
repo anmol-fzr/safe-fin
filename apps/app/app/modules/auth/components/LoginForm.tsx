@@ -54,13 +54,21 @@ export const LoginFormRoot = (props: LoginFormRootProps) => {
 	const handleSubmit = form.handleSubmit(async (data) => {
 		const { email } = data;
 		sendOtp(email, {
-			onSuccess: () => {
-				router.push({
-					pathname: "/auth/verify",
-					params: {
-						email,
-					},
-				});
+			onSuccess: ({ data, error }) => {
+				if (error !== null) {
+					console.log(error);
+					console.log(error.message);
+					return;
+				}
+
+				if (data.success) {
+					router.push({
+						pathname: "/auth/verify",
+						params: {
+							email,
+						},
+					});
+				}
 			},
 		});
 	});
@@ -138,6 +146,7 @@ const Actions = (props: ActionsProps) => {
 
 const SubmitButton = () => {
 	const { isSendingOtp, handleSubmit } = useLoginFormContext();
+
 	const {
 		themed,
 		theme: { colors },
