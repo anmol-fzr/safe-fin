@@ -1,4 +1,5 @@
 import { Moon, Settings, Sun1 } from "iconsax-react-nativejs";
+import { useMemo } from "react";
 import { LayoutAnimation, Platform, UIManager } from "react-native";
 import { SelectChips } from "@/components/SelectChips";
 import type { ThemeContexts } from "@/theme";
@@ -13,11 +14,14 @@ if (Platform.OS === "android") {
 export const ThemeSwitcher = () => {
 	const { themeContext, setThemeContextOverride } = useAppTheme();
 
-	const themeOptions = [
-		{ label: "Light", value: "light", Icon: Sun1 },
-		{ label: "System", value: "system", Icon: Settings },
-		{ label: "Dark", value: "dark", Icon: Moon },
-	];
+	const themeOptions = useMemo(
+		() => [
+			{ label: "Light", value: "light", Icon: Sun1 },
+			{ label: "System", value: "system", Icon: Settings },
+			{ label: "Dark", value: "dark", Icon: Moon },
+		],
+		[],
+	);
 
 	return (
 		<SelectChips.Root

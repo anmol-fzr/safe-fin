@@ -1,4 +1,5 @@
 import { type Href, useRouter } from "expo-router";
+import { ac } from "node_modules/@faker-js/faker/dist/airline-Dz1uGqgJ";
 import { PressableScale } from "pressto";
 import {
 	Image,
@@ -16,8 +17,8 @@ import { type TxKeyPath, translate } from "@/i18n";
 import {
 	makeSpringy,
 	spacing,
-	ThemedViewStyle,
 	type ThemedStyle,
+	type ThemedViewStyle,
 } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -46,9 +47,8 @@ export const QuickActionCard = (action: QuickActionCardProps) => {
 				preset="subheading"
 				style={themed($actionTitle)}
 				entering={makeSpringy(FadeInUp)}
-			>
-				{translate(action.labelTx)}
-			</Text>
+				tx={action.labelTx}
+			/>
 			<Animated.Image
 				source={action.image}
 				entering={makeSpringy(SlideInDown)}

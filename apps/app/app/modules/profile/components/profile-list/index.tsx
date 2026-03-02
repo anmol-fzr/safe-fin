@@ -2,7 +2,7 @@ import type { Icon as IconType } from "iconsax-react-nativejs";
 import { View, type ViewProps, type ViewStyle } from "react-native";
 import { Text } from "@/components";
 import { IconSax } from "@/context/IconContext";
-import { type TxKeyPath, translate } from "@/i18n";
+import type { TxKeyPath } from "@/i18n";
 import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
@@ -51,13 +51,9 @@ ProfileList.ListItem = ({ icon, titleTx, descTx }: ListItemProps) => {
 		<View style={themed($profileListItem)}>
 			<IconSax icon={icon} />
 			<View>
-				<Text size="lg" weight="medium">
-					{translate(titleTx)}
-				</Text>
+				<Text size="lg" weight="medium" tx={titleTx} />
 				{descTx && (
-					<Text size="xs" style={{ color: colors.textDim }}>
-						{translate(descTx)}
-					</Text>
+					<Text size="xs" style={{ color: colors.textDim }} tx={descTx} />
 				)}
 			</View>
 		</View>

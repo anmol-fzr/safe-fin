@@ -1,9 +1,10 @@
 import { useInterval, useSafeContext } from "@safe-fin/ui/hooks";
-import React, {
+import { useRouter } from "expo-router";
+import {
 	createContext,
+	type PropsWithChildren,
 	useCallback,
 	useState,
-	type PropsWithChildren,
 } from "react";
 import {
 	Controller,
@@ -12,20 +13,19 @@ import {
 	useFormContext,
 } from "react-hook-form";
 import { Pressable, type ViewStyle } from "react-native";
-import { Button, Text } from "@/components";
-import { spacing, type ThemedStyle } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 import {
 	TextInputOTP,
-	TextInputOTPSlot,
 	TextInputOTPGroup,
+	TextInputOTPSlot,
 } from "react-native-input-code-otp";
+import { Button, Text } from "@/components";
 import { getEmptyArr } from "@/pkg/ui";
-import { LoginForm } from "./LoginForm";
-import { useVerifyOtp } from "../hooks/useVerifyOtp";
+import { spacing, type ThemedStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { useSendOtp } from "../hooks/useSendOtp";
-import { useRouter } from "expo-router";
+import { useVerifyOtp } from "../hooks/useVerifyOtp";
 import { setAuthData } from "../store";
+import { LoginForm } from "./LoginForm";
 
 interface VerifyFormContextType {
 	handleSubmit: VoidFunction;
@@ -207,13 +207,6 @@ const OtpFieldInfo = () => {
 			)}
 		</Text>
 	);
-};
-
-const padZerosByLength = (val: string, len: number) => {
-	if (val.length === len) {
-		return val;
-	}
-	return val.padStart(length, "0");
 };
 
 const useTimer = (seconds = 300) => {

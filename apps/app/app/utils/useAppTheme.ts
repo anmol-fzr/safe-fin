@@ -2,7 +2,8 @@ import {
 	type DefaultTheme,
 	useTheme as useNavTheme,
 } from "@react-navigation/native";
-import { createContext, use, useCallback, useMemo } from "react";
+import { useSafeContext } from "@safe-fin/ui/hooks";
+import { createContext, useCallback, useMemo } from "react";
 import { type StyleProp, useColorScheme } from "react-native";
 import { useMMKVString } from "react-native-mmkv";
 import type {
@@ -12,7 +13,6 @@ import type {
 	ThemedStyleArray,
 } from "@/theme";
 import { darkTheme, lightTheme } from "@/theme";
-import { MissingContextError } from "./error";
 import { storage } from "./storage";
 
 type ThemeContextType = {
@@ -47,11 +47,7 @@ interface UseAppThemeValue {
 const useAppTheme = () => {
 	const navTheme = useNavTheme();
 	const systemColorScheme = useColorScheme();
-	const context = use(ThemeContext);
-
-	if (!context) {
-		throw new MissingContextError("useTheme", " ThemeProvider");
-	}
+	const context = useSafeContext(ThemeContext, "useAppTheme");
 
 	const { theme: themeScheme, setTheme: setThemeContextOverride } = context;
 

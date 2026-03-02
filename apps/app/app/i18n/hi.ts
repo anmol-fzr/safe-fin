@@ -4,114 +4,126 @@ const hi = {
 	tabs: {
 		home: "हम",
 		calculator: "कलकलटर",
-		learnings: "सख",
-		scams: "घटल",
-		profile: "पफइल",
+		learnings: "कर",
+		scams: "सम",
+		profile: "अकउट",
 	},
 	screens: {
 		homeScreen: {
 			actions: {
 				learn: "सख",
-				calculator: "$t(tabs.calculator)", // Will pull "कलकलटर"
-				scams: "$t(tabs.scams)", // Will pull "घटल"
-				more: "अधक",
+				calculator: "कलकलटर",
+				scams: "सम",
+				more: "और दख",
 			},
 		},
 		calculatorList: {
 			title: "कलकलटर",
-			tagLine: "सभ वतय कलकलटर दख",
+			tagLine: "सभ फइनशयल कलकलटर दख",
 		},
 		learningList: {
-			title: "सख",
-			tagLine: "फइनस पर नवनतम पठ",
+			title: "कर",
+			tagLine: "फइनस पर नए कर",
 		},
 		scamList: {
-			title: "$t(tabs.scams)", // Will pull "घटल"
-			tagLine: "फइनस स जड़ नवनतम घटल",
+			title: "सम",
+			tagLine: "फइनस स जड नए सम",
 		},
 		profileList: {
 			accountList: {
-				userProfile: { title: "यजर पफइल", desc: "नम, फन नबर..." },
+				userProfile: { title: "यजर पफइल", desc: "नम, फन नबर आद" },
 				demographics: {
-					title: "जनसखक", // or "डमगफक"
-					desc: "पत, ववसय आद",
+					title: "डमगफक",
+					desc: "पत, पश आद",
 				},
 				financialDetails: {
-					title: "वतय ववरण",
-					desc: "आय, खर करन क आदत आद",
+					title: "फइनशयल डटल",
+					desc: "आय, खर क आदत आद",
 				},
-				account: { title: "खत", desc: "सत, खत हटए आद..." },
+				account: { title: "अकउट", desc: "सशन, अकउट डलट आद" },
 				appSettings: {
 					title: "ऐप सटग",
-					desc: "थम, भष, पहच आद...",
+					desc: "थम, भष आद",
 				},
 				debug: {
 					title: "डबग",
-					desc: "ऐप आईड, बल आईड, ससरण",
+					desc: "ऐप आईड, बल आईड, वरन",
 				},
 			},
 			appInfoList: {
 				aboutUs: "हमर बर म",
-				shareApp: "ऐप शयर कर",
-				rateApp: "ऐप क रट कर",
-				support: "सहयत",
+				shareApp: {
+					title: "ऐप शयर कर",
+					desc: "दसर क पस सभलन सखन म मदद कर",
+				},
+				rateApp: {
+					title: "ऐप क रट कर",
+					desc: "Play Store पर हम रव द",
+				},
+				feedback: {
+					title: "फडबक",
+					desc: "SafeFin क बर म अपन रय बतए",
+				},
+				support: "सपर",
 				terms: "सव क शर",
-				privacyPolicy: "गपनयत नत",
+				privacyPolicy: "पइवस पलस",
 			},
 		},
 	},
 	common: {
 		ok: "ठक ह!",
+		next: "आग",
 		cancel: "रद कर",
-		back: "पछ",
-		submit: "जम कर", // or "सबमट कर"
+		back: "वपस",
+		submit: "सबमट",
 		logOut: "लग आउट",
-		logOutAsGuest: "गस क रप म लग आउट कर",
+		logOutAsGuest: "गस क रप म लग आउट",
 	},
 	welcomeScreen: {
 		postscript:
-			"psst — शयद आपक ऐप ऐस नह दखत ह। (जब तक क आपक डजइनर न आपक य सन नह द ह, और उस सत म, इस शप कर!)",
-		readyForLaunch: "आपक ऐप, लन क लए लगभग तयर ह!",
-		exciting: "(ओह, यह रमचक ह!)",
-		letsGo: "चलए शर करत ह!",
+			"अर — ह सकत ह आपक ऐप ऐस न दखत ह। (अगर आपक डजइनर न यह सन द ह, त फर लन कर दजए!)",
+		readyForLaunch: "आपक ऐप लन क लए लगभग तयर ह!",
+		exciting: "(वह, य त मजदर ह!)",
+		letsGo: "चल शर कर!",
 	},
 	errorScreen: {
-		title: "कछ गलत ह गय!",
+		title: "कछ गडबड ह गई!",
 		friendlySubtitle:
-			"यह वह सन ह ज आपक उपयगकर उतदन (production) म तट आन पर दखग। आप इस सदश क अनकलत करन चहग (`app/i18n/hi.ts` म सत) और शयद लआउट भ (`app/screens/ErrorScreen`)। यद आप इस पर तरह स हटन चहत ह, त <ErrorBoundary> घटक क लए `app/app.tsx` दख।",
+			"अभ इस लड करन म दकत आ रह ह। गलत आपक नह, हमर ह। कपय दबर कशश कर।",
 		reset: "ऐप रसट कर",
-		traceTitle: "%{name} सक स तट",
+		traceTitle: "%{name} सक स एरर",
+	},
+	notFoundError: {
+		title: "{{name}} नह मल",
 	},
 	emptyStateComponent: {
 		generic: {
-			heading: "इतन खल... बहत दखद",
-			content:
-				"अभ तक कई डट नह मल। ऐप क रफश य रलड करन क लए बटन पर कक करन क पयस कर।",
-			button: "चलए फर स कशश करत ह",
+			heading: "यह अभ कछ नह ह",
+			content: "अभ कई डट उपलब नह ह। रफश करन क लए बटन दबए य ऐप दबर खल।",
+			button: "फर स कशश कर",
 		},
 	},
 
 	errors: {
-		invalidEmail: "अमन ईमल पत।",
+		invalidEmail: "गलत ईमल एडस।",
 	},
 	loginScreen: {
 		title: "लग इन",
-		tagLine: "अपन खत तक पहचन क लए लग इन कर",
+		tagLine: "अपन अकउट तक पहचन क लए लग इन कर",
 		logIn: "लग इन",
-		guestLogIn: "गस क रप म लग इन कर",
+		guestLogIn: "गस क रप म लग इन",
 		guestLogInPending: "गस क रप म लग इन ह रह ह...",
-		enterDetails:
-			"गप जनकर अनलक करन क लए नच अपन ववरण दर कर। आप कभ अनमन नह लग पएग क हमर पस क ह। य शयद आप लग लग; यह कई रकट सइस नह ह।",
-		phoneFieldLabel: "फन नबर",
-		phoneFieldPlaceholder: "अपन फन नबर दर कर",
-		otpFieldLabel: "ओटप ( वन टइम पसवर )",
+		enterDetails: "नच अपन जनकर दर कर। आपक लए खस चज तयर ह।",
+		emailFieldLabel: "ईमल एडस",
+		emailFieldPlaceholder: "अपन ईमल एडस दर कर",
+		otpFieldLabel: "ओटप (वन टइम पसवर)",
 		otpFieldPlaceholder: "123456",
-		verifyOtp: "ओटप सतपत कर",
+		verifyOtp: "ओटप वरफई कर",
 		sendOtp: "ओटप भज",
 	},
 	registerScreen: {
 		register: "रजसर",
-		enterDetails: "चलए आपक खत सटअप करत ह",
+		enterDetails: "अपन अकउट सटअप कर",
 		nameFieldLabel: "नम",
 		nameFieldPlaceholder: "अनमल",
 		emailFieldLabel: "ईमल",
@@ -122,63 +134,50 @@ const hi = {
 		calculatorListTab: "कलकलटर",
 		learnTab: "सख",
 		profileTab: "पफइल",
-		scamTab: "घटल",
+		scamTab: "सम",
 	},
 	quizzesScreen: {
 		title: "कज",
-		tagLine: "फइनस पर नवनतम कज",
-	},
-	scamScreen: {
-		title: "घटल",
-		tagLine: "फइनस स जड़ नवनतम घटल",
+		tagLine: "फइनस पर नए कज",
 	},
 	lessonScreen: {
-		title: "पठ",
-		tagLine: "फइनस पर नवनतम पठ",
-	},
-	learningScreen: {
-		title: "सख",
-		tagLine: "फइनस पर नवनतम पठ",
+		title: "लसन",
+		tagLine: "फइनस पर नए लसन",
 	},
 	resultsScreen: {
-		title: "परणम",
-		tagLine: "फइनस पर नवनतम कज",
+		title: "रजल",
+		tagLine: "फइनस कज क रजल",
 	},
 	settingScreen: {
 		title: "सटग",
 		tagLine: "सटग",
 	},
 	profileScreen: {
-		title: "पफइल",
-		tagLine: "यजर पफइल और ऐप सटग पबधत कर",
+		title: "अकउट",
+		tagLine: "यजर पफइल और ऐप सटग मनज कर",
 	},
 	demoGraphicsScreen: {
-		title: "डमगफक",
-		tagLine: "डमगफक",
+		title: "डम गफक",
+		tagLine: "डम गफक",
 	},
 	demoDebugScreen: {
 		howTo: "कस कर",
 		title: "डबग",
-		tagLine:
-			"बधई ह, आपक पस यह एक बहत ह उनत रएक नटव ऐप टमलट ह। इस बयलरपट क लभ उठए!",
-		reactotron: "रएकटन पर भज",
+		tagLine: "बधई ह, आपक पस एक एडवस React Native ऐप टमलट ह। इसक पर फयद उठए!",
+		reactotron: "Reactotron पर भज",
 		reportBugs: "बग रपर कर",
-		demoList: "डम सच",
-		demoPodcastList: "डम पडकस सच",
+		demoList: "डम लस",
+		demoPodcastList: "डम पडकस लस",
 		androidReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क रएकटन डसटप ऐप चल रह ह, अपन टरनल स adb reverse tcp:9090 tcp:9090 चलए, और ऐप क रलड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह, टरनल म adb reverse tcp:9090 tcp:9090 चलए और ऐप रलड कर।",
 		iosReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क रएकटन डसटप ऐप चल रह ह और ऐप क रलड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 		macosReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क रएकटन डसटप ऐप चल रह ह और ऐप क रलड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 		webReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क रएकटन डसटप ऐप चल रह ह और ऐप क रलड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 		windowsReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क रएकटन डसटप ऐप चल रह ह और ऐप क रलड कर।",
-	},
-	calculatorListScreen: {
-		title: "कलकलटर",
-		tagLine: "सभ वतय कलकलटर दख",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 	},
 	sipScreen: {
 		title: "SIP कलकलटर",

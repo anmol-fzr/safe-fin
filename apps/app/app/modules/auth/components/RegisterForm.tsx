@@ -119,9 +119,7 @@ const SubmitButton = ({ tx = "common:submit" as TxKeyPath }) => {
 			status={isPending ? "loading" : undefined}
 			onPress={onSubmit}
 		>
-			<Text preset="subheading" style={{ color: colors.textInverse }}>
-				{translate(tx)}
-			</Text>
+			<Text preset="subheading" style={{ color: colors.textInverse }} tx={tx} />
 		</Button>
 	);
 };

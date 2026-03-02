@@ -27,7 +27,7 @@ import { ListView, Screen, Text } from "@/components";
 import { Section } from "@/components/Section";
 import { IconSax } from "@/context/IconContext";
 import { getCountriesOpts } from "@/hooks/queries";
-import { type TxKeyPath, translate } from "@/i18n";
+import type { TxKeyPath } from "@/i18n";
 import { getDemoGraphicsOpts } from "@/modules/profile/hooks/queries";
 import { ellipsize } from "@/pkg/ui";
 import { $styles } from "@/theme";
@@ -289,14 +289,13 @@ export const AccountIndexScreen = () => {
 																color={colors.text}
 															/>
 															<View style={{ flex: 1 }}>
-																<Text size="md">{translate(item.title)}</Text>
+																<Text size="md" tx={item.title} />
 																{item.desc && (
 																	<Text
 																		size="xs"
 																		style={{ color: colors.textDim }}
-																	>
-																		{translate(item.desc)}
-																	</Text>
+																		tx={item.desc}
+																	/>
 																)}
 															</View>
 															<IconSax icon={ArrowRight2} />
@@ -317,14 +316,13 @@ export const AccountIndexScreen = () => {
 																color={colors.text}
 															/>
 															<View style={{ flex: 1 }}>
-																<Text size="md">{translate(item.title)}</Text>
+																<Text size="md" tx={item.title} />
 																{item.desc && (
 																	<Text
 																		size="xs"
 																		style={{ color: colors.textDim }}
-																	>
-																		{translate(item.desc)}
-																	</Text>
+																		tx={item.desc}
+																	/>
 																)}
 															</View>
 															<IconSax icon={ArrowRight2} />
