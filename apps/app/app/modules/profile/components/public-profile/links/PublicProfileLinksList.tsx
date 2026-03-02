@@ -1,9 +1,12 @@
 import { type ExternalPathString, Link } from "expo-router";
 import {
+	Add,
 	Facebook as FacebookIcon,
 	Instagram as InstagramIcon,
 	Link as LinkIcon,
+	Snapchat as SnapchatIcon,
 	Trash,
+	Whatsapp as WhatsappIcon,
 	Youtube as YoutubeIcon,
 } from "iconsax-react-nativejs";
 import { PressableScale } from "pressto";
@@ -91,6 +94,8 @@ const hostXIcon = {
 	"instagram.com": InstagramIcon,
 	"facebook.com": FacebookIcon,
 	"youtube.com": YoutubeIcon,
+	"w.me": WhatsappIcon,
+	"snapchat.com": SnapchatIcon,
 } as const;
 
 export const PublicProfileLinksListItem = (
@@ -100,9 +105,9 @@ export const PublicProfileLinksListItem = (
 	const { isMyProfile } = usePublicProfileScreenContext();
 	const { themed, theme } = useAppTheme();
 
-	const url = new URL(link);
+	const { hostname } = new URL(link);
 
-	const icon = hostXIcon[url.hostname] ?? LinkIcon;
+	const icon = hostXIcon[hostname] || LinkIcon;
 
 	return (
 		<Animated.View
@@ -117,7 +122,15 @@ export const PublicProfileLinksListItem = (
 			</Link>
 			{isMyProfile && (
 				<PressableScale onPress={handleRemove}>
-					<IconSax icon={Trash} color={theme.colors.error} size={18} />
+					<IconSax
+						icon={Add}
+						color={theme.colors.error}
+						//size={18}
+						style={{
+							//backgroundColor: "pink",
+							transform: [{ rotate: "45deg" }],
+						}}
+					/>
 				</PressableScale>
 			)}
 		</Animated.View>
