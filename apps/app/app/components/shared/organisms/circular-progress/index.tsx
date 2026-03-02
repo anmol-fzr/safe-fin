@@ -1,23 +1,24 @@
-import React, { memo } from "react";
+import type React from "react";
+import { memo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import Animated, { useAnimatedProps } from "react-native-reanimated";
-import { Circle, Svg, type CircleProps } from "react-native-svg";
+import { Circle, type CircleProps, Svg } from "react-native-svg";
+import { useAppTheme } from "@/utils/useAppTheme";
 import type { ICircularProgress } from "./types";
 
 const AnimatedCircle = Animated.createAnimatedComponent<CircleProps>(Circle);
 
 export const CircularProgress: React.FC<ICircularProgress> =
 	memo<ICircularProgress>((props: ICircularProgress): React.ReactNode => {
+		const { theme } = useAppTheme();
+
 		const {
 			progress,
 			size = 50,
 			strokeWidth = 3,
-			outerCircleColor = "rgba(255, 255, 255, 0.3)",
-			progressCircleColor = "white",
-			backgroundColor = "#502314",
-			gap: _gap = 2,
+			outerCircleColor = theme.colors.palette.neutral800,
+			progressCircleColor = theme.colors.palette.primary500,
 			onPress,
-			renderIcon,
 		} = props;
 
 		const radius = (size - strokeWidth) / 2;
@@ -32,10 +33,6 @@ export const CircularProgress: React.FC<ICircularProgress> =
 				strokeDashoffset,
 			};
 		});
-
-		const gap = _gap;
-		const innerCircleSize = size - strokeWidth * 2 - gap * 2;
-		const innerCirclePosition = strokeWidth + gap;
 
 		return (
 			<Pressable onPress={onPress}>

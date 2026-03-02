@@ -12,8 +12,8 @@ export default function Settings() {
 	return (
 		<Screen preset="scroll" contentContainerStyle={$styles.container}>
 			<View style={{ gap: spacing.lg }}>
-				{/*
 				<ThemeSwitcher />
+				{/*
 				<LangSwitcher />
         */}
 			</View>

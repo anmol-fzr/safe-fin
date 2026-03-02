@@ -9,6 +9,7 @@ import {
 	Lifebuoy,
 	LikeDislike,
 	Profile,
+	Setting2,
 	Share as ShareIcon,
 	Star1,
 	User,
@@ -110,12 +111,12 @@ const DATA: ListItems = [
 				desc: "screens:profileList.accountList.account.desc",
 				href: "/profile/account",
 			},
-			// {
-			// 	icon: Setting2,
-			// 	title: "screens:profileList.accountList.appSettings.title",
-			// 	desc: "screens:profileList.accountList.appSettings.desc",
-			// 	href: "/settings/app",
-			// },
+			{
+				icon: Setting2,
+				title: "screens:profileList.accountList.appSettings.title",
+				desc: "screens:profileList.accountList.appSettings.desc",
+				href: "/settings/app",
+			},
 		],
 	},
 	{

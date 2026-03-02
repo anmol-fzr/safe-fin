@@ -57,8 +57,6 @@ export const SelectField = forwardRef(function SelectField(
 		`select-field-${props.name}`,
 	);
 
-	console.log(`select-field-${props.name}`);
-
 	const bottomSheet = useBottomSheet();
 
 	useImperativeHandle(ref, () => ({

@@ -429,7 +429,7 @@ const DayItem = memo((props: DayItemProps) => {
 					aspectRatio: 1,
 					borderWidth: 1,
 					backgroundColor: interpolateColorsHelper(
-						colors.palette.neutral100,
+						colors.palette.primary100,
 						colors.palette.primary600,
 						intensity,
 					),

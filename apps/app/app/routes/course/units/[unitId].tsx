@@ -14,6 +14,7 @@ import { MarkdowRenderer } from "@/modules/lesson/components/Lesson";
 import { LessonCard } from "@/modules/lesson/components/LessonCard/LessonCard";
 import { useGetUnit } from "@/modules/lesson/hooks/units/queries";
 import { idSchema } from "@/schema";
+import type { ThemedTextStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 const Route = createRoute({
@@ -37,6 +38,7 @@ type Props = { unitId: number };
 function UnitScreenImpl(props: Props) {
 	const { unitId } = props;
 	const {
+		themed,
 		theme: { colors, spacing },
 	} = useAppTheme();
 
@@ -68,7 +70,7 @@ function UnitScreenImpl(props: Props) {
 			}}
 			renderInitialContent={() => (
 				<View style={styles.fabContent}>
-					<Text size="xs" style={styles.fabTitle} numberOfLines={1}>
+					<Text size="xs" style={themed($fabTitle)} numberOfLines={1}>
 						{ellipsize(unit.content.title, 35)}
 					</Text>
 					<CircularProgress progress={progress} size={36} strokeWidth={3} />
@@ -133,15 +135,27 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	title: { fontSize: 32, lineHeight: 36 },
-	fabTitle: { color: "#fff", flex: 1, paddingRight: 12 },
+});
+
+const $fabTitle: ThemedTextStyle = (theme) => ({
+	color: theme.colors.textInverse,
+	flex: 1,
+	paddingRight: 12,
+});
+
+const $continueBtnText: ThemedTextStyle = (theme) => ({
+	color: theme.colors.text,
 });
 
 const ContinueButton = (props: ButtonProps) => {
+	const { themed } = useAppTheme();
+
 	return (
 		<Button
 			{...props}
 			preset="reversed"
 			style={[styles.continueButton, props.style]} // Merge styles if Link passes any
+			textStyle={themed($continueBtnText)}
 		>
 			Continue
 		</Button>

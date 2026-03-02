@@ -8,7 +8,7 @@ import { Suspense, useMemo } from "react";
 import { View } from "react-native";
 import {
 	EnrichedMarkdownText,
-	EnrichedMarkdownTextProps,
+	type EnrichedMarkdownTextProps,
 } from "react-native-enriched-markdown";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { $sizeStyles } from "@/components";
@@ -73,11 +73,8 @@ export function MarkdowRenderer(props: LessonRendererProps) {
 
 	const styles = useMemo(
 		() => ({
-			body: {
-				color: colors.text,
-				fontSize: 18,
-			},
 			paragraph: {
+				color: colors.text,
 				fontFamily: "spaceGroteskRegular",
 			},
 			strong: {
