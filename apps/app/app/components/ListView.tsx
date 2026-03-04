@@ -1,11 +1,11 @@
-import type {
-	//LegendList,
-	//type LegendListProps,
-	LegendListRef,
+import {
+	LegendList,
+	type LegendListProps,
+	type LegendListRef,
 } from "@legendapp/list";
 import {
-	AnimatedLegendList,
-	type AnimatedLegendListProps,
+	// AnimatedLegendList as LegendList,
+	// type AnimatedLegendListProps as LegendListProps,
 } from "@legendapp/list/reanimated";
 import type {
 	ForwardedRef,
@@ -28,11 +28,11 @@ import { getGenericEndState } from "@/utils/faker/endState";
 
 export type ListViewRef = LegendListRef;
 
-export type ListViewProps<T> = PropsWithoutRef<AnimatedLegendListProps<T>>;
+export type ListViewProps<T> = PropsWithoutRef<LegendListProps<T>>;
 
 const ListViewComponent = forwardRef(
 	<T,>(props: ListViewProps<T>, ref: ForwardedRef<LegendListRef>) => {
-		return <AnimatedLegendList {...props} ref={ref} />;
+		return <LegendList {...props} ref={ref} />;
 	},
 );
 
