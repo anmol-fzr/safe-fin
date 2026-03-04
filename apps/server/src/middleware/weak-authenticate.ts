@@ -1,4 +1,3 @@
-import { env } from "hono/adapter";
 import type { Session, User } from "@/pkg/auth";
 import { auth } from "@/pkg/auth";
 import { createTypedFactory } from "../factory";
@@ -11,7 +10,7 @@ const { createMiddleware } = createTypedFactory<{
 }>();
 
 const weakAuthenticate = createMiddleware(async (c, next) => {
-	const session = await auth(env(c)).api.getSession({
+	const session = await auth().api.getSession({
 		headers: c.req.raw.headers,
 	});
 

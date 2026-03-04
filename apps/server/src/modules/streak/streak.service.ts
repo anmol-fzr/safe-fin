@@ -1,6 +1,5 @@
-import { getDb, streak } from "@/pkg/db";
 import type { User } from "@safe-fin/auth";
-import { eq } from "@/pkg/db";
+import { eq, getDb, streak } from "@/pkg/db";
 
 export function startOfDay(date: Date) {
 	date.setHours(0, 0, 0, 0);

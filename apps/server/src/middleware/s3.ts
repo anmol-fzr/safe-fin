@@ -1,6 +1,6 @@
-import { env } from "cloudflare:workers";
 import { createTypedFactory } from "@/factory";
 import { StorageService } from "@/pkg/storage";
+import { envs } from "@/utils/envs";
 
 export interface BucketConfig {
 	BUCKET: string;
@@ -15,20 +15,15 @@ const { createMiddleware } = createTypedFactory<{
 }>();
 
 const s3 = createMiddleware(async (c, next) => {
-	const {
-		S3_BUCKET,
-		S3_ENDPOINT,
-		S3_PUBLIC_ENDPOINT,
-		S3_ACCESS_KEY,
-		S3_SECRET_KEY,
-	} = env;
+	const { S3 } = envs;
+	const { BUCKET, ENDPOINT, PUBLIC_ENDPOINT, ACCESS_KEY, SECRET_KEY } = S3;
 
 	const storage = new StorageService({
-		bucket: S3_BUCKET,
-		endpoint: S3_ENDPOINT,
-		publicEndpoint: S3_PUBLIC_ENDPOINT,
-		accessKeyId: S3_ACCESS_KEY,
-		secretAccessKey: S3_SECRET_KEY,
+		bucket: BUCKET,
+		endpoint: ENDPOINT,
+		publicEndpoint: PUBLIC_ENDPOINT,
+		accessKeyId: ACCESS_KEY,
+		secretAccessKey: SECRET_KEY,
 	});
 
 	c.set("storage", storage);
@@ -40,11 +35,12 @@ const s3 = createMiddleware(async (c, next) => {
 });
 
 const getS3Config = () => {
-	const { S3_BUCKET, S3_PUBLIC_ENDPOINT } = env;
+	const { S3 } = envs;
+	const { BUCKET, PUBLIC_ENDPOINT } = S3;
 
 	return {
-		BUCKET: S3_BUCKET,
-		ENDPOINT: S3_PUBLIC_ENDPOINT,
+		BUCKET: BUCKET,
+		ENDPOINT: PUBLIC_ENDPOINT,
 	};
 };
 
