@@ -106,6 +106,7 @@ const FooterText = () => {
 			exiting={makeSpringy(FadeOutDown)}
 			preset="default"
 			size="xs"
+			color="dim"
 			style={themed($footerText)}
 		>
 			By continuing, you agree to our{" "}
@@ -150,9 +151,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const $footerText: ThemedTextStyle = ({ spacing, colors }) => ({
+const $footerText: ThemedTextStyle = ({ spacing }) => ({
 	textAlign: "center",
-	color: colors.textDim,
 	paddingInline: spacing.md,
 });
 

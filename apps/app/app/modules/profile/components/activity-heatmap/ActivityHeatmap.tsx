@@ -127,10 +127,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 				<Pressable
 					onPress={() => setCurr((c) => (c === "year" ? "month" : "year"))}
 				>
-					<Text
-						size="xs"
-						style={{ color: colors.textDim, textTransform: "capitalize" }}
-					>
+					<Text size="xs" color="dim" style={{ textTransform: "capitalize" }}>
 						This {curr} Activity
 					</Text>
 				</Pressable>
@@ -158,7 +155,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 								<Text
 									entering={makeSpringy(FadeInUp)}
 									exiting={makeSpringy(FadeOutDown)}
-									style={{ color: colors.textDim }}
+									color="dim"
 									key={
 										activeItem?.totalPxEarned === 0
 											? "No"
@@ -172,7 +169,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 								<Text
 									entering={makeSpringy(FadeInUp)}
 									exiting={makeSpringy(FadeOutDown)}
-									style={{ color: colors.textDim }}
+									color="dim"
 								>
 									PX Earned
 								</Text>
@@ -180,7 +177,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 								<Text
 									entering={makeSpringy(FadeInUp)}
 									exiting={makeSpringy(FadeOutDown)}
-									style={{ color: colors.textDim }}
+									color="dim"
 									key={formatDate(activeItem?.date)}
 								>
 									{formatDate(activeItem?.date)}
@@ -190,7 +187,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 							<Text
 								entering={makeSpringy(FadeIn).delay(100)}
 								exiting={makeSpringy(FadeOut).delay(100)}
-								style={{ color: colors.textDim }}
+								color="dim"
 							>
 								Tap any day to see your PX for that day
 							</Text>
@@ -200,7 +197,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 						<View
 							style={{ flexDirection: "row", gap: 6, alignItems: "flex-end" }}
 						>
-							<Text style={{ color: colors.textDim }} size="xs">
+							<Text color="dim" size="xs">
 								Less
 							</Text>
 							{getEmptyArr(5).map((i) => (
@@ -214,7 +211,7 @@ export function ActivityHeatmap(props: ActivityHeatmapProps) {
 									/>
 								</Animated.View>
 							))}
-							<Text style={{ color: colors.textDim }} size="xs">
+							<Text color="dim" size="xs">
 								More
 							</Text>
 						</View>

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { FadeInUp } from "react-native-reanimated";
 import { ListView, Text } from "@/components";
-import type { ThemedTextStyle, ThemedViewStyle } from "@/theme";
+import type { ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 interface PublicProfileStatsProps {
@@ -50,7 +50,7 @@ const Stat = (props: StatProps) => {
 			<Text size="lg" weight="semiBold" entering={FadeInUp}>
 				{title}
 			</Text>
-			<Text style={themed($statDesc)} size="xs" entering={FadeInUp}>
+			<Text color="dim" size="xs" entering={FadeInUp}>
 				{desc}
 			</Text>
 		</View>
@@ -62,8 +62,4 @@ const $statRoot: ThemedViewStyle = (theme) => ({
 	borderRadius: theme.roundness,
 	padding: theme.spacing.sm,
 	alignItems: "center",
-});
-
-const $statDesc: ThemedTextStyle = (theme) => ({
-	color: theme.colors.textDim,
 });

@@ -1,10 +1,10 @@
-import { useAppTheme } from "@/utils/useAppTheme";
-import { Text } from "@/components";
-import { StyleSheet, View } from "react-native";
-import { useRevokeOtherSessions } from "../../hooks/mutations";
 import { PressableScale } from "pressto";
-import { ThemedViewStyle } from "@/theme";
 import { useCallback } from "react";
+import { StyleSheet, View } from "react-native";
+import { Text } from "@/components";
+import type { ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { useRevokeOtherSessions } from "../../hooks/mutations";
 
 export function RevokeOtherSessions() {
 	const { revokeOtherSessions, isPending } = useRevokeOtherSessions();
@@ -28,7 +28,7 @@ export function RevokeOtherSessions() {
 				<Text
 					style={{
 						textDecorationLine: "underline",
-						color: isPending ? colors.textDim : colors.palette.neutral900,
+						color: isPending ? colors.textDim : colors.text,
 					}}
 				>
 					Revoke all Other

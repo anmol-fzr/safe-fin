@@ -21,7 +21,7 @@ export const ChapterBar = (props: ChapterProps) => {
 
 	const {
 		themed,
-		theme: { colors, spacing, typography },
+		theme: { spacing, typography },
 	} = useAppTheme();
 
 	return (
@@ -29,8 +29,8 @@ export const ChapterBar = (props: ChapterProps) => {
 			<View style={{ flexDirection: "row", gap: 6 }}>
 				<Text
 					weight="medium"
+					color="dim"
 					style={{
-						color: colors.textDim,
 						fontFamily: typography.secondary?.medium,
 					}}
 				>

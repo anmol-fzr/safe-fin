@@ -70,7 +70,12 @@ function UnitScreenImpl(props: Props) {
 			}}
 			renderInitialContent={() => (
 				<View style={styles.fabContent}>
-					<Text size="xs" style={themed($fabTitle)} numberOfLines={1}>
+					<Text
+						size="xs"
+						color="inverse"
+						style={styles.fabTitle}
+						numberOfLines={1}
+					>
 						{ellipsize(unit.content.title, 35)}
 					</Text>
 					<CircularProgress progress={progress} size={36} strokeWidth={3} />
@@ -135,12 +140,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	title: { fontSize: 32, lineHeight: 36 },
-});
-
-const $fabTitle: ThemedTextStyle = (theme) => ({
-	color: theme.colors.textInverse,
-	flex: 1,
-	paddingRight: 12,
+	fabTitle: {
+		flex: 1,
+		paddingRight: 12,
+	},
 });
 
 const $continueBtnText: ThemedTextStyle = (theme) => ({

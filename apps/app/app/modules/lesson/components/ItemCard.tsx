@@ -38,18 +38,12 @@ export function ItemCard(props: ItemCardProps) {
 			{...rest}
 		>
 			<View style={styles.textWrapper}>
-				<Text
-					weight="medium"
-					size="sm"
-					style={{
-						color: isLocked ? colors.textDim : colors.text,
-					}}
-				>
+				<Text weight="medium" size="sm" color={isLocked ? "dim" : "default"}>
 					{title}
 				</Text>
 
 				<View style={{ flexDirection: "row", gap: spacing.md }}>
-					<Text style={{ color: colors.textDim }} size="xs" weight="semiBold">
+					<Text color="dim" size="xs" weight="semiBold">
 						{points} PX
 					</Text>
 					{isCompleted && <CompletedBadge />}

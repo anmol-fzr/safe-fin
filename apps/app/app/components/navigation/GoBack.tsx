@@ -6,6 +6,7 @@ import { memo, useMemo } from "react";
 import { Pressable, type ViewStyle } from "react-native";
 import Animated, { FadeInLeft, FadeOutRight } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { IconSax } from "@/context/IconContext";
 import { type TxKeyPath, translate } from "@/i18n";
 import { $styles, makeSpringy, type ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
@@ -70,7 +71,7 @@ export const GoBack = memo((props: GoBackProps) => {
 				exiting={exitingAnim}
 				style={styles}
 			>
-				<ChevronLeft color={colors.textDim} size={18} />
+				<IconSax icon={ChevronLeft} color={colors.textDim} size={18} />
 				<Text>{content}</Text>
 			</Animated.View>
 		</Pressable>

@@ -1,10 +1,10 @@
-import { ListView, Text } from "@/components";
-import { View } from "react-native";
-import { IconSax } from "@/context/IconContext";
 import { TickCircle } from "iconsax-react-nativejs";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { Section } from "@/components/Section";
+import { View } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
+import { ListView, Text } from "@/components";
+import { Section } from "@/components/Section";
+import { IconSax } from "@/context/IconContext";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 const stats = [
 	{
@@ -118,7 +118,7 @@ export function StreakSheetView() {
 									gap: spacing.xs,
 								}}
 							>
-								<Text style={{ color: colors.textDim }} weight="medium">
+								<Text color="dim" weight="medium">
 									{item.day.at(0)}
 								</Text>
 								{item.isCheck ? (
@@ -153,10 +153,7 @@ export function StreakSheetView() {
 						padding: spacing.sm,
 					}}
 				>
-					<Section.Title
-						style={{ marginInline: "auto", color: colors.textDim }}
-						size="sm"
-					>
+					<Section.Title color="dim" style={{ marginInline: "auto" }} size="sm">
 						Your Stats
 					</Section.Title>
 					<Section.Body
@@ -186,7 +183,7 @@ export function StreakSheetView() {
 											gap: 2,
 										}}
 									>
-										<Text style={{ color: colors.textDim }}>{item.label}</Text>
+										<Text color="dim">{item.label}</Text>
 										<Text weight="medium">{item.value}</Text>
 									</View>
 								)}

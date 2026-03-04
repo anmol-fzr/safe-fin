@@ -1,16 +1,16 @@
-import { Text } from "@/components";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { Pressable, View } from "react-native";
 import Animated, {
 	FadeIn,
 	FadeOut,
 	LinearTransition,
 } from "react-native-reanimated";
+import { Text } from "@/components";
 import { useToggle } from "@/pkg/ui";
 import { makeSpringy } from "@/theme";
-import { Item } from "./profile-completion-task-list-item";
-import { ProfileCompletionTaskList } from "./profile-completion-task-list";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { ProfileCompletionCTA } from "./profile-completion-cta";
+import { ProfileCompletionTaskList } from "./profile-completion-task-list";
+import type { Item } from "./profile-completion-task-list-item";
 
 export function ProfileCompletionCard({ tasks }: { tasks: Item[] }) {
 	const {
@@ -35,7 +35,7 @@ export function ProfileCompletionCard({ tasks }: { tasks: Item[] }) {
 					<Text weight="bold" size="xl">
 						Complete Your Profile
 					</Text>
-					<Text size="xs" style={{ color: colors.textDim }}>
+					<Text size="xs" color="dim">
 						Unlock your full potential by completing your profile
 					</Text>
 				</View>

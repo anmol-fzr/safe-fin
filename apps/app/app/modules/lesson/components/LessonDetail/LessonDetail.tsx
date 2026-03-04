@@ -1,5 +1,5 @@
 import { Bookmark2, Calendar2, Share } from "iconsax-react-nativejs";
-import { PressableOpacity, PressableScale } from "pressto";
+import { PressableScale } from "pressto";
 import type { ReactNode } from "react";
 import {
 	type StyleProp,
@@ -7,8 +7,6 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-import Animated from "react-native-reanimated";
-import { Icon } from "@/components/Icon";
 import { Text, type TextProps } from "@/components/Text";
 import { IconSax } from "@/context/IconContext";
 import type { ThemedStyle } from "@/theme";
@@ -46,14 +44,14 @@ interface LessonDetailUpdatedProps extends Omit<TextProps, "style"> {
 
 function LessonDetailUpdated(props: LessonDetailUpdatedProps) {
 	const { children, style: $styleOverride, ...textProps } = props;
-	const { themed } = useAppTheme();
 
 	return (
 		<View style={$metadataItem}>
 			<IconSax icon={Calendar2} size={18} />
 			<Text
 				{...textProps}
-				style={[themed($metadataText), $styleOverride]}
+				color="dim"
+				style={$styleOverride}
 				size="sm"
 				weight="normal"
 			>

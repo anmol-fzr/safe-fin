@@ -257,9 +257,7 @@ SelectChips.OptionRenderer = <T,>(props: OptionRendererProps<T>) => {
 		>
 			{props.children}
 			<Text
-				style={{
-					color: isSelected ? colors.textInverse : colors.textDim,
-				}}
+				color={isSelected ? "inverse" : "dim"}
 				weight={isSelected ? "medium" : "normal"}
 			>
 				{label}

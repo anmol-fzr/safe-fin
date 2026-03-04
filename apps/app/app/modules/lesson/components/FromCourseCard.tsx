@@ -1,8 +1,8 @@
-import { useAppTheme } from "@/utils/useAppTheme";
-import { View } from "react-native";
 import { memo } from "react";
+import { View } from "react-native";
 import { Text } from "@/components";
-import { ThemedTextStyle, ThemedViewStyle } from "@/theme";
+import type { ThemedTextStyle, ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 interface FromCourseCardProps {
 	courseTitle: string;
@@ -15,7 +15,7 @@ export const FromCourseCard = memo((props: FromCourseCardProps) => {
 
 	return (
 		<View style={themed($root)}>
-			<Text weight="medium" style={themed($title)}>
+			<Text weight="medium" color="dim" style={themed($title)}>
 				FROM COURSE
 			</Text>
 
@@ -31,7 +31,6 @@ const $root: ThemedViewStyle = (theme) => ({
 });
 
 const $title: ThemedTextStyle = (theme) => ({
-	color: theme.colors.textDim,
 	fontFamily: theme.typography.secondary?.medium,
 });
 

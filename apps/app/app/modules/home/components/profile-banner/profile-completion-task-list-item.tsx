@@ -1,11 +1,11 @@
-import { Text } from "@/components";
-import { useAppTheme } from "@/utils/useAppTheme";
+import { LinearGradient } from "expo-linear-gradient";
+import type { Icon as IconType } from "iconsax-react-nativejs";
 import { View } from "react-native";
 import Animated, { FadeIn, FadeInUp, FadeOut } from "react-native-reanimated";
+import { Text } from "@/components";
 import { IconSax } from "@/context/IconContext";
-import { LinearGradient } from "expo-linear-gradient";
 import { makeSpringy } from "@/theme";
-import type { Icon as IconType } from "iconsax-react-nativejs";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 export interface Item {
 	title: string;
@@ -100,7 +100,7 @@ export function ProfileCompletionTaskListItem(props: ListItemProps) {
 					{task.title}{" "}
 				</Text>
 
-				<Text size="xs" style={{ color: colors.textDim }}>
+				<Text size="xs" color="dim">
 					{task.subtitle}
 				</Text>
 			</View>

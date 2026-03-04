@@ -2,17 +2,17 @@ import { useFocusEffect } from "@react-navigation/native";
 import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { memo, PropsWithChildren, useCallback, useMemo, useState } from "react";
 import Animated, {
-	AnimatedProps,
+	type AnimatedProps,
 	FadeInUp,
 	FadeOutDown,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 import type { TxKeyPath } from "@/i18n";
+import { isUndefined } from "@/pkg/utils";
 import { makeSpringy, type ThemedTextStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Text } from "./Text";
-import { isUndefined } from "@/pkg/utils";
-import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 
 export interface ScreenHeaderRootProps
 	extends NativeStackHeaderProps,

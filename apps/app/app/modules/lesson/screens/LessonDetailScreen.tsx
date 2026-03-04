@@ -183,17 +183,10 @@ function CourseDetailsScreenContent(props: CourseDetailsScreenContentProps) {
 		level,
 		duration,
 		points,
-		// learners,
 		rating,
 		ratingCount,
 		updatedDate = new Date(),
-		// isBookmarked = false,
-		// onBookmarkToggle,
-		// onShare,
-		// onStartCourse,
 	} = props;
-
-	const { theme } = useAppTheme();
 
 	return (
 		<>

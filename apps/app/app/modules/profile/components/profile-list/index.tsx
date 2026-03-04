@@ -42,19 +42,14 @@ interface ListItemProps {
 }
 
 ProfileList.ListItem = ({ icon, titleTx, descTx }: ListItemProps) => {
-	const {
-		themed,
-		theme: { colors },
-	} = useAppTheme();
+	const { themed } = useAppTheme();
 
 	return (
 		<View style={themed($profileListItem)}>
 			<IconSax icon={icon} />
 			<View>
 				<Text size="lg" weight="medium" tx={titleTx} />
-				{descTx && (
-					<Text size="xs" style={{ color: colors.textDim }} tx={descTx} />
-				)}
+				{descTx && <Text size="xs" color="dim" tx={descTx} />}
 			</View>
 		</View>
 	);
