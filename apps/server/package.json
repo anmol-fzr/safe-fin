@@ -24,7 +24,7 @@
 		"@sentry/cloudflare": "^10.38.0",
 		"country-state-city": "^3.2.1",
 		"drizzle-zod": "^0.8.3",
-		"hono": "^4.12.3",
+		"hono": "^4.12.5",
 		"neverthrow": "^8.2.0",
 		"zod": "4.3.6"
 	},
