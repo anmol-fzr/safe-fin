@@ -1,36 +1,62 @@
-import { memo } from "react";
+import { useCallback, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import type { pieDataItem } from "react-native-gifted-charts";
-import { PieChart } from "react-native-gifted-charts";
+import { Pie, PolarChart } from "victory-native";
 import { Text } from "@/components";
-import { colors, spacing } from "@/theme";
+import { spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 type CalculatorPieChartProps = {
-	data: pieDataItem[];
+	data: {
+		text: string;
+		value: string;
+	}[];
 };
 
-export const pieColors = [
-	colors.palette.primary300,
-	colors.palette.secondary300,
-	colors.palette.neutral300,
-];
+export const CalculatorPieChart = (props: CalculatorPieChartProps) => {
+	const { data } = props;
 
-export const getPieColor = (indx: number) => pieColors[indx % pieColors.length];
+	const {
+		theme: { colors },
+	} = useAppTheme();
 
-export const CalculatorPieChart = memo(({ data }: CalculatorPieChartProps) => {
-	const { themeContext } = useAppTheme();
+	const pieColors = useMemo(
+		() => [
+			colors.palette.primary300,
+			colors.palette.secondary300,
+			colors.palette.neutral300,
+		],
+		[colors],
+	);
+
+	const getPieColor = useCallback(
+		(indx: number) => pieColors[indx % pieColors.length],
+		[pieColors],
+	);
+
+	const pieData = useMemo(
+		() =>
+			data.map((obj, index) => ({
+				...obj,
+				color: getPieColor(index),
+			})),
+		[data, getPieColor],
+	);
+
 	return (
-		<View style={styles.chartContainer}>
-			<PieChart
-				data={data}
-				donut
-				backgroundColor={
-					themeContext === "light" ? colors.background : colors.text
-				}
-			/>
+		<View style={styles.root}>
+			<View style={styles.chartContainer}>
+				<PolarChart
+					data={pieData}
+					labelKey="text"
+					valueKey="value"
+					colorKey="color"
+				>
+					<Pie.Chart startAngle={270} innerRadius="40%" />
+				</PolarChart>
+			</View>
+
 			<View style={styles.chartLegendContainer}>
-				{data.map((item) => (
+				{pieData.map((item) => (
 					<View key={item.text} style={styles.legendRow}>
 						<View
 							style={[styles.legendColorBox, { backgroundColor: item.color }]}
@@ -41,19 +67,27 @@ export const CalculatorPieChart = memo(({ data }: CalculatorPieChartProps) => {
 			</View>
 		</View>
 	);
-});
+};
 
 const styles = StyleSheet.create({
-	chartContainer: {
+	root: {
 		alignSelf: "center",
 		alignItems: "center",
 		marginVertical: spacing.lg,
 	},
+	chartContainer: {
+		width: "75%",
+		maxWidth: 500,
+		aspectRatio: 1,
+		marginInline: "auto",
+	},
 	chartLegendContainer: {
 		flexDirection: "row",
 		gap: spacing.md,
+		flexWrap: "wrap",
 		marginTop: spacing.sm,
 		alignSelf: "center",
+		justifyContent: "center",
 	},
 	legendRow: {
 		flexDirection: "row",

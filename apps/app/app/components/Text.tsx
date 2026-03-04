@@ -1,7 +1,6 @@
-import { Size } from "@testing-library/react-native/build/types";
 import type { TOptions } from "i18next";
 import type { ComponentProps } from "react";
-import { type ForwardedRef, forwardRef, type ReactNode } from "react";
+import { type ForwardedRef, forwardRef, type ReactNode, useMemo } from "react";
 // eslint-disable-next-line no-restricted-imports
 import type {
 	Text as RNText,
@@ -25,6 +24,8 @@ type Presets =
 	| "formLabel"
 	| "formHelper"
 	| "error";
+
+type TextColor = "default" | "inverse" | "dim" | "disabled";
 
 type J = ComponentProps<typeof Animated.View>;
 
@@ -52,6 +53,10 @@ export interface TextProps extends RNTextProps, J {
 	preset?: Presets;
 	/**
 	 * Text weight modifier.
+	 */
+	color?: TextColor;
+	/**
+	 * Text color modifier.
 	 */
 	weight?: Weights;
 	/**
@@ -81,14 +86,28 @@ export const Text = forwardRef(function Text(
 		tx,
 		txOptions,
 		text,
+		color = "default",
 		children,
 		style: $styleOverride,
 		...rest
 	} = props;
-	const { themed } = useAppTheme();
+	const {
+		themed,
+		theme: { colors },
+	} = useAppTheme();
 
 	const i18nText = tx && translate(tx, txOptions);
 	const content = i18nText || text || children;
+
+	const textColorConfig = useMemo(
+		() => ({
+			default: colors.text,
+			dim: colors.textDim,
+			inverse: colors.textInverse,
+			disabled: colors.textDisabled,
+		}),
+		[colors],
+	);
 
 	const preset: Presets = props.preset ?? "default";
 	const $styles: StyleProp<TextStyle> = [
@@ -96,6 +115,7 @@ export const Text = forwardRef(function Text(
 		themed($presets[preset]),
 		weight && $fontWeightStyles[weight],
 		size && $sizeStyles[size],
+		{ color: textColorConfig[color] },
 		$styleOverride,
 	];
 

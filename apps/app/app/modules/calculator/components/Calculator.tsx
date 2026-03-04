@@ -1,4 +1,3 @@
-import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Parser } from "expr-eval";
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -10,8 +9,8 @@ import {
 	CalculatorPieChart,
 	CalculatorResultItem,
 	CalculatorSlider,
-	getPieColor,
 } from "@/modules/calculator/components";
+import { getEmptyArr } from "@/pkg/ui";
 import { colors, spacing } from "@/theme";
 import type { ResourceId } from "@/types";
 import type { SliderConfig } from "@/utils/const";
@@ -76,14 +75,11 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 		getInitStateFromSliders(sliders),
 	);
 
-	const onSliderChange = useCallback(
-		(key: string) => {
-			return (val: number) => {
-				setFormState((prev) => ({ ...prev, [key]: val }));
-			};
-		},
-		[setFormState],
-	);
+	const onSliderChange = useCallback((key: string) => {
+		return (val: number) => {
+			setFormState((prev) => ({ ...prev, [key]: val }));
+		};
+	}, []);
 
 	const resultData = useMemo(
 		() => getInitResultFromConfig({ input: formState, calculate }),
@@ -108,7 +104,7 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 	}, [resultData, resultKeys]);
 
 	return (
-		<>
+		<View>
 			<Text
 				preset="heading"
 				size="xl"
@@ -127,11 +123,10 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 			{pieChart && pieData && pieData?.length > 0 && (
 				<CalculatorPieChart
 					data={
-						pieData?.map((pieDataObj, index) => {
+						pieData?.map((pieDataObj) => {
 							return {
-								...pieDataObj,
-								color: getPieColor(index),
-								value: resultData[pieDataObj.valueKey],
+								text: pieDataObj.text,
+								value: resultData[pieDataObj.valueKey].toString(),
 							};
 						}) ?? []
 					}
@@ -145,10 +140,11 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 						keyExtractor={(item) => item.key}
 						contentContainerStyle={{ marginTop: 24 }}
 						renderItem={({ item }) => {
+							const { key: _key, ...rest } = item;
 							const value = formState[item.key];
 							const setValue = onSliderChange(item.key);
 							return (
-								<CalculatorSlider {...item} value={value} setValue={setValue} />
+								<CalculatorSlider {...rest} value={value} setValue={setValue} />
 							);
 						}}
 					/>
@@ -166,7 +162,7 @@ function CalculatorImpl({ id }: { id: ResourceId }) {
 					/>
 				</Section.Body>
 			</Section>
-		</>
+		</View>
 	);
 }
 
