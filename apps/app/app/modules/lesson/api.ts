@@ -120,7 +120,7 @@ type IResGetSavedCourse = IResData<
 		type: "course";
 		entity: {
 			id: number;
-			coverPath: string;
+			coverUrl: string;
 			content: Pick<Content, "title" | "shortDesc">;
 		};
 	}[],

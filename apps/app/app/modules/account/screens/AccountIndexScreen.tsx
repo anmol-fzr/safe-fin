@@ -15,25 +15,20 @@ import {
 	User,
 	WalletMoney,
 } from "iconsax-react-nativejs";
-import { PressableScale } from "pressto";
 import { useEffect } from "react";
 import { Platform, Pressable, Share, View } from "react-native";
-import Animated, {
-	FadeIn,
-	FadeInDown,
-	FadeInUp,
-} from "react-native-reanimated";
+import Animated, { FadeIn } from "react-native-reanimated";
 import { ListView, Screen, Text } from "@/components";
 import { Section } from "@/components/Section";
 import { IconSax } from "@/context/IconContext";
 import { getCountriesOpts } from "@/hooks/queries";
 import type { TxKeyPath } from "@/i18n";
 import { getDemoGraphicsOpts } from "@/modules/profile/hooks/queries";
-import { ellipsize } from "@/pkg/ui";
 import { $styles } from "@/theme";
 import { APP } from "@/utils/const";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
+import { Action } from "../components";
 
 const { ABOUT, TERMS, POLICY, SUPPORT, APPSTORE, PLAYSTORE } = envs.META_URLS;
 
@@ -77,7 +72,7 @@ type ListItem = {
 
 type ListItems = ListItem[];
 
-const DATA: ListItems = [
+const DATA = [
 	{
 		title: "Personal Info",
 		links: [
@@ -177,55 +172,7 @@ const DATA: ListItems = [
 			},
 		],
 	},
-];
-
-type BoxProps = {
-	title: string;
-	icon: IconType;
-	href: LinkProps["href"];
-};
-
-const Box = (props: BoxProps) => {
-	const { title, icon, href } = props;
-	const {
-		theme: { colors, spacing, roundness },
-	} = useAppTheme();
-
-	return (
-		<View
-			style={{
-				flex: 1,
-			}}
-		>
-			<Link href={href} asChild>
-				<PressableScale>
-					<View
-						style={{
-							backgroundColor: colors.palette.neutral200,
-							flex: 1,
-							padding: spacing.md,
-							borderRadius: roundness,
-							flexDirection: "row",
-							alignItems: "center",
-							gap: 8,
-						}}
-					>
-						<View
-							style={{
-								padding: 8,
-								backgroundColor: colors.palette.primary100,
-								borderRadius: 20,
-							}}
-						>
-							<IconSax icon={icon} color={colors.tint} />
-						</View>
-						<Text>{title}</Text>
-					</View>
-				</PressableScale>
-			</Link>
-		</View>
-	);
-};
+] as const;
 
 export const AccountIndexScreen = () => {
 	const {
@@ -254,8 +201,8 @@ export const AccountIndexScreen = () => {
 					gap: spacing.sm,
 				}}
 			>
-				<Box title="Public Profile" icon={Profile} href="/profile/public" />
-				<Box title="Saved" icon={Heart} href="/saved" />
+				<Action title="Public Profile" icon={Profile} href="/profile/public" />
+				<Action title="Saved" icon={Heart} href="/saved" />
 			</View>
 
 			<ListView
@@ -267,7 +214,7 @@ export const AccountIndexScreen = () => {
 						<Section>
 							<Section.Title>{section.title}</Section.Title>
 							<Section.Body preset="filled" style={{ paddingBottom: 0 }}>
-								<View style={{ flex: 1 }}>
+								<View style={$styles.flex1}>
 									<ListView
 										data={section.links}
 										keyExtractor={(item) => item.title}
@@ -288,14 +235,10 @@ export const AccountIndexScreen = () => {
 																size={24}
 																color={colors.text}
 															/>
-															<View style={{ flex: 1 }}>
+															<View style={$styles.flex1}>
 																<Text size="md" tx={item.title} />
 																{item.desc && (
-																	<Text
-																		size="xs"
-																		style={{ color: colors.textDim }}
-																		tx={item.desc}
-																	/>
+																	<Text size="xs" color="dim" tx={item.desc} />
 																)}
 															</View>
 															<IconSax icon={ArrowRight2} />
@@ -315,14 +258,10 @@ export const AccountIndexScreen = () => {
 																size={24}
 																color={colors.text}
 															/>
-															<View style={{ flex: 1 }}>
+															<View style={$styles.flex1}>
 																<Text size="md" tx={item.title} />
 																{item.desc && (
-																	<Text
-																		size="xs"
-																		style={{ color: colors.textDim }}
-																		tx={item.desc}
-																	/>
+																	<Text size="xs" color="dim" tx={item.desc} />
 																)}
 															</View>
 															<IconSax icon={ArrowRight2} />
@@ -339,62 +278,5 @@ export const AccountIndexScreen = () => {
 				)}
 			/>
 		</Screen>
-	);
-};
-
-interface UserDetailsCardProps {
-	name: string;
-	image: string;
-}
-
-export const UserDetailsCard = (props: UserDetailsCardProps) => {
-	const { name = "User", image = "" } = props;
-
-	const {
-		theme: { colors, spacing },
-	} = useAppTheme();
-
-	return (
-		<View
-			style={{
-				//flexDirection: "row",
-				gap: spacing.md,
-				padding: spacing.sm,
-				//borderBottomWidth: StyleSheet.hairlineWidth,
-				borderBottomColor: colors.border,
-				//backgroundColor: "red",
-				alignItems: "center",
-				paddingTop: 0,
-			}}
-		>
-			<Animated.Image
-				entering={FadeInDown}
-				height={80}
-				width={80}
-				style={{
-					borderRadius: 100,
-				}}
-				source={{
-					uri: image,
-				}}
-			/>
-			<Text size="xxl" weight="medium" entering={FadeInUp} numberOfLines={1}>
-				{ellipsize(name, 15)}
-			</Text>
-
-			{/*
-			<Link href="/profile/edit" asChild>
-				<PressableIcon
-					icon={Edit}
-					size={20}
-					style={{
-						position: "absolute",
-						top: 0,
-						right: 8,
-					}}
-				/>
-			</Link>
-      */}
-		</View>
 	);
 };

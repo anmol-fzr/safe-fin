@@ -66,6 +66,10 @@ export const colors = {
 	 */
 	textDim: palette.neutral600,
 	/**
+	 * Disabled text
+	 */
+	textDisabled: palette.neutral400,
+	/**
 	 * The default color of the screen background (very dark).
 	 */
 	background: palette.neutral100, // Very dark background

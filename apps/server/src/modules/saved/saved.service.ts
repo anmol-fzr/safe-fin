@@ -1,12 +1,15 @@
+import { getS3Config } from "@/middleware";
 import {
 	and,
 	count,
 	course,
 	type DB,
+	desc,
 	eq,
 	richContent,
 	richContentItem,
 	saved,
+	sql,
 } from "@/pkg/db";
 import type { PaginateReqArgs } from "@/types";
 import type { EntityType } from "./saved.schema";
@@ -66,6 +69,8 @@ export class SavedService {
 			eq(saved.entityType, entityType),
 		);
 
+		const s3 = getS3Config();
+
 		const query = db
 			.select({
 				id: saved.id,
@@ -74,7 +79,10 @@ export class SavedService {
 					entityType === "course"
 						? {
 								id: course.id,
-								coverPath: course.coverPath,
+								coverUrl:
+									sql`CONCAT(${s3.ENDPOINT}, '/', ${course.coverPath})`.as(
+										"cover_url",
+									),
 								content: {
 									title: richContent.title,
 									shortDesc: richContent.shortDesc,
@@ -85,6 +93,7 @@ export class SavedService {
 			.from(saved)
 			.limit(limit)
 			.offset(offset)
+			.orderBy(desc(saved.createdAt))
 			.where(filter)
 			.leftJoin(course, eq(saved.entityId, course.id))
 			.leftJoin(richContent, eq(course.contentId, richContent.id))
