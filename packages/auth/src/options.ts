@@ -4,11 +4,11 @@ import { verification } from "@safe-fin/db/schema";
 import type { BetterAuthOptions } from "better-auth";
 import {
 	admin,
-	anonymous,
+	//anonymous,
 	createAuthMiddleware,
 	emailOTP,
-	multiSession,
-	openAPI,
+	//multiSession,
+	//openAPI,
 } from "better-auth/plugins";
 import { Emailer } from "./email";
 import type { EmailOtps } from "./server";
@@ -100,14 +100,12 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 			expo({
 				disableOriginOverride: true,
 			}),
-			admin({
-				adminUserIds: ["F7EOrNtgbhOUA4FYvj0r7bN4eJykYGMb"],
-			}),
-			openAPI(),
-			anonymous({
-				generateName: () => "Guest",
-			}),
-			multiSession(),
+			admin(),
+			//openAPI(),
+			// anonymous({
+			// 	generateName: () => "Guest",
+			// }),
+			//multiSession(),
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) {
 					if (email === GOOGLE_TEST_EMAIL) {

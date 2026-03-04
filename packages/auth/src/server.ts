@@ -1,9 +1,9 @@
+//import studioConfig from "./studio.config";
+import type { D1Database } from "@cloudflare/workers-types";
 import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth/minimal";
 import { getAuthDrizzleAdapter, getDb } from "@/pkg/db";
 import { getBetterAuthOptions } from "./options";
-//import studioConfig from "./studio.config";
-import type { D1Database } from "@cloudflare/workers-types";
 
 export interface EmailOtps {
 	CLIENT_ID: string;

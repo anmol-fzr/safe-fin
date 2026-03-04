@@ -1,8 +1,8 @@
 import { expoClient } from "@better-auth/expo/client";
 import {
-	anonymousClient,
-	inferAdditionalFields,
 	emailOTPClient,
+	//anonymousClient,
+	inferAdditionalFields,
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import type { ServerAuth } from "./server";
@@ -28,7 +28,7 @@ const createAppAuthClient = (opts: CreateAppAuthClientOpts) => {
 			}),
 			emailOTPClient(),
 			inferAdditionalFields<ServerAuth>(),
-			anonymousClient(),
+			//anonymousClient(),
 		],
 	});
 };
