@@ -1,4 +1,4 @@
-import { axiosInstance, IResData } from "@/services/axios";
+import { axiosInstance, type IResData } from "@/services/axios";
 
 const { post, get } = axiosInstance;
 
@@ -18,7 +18,9 @@ type IResHomeUI = IResData<
 			| "InProgressCourseCard"
 			| "ForYouLessons"
 			| "UpdateAvailableCard"
-			| "ShareAppCard";
+			| "ShareAppCard"
+			| "DynamicCard";
+		props?: Record<string, unknown>;
 	}[]
 >;
 

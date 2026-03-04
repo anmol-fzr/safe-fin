@@ -5,6 +5,7 @@ import { getCalculatorsOpts } from "@/modules/calculator/hooks/queries";
 import { getLessonsOpts } from "@/modules/lesson/hooks/api";
 import { $styles } from "@/theme";
 import {
+	DynamicCard,
 	InProgressCourseCard,
 	ProfileCompletionBanner,
 	QuickActions,
@@ -24,6 +25,7 @@ const componentMap = {
 	ForYouLessons: ForYouLessons,
 	UpdateAvailableCard: UpdateAvailableCard,
 	ShareAppCard: ShareAppCard,
+	DynamicCard: DynamicCard,
 } as const;
 
 const usePreloadOtherTabsData = () => {
@@ -56,7 +58,7 @@ export function HomeScreen() {
 
 			streakSheet.present();
 		},
-		[streak?.data],
+		[streak, streakSheet],
 	);
 
 	return (
@@ -66,9 +68,14 @@ export function HomeScreen() {
 			safeAreaEdges={["bottom"]}
 		>
 			{data.data.map((item) => {
-				const Component = componentMap[item.componentName];
+				const { componentName, props = {} } = item;
+				const Component = componentMap[componentName];
 
-				return <Component key={item.componentName} />;
+				if (!Component) {
+					return <></>;
+				}
+
+				return <Component key={item.componentName} {...props} />;
 			})}
 
 			<StreakSheet streak={streak?.data} />

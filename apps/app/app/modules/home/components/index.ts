@@ -1,3 +1,4 @@
+export * from "./dynamic-card";
 export * from "./home-header";
 export * from "./in-progress-course-card";
 export * from "./profile-banner";

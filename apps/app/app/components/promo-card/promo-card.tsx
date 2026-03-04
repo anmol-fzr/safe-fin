@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import type { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 import { Text, type TextProps } from "@/components";
 import {
@@ -22,28 +22,23 @@ PromoCardRoot.Badge = (props: PromoCardBadgeProps) => {
 		theme: { colors, spacing, roundness },
 	} = useAppTheme();
 
-	return (
-		<Text
-			size="xs"
-			weight="semiBold"
-			style={[
-				{
-					backgroundColor: colors.palette.neutral100,
-					padding: spacing.xxs,
-					paddingInline: spacing.sm,
-					borderRadius: roundness * 2,
-					flex: 0,
-					margin: "auto",
-					marginLeft: 0,
-					textAlign: "center",
-					marginBottom: spacing.xs,
-					textTransform: "uppercase",
-				},
-				$styleOverride,
-			]}
-			{...rest}
-		/>
-	);
+	const styles = StyleSheet.flatten([
+		{
+			backgroundColor: colors.palette.neutral100,
+			padding: spacing.xxs,
+			paddingInline: spacing.sm,
+			borderRadius: roundness * 2,
+			flex: 0,
+			margin: "auto",
+			marginLeft: 0,
+			textAlign: "center",
+			marginBottom: spacing.xs,
+			textTransform: "uppercase",
+		},
+		$styleOverride,
+	]);
+
+	return <Text size="xs" weight="semiBold" style={styles} {...rest} />;
 };
 
 export interface PromoCardTitleProps extends SectionTitleProps {}
