@@ -92,3 +92,7 @@ export const BaseListItemSeparator = memo((props?: ViewProps) => (
 export const $baseListItemSeparatorStyles: ThemedViewStyle = (theme) => ({
 	gap: theme.spacing.xs,
 });
+
+export const $mdListItemSeparatorStyles: ThemedViewStyle = (theme) => ({
+	gap: theme.spacing.md,
+});
