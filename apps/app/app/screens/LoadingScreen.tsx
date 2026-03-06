@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { colors } from "@/theme";
 
 const icon = require("assets/icons/app-icons/android/adaptive-icon-transparent-dark.png");
@@ -10,7 +10,7 @@ export const LoadingScreen = () => {
 				source={icon}
 				height={100}
 				width={100}
-				style={{ height: 512, width: 512 }}
+				style={{ height: 284, width: 284 }}
 			/>
 		</View>
 	);
