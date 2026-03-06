@@ -19,6 +19,10 @@ export const envs = Object.freeze({
 		CLIENT_SECRET: env.EMAIL_CLIENT_SECRET,
 		REFRESH_TOKEN: env.EMAIL_REFRESH_TOKEN,
 	}),
+	TEST_CREDS: Object.freeze({
+		EMAIL: env.TEST_CREDS_EMAIL,
+		OTP: env.TEST_CREDS_OTP,
+	}),
 	SENTRY: Object.freeze({
 		DSN: env.SENTRY_DSN,
 	}),
