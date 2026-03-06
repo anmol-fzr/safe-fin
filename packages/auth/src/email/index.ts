@@ -110,7 +110,7 @@ async function sendOTPEmail(accessToken: string, to: string, otpCode: string) {
 
 	const rawMessage = [
 		`To: ${to}`,
-		"Subject: " + content.subject,
+		`Subject: ${content.subject}`,
 		"MIME-Version: 1.0",
 		`Content-Type: multipart/alternative; boundary="${boundary}"`,
 		"",

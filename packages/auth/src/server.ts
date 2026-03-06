@@ -1,6 +1,4 @@
-//import studioConfig from "./studio.config";
 import type { D1Database } from "@cloudflare/workers-types";
-import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth/minimal";
 import { getAuthDrizzleAdapter, getDb } from "@/pkg/db";
 import { getBetterAuthOptions } from "./options";
@@ -14,39 +12,42 @@ export interface EmailOtps {
 interface AuthOpts {
 	isDev: boolean;
 	DB: D1Database;
-	//KV: KVNamespace<string>;
-	BETTER_AUTH_URL: string;
-	BETTER_AUTH_SECRET: string;
+
+	BETTER_AUTH: {
+		URL: string;
+		SECRET: string;
+	};
+
 	CORS_ORIGIN_URL: string;
 
 	EMAIL: EmailOtps;
-	//ctx?: ExecutionContext;
+
+	TEST_CREDS: {
+		EMAIL: string;
+		OTP: string;
+	};
 }
 
 /**
  * Better Auth Instance
  */
 export const auth = (opts: AuthOpts) => {
-	const {
-		isDev,
-		DB,
-		EMAIL,
-		BETTER_AUTH_URL,
-		BETTER_AUTH_SECRET,
-		CORS_ORIGIN_URL,
-	} = opts;
+	const { DB, BETTER_AUTH, CORS_ORIGIN_URL, ...rest } = opts;
 
-	const database = getAuthDrizzleAdapter(DB);
 	const db = getDb(DB);
+	const database = getAuthDrizzleAdapter(DB);
 
-	const betterAuthOptions = getBetterAuthOptions({ isDev, EMAIL, db });
+	const betterAuthOptions = getBetterAuthOptions({
+		db,
+		...rest,
+	});
 
 	return betterAuth({
 		...betterAuthOptions,
 		database,
-		baseURL: BETTER_AUTH_URL,
+		baseURL: BETTER_AUTH.URL,
 		basePath: "/api/v1/auth",
-		secret: BETTER_AUTH_SECRET,
+		secret: BETTER_AUTH.SECRET,
 		trustedOrigins: [CORS_ORIGIN_URL],
 	});
 };

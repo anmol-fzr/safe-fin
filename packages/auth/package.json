@@ -20,7 +20,8 @@
 		"better-auth": "catalog:"
 	},
 	"devDependencies": {
-		"wrangler": "^4.24.3",
-		"@cloudflare/workers-types": "catalog:"
+		"@cloudflare/workers-types": "catalog:",
+		"@types/node": "^25.3.5",
+		"wrangler": "^4.24.3"
 	}
 }

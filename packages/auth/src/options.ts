@@ -1,25 +1,19 @@
 import { expo } from "@better-auth/expo";
-import type { DB } from "@safe-fin/db";
+import { type DB, eq } from "@safe-fin/db";
 import { verification } from "@safe-fin/db/schema";
-import type { BetterAuthOptions } from "better-auth";
-import {
-	admin,
-	//anonymous,
-	createAuthMiddleware,
-	emailOTP,
-	//multiSession,
-	//openAPI,
-} from "better-auth/plugins";
+import type { BetterAuthOptions, CookieOptions } from "better-auth";
+import { admin, emailOTP } from "better-auth/plugins";
 import { Emailer } from "./email";
 import type { EmailOtps } from "./server";
-
-const GOOGLE_TEST_EMAIL = "bot@safefin.app";
-const GOOGLE_TEST_OTP = "123456:0";
 
 interface GetBetterAuthOptions {
 	db: DB;
 	isDev: boolean;
 	EMAIL: EmailOtps;
+	TEST_CREDS: {
+		EMAIL: string;
+		OTP: string;
+	};
 }
 
 /**
@@ -28,34 +22,25 @@ interface GetBetterAuthOptions {
  * Docs: https://www.better-auth.com/docs/reference/options
  */
 export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
-	const { isDev, db, EMAIL } = params;
-
-	const secondaryStorage = undefined;
+	const { isDev, db, EMAIL, TEST_CREDS } = params;
 
 	const emailer = new Emailer(EMAIL);
 
-	return {
-		/**
-		 * The name of the application.
-		 */
-		appName: "safe-fin-api",
-		secondaryStorage,
-		hooks: {
-			after: createAuthMiddleware(async (ctx) => {
-				if (ctx.path.endsWith("/update-user")) {
-					const userId = ctx.context.session?.user.id;
-					if (userId === undefined) {
-						throw new Error(
-							"[AUTH Package]: After Update User hook, userId must not be undefined",
-						);
-					}
+	let defaultCookieAttributes: CookieOptions = {
+		httpOnly: true,
+		secure: true,
+		sameSite: "none",
+		path: "/",
+	};
 
-					ctx.context.internalAdapter.updateUser(userId, {
-						isNew: false,
-					});
-				}
-			}),
-		},
+	if (isDev) {
+		defaultCookieAttributes = {
+			httpOnly: true,
+		};
+	}
+
+	return {
+		appName: "safe-fin-api",
 		user: {
 			changeEmail: {
 				enabled: true,
@@ -64,10 +49,6 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 				enabled: true,
 			},
 			additionalFields: {
-				isNew: {
-					type: "boolean",
-					defaultValue: true,
-				},
 				bio: {
 					type: "string",
 					input: true,
@@ -79,21 +60,12 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 		},
 		advanced: {
 			disableOriginCheck: true,
-			defaultCookieAttributes: isDev
-				? {
-						httpOnly: true,
-					}
-				: {
-						httpOnly: true,
-						secure: true,
-						sameSite: "none",
-						path: "/",
-					},
+			defaultCookieAttributes,
 		},
 		session: {
 			cookieCache: {
 				enabled: true,
-				maxAge: 216000, // Cache duration in seconds
+				maxAge: 216000,
 			},
 		},
 		plugins: [
@@ -101,25 +73,22 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 				disableOriginOverride: true,
 			}),
 			admin(),
-			//openAPI(),
-			// anonymous({
-			// 	generateName: () => "Guest",
-			// }),
-			//multiSession(),
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) {
-					if (email === GOOGLE_TEST_EMAIL) {
+					const { EMAIL, OTP } = TEST_CREDS;
+
+					if (email === EMAIL) {
 						console.info("! Google Test Bot detected. Skipping SMS.");
 
 						await db
 							.update(verification)
 							.set({
-								value: GOOGLE_TEST_OTP,
+								value: `${OTP}:0`,
 								expiresAt: new Date(Date.now() + 1000 * 60 * 10),
 							})
 							.where(eq(verification.identifier, email));
 
-						console.info({ email, otp: GOOGLE_TEST_OTP, type });
+						console.info({ email, otp: OTP, type });
 						return;
 					}
 
