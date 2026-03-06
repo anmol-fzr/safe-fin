@@ -12,8 +12,6 @@ import { Reason } from "../_utils/reasons";
 
 const db = getDb();
 
-const countExercises = db.select({ count: count() }).from(exercise).prepare();
-
 interface CreateExercisePayload {
 	title: string;
 	desc: string;
@@ -67,7 +65,7 @@ export class ExerciseService extends ResourceService<
 				},
 			});
 
-			const countQuery = countExercises.run();
+			const countQuery = db.select({ count: count() }).from(exercise);
 
 			const [queryResult, countResult] = await Promise.all([query, countQuery]);
 
