@@ -43,7 +43,7 @@ const useDemoGraphicsForm = () => {
 			try {
 				const data = await queryClient.fetchQuery(opts);
 
-				if (data.data === null || data.isNew) {
+				if (data.data === null) {
 					return emptyFormState;
 				}
 				const { country = "", state = "" } = data.data;
