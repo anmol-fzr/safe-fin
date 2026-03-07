@@ -3,7 +3,12 @@ import { ProfileScreenHeader } from "../tabs/profile/_layout";
 
 export default function SavedLayout() {
 	return (
-		<Stack screenOptions={{ header: ProfileScreenHeader }}>
+		<Stack
+			screenOptions={{
+				header: ProfileScreenHeader,
+				animation: "slide_from_left",
+			}}
+		>
 			<Stack.Screen name="public" />
 			<Stack.Screen name="edit" />
 			<Stack.Screen name="demographics" />

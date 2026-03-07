@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Screen } from "@/components";
 import { LogoutButton } from "@/modules/auth/components/LogoutButton";
-import { $styles, type ThemedViewStyle } from "@/theme";
+import type { ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { DeleteAccountCard, SessionsCard } from "../components";
 

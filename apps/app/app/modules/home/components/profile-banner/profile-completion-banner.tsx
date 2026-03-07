@@ -1,6 +1,6 @@
 import { Edit2, Happyemoji, User } from "iconsax-react-nativejs";
-import { useSession } from "@/modules/profile/hooks/queries";
 import { Suspense, useMemo } from "react";
+import { useSession } from "@/modules/profile/hooks/queries";
 import { ProfileCompletionCard } from "./profile-completion-card";
 
 export function ProfileCompletionBanner() {

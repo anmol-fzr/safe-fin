@@ -1,3 +1,1 @@
-import { CalculatorListScreen } from "@/modules/calculator/screens";
-
-export default CalculatorListScreen;
+export { CalculatorListScreen as default } from "@/modules/calculator/screens";

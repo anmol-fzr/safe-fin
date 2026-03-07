@@ -12,7 +12,8 @@ const palette = {
 
 	// Primary: Electric Purple (#8A43E1)
 	// 100-300 are deep background tints, 500 is your main color
-	primary100: "#1D1029", // Very dark purple background
+	//primary100: "#1D1029", // Very dark purple background
+	primary100: "#D8B4FE", // Very light background
 	primary200: "#2D1942",
 	primary300: "#4B2570",
 	primary400: "#6939C1",

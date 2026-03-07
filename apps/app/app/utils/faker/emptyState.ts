@@ -44,4 +44,46 @@ const getGenericEmptyState = () => {
 	return faker.helpers.arrayElement(genericEmptyStates);
 };
 
-export { getGenericEmptyState };
+const calculatorEmptyStates = [
+	{
+		emoji: "🧮",
+		title: "No Calculators Yet",
+		subtitle: "Calculators will appear here once they’re available.",
+	},
+	{
+		emoji: "➕",
+		title: "Nothing to Calculate",
+		subtitle: "Looks like there are no calculators to show right now.",
+	},
+	{
+		emoji: "📊",
+		title: "No Tools Found",
+		subtitle: "Try checking back later for financial calculators.",
+	},
+	{
+		emoji: "🪄",
+		title: "Ready to Crunch Numbers",
+		subtitle: "use calculators to start estimating.",
+	},
+	{
+		emoji: "💸",
+		title: "No Finance Tools",
+		subtitle: "Financial calculators will show up here soon.",
+	},
+	{
+		emoji: "🔎",
+		title: "No Calculator Matches",
+		subtitle: "Try adjusting your search or filters.",
+	},
+	{
+		emoji: "⚙",
+		title: "Calculators Coming Soon",
+		subtitle: "We’re preparing tools to help you estimate finances.",
+	},
+] as const;
+
+const getCalculatorEmptyState = () => {
+	return faker.helpers.arrayElement(calculatorEmptyStates);
+};
+
+export { getCalculatorEmptyState, getGenericEmptyState };

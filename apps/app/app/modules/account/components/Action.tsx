@@ -4,7 +4,7 @@ import { PressableScale } from "pressto";
 import { View } from "react-native";
 import { Text } from "@/components";
 import { IconSax } from "@/context/IconContext";
-import { $styles, type ThemedViewStyle } from "@/theme";
+import type { ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 type ActionProps = {
@@ -33,7 +33,7 @@ export const Action = (props: ActionProps) => {
 };
 
 const $iconWrapper: ThemedViewStyle = (theme) => ({
-	padding: 8,
+	padding: theme.spacing.xs,
 	backgroundColor: theme.colors.palette.primary100,
 	borderRadius: 20,
 });

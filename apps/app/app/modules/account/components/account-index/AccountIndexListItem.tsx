@@ -33,7 +33,7 @@ export const AccountIndexListItem = (props: AccountIndexListItemProps) => {
 	const { item } = props;
 
 	return item.type === "link" ? (
-		<Link href={item.href}>
+		<Link href={item.href} push>
 			<Item {...item} />
 		</Link>
 	) : (

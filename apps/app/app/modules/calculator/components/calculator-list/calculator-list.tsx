@@ -1,6 +1,12 @@
 import { getEmptyArr } from "@safe-fin/ui/utils";
 import { Suspense } from "react";
-import { EmptyListView, EndListView, ListView } from "@/components";
+import {
+	EmptyListView,
+	EndListView,
+	ListMessageView,
+	ListView,
+} from "@/components";
+import { getCalculatorEmptyState } from "@/utils/faker/emptyState";
 //import { usePrefetchListItem } from "@/hooks/usePrefetchListItem";
 //import { getLessonOpts } from "@/modules/lesson/hooks/api";
 import { useGetCalculators } from "../../hooks/queries";
@@ -29,13 +35,13 @@ function CalculatorListImpl() {
 			refreshing={isRefetching}
 			onRefresh={refetch}
 			keyExtractor={(item) => item.id.toString()}
-			ListEmptyComponent={EmptyListView}
+			ListEmptyComponent={CalculatorListEmpty}
 			ListFooterComponent={
 				calculators.length === 0
 					? undefined
 					: isFetchingNextPage
 						? CalculatorListItemImpl.Loading
-						: EndListView
+						: CalculatorListEmpty
 			}
 			//onViewableItemsChanged={handleViewableItemsChanged}
 			renderItem={({ item, data, index }) => (
@@ -61,3 +67,8 @@ CalculatorListImpl.Loading = (
 		renderItem={CalculatorListItemImpl.Loading}
 	/>
 );
+
+const CalculatorListEmpty = () => {
+	const { emoji, title, subtitle } = getCalculatorEmptyState();
+	return <ListMessageView icon={emoji} title={title} desc={subtitle} />;
+};

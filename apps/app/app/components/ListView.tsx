@@ -46,7 +46,7 @@ interface ListMessageViewProps {
 	desc: string;
 }
 
-const ListMessageView = (props: ListMessageViewProps) => {
+export const ListMessageView = (props: ListMessageViewProps) => {
 	const { icon, title, desc } = props;
 
 	return (
@@ -91,4 +91,8 @@ export const $baseListItemSeparatorStyles: ThemedViewStyle = (theme) => ({
 
 export const $mdListItemSeparatorStyles: ThemedViewStyle = (theme) => ({
 	gap: theme.spacing.md,
+});
+
+export const $lgGap: ThemedViewStyle = (theme) => ({
+	gap: theme.spacing.lg,
 });

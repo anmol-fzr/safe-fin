@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import { View } from "react-native";
 import { Screen } from "@/components";
 import { getCountriesOpts } from "@/hooks/queries";
-import { getDemoGraphicsOpts } from "@/modules/profile/hooks/queries";
+import {
+	getDemoGraphicsOpts,
+	getSessionOpts,
+} from "@/modules/profile/hooks/queries";
 import { $styles, type ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 import { Action } from "../components";
@@ -15,6 +18,7 @@ export const AccountIndexScreen = () => {
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
+		queryClient.prefetchQuery(getSessionOpts());
 		queryClient.prefetchQuery(getCountriesOpts());
 		queryClient.prefetchQuery(getDemoGraphicsOpts());
 	}, [queryClient]);

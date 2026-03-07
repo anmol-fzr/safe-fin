@@ -1,9 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useMMKVString } from "react-native-mmkv";
 import { Screen } from "@/components";
 import { getCalculatorsOpts } from "@/modules/calculator/hooks/queries";
 import { getLessonsOpts } from "@/modules/lesson/hooks/api";
 import { $styles } from "@/theme";
+import { storage } from "@/utils/storage";
 import {
 	DynamicCard,
 	InProgressCourseCard,
@@ -36,13 +38,21 @@ const usePreloadOtherTabsData = () => {
 			queryClient.prefetchInfiniteQuery(getCalculatorsOpts());
 			queryClient.prefetchInfiniteQuery(getLessonsOpts());
 		},
-		[queryClient.prefetchInfiniteQuery],
+		[queryClient],
 	);
 };
+
+function getTodayKey() {
+	return new Date().toLocaleDateString("en-IN");
+}
 
 export function HomeScreen() {
 	const streak = useStreak();
 	const streakSheet = useStreakSheet();
+	const [lastStreakOpenDate, setLastStreakOpenDate] = useMMKVString(
+		"last-streak-open-date",
+		storage,
+	);
 	const { data } = useHomeUI();
 
 	usePreloadOtherTabsData();
@@ -55,10 +65,15 @@ export function HomeScreen() {
 			if (streak?.data?.status === "same") {
 				return;
 			}
+			const today = getTodayKey();
+			if (lastStreakOpenDate === today) {
+				return;
+			}
+			setLastStreakOpenDate(today);
 
 			streakSheet.present();
 		},
-		[streak, streakSheet],
+		[streak, streakSheet, lastStreakOpenDate, setLastStreakOpenDate],
 	);
 
 	return (

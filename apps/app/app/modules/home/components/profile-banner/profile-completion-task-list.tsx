@@ -1,21 +1,25 @@
-import { ListView } from "@/components";
+import { $lgGap, ListView } from "@/components";
 import { useAppTheme } from "@/utils/useAppTheme";
-import { ProfileCompletionTaskListItem } from "./profile-completion-task-list-item";
-import { Item } from "./profile-completion-task-list-item";
+import {
+	type Item,
+	ProfileCompletionTaskListItem,
+} from "./profile-completion-task-list-item";
 
-export const ProfileCompletionTaskList = ({ tasks }: { tasks: Item[] }) => {
-	const {
-		theme: { spacing },
-	} = useAppTheme();
+interface ProfileCompletionTaskListProps {
+	tasks: Item[];
+}
+
+export const ProfileCompletionTaskList = (
+	props: ProfileCompletionTaskListProps,
+) => {
+	const { tasks } = props;
+	const { themed } = useAppTheme();
+
 	return (
 		<ListView
 			data={tasks}
 			keyExtractor={(item) => item.title}
-			contentContainerStyle={{ gap: spacing.lg }}
-			style={{
-				paddingInline: spacing.xxs,
-				paddingBlock: spacing.xs,
-			}}
+			contentContainerStyle={themed($lgGap)}
 			renderItem={({ item, index }) => (
 				<ProfileCompletionTaskListItem
 					task={item}
