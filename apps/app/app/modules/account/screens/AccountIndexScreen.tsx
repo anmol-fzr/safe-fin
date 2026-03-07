@@ -22,7 +22,7 @@ export const AccountIndexScreen = () => {
 	return (
 		<Screen
 			preset="scroll"
-			safeAreaEdges={["bottom"]}
+			//safeAreaEdges={["bottom"]}
 			contentContainerStyle={$styles.fullHeaderScreen}
 		>
 			<View style={themed($actionsRoot)}>

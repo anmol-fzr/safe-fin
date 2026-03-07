@@ -65,7 +65,7 @@ export function HomeScreen() {
 		<Screen
 			preset="scroll"
 			contentContainerStyle={$styles.fullHeaderScreen}
-			safeAreaEdges={["bottom"]}
+			//safeAreaEdges={["bottom"]}
 		>
 			{data.data.map((item) => {
 				const { componentName, props = {} } = item;

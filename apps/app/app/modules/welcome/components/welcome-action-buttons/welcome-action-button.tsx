@@ -7,7 +7,8 @@ import type { ThemedStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 const $actionBtn: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	margin: spacing.lg,
+	margin: spacing.xxs,
+	marginInline: spacing.lg,
 	borderWidth: 0,
 });
 

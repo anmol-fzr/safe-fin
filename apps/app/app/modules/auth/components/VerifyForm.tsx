@@ -122,11 +122,12 @@ const OtpField = () => {
 		<Controller
 			name="otp"
 			control={control}
-			render={({ field: { onChange, value } }) => (
+			render={({ field: { onChange, value, onBlur } }) => (
 				<TextInputOTP
 					value={value}
 					onChangeText={onChange}
 					maxLength={6}
+					onBlur={onBlur}
 					caretColor={colors.tint}
 					onFilled={handleSubmit}
 				>
@@ -209,7 +210,7 @@ const OtpFieldInfo = () => {
 	);
 };
 
-const useTimer = (seconds = 300) => {
+const useTimer = (seconds = 119) => {
 	const [count, setCount] = useState(seconds);
 
 	useInterval(() => {

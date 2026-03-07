@@ -180,7 +180,7 @@ export const AccountIndexList = () => {
 					<Section>
 						<Section.Title>{section.title}</Section.Title>
 
-						<Section.Body preset="filled" style={{ paddingBottom: 0 }}>
+						<Section.Body preset="filled">
 							<View style={$styles.flex1}>
 								<ListView
 									data={section.links}

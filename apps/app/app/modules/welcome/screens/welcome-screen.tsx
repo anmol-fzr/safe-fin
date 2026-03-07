@@ -10,6 +10,7 @@ import { $sizeStyles, Screen, Text } from "@/components";
 import { useLoopOverArray } from "@/hooks/use-loop-over-array";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { $styles, makeSpringy, type ThemedStyle } from "@/theme";
+import { APP } from "@/utils/const";
 import { envs } from "@/utils/envs";
 import { useAppTheme } from "@/utils/useAppTheme";
 import {
@@ -49,7 +50,7 @@ export function WelcomeScreen() {
 					style={{ textAlign: "center", ...$sizeStyles.xxl }}
 					entering={FadeIn}
 				>
-					SafeFin
+					{APP.NAME}
 				</Text>
 
 				<Animated.View

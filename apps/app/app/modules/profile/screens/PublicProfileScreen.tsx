@@ -33,11 +33,11 @@ export function PublicProfileScreen() {
 		() => [
 			{
 				title: "Current Streak",
-				count: user.streak.current,
+				count: user.streak?.current ?? 0,
 			},
 			{
 				title: "Maximum Streak",
-				count: user.streak.maximum,
+				count: user.streak?.maximum ?? 0,
 			},
 			{
 				title: "Courses Completed",
@@ -54,7 +54,7 @@ export function PublicProfileScreen() {
 	const {
 		theme: { colors, spacing },
 	} = useAppTheme();
-
+	const isMyProfile = user.id === userId;
 	return (
 		<Screen
 			preset="scroll"
@@ -65,9 +65,7 @@ export function PublicProfileScreen() {
 				},
 			]}
 		>
-			<PublicProfileScreenContext.Provider
-				value={{ isMyProfile: user.id === userId }}
-			>
+			<PublicProfileScreenContext.Provider value={{ isMyProfile }}>
 				<View style={{ gap: spacing.lg }}>
 					<View
 						style={{
@@ -79,7 +77,7 @@ export function PublicProfileScreen() {
 						<View
 							style={{
 								width: 100,
-								aspectRatio: 1,
+								height: 100,
 								margin: "auto",
 								borderRadius: 50,
 								backgroundColor: colors.palette.neutral200,
@@ -90,36 +88,43 @@ export function PublicProfileScreen() {
 							<ProfileForm.Avatar imageUri={user.image} />
 						</View>
 
-						<Text
-							size="xxl"
-							weight="medium"
-							entering={FadeInUp}
-							numberOfLines={1}
-						>
-							{ellipsize(user.name, 15)}
-						</Text>
-						<Text
-							entering={FadeInUp}
-							style={{
-								textAlign: "center",
-								paddingInline: spacing.md,
-								color: colors.textDim,
-							}}
-						>
-							{ellipsize(user.bio, 100)}
-						</Text>
+						{user.name && (
+							<Text
+								size="xxl"
+								weight="medium"
+								entering={FadeInUp}
+								numberOfLines={1}
+							>
+								{ellipsize(user.name, 15)}
+							</Text>
+						)}
 
-						<Link href="/profile/edit" asChild>
-							<PressableIcon
-								icon={Edit}
-								size={20}
+						{user.bio && (
+							<Text
+								entering={FadeInUp}
 								style={{
-									position: "absolute",
-									top: 0,
-									right: 8,
+									textAlign: "center",
+									paddingInline: spacing.md,
+									color: colors.textDim,
 								}}
-							/>
-						</Link>
+							>
+								{ellipsize(user.bio, 100)}
+							</Text>
+						)}
+
+						{isMyProfile && (
+							<Link href="/profile/edit" asChild>
+								<PressableIcon
+									icon={Edit}
+									size={20}
+									style={{
+										position: "absolute",
+										top: 0,
+										right: 8,
+									}}
+								/>
+							</Link>
+						)}
 					</View>
 
 					<PublicProfileStats stats={stats} />

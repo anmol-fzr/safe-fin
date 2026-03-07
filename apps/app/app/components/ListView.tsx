@@ -2,11 +2,7 @@ import {
 	LegendList,
 	type LegendListProps,
 	type LegendListRef,
-} from "@legendapp/list";
-import {
-	// AnimatedLegendList as LegendList,
-	// type AnimatedLegendListProps as LegendListProps,
-} from "@legendapp/list/reanimated";
+} from "@legendapp/list/react-native";
 import type {
 	ForwardedRef,
 	PropsWithoutRef,
@@ -14,7 +10,7 @@ import type {
 	ReactNode,
 	RefObject,
 } from "react";
-import { forwardRef, memo, useId } from "react";
+import { forwardRef, memo } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 import Animated, {
 	BounceIn,

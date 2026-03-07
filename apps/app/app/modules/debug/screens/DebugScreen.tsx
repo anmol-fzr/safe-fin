@@ -1,11 +1,9 @@
 import * as Application from "expo-application";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import {
-	LayoutAnimation,
 	Linking,
 	Platform,
 	type TextStyle,
-	useColorScheme,
 	View,
 	type ViewStyle,
 } from "react-native";
@@ -15,8 +13,8 @@ import { useAuthStore } from "@/modules/auth/store";
 import { logout } from "@/modules/auth/utils";
 import type { ThemedStyle } from "@/theme";
 import { $styles } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { envs } from "@/utils/envs";
+import { useAppTheme } from "@/utils/useAppTheme";
 
 type T = Record<string, string | boolean | Record<string, string | boolean>>;
 
@@ -44,7 +42,7 @@ const usingHermes =
 	typeof HermesInternal === "object" && HermesInternal !== null;
 
 export function DebugScreen() {
-	const { themeContext, themed } = useAppTheme();
+	const { themeContext, themed, actualTheme } = useAppTheme();
 	const resetAuthData = useAuthStore((state) => state.resetData);
 	const user = useAuthStore((state) => state.user);
 
@@ -71,53 +69,49 @@ export function DebugScreen() {
 		[],
 	);
 
-	const toggleTheme = useCallback(() => {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); // Animate the transition
-	}, []);
+	const appDataList = useMemo(
+		() => [
+			{
+				label: "App Id",
+				value: Application.applicationId,
+			},
+			{
+				label: "App Name",
+				value: Application.applicationName,
+			},
+			{
+				label: "App Version",
+				value: Application.nativeApplicationVersion,
+			},
+			{
+				label: "App Build Version",
+				value: Application.nativeBuildVersion,
+			},
+			{
+				label: "Hermes Enabled",
+				value: String(usingHermes),
+			},
+			{
+				label: "App Build Version",
+				value: String(usingFabric),
+			},
+		],
+		[usingFabric],
+	);
 
-	// Resets the theme to the system theme
-	const colorScheme = useColorScheme();
-	const resetTheme = useCallback(() => {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-	}, []);
-
-	const appDataList = [
-		{
-			label: "App Id",
-			value: Application.applicationId,
-		},
-		{
-			label: "App Name",
-			value: Application.applicationName,
-		},
-		{
-			label: "App Version",
-			value: Application.nativeApplicationVersion,
-		},
-		{
-			label: "App Build Version",
-			value: Application.nativeBuildVersion,
-		},
-		{
-			label: "Hermes Enabled",
-			value: String(usingHermes),
-		},
-		{
-			label: "App Build Version",
-			value: String(usingFabric),
-		},
-	];
-
-	const userDataList = [
-		{
-			label: "User Id",
-			value: user?.id,
-		},
-		{
-			label: "User Email",
-			value: user?.email,
-		},
-	];
+	const userDataList = useMemo(
+		() => [
+			{
+				label: "User Id",
+				value: user?.id,
+			},
+			{
+				label: "User Email",
+				value: user?.email,
+			},
+		],
+		[user],
+	);
 
 	return (
 		<Screen
@@ -138,13 +132,11 @@ export function DebugScreen() {
 				preset="heading"
 				tx="demoDebugScreen:title"
 			/>
-			<Text preset="bold">Current system theme: {colorScheme}</Text>
+			<Text preset="bold">Current system theme: {actualTheme}</Text>
 			<Text preset="bold">Current app theme: {themeContext}</Text>
 
 			<View style={themed($itemsContainer)}>
-				<Button onPress={resetTheme} text={`Reset`} />
 				<Button onPress={resetAuthData} text="Reset Auth Store" />
-				<Button onPress={toggleTheme} text={`Toggle Theme: ${themeContext}`} />
 			</View>
 			<View style={themed($itemsContainer)}>
 				<ListView

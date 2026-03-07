@@ -5,7 +5,6 @@ import {
 	Instagram as InstagramIcon,
 	Link as LinkIcon,
 	Snapchat as SnapchatIcon,
-	Trash,
 	Whatsapp as WhatsappIcon,
 	Youtube as YoutubeIcon,
 } from "iconsax-react-nativejs";
@@ -43,7 +42,6 @@ export const PublicProfileLinksList = (props: LinkListProps) => {
 	return (
 		<ListView
 			data={links}
-			layout={SequencedTransition}
 			keyExtractor={(item) => item.link.toString()}
 			columnWrapperStyle={{ gap: spacing.xxs }}
 			renderItem={({ item }) => {

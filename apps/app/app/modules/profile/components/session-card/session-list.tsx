@@ -1,12 +1,13 @@
-import { getEmptyArr } from "@/pkg/ui";
-import { useState } from "react";
-import { ListView, Text } from "@/components";
-import { colors, makeSpringy } from "@/theme";
-import { useListSessions, useSession } from "../../hooks/queries";
 import { PressableScale } from "pressto";
+import { useState } from "react";
+import Animated, { FadeIn, FadingTransition } from "react-native-reanimated";
+import { ListView, Text } from "@/components";
+import { getEmptyArr } from "@/pkg/ui";
+import { makeSpringy } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { useListSessions, useSession } from "../../hooks/queries";
 import { RevokeOtherSessions } from "./revoke-other-sessions";
 import { SessionCell } from "./session-cell";
-import Animated, { FadeIn, FadingTransition } from "react-native-reanimated";
 
 const MAX_NUM_SESSIONS_SHOWN = 3;
 
@@ -26,6 +27,10 @@ export function SessionList() {
 	const onSessionsExpand = () => {
 		setMaxNumSessionShown(sessions.length);
 	};
+
+	const {
+		theme: { colors },
+	} = useAppTheme();
 
 	return (
 		<>
@@ -66,7 +71,7 @@ export function SessionList() {
 					<PressableScale onPress={onSessionsCollapse}>
 						<Text
 							style={{
-								color: colors.palette.neutral700,
+								color: colors.textDim,
 								marginBottom: 24,
 								textAlign: "center",
 							}}

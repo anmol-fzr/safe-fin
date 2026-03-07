@@ -57,7 +57,7 @@ export type IResPubliProfile = IResData<{
 			current: number;
 			maximum: number;
 			lastActivityDate: string;
-		};
+		} | null;
 	};
 	profile: {
 		totalPX: number;

@@ -23,13 +23,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Text } from "@/components";
 import { Section } from "@/components/Section";
-import {
-	ANIMATION,
-	colors,
-	getSpringConfig,
-	makeSpringy,
-	spacing,
-} from "@/theme";
+import { ANIMATION, getSpringConfig, makeSpringy, spacing } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 /* ------------------ Constants ------------------ */
@@ -269,13 +263,6 @@ function Heatmap(props: HeatmapProps) {
 							const index = row + col * ROW_COUNT;
 							const item = data[index];
 							if (!item) return null;
-
-							if (colIndx > 0 && rowIndx === 0) {
-								console.log({
-									date: data[index].date,
-									month: getMonth(data[index].date),
-								});
-							}
 
 							return (
 								<View

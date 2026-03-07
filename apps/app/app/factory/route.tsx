@@ -1,8 +1,8 @@
+import { useLocalSearchParams } from "expo-router";
+import type { z } from "zod";
 import { Screen, type ScreenProps } from "@/components";
 import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
 import { $styles } from "@/theme";
-import { useLocalSearchParams } from "expo-router";
-import type { z } from "zod";
 
 interface CreateRouteOptions<TSchema extends z.ZodTypeAny | undefined> {
 	paramSchema?: TSchema;

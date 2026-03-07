@@ -1,17 +1,18 @@
 import { z } from "zod";
 import { Screen } from "@/components";
-import { useTypedLocalSearchParams } from "@/hooks/navigation/useTypedLocalSearchParams";
+import { createRoute } from "@/factory/route";
 import { Calculator } from "@/modules/calculator/components/Calculator";
 import { idSchema } from "@/schema";
 import { $styles } from "@/theme";
 
-const paramsSchema = z.object({
-	calculatorId: idSchema,
+const { useParams } = createRoute({
+	paramSchema: z.object({
+		calculatorId: idSchema,
+	}),
 });
 
 export default function CalculatorScreen() {
-	const params = useTypedLocalSearchParams(paramsSchema);
-	const { calculatorId } = params;
+	const { calculatorId } = useParams();
 
 	return (
 		<Screen
