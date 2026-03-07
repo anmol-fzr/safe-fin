@@ -1,5 +1,7 @@
+import { envs } from "./envs";
+
 export const APP = {
-	NAME: "SafeFin",
+	NAME: envs.isProd ? "SafeFin" : `SafeFin ${envs.MODE}`,
 	DESC: "Your Friend for Financial Learnings",
 } as const;
 

@@ -1,10 +1,16 @@
 import type { ExternalPathString } from "expo-router";
 
 const env = process.env;
-const isDev = env.EXPO_PUBLIC_MODE === "DEV" || __DEV__;
+
+const MODE = env.EXPO_PUBLIC_MODE ?? "DEV";
+
+const isDev = MODE === "DEV" || __DEV__;
+const isProd = MODE === "PROD";
 
 export const envs = Object.freeze({
 	isDev,
+	isProd,
+	MODE,
 	API_URL:
 		env.EXPO_PUBLIC_API_URL ?? "https://safe-fin.anmol-fzr.workers.dev/api/v1",
 	get AUTH_API_URL() {

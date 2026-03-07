@@ -6,27 +6,27 @@
 	"scripts": {
 		"compile": "tsc --noEmit -p . --pretty",
 		"format": "biome format --write",
+
 		"lint": "biome lint app/",
 		"lint:check": "biome lint app/",
+
 		"test": "jest",
 		"test:watch": "jest --watchAll",
 		"test:maestro": "maestro test -e MAESTRO_APP_ID=com.safefin -e IS_DEV=true .maestro/flows",
 		"test:maestro:ci": "maestro test -e MAESTRO_APP_ID=com.safefin -e IS_DEV=false .maestro/flows",
-		"build:android:dev": "eas build --profile development-device --platform android --local",
+
 		"build:android:preview": "eas build --profile preview --platform android --local",
 		"build:android:prod": "eas build --profile production --platform android --local",
-		"update:android:dev": "eas update --channel development-device --platform android",
+
 		"update:android:preview": "eas update --channel preview --platform android",
 		"update:android:prod": "eas update --channel production --platform android",
-		"start": "expo start --dev-client",
-		"android": "expo run:android",
+
+		"start": "APP_VARIANT=development expo start --dev-client",
+		"android": "pnpm run prebuild:dev && expo run:android",
 		"dev": "bun run start",
-		"web": "expo start --web",
-		"bundle:web": "bunx expo export --platform web",
-		"serve:web": "bunx serve dist",
-		"prebuild": "bunx expo prebuild -p android",
-		"prebuild:clean": "bunx expo prebuild --clean -p android",
-		"ios": "expo run:ios"
+
+		"prebuild:dev": "APP_VARIANT=development bunx expo prebuild -p android",
+		"prebuild:prod": "APP_VARIANT=production bunx expo prebuild -p android"
 	},
 	"dependencies": {
 		"@expo-google-fonts/space-grotesk": "^0.4.1",

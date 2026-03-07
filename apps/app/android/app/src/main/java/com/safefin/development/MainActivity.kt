@@ -1,4 +1,4 @@
-package com.safefin
+package com.safefin.development
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
