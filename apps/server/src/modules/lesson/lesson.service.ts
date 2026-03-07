@@ -10,7 +10,6 @@ import {
 	courseProgress,
 	eq,
 	exercise,
-	exerciseAttempt,
 	exists,
 	getDb,
 	richContent,
@@ -257,33 +256,32 @@ export class LessonService {
 					extras: userId
 						? {
 								status: sql<"COMPLETED" | "ONGOING" | "LOCKED">`
-        CASE
-            -- All units completed
-            WHEN NOT EXISTS (
-                SELECT 1
-                FROM unit u
-                WHERE u.chapter_id = ${chapter.id}
-                AND NOT EXISTS (
+              CASE
+                -- All units completed
+                WHEN NOT EXISTS (
+                  SELECT 1
+                  FROM unit u
+                  WHERE u.chapter_id = ${chapter.id}
+                  AND NOT EXISTS (
                     SELECT 1
                     FROM course_progress cp
                     WHERE cp.user_id = ${userId}
                     AND cp.curr_unit_id = u.id
-                )
-            ) THEN 'COMPLETED'
+                  )
+                ) THEN 'COMPLETED'
 
-            -- Any unit completed
-            WHEN EXISTS (
-                SELECT 1
-                FROM unit u
-                JOIN course_progress cp
-                    ON cp.curr_unit_id = u.id
-                WHERE cp.user_id = ${userId}
-                AND u.chapter_id = ${chapter.id}
-            ) THEN 'ONGOING'
+                -- Any unit completed
+                WHEN EXISTS (
+                  SELECT 1
+                  FROM unit u
+                  JOIN course_progress cp ON cp.curr_unit_id = u.id
+                  WHERE cp.user_id = ${userId}
+                  AND u.chapter_id = ${chapter.id}
+                ) THEN 'ONGOING'
 
-            ELSE 'LOCKED'
-        END
-      `.as("status"),
+                ELSE 'LOCKED'
+              END
+            `.as("status"),
 							}
 						: undefined,
 
@@ -295,39 +293,38 @@ export class LessonService {
 						createdAt: isAdmin,
 						updatedAt: isAdmin,
 					},
-					orderBy: (chapter, { asc }) => [asc(chapter.index)],
-					where: (exercises, { eq }) =>
-						isAdmin ? undefined : eq(exercises.isPublished, true),
+					orderBy: (chapters, { asc }) => [asc(chapters.index)],
+					where: (chapters, { eq }) =>
+						isAdmin ? undefined : eq(chapters.isPublished, true),
 					with: {
 						exercises: {
 							extras: {
 								status: sql<"COMPLETED" | "LOCKED" | "UNLOCKED">`
-            CASE
-                -- 1. Check if Completed (Look in exercise_attempt)
+              CASE
+                -- 1. Check if Completed
                 WHEN EXISTS (
-                    SELECT 1 FROM exercise_attempt ea
-                    WHERE ea.user_id = ${userId}
-                    AND ea.exercise_id = ${exercise.id}
+                  SELECT 1 FROM exercise_attempt ea
+                  WHERE ea.user_id = ${userId}
+                  AND ea.exercise_id = ${exercise.id}
                 ) THEN 'COMPLETED'
 
-                -- 2. Check if Locked (Is there an unfinished previous exercise in this chapter?)
+                -- 2. Check if Locked (unfinished previous exercise in this chapter)
                 WHEN EXISTS (
+                  SELECT 1
+                  FROM exercise prev_e
+                  WHERE prev_e.chapter_id = ${chapter.id}
+                  AND prev_e.is_published = 1
+                  AND NOT EXISTS (
                     SELECT 1
-                    FROM exercise prev_e
-                    WHERE prev_e.chapter_id = ${chapter.id} -- Same chapter
-                    AND prev_e.is_published = 1             -- Ignore hidden/unpublished exercises
-                    AND NOT EXISTS (
-                        SELECT 1
-                        FROM exercise_attempt ea
-                        WHERE ea.user_id = ${userId}
-                        AND ea.exercise_id = prev_e.id
-                    )
+                    FROM exercise_attempt ea
+                    WHERE ea.user_id = ${userId}
+                    AND ea.exercise_id = prev_e.id
+                  )
                 ) THEN 'LOCKED'
 
-                -- 3. Default to Unlocked
                 ELSE 'UNLOCKED'
-            END
-        `.as("status"),
+              END
+            `.as("status"),
 							},
 
 							columns: {
@@ -339,42 +336,93 @@ export class LessonService {
 
 							where: (exercises, { eq }) =>
 								isAdmin ? undefined : eq(exercises.isPublished, true),
-							orderBy: (exercise, { desc }) => [desc(exercise.createdAt)], // Ensure correct order for index logic
+							orderBy: (exercise, { desc }) => [desc(exercise.createdAt)],
 						},
 
 						units: {
 							extras: userId
 								? {
 										status: sql<"COMPLETED" | "LOCKED" | "UNLOCKED">`
-            CASE
-                -- 1. Check if Completed
-                WHEN EXISTS (
-                    SELECT 1 FROM course_progress cp
-                    WHERE cp.user_id = ${userId}
-                    AND cp.curr_unit_id = ${unit.id}
-                ) THEN 'COMPLETED'
+                  CASE
+                    -- 1. Check if Completed
+                    WHEN EXISTS (
+                      SELECT 1 FROM course_progress cp
+                      WHERE cp.user_id = ${userId}
+                      AND cp.curr_unit_id = ${unit.id}
+                    ) THEN 'COMPLETED'
 
-                -- 2. Check if Locked (Predecessor logic)
-                WHEN EXISTS (
-                    SELECT 1
-                    FROM unit u
-                    JOIN chapter c ON c.id = u.chapter_id
-                    WHERE c.course_id = ${courseId}
-                    AND u."index" < ${unit.index} -- Check strictly previous units
-                    AND NOT EXISTS (
-                        SELECT 1
-                        FROM course_progress cp
-                        WHERE cp.user_id = ${userId}
-                        AND cp.curr_unit_id = u.id
-                    )
-                ) THEN 'LOCKED'
+                    -- 2. First unit of the first chapter is always unlocked
+                    WHEN (
+                      SELECT u2.id
+                      FROM unit u2
+                      JOIN chapter c2 ON c2.id = u2.chapter_id
+                      WHERE c2.course_id = ${courseId}
+                        AND c2.is_published = 1
+                        AND u2.is_published = 1
+                      ORDER BY c2."index" ASC, u2."index" ASC
+                      LIMIT 1
+                    ) = ${unit.id} THEN 'UNLOCKED'
 
-                -- 3. Default to Unlocked (Available to start)
-                ELSE 'UNLOCKED'
-            END
-        `.as("status"),
+                    -- 3. Unlock if the immediately preceding unit is completed
+                    --    (previous unit in same chapter OR last unit of previous chapter)
+                    WHEN EXISTS (
+                      SELECT 1
+                      FROM unit prev_u
+                      JOIN chapter prev_c ON prev_c.id = prev_u.chapter_id
+                      JOIN chapter curr_c ON curr_c.id = ${chapter.id}
+                      WHERE prev_c.course_id = ${courseId}
+                        AND prev_c.is_published = 1
+                        AND prev_u.is_published = 1
+                        AND (
+                          -- Previous unit in the same chapter
+                          (
+                            prev_c.id = curr_c.id
+                            AND prev_u."index" = (
+                              SELECT MAX(u3."index")
+                              FROM unit u3
+                              WHERE u3.chapter_id = curr_c.id
+                                AND u3."index" < ${unit.index}
+                                AND u3.is_published = 1
+                            )
+                          )
+                          OR
+                          -- Last unit of the previous chapter (when this is first unit of current chapter)
+                          (
+                            ${unit.index} = (
+                              SELECT MIN(u4."index")
+                              FROM unit u4
+                              WHERE u4.chapter_id = curr_c.id
+                                AND u4.is_published = 1
+                            )
+                            AND prev_c."index" = (
+                              SELECT MAX(c3."index")
+                              FROM chapter c3
+                              WHERE c3.course_id = ${courseId}
+                                AND c3."index" < curr_c."index"
+                                AND c3.is_published = 1
+                            )
+                            AND prev_u."index" = (
+                              SELECT MAX(u5."index")
+                              FROM unit u5
+                              WHERE u5.chapter_id = prev_c.id
+                                AND u5.is_published = 1
+                            )
+                          )
+                        )
+                        AND EXISTS (
+                          SELECT 1 FROM course_progress cp
+                          WHERE cp.user_id = ${userId}
+                          AND cp.curr_unit_id = prev_u.id
+                        )
+                    ) THEN 'UNLOCKED'
+
+                    -- 4. Everything else is locked
+                    ELSE 'LOCKED'
+                  END
+                `.as("status"),
 									}
 								: undefined,
+
 							columns: {
 								id: true,
 								chapterId: false,
