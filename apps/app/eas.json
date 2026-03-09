@@ -7,7 +7,7 @@
 			"bun": "1.3.5",
 			"channel": "production",
 			"android": {
-				"buildType": "aab"
+				"buildType": "app-bundle"
 			},
 			"env": {
 				"APP_VARIANT": "production"

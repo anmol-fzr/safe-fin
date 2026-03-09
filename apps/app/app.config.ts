@@ -1,4 +1,5 @@
 import type { ConfigContext, ExpoConfig } from "@expo/config";
+import pkg from "./package.json";
 
 require("ts-node/register");
 
@@ -8,7 +9,6 @@ if (!APP_VARIANT) {
 	process.exit(1);
 }
 
-const IS_DEV = APP_VARIANT === "development";
 const IS_PROD = APP_VARIANT === "production";
 
 const packageName = IS_PROD ? "com.safefin" : `com.safefin.${APP_VARIANT}`;
@@ -19,13 +19,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	name: IS_PROD ? "Safe Fin" : `Safe Fin ${APP_VARIANT}`,
 	slug: "safeFin",
 	scheme: "safefin",
-	version: "1.2.1",
+	version: pkg.version,
 	orientation: "portrait",
 	userInterfaceStyle: "automatic",
 
 	icon: "./assets/icons/app-icon.png",
 
-	runtimeVersion: "1.0.0",
+	runtimeVersion: "1.2.0",
 
 	newArchEnabled: true,
 	jsEngine: "hermes",
@@ -42,10 +42,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	android: {
 		package: packageName,
 		allowBackup: true,
-		permissions: [
-			"android.permission.RECORD_AUDIO",
-			"android.permission.REQUEST_INSTALL_PACKAGES",
-		],
+		//permissions: [
+		//"android.permission.RECORD_AUDIO",
+		//"android.permission.REQUEST_INSTALL_PACKAGES",
+		//],
 		adaptiveIcon: {
 			foregroundImage:
 				"./assets/icons/app-icons/android/adaptive-icon-transparent.png",
@@ -134,7 +134,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
 	extra: {
 		eas: {
-			projectId: "xxxxx",
+			projectId: "65ecfa2b-b101-4892-b765-64c97a4898d4",
 		},
 	},
 });

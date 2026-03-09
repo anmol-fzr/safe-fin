@@ -1,6 +1,7 @@
 {
 	"name": "@safe-fin/auth",
-	"version": "0.0.0",
+	"version": "1.2.0",
+	"private": true,
 	"description": "Authentication package for Safe Fin",
 	"main": "./src/index.ts",
 	"types": "./src/index.ts",

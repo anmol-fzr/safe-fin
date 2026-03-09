@@ -1,6 +1,8 @@
 {
 	"name": "@safe-fin/server",
 	"type": "module",
+	"version": "1.2.0",
+	"private": true,
 	"scripts": {
 		"cf:typegen": "wrangler types --env-interface CloudflareBindings",
 		"deploy": "pnpm dlx wrangler deploy --env prod && pnpm dlx wrangler secret bulk --env prod .dev.vars.production",
