@@ -12,7 +12,6 @@ import {
 	ProfileCompletionBanner,
 	QuickActions,
 	ShareAppCard,
-	UpdateAvailableCard,
 } from "../components";
 import { ForYouLessons } from "../components/lessons/ForYouLessons";
 import { StreakSheet } from "../components/streak-sheet";
@@ -25,7 +24,7 @@ const componentMap = {
 	QuickActions: QuickActions,
 	InProgressCourseCard: InProgressCourseCard,
 	ForYouLessons: ForYouLessons,
-	UpdateAvailableCard: UpdateAvailableCard,
+	//UpdateAvailableCard: UpdateAvailableCard,
 	ShareAppCard: ShareAppCard,
 	DynamicCard: DynamicCard,
 } as const;

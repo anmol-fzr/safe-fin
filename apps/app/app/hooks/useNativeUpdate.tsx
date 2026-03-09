@@ -119,11 +119,11 @@ export function useNativeUpdate() {
 
 		const contentUri = await FileSystemLegacy.getContentUriAsync(info.uri);
 
-		await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
-			data: contentUri,
-			flags: 1,
-			type: "application/vnd.android.package-archive",
-		});
+		// await IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
+		// 	data: contentUri,
+		// 	flags: 1,
+		// 	type: "application/vnd.android.package-archive",
+		// });
 	}, [finalFile]);
 
 	// ---------- AUTO CHECK ----------

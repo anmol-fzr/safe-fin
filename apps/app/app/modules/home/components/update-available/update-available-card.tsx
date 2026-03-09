@@ -1,6 +1,7 @@
 import { Button } from "@/components";
 import { PromoCardImpl } from "@/components/promo-card";
 import { useNativeUpdate } from "@/hooks/useNativeUpdate";
+import type { ThemedViewStyle } from "@/theme";
 import { useAppTheme } from "@/utils/useAppTheme";
 
 export function UpdateAvailableCard() {
@@ -8,9 +9,7 @@ export function UpdateAvailableCard() {
 }
 
 function UpdateAvailableCardImpl() {
-	const {
-		theme: { colors },
-	} = useAppTheme();
+	const { themed } = useAppTheme();
 
 	const update = useNativeUpdate();
 	const { isDownloading, isDownloaded, isUpdateAvailable } = update;
@@ -18,11 +17,7 @@ function UpdateAvailableCardImpl() {
 	if (!isUpdateAvailable) return null;
 
 	return (
-		<PromoCardImpl.Root
-			style={{
-				backgroundColor: colors.palette.secondary300,
-			}}
-		>
+		<PromoCardImpl.Root style={themed($root)}>
 			<PromoCardImpl.Badge>Update Available</PromoCardImpl.Badge>
 			<PromoCardImpl.Body>
 				<PromoCardImpl.Title
@@ -34,10 +29,7 @@ function UpdateAvailableCardImpl() {
 				</PromoCardImpl.Title>
 
 				<Button
-					style={{
-						backgroundColor: colors.palette.secondary500,
-						borderColor: colors.palette.secondary500,
-					}}
+					style={themed($btn)}
 					onPress={isDownloaded ? update.install : update.download}
 				>
 					{isDownloading
@@ -50,3 +42,11 @@ function UpdateAvailableCardImpl() {
 		</PromoCardImpl.Root>
 	);
 }
+const $root: ThemedViewStyle = (theme) => ({
+	backgroundColor: theme.colors.palette.secondary300,
+});
+
+const $btn: ThemedViewStyle = (theme) => ({
+	backgroundColor: theme.colors.palette.secondary500,
+	borderColor: theme.colors.palette.secondary500,
+});

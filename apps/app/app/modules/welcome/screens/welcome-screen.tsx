@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { ImageStyle, ViewStyle } from "react-native";
 import { Image, View } from "react-native";
 import Animated, {
@@ -20,21 +21,39 @@ import {
 import { WelcomeActionButton } from "../components/welcome-action-buttons/welcome-action-button";
 
 const balanceImage = require("assets/images/start/balance.png");
-const becomingRichImage = require("assets/images/start/becoming-rich.png");
-const unknownCallerImage = require("assets/images/start/unknown-caller.png");
-
-const contents = [
-	{ image: balanceImage, bg: "#cce7ff", text: "Gain Financial Clarity" },
-	{ image: becomingRichImage, bg: "#e6fef1", text: "Calculate and Invest" },
-	{ image: unknownCallerImage, bg: "#fff8e5", text: "Stay aware of Scams" },
-] as const;
 
 const enteringAnim = makeSpringy(SlideInRight);
 const exitingAnim = makeSpringy(SlideOutLeft);
 
 export function WelcomeScreen() {
-	const { themed } = useAppTheme();
+	const { themed, isDark } = useAppTheme();
 	const { isLogin } = useAuth();
+
+	const becomingRichImage = isDark
+		? require("assets/images/start/becoming-rich/dark.png")
+		: require("assets/images/start/becoming-rich/light.png");
+
+	const unknownCallerImage = isDark
+		? require("assets/images/start/unknown-caller/dark.png")
+		: require("assets/images/start/unknown-caller/light.png");
+
+	const contents = useMemo(
+		() =>
+			[
+				{ image: balanceImage, bg: "#cce7ff", text: "Gain Financial Clarity" },
+				{
+					image: becomingRichImage,
+					bg: "#e6fef1",
+					text: "Calculate and Invest",
+				},
+				{
+					image: unknownCallerImage,
+					bg: "#fff8e5",
+					text: "Stay aware of Scams",
+				},
+			] as const,
+		[becomingRichImage, unknownCallerImage],
+	);
 
 	const [curr, currIndx] = useLoopOverArray(contents);
 
