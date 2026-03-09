@@ -27,4 +27,27 @@ const getFakeUsers = (len = 10): InsertUser[] => {
 	return fakerUsers;
 };
 
-export { getFakeUsers };
+const getRealUsers = (len = 10): InsertUser[] => {
+	const realUsers: InsertUser[] = [
+		{
+			id: faker.string.nanoid(),
+			name: "Anmol",
+			bio: faker.person.bio(),
+			email: "anmol_dev@getsafefin.app",
+			emailVerified: true,
+			role: "user",
+		},
+		{
+			id: faker.string.nanoid(),
+			name: "Anmol Admin",
+			bio: faker.person.bio(),
+			email: "anmol_admin@getsafefin.app",
+			emailVerified: true,
+			role: "admin",
+		},
+	];
+
+	return realUsers;
+};
+
+export { getFakeUsers, getRealUsers };

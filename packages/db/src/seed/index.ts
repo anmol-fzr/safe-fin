@@ -2,7 +2,7 @@ import { Database } from "bun:sqlite";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import { envs } from "@/envs";
 import * as schema from "@/schema"; // adjust path
-import { getFakeUsers } from "./auth";
+import { getFakeUsers, getRealUsers } from "./auth";
 import { getFakeCalculators } from "./calculator";
 import { getFakeCourses } from "./course";
 
@@ -25,8 +25,12 @@ async function seed() {
 
 async function seedUsers() {
 	const fakerUsers = getFakeUsers();
+	const realUsers = getRealUsers();
 
-	await db.insert(schema.user).values(fakerUsers).onConflictDoNothing;
+	await db
+		.insert(schema.user)
+		.values([...fakerUsers, ...realUsers])
+		.onConflictDoNothing();
 }
 
 async function seedCalculators() {
