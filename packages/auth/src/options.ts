@@ -2,9 +2,10 @@ import { expo } from "@better-auth/expo";
 import { type DB, eq } from "@safe-fin/db";
 import { verification } from "@safe-fin/db/schema";
 import type { BetterAuthOptions, CookieOptions } from "better-auth";
-import { admin, emailOTP } from "better-auth/plugins";
+import { admin as adminPlugin, emailOTP } from "better-auth/plugins";
 import { Emailer } from "./email";
 import type { EmailOtps } from "./server";
+import { ac, roles } from "./access-control";
 
 interface GetBetterAuthOptions {
 	db: DB;
@@ -72,7 +73,10 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 			expo({
 				disableOriginOverride: true,
 			}),
-			admin(),
+			adminPlugin({
+				ac,
+				roles,
+			}),
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) {
 					const { EMAIL, OTP } = TEST_CREDS;
@@ -80,13 +84,20 @@ export const getBetterAuthOptions = (params: GetBetterAuthOptions) => {
 					if (email === EMAIL) {
 						console.info("! Google Test Bot detected. Skipping SMS.");
 
-						await db
-							.update(verification)
-							.set({
-								value: `${OTP}:0`,
-								expiresAt: new Date(Date.now() + 1000 * 60 * 10),
-							})
-							.where(eq(verification.identifier, email));
+						try {
+							console.log("Overwritting OTP with Test OTP ");
+							await db
+								.update(verification)
+								.set({
+									value: `${OTP}:0`,
+									expiresAt: new Date(Date.now() + 1000 * 60 * 10),
+								})
+								.where(eq(verification.identifier, email));
+							console.log("Successfully Overwritten OTP with Test OTP ");
+						} catch (error) {
+							console.log(error);
+							console.log("Unable to  Overwrite OTP with Test OTP ");
+						}
 
 						console.info({ email, otp: OTP, type });
 						return;
