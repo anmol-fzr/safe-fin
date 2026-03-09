@@ -1,5 +1,6 @@
 import { View } from "react-native";
 import { Screen } from "@/components";
+import { AnimationSwitch } from "@/modules/settings/component/AnimationSwitch";
 import { LangSwitcher } from "@/modules/settings/component/LangSwitcher";
 import { ThemeSwitcher } from "@/modules/settings/component/ThemeSwitcher";
 import { $styles } from "@/theme";
@@ -14,6 +15,7 @@ export default function Settings() {
 			<View style={{ gap: spacing.lg }}>
 				<ThemeSwitcher />
 				<LangSwitcher />
+				<AnimationSwitch />
 			</View>
 		</Screen>
 	);

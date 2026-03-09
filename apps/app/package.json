@@ -6,27 +6,22 @@
 	"scripts": {
 		"compile": "tsc --noEmit -p . --pretty",
 		"format": "biome format --write",
-
 		"lint": "biome lint app/",
 		"lint:check": "biome lint app/",
-
 		"test": "jest",
 		"test:watch": "jest --watchAll",
 		"test:maestro": "maestro test -e MAESTRO_APP_ID=com.safefin -e IS_DEV=true .maestro/flows",
 		"test:maestro:ci": "maestro test -e MAESTRO_APP_ID=com.safefin -e IS_DEV=false .maestro/flows",
-
 		"build:android:preview": "eas build --profile preview --platform android --local",
 		"build:android:prod": "eas build --profile production --platform android --local",
-
 		"update:android:preview": "eas update --channel preview --platform android",
 		"update:android:prod": "eas update --channel production --platform android",
-
 		"start": "APP_VARIANT=development expo start --dev-client",
-		"android": "pnpm run prebuild:dev && expo run:android",
+		"android": "pnpm run prebuild:dev && APP_VARIANT=development expo run:android",
 		"dev": "bun run start",
-
 		"prebuild:dev": "APP_VARIANT=development bunx expo prebuild -p android",
-		"prebuild:prod": "APP_VARIANT=production bunx expo prebuild -p android"
+		"prebuild:prod": "APP_VARIANT=production bunx expo prebuild -p android",
+		"ios": "expo run:ios"
 	},
 	"dependencies": {
 		"@expo-google-fonts/space-grotesk": "^0.4.1",
@@ -35,7 +30,7 @@
 		"@faker-js/faker": "^10.1.0",
 		"@futurejj/react-native-visibility-sensor": "^1.4.5",
 		"@hookform/resolvers": "^5.2.2",
-		"@legendapp/list": "^2.0.16",
+		"@legendapp/list": "3.0.0-beta.41",
 		"@lodev09/react-native-true-sheet": "^3.8.2",
 		"@lottiefiles/dotlottie-react-native": "^0.7.1",
 		"@react-native-async-storage/async-storage": "2.2.0",
@@ -57,6 +52,7 @@
 		"buffer": "^6.0.3",
 		"expo": "~54.0.33",
 		"expo-application": "~7.0.7",
+		"expo-battery": "^55.0.8",
 		"expo-blur": "^15.0.8",
 		"expo-build-properties": "~1.0.9",
 		"expo-constants": "~18.0.11",
