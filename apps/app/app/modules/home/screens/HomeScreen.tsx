@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Screen } from "@/components";
 import { getCalculatorsOpts } from "@/modules/calculator/hooks/queries";
 import { getLessonsOpts } from "@/modules/lesson/hooks/api";
@@ -20,7 +20,7 @@ import { useStreak } from "../hooks/useStreak";
 const componentMap = {
 	ProfileCompletionBanner: ProfileCompletionBanner,
 	QuickActions: QuickActions,
-	InProgressCourseCard: InProgressCourseCard,
+	//InProgressCourseCard: InProgressCourseCard,
 	ForYouLessons: ForYouLessons,
 	UpdateAvailableCard: UpdateAvailableCard,
 	ShareAppCard: ShareAppCard,
@@ -59,18 +59,24 @@ export function HomeScreen() {
 		[streak?.data],
 	);
 
+	const [query, setQuery] = useState("");
+
 	return (
 		<Screen
 			preset="scroll"
 			contentContainerStyle={$styles.fullHeaderScreen}
 			safeAreaEdges={["bottom"]}
 		>
+			{/*
 			{data.data.map((item) => {
 				const Component = componentMap[item.componentName];
+				if (!Component) {
+					return <></>;
+				}
 
 				return <Component key={item.componentName} />;
 			})}
-
+      */}
 			<StreakSheet streak={streak?.data} />
 		</Screen>
 	);

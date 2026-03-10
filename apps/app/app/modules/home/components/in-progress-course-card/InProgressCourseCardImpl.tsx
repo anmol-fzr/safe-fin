@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import type { PropsWithChildren } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button, type ButtonProps, Text } from "@/components";
 import { PromoCardImpl } from "@/components/promo-card";
 import type {
@@ -92,6 +92,13 @@ InProgressCourseCardRoot.Action = (props: InProgressCourseCardActionProps) => {
 		theme: { colors },
 	} = useAppTheme();
 
+	const styles = StyleSheet.flatten([
+		{
+			backgroundColor: colors.tint,
+		},
+		$styleOverride,
+	]);
+
 	return (
 		<Link
 			href={{
@@ -102,16 +109,7 @@ InProgressCourseCardRoot.Action = (props: InProgressCourseCardActionProps) => {
 			}}
 			asChild
 		>
-			<Button
-				preset="reversed"
-				style={[
-					{
-						backgroundColor: colors.tint,
-					},
-					$styleOverride,
-				]}
-				{...rest}
-			>
+			<Button preset="reversed" style={styles} {...rest}>
 				Continue Course
 			</Button>
 		</Link>

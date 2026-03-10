@@ -24,7 +24,7 @@ function CalculatorListImpl() {
 			estimatedItemSize={113}
 			refreshing={isRefetching}
 			onRefresh={refetch}
-			keyExtractor={(item) => item.title}
+			keyExtractor={(item) => item.id.toString()}
 			ListEmptyComponent={EmptyListView}
 			ListFooterComponent={
 				calculators.length === 0
