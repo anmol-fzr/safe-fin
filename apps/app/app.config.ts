@@ -42,6 +42,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	android: {
 		package: packageName,
 		allowBackup: true,
+		versionCode: 2,
 		//permissions: [
 		//"android.permission.RECORD_AUDIO",
 		//"android.permission.REQUEST_INSTALL_PACKAGES",
