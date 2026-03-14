@@ -1,4 +1,7 @@
-import { SidebarIcon } from "lucide-react";
+import { isMatch, useMatches } from "@tanstack/react-router";
+
+import { SidebarLeft } from "iconsax-reactjs";
+import { Fragment } from "react";
 import { SearchForm } from "@/components/search-form";
 import {
 	Breadcrumb,
@@ -10,12 +13,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useCmdk } from "./cmd-k";
 import { ModeToggle } from "./mode-toggle";
-import { isMatch, useMatches } from "@tanstack/react-router";
-import { Fragment } from "react";
 
 export function SiteHeader() {
 	const { toggleSidebar } = useSidebar();
+	const { setOpen } = useCmdk();
 
 	const matches = useMatches();
 	const matchesWithCrumbs = matches.filter((match) =>
@@ -40,7 +43,7 @@ export function SiteHeader() {
 					size="icon"
 					onClick={toggleSidebar}
 				>
-					<SidebarIcon />
+					<SidebarLeft />
 				</Button>
 				<Separator orientation="vertical" className="mr-2 h-4" />
 				<Breadcrumb className="hidden sm:block">
@@ -53,13 +56,16 @@ export function SiteHeader() {
 											{crumb.label}
 										</BreadcrumbLink>
 									</BreadcrumbItem>
-									{indx === lastIndx ? <></> : <BreadcrumbSeparator />}
+									{indx !== lastIndx && <BreadcrumbSeparator />}
 								</Fragment>
 							);
 						})}
 					</BreadcrumbList>
 				</Breadcrumb>
-				<SearchForm className="w-full sm:ml-auto sm:w-auto" />
+				<SearchForm
+					className="w-full sm:ml-auto sm:w-auto"
+					onClick={() => setOpen(true)}
+				/>
 				<ModeToggle />
 			</div>
 		</header>

@@ -3,37 +3,36 @@
 		"version": ">= 3.15.1"
 	},
 	"build": {
-		"development": {
-			"bun": "1.0.0",
-			"extends": "production",
-			"distribution": "internal",
+		"production": {
+			"bun": "1.3.5",
+			"channel": "production",
 			"android": {
-				"gradleCommand": ":app:assembleDebug"
+				"buildType": "aab"
 			},
-			"ios": {
-				"buildConfiguration": "Debug",
-				"simulator": true
+			"env": {
+				"APP_VARIANT": "production"
 			}
 		},
-		"development:device": {
-			"extends": "development",
+		"development": {
+			"extends": "production",
 			"distribution": "internal",
-			"ios": {
-				"buildConfiguration": "Debug",
-				"simulator": false
+			"channel": "development",
+			"developmentClient": true,
+			"env": {
+				"APP_VARIANT": "development"
 			}
 		},
 		"preview": {
 			"extends": "production",
 			"distribution": "internal",
-			"ios": { "simulator": true },
-			"android": { "buildType": "apk" }
-		},
-		"preview:device": {
-			"extends": "preview",
-			"ios": { "simulator": false }
-		},
-		"production": {}
+			"channel": "preview",
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"APP_VARIANT": "preview"
+			}
+		}
 	},
 	"submit": {
 		"production": {}

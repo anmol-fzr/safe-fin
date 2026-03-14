@@ -1,0 +1,12 @@
+{
+	"name": "@safe-fin/utils",
+	"version": "0.0.0",
+	"description": "Common Utility Package for Safe Fin",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./type-utils": "./src/type-utils.ts",
+		"./date-time": "./src/date-time.ts"
+	}
+}

@@ -1,4 +1,4 @@
-import { axiosInstance, IResData } from "../axios";
+import { axiosInstance, type IResData } from "../axios";
 
 interface SaveQuizResultReq {
 	quizId: number;

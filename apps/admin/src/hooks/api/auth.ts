@@ -1,32 +1,53 @@
-import { authClient } from "@/lib/auth";
-import { useMutation } from "@tanstack/react-query";
 import { createAuthHooks } from "@daveyplate/better-auth-tanstack";
-
-const useSendOtp = () => {
-	const { mutate, isPending, ...rest } = useMutation({
-		mutationKey: ["AUTH", "SEND", "OTP"],
-		mutationFn: (phoneNumber: number) =>
-			authClient.phoneNumber.sendOtp({ phoneNumber }),
-	});
-
-	return { sendOtp: mutate, isSendingOtp: isPending, ...rest };
-};
+import { useMutation } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth";
+import { useResourceActionToast } from "./defaults";
 
 type IVerifyOtp = {
-	phoneNumber: string;
-	code: string;
+	email: string;
+	otp: string;
 };
 
 const useVerifyOtp = () => {
-	const { mutate, isPending, ...rest } = useMutation({
-		mutationKey: ["AUTH", "VERIFY", "OTP"],
-		mutationFn: (payload: IVerifyOtp) => authClient.phoneNumber.verify(payload),
-	});
+	const toast = useResourceActionToast();
 
-	return { verifyOtp: mutate, isVerifyingOtp: isPending, ...rest };
+	const loadingMsg = "Verifying OTP ...";
+	const successMsg = "OTP Verified Successfully";
+	const errorMsg = "Unable to Verify OTP";
+
+	const { mutate, isPending, mutateAsync, isError, error, ...rest } =
+		useMutation({
+			mutationKey: ["AUTH", "VERIFY", "OTP"],
+			mutationFn(payload: IVerifyOtp) {
+				return authClient.signIn.emailOtp(payload);
+			},
+			onMutate() {
+				toast.loading(loadingMsg);
+			},
+			onSuccess(data) {
+				if (data.data === null) {
+					toast.error(data.error.message ?? errorMsg);
+					return;
+				}
+				toast.success(successMsg);
+			},
+			onError(data) {
+				console.log(data);
+				toast.error(data.message ?? errorMsg);
+			},
+		});
+
+	return {
+		verifyOtp: mutate,
+		verifyOtpAsync: mutateAsync,
+		isVerifyingOtp: isPending,
+		isVerifyOtpError: isError,
+		verifyOtpError: error,
+		...rest,
+	};
 };
 
-export { useSendOtp, useVerifyOtp };
+export { useVerifyOtp };
 
 export const {
 	useSession,

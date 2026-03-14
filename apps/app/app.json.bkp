@@ -1,0 +1,102 @@
+{
+	"expo": {
+		"name": "Safe Fin",
+		"slug": "safeFin",
+		"scheme": "safefin",
+		"version": "1.2.1",
+		"orientation": "portrait",
+		"userInterfaceStyle": "automatic",
+		"icon": "./assets/icons/app-icon.png",
+		"updates": {
+			"fallbackToCacheTimeout": 0,
+			"url": "https://u.expo.dev/65ecfa2b-b101-4892-b765-64c97a4898d4"
+		},
+		"newArchEnabled": true,
+		"jsEngine": "hermes",
+		"assetBundlePatterns": ["**/*"],
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/icons/app-icons/android/adaptive-icon-transparent.png",
+				"monochromeImage": "./assets/icons/app-icons/android/adaptive-icon-transparent.png",
+				"backgroundColor": "#000000"
+			},
+			"package": "com.safefin",
+			"allowBackup": false,
+			"permissions": [
+				"android.permission.RECORD_AUDIO",
+				"android.permission.REQUEST_INSTALL_PACKAGES"
+			]
+		},
+		"ios": {
+			"icon": "./assets/images/app-icon-ios.png",
+			"supportsTablet": true,
+			"bundleIdentifier": "com.safefin",
+			"privacyManifests": {
+				"NSPrivacyAccessedAPITypes": [
+					{
+						"NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+						"NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+					}
+				]
+			}
+		},
+		"web": {
+			"favicon": "./assets/images/app-icon-web-favicon.png",
+			"bundler": "metro"
+		},
+		"plugins": [
+			"expo-localization",
+			"expo-font",
+			[
+				"expo-splash-screen",
+				{
+					"dark": {
+						"image": "./assets/icons/app-icons/android/adaptive-icon-transparent.png",
+						"backgroundColor": "#000000"
+					},
+					"image": "./assets/icons/app-icons/android/adaptive-icon-transparent-dark.png",
+					"backgroundColor": "#ffffff",
+					"imageWidth": 300,
+					"resizeMode": "contain"
+				}
+			],
+			[
+				"expo-secure-store",
+				{
+					"configureAndroidBackup": true,
+					"faceIDPermission": "Allow SafeFin to access your Face ID biometric data."
+				}
+			],
+			[
+				"@sentry/react-native/expo",
+				{
+					"url": "https://sentry.io/",
+					"project": "srvc",
+					"organization": "anmol-ng"
+				}
+			],
+			[
+				"expo-router",
+				{
+					"root": "./app/routes"
+				}
+			],
+			[
+				"expo-image-picker",
+				{
+					"photosPermission": "The app accesses your photos to let you set your Public Profile Image"
+				}
+			]
+		],
+		"experiments": {
+			"tsconfigPaths": true,
+			"typedRoutes": true
+		},
+		"extra": {
+			"eas": {
+				"projectId": "65ecfa2b-b101-4892-b765-64c97a4898d4"
+			}
+		},
+		"runtimeVersion": "1.0.0"
+	}
+}

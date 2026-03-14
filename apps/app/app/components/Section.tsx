@@ -1,0 +1,68 @@
+import type { ViewProps } from "react-native";
+import { StyleSheet, View } from "react-native";
+import Animated from "react-native-reanimated";
+import { Text, TextProps } from "@/components";
+import { spacing, type ThemedViewStyle } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+
+export type SectionProps = ViewProps;
+type SectionPreset = "default" | "filled";
+
+export function Section(props: SectionProps) {
+	const { children, ...rest } = props;
+	return (
+		<Animated.View {...rest} style={[styles.sectionRoot, rest.style]}>
+			{children}
+		</Animated.View>
+	);
+}
+
+export type SectionTitleProps = TextProps;
+
+type SectionHeaderProps = ViewProps;
+
+Section.Header = (props: SectionHeaderProps) => {
+	const { style, ...rest } = props;
+	return <View style={[styles.header, style]} {...rest} />;
+};
+
+Section.Title = (props: SectionTitleProps) => {
+	return <Text preset="heading" size="lg" {...props} />;
+};
+
+const $sectionBodyDefault: ThemedViewStyle = () => ({});
+const $sectionBodyFilled: ThemedViewStyle = (theme) => ({
+	backgroundColor: theme.colors.palette.neutral200,
+	padding: theme.spacing.md,
+	borderRadius: theme.roundness * 1.5,
+});
+
+const presetXStyles = {
+	default: $sectionBodyDefault,
+	filled: $sectionBodyFilled,
+} as const;
+
+export interface SectionBodyProps extends ViewProps {
+	preset?: SectionPreset;
+}
+
+Section.Body = (props: SectionBodyProps) => {
+	const { style: $styleOverride, preset = "default", ...rest } = props;
+
+	const { themed } = useAppTheme();
+
+	const $styles = themed(presetXStyles[preset]);
+
+	return <View style={[$styles, $styleOverride]} {...rest} />;
+};
+
+const styles = StyleSheet.create({
+	sectionRoot: {
+		gap: spacing.xs,
+	},
+	header: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+});

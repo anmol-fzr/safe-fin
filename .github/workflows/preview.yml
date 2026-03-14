@@ -1,0 +1,61 @@
+name: Preview
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+  statuses: write
+
+jobs:
+  preview_server:
+    runs-on: ubuntu-latest
+    name: Deploy Server
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'Safe Fin Staging' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with: 
+          bun-version: 1.2.23
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Deploy Server to Cloudflare Worker
+        id: deploy_server
+        uses: cloudflare/wrangler-action@v3
+        with:
+          packageManager: bun
+          wranglerVersion: "4.40.3"
+          workingDirectory: ./apps/server/ 
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: versions upload --preview-alias ${{ github.event.pull_request.number }} --env preview
+
+      - name: Setting env for Admin
+        env:
+          SERVER_URL: ${{ steps.deploy_server.outputs.deployment-url }}
+        run: |
+          echo $DEPLOYMENT_URL
+          echo "$SERVER_URL" >> ./apps/admin/.env
+
+      - name: Build Admin
+        run: turbo run build:admin
+
+      - name: Deploy to Netlify (Preview)
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: ./apps/admin/dist
+          production-deploy: false
+          deploy-message: "PR #${{ github.event.pull_request.number }} Preview"
+          alias: pr-${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}

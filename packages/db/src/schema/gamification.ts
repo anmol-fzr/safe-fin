@@ -1,0 +1,78 @@
+import {
+	integer,
+	primaryKey,
+	sqliteTable,
+	text,
+} from "drizzle-orm/sqlite-core";
+import { id, timestamp } from "./__utils";
+import { user } from "./auth";
+
+export const streak = sqliteTable("streak", {
+	id,
+	userId: text("user_id")
+		.references(() => user.id)
+		.notNull()
+		.unique(),
+
+	current: integer("current_streak").default(1).notNull(),
+	maximum: integer("max_streak").default(1).notNull(),
+
+	lastActivityDate: timestamp("last_activity_date").unique().notNull(),
+
+	createdAt: timestamp.createdAt,
+	updatedAt: timestamp.updatedAt,
+});
+
+export const publicUserProfile = sqliteTable("public_user_profile", {
+	id,
+	userId: text("user_id")
+		.references(() => user.id)
+		.unique()
+		.notNull(),
+
+	createdAt: timestamp.createdAt,
+	updatedAt: timestamp.updatedAt,
+});
+
+export const userActivityLog = sqliteTable(
+	"user_activity_log",
+	{
+		userId: text("user_id")
+			.notNull()
+			.references(() => user.id),
+
+		// Store as unix timestamp (recommended for SQLite)
+		date: integer("date", { mode: "timestamp" }).notNull(),
+
+		totalPxEarned: integer("total_px").notNull().default(0),
+
+		createdAt: timestamp.createdAt,
+		updatedAt: timestamp.updatedAt,
+	},
+	(table) => ({
+		pk: primaryKey({
+			columns: [table.userId, table.date],
+			name: "user_activity_user_date_pk",
+		}),
+	}),
+);
+
+export const userProfileLink = sqliteTable("user_profile_link", {
+	id,
+	userId: text("user_id")
+		.notNull()
+		.references(() => user.id),
+
+	link: text().notNull(),
+
+	createdAt: timestamp.createdAt,
+});
+
+export type SelectUserProfileLink = Omit<
+	typeof userProfileLink.$inferSelect,
+	"updatedAt"
+>;
+export type InsertUserProfileLink = Omit<
+	typeof userProfileLink.$inferInsert,
+	"createdAt" | "updatedAt" | "id"
+>;

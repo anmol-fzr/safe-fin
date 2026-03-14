@@ -1,11 +1,7 @@
-import { memo, type ReactNode } from "react";
+import { memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Kbd } from "../ui/kbd";
-
-type OnlyChild = {
-	children: ReactNode;
-};
 
 const shortcuts = [
 	{
@@ -28,7 +24,7 @@ const shortcuts = [
 		title: "Add New Record in Table",
 		keys: ["a"],
 	},
-] as const;
+];
 
 export const KeyShortcuts = memo(({ className }: { className: string }) => {
 	return (
@@ -81,7 +77,3 @@ const Keys = memo(({ keys }: KeysProps) => {
 		</div>
 	);
 });
-
-const Key = memo(({ children }: OnlyChild) => (
-	<p className="bg-muted w-fit py-1 px-3 rounded-md capitalize">{children}</p>
-));

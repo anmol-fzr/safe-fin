@@ -1,20 +1,22 @@
+import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import type { ReactElement } from "react";
-
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import "../index.css";
 
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { AuthQueryProvider } from "@daveyplate/better-auth-tanstack";
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
-import { Link, useRouter } from "@tanstack/react-router";
+import { AuthProvider, NotifierProvider } from "@safe-fin/ui/hooks";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { Link, useRouter } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+import { toast } from "sonner";
 import { authClient } from "@/lib/auth";
 import { queryClient } from "@/main";
+import { CmdK, CmdKProvider } from "./cmd-k";
 import { ViewTransition } from "./extras";
-import { CmdK } from "./cmd-k";
-import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+
 // import { PostHogProvider } from "posthog-js/react";
 // import { posthogClient } from "@/lib/posthog";
 
@@ -59,27 +61,37 @@ export function Providers({ children }: { children: ReactElement }) {
 				}}
 			>
 				<ViewTransition>
-					<CmdK />
-					<ThemeProvider
-						attribute="class"
-						defaultTheme="dark"
-						disableTransitionOnChange
-						storageKey="vite-ui-theme"
-					>
-						<QueryClientProvider client={queryClient}>
-							<AuthQueryProvider>
-								<AuthUIProviderTanstack
-									authClient={authClient}
-									navigate={(href) => router.navigate({ href })}
-									replace={(href) => router.navigate({ href, replace: true })}
-									Link={({ href, ...props }) => <Link to={href} {...props} />}
-								>
-									<NuqsAdapter>{children}</NuqsAdapter>
-								</AuthUIProviderTanstack>
-							</AuthQueryProvider>
-						</QueryClientProvider>
-						<Toaster richColors />
-					</ThemeProvider>
+					<CmdKProvider>
+						<CmdK />
+						<ThemeProvider
+							attribute="class"
+							defaultTheme="dark"
+							disableTransitionOnChange
+							storageKey="vite-ui-theme"
+						>
+							<QueryClientProvider client={queryClient}>
+								<AuthProvider client={authClient}>
+									<NotifierProvider value={toast}>
+										<AuthQueryProvider>
+											<AuthUIProviderTanstack
+												authClient={authClient}
+												navigate={(href) => router.navigate({ href })}
+												replace={(href) =>
+													router.navigate({ href, replace: true })
+												}
+												Link={({ href, ...props }) => (
+													<Link to={href} {...props} />
+												)}
+											>
+												<NuqsAdapter>{children}</NuqsAdapter>
+											</AuthUIProviderTanstack>
+										</AuthQueryProvider>
+									</NotifierProvider>
+								</AuthProvider>
+							</QueryClientProvider>
+							<Toaster richColors />
+						</ThemeProvider>
+					</CmdKProvider>
 				</ViewTransition>
 			</ErrorBoundary>
 

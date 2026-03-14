@@ -1,26 +1,35 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    //"extends": "../../tsconfig.json",
-    "include": [
-      "src/**/*"
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "types": [
-      "@cloudflare/workers-types",
-      "vitest-environment-miniflare/globals"
-    ],
-    "lib": [
-      "ESNext"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
-  }
+	"compilerOptions": {
+		"target": "ESNext", // Use a modern target
+		"module": "ESNext", // Set module system to ESNext
+		"moduleResolution": "bundler", // *** CRITICAL FOR SPEED & PATHS ***
+		"verbatimModuleSyntax": true,
+		"strict": true,
+		"composite": true,
+		"skipLibCheck": true,
+		"checkJs": false,
+		"allowUnreachableCode": true,
+		"allowUnusedLabels": true,
+		"noErrorTruncation": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"types": ["bun", "./worker-configuration.d.ts"],
+		"lib": ["ES2022"],
+		"isolatedModules": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"incremental": true,
+		"useDefineForClassFields": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"alwaysStrict": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", ".turbo/"],
+	"references": [
+		{ "path": "../../packages/db" },
+		{ "path": "../../packages/auth" }
+	]
 }

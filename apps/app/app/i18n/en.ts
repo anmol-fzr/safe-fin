@@ -1,12 +1,84 @@
-import demoEn from "./demo-en";
+import { base } from "./base";
 
 const en = {
+	tabs: {
+		home: "Home",
+		calculator: "Calculator",
+		learnings: "Courses",
+		scams: "Scams",
+		profile: "Account",
+	},
+	screens: {
+		homeScreen: {
+			actions: {
+				learn: "Learn",
+				calculator: "Calculator",
+				scams: "Scams",
+				more: "More",
+			},
+		},
+		calculatorList: {
+			title: "Calculators",
+			tagLine: "Explore All Financial Calculators",
+		},
+		learningList: {
+			title: "Courses",
+			tagLine: "Latest Courses on Finance",
+		},
+		scamList: {
+			title: "Scams",
+			tagLine: "Latest Scam on Finance",
+		},
+		profileList: {
+			accountList: {
+				userProfile: { title: "User Profile", desc: "Name, Phone number ..." },
+				demographics: {
+					title: "Demographics",
+					desc: "Address, Occupation etc.",
+				},
+				financialDetails: {
+					title: "Financial Details",
+					desc: "Income, Spending Habits etc.",
+				},
+				account: { title: "Account", desc: "Session, Delete Account etc..." },
+				appSettings: {
+					title: "App Settings",
+					desc: "Theme, Language etc...",
+					//desc: "Theme, Language, Accessibility etc...",
+				},
+				debug: {
+					title: "Debug",
+					desc: "App Id, Build Id, Versions",
+				},
+			},
+			appInfoList: {
+				aboutUs: "About Us",
+				shareApp: {
+					title: "Share the app",
+					desc: "Help others master thier money",
+				},
+				rateApp: {
+					title: "Rate the app",
+					desc: "Review our app on Playstore",
+				},
+				feedback: {
+					title: "Feedback",
+					desc: "Let us know, your thoughts on SafeFin",
+				},
+				support: "Support",
+				terms: "Terms of Service",
+				privacyPolicy: "Privacy Policy",
+			},
+		},
+	},
 	common: {
 		ok: "OK!",
+		next: "Next",
 		cancel: "Cancel",
 		back: "Back",
 		submit: "Submit",
 		logOut: "Log Out",
+		logOutAsGuest: "Log Out as Guest",
 	},
 	welcomeScreen: {
 		postscript:
@@ -18,9 +90,12 @@ const en = {
 	errorScreen: {
 		title: "Something went wrong!",
 		friendlySubtitle:
-			"This is the screen that your users will see in production when an error is thrown. You'll want to customize this message (located in `app/i18n/en.ts`) and probably the layout as well (`app/screens/ErrorScreen`). If you want to remove this entirely, check `app/app.tsx` for the <ErrorBoundary> component.",
+			"We’re having trouble loading this right now. It’s not you, it’s us. Please give it another try.",
 		reset: "RESET APP",
 		traceTitle: "Error from %{name} stack",
+	},
+	notFoundError: {
+		title: "{{name}} Not Found",
 	},
 	emptyStateComponent: {
 		generic: {
@@ -35,11 +110,15 @@ const en = {
 		invalidEmail: "Invalid email address.",
 	},
 	loginScreen: {
+		title: "Log In",
+		tagLine: "Login to gain access to your accounts",
 		logIn: "Log In",
+		guestLogIn: "Log In as Guest",
+		guestLogInPending: "Logging In as Guest ...",
 		enterDetails:
 			"Enter your details below to unlock top secret info. You'll never guess what we've got waiting. Or maybe you will; it's not rocket science here.",
-		phoneFieldLabel: "Phone Number",
-		phoneFieldPlaceholder: "Enter your Phone Number",
+		emailFieldLabel: "Email Address",
+		emailFieldPlaceholder: "Enter your Email Address",
 		otpFieldLabel: "OTP ( One Time Password )",
 		otpFieldPlaceholder: "123456",
 		verifyOtp: "Verify Otp",
@@ -53,30 +132,19 @@ const en = {
 		emailFieldLabel: "Email",
 		emailFieldPlaceholder: "anmol@withanmol.com",
 	},
-	demoNavigator: {
-		componentsTab: "Quizzes",
-		debugTab: "Debug",
-		profileTab: "Profile",
-		settingsTab: "Settings",
-		scamTab: "Scams",
-		lessonsTab: "Lessons",
-		learningTab: "Learnings",
+	mainNavigator: {
+		homeTab: "Home",
 		calculatorListTab: "Calculator",
+		learnTab: "Learnings",
+		profileTab: "Profile",
+		scamTab: "Scams",
 	},
 	quizzesScreen: {
 		title: "Quizzes",
 		tagLine: "Latest Quiz on Finance",
 	},
-	scamScreen: {
-		title: "Scams",
-		tagLine: "Latest Scam on Finance",
-	},
 	lessonScreen: {
 		title: "Lessons",
-		tagLine: "Latest Lessons on Finance",
-	},
-	learningScreen: {
-		title: "Learnings",
 		tagLine: "Latest Lessons on Finance",
 	},
 	resultsScreen: {
@@ -88,8 +156,12 @@ const en = {
 		tagLine: "Settings",
 	},
 	profileScreen: {
-		title: "Profile",
-		tagLine: "Profile",
+		title: "Account",
+		tagLine: "Manage User Profile & App Settings",
+	},
+	demoGraphicsScreen: {
+		title: "Demo Graphics",
+		tagLine: "Demo Graphics",
 	},
 	demoDebugScreen: {
 		howTo: "HOW TO",
@@ -111,10 +183,6 @@ const en = {
 		windowsReactotronHint:
 			"If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
 	},
-	calculatorListScreen: {
-		title: "Calculators",
-		tagLine: "All Financial Calculators",
-	},
 	sipScreen: {
 		title: "SIP Calculator",
 		tagLine: "Calculators",
@@ -135,7 +203,7 @@ const en = {
 		title: "EPF Calculator",
 		tagLine: "Calculators",
 	},
-	...demoEn,
+	...base,
 } as const;
 
 export default en;

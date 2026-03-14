@@ -7,8 +7,8 @@ export default defineWorkersConfig({
 			workers: {
 				//wrangler: { configPath: "../../wrangler.jsonc" },
 				miniflare: {
-					TURSO_DB_URL: "file:./test.db",
-					TURSO_DB_AUTH_TOKEN: "test-token",
+					DB_URL: "file:./test.db",
+					DB_TOKEN: "test-token",
 				},
 			},
 		},

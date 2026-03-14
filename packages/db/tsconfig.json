@@ -1,18 +1,23 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "lib": [
-      "ESNext"
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "references": [
-      { "path": "../types" }
-    ]
-  }
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"composite": true,
+		"target": "ESNext",
+    "types": ["@cloudflare/workers-types"],
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"lib": ["ESNext"],
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"outDir": "dist",
+		"rootDir": "src",
+		"declarationMap": true
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "dist"]
 }
+

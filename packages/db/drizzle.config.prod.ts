@@ -1,12 +1,16 @@
-import { defineConfig } from 'drizzle-kit';
-import { envs } from './src/envs';
+import { defineConfig } from "drizzle-kit";
+import { envs } from "./src/envs";
 
 export default defineConfig({
-  out: './migrations/prod',
-  schema: './src/schema/index.ts',
-  dialect: 'turso',
-  dbCredentials: {
-    url: envs.DB.URL,
-    authToken: envs.DB.TOKEN
-  },
+	strict: true,
+	out: "./migrations/prod",
+	schema: "./src/schema/index.ts",
+	dialect: "sqlite",
+	driver: "d1-http",
+	tablesFilter: ["!_cf_KV"],
+	dbCredentials: {
+		accountId: envs.CLOUDFLARE.ACCOUNT_ID,
+		databaseId: envs.CLOUDFLARE.DATABASE_ID,
+		token: envs.CLOUDFLARE.D1_TOKEN,
+	},
 });

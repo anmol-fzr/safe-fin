@@ -1,113 +1,64 @@
 import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useState,
-} from "react";
-import { type StyleProp, useColorScheme } from "react-native";
-import {
-	DarkTheme,
-	DefaultTheme,
+	type DefaultTheme,
 	useTheme as useNavTheme,
 } from "@react-navigation/native";
-import {
-	type Theme,
-	type ThemeContexts,
-	type ThemedStyle,
-	type ThemedStyleArray,
-	lightTheme,
-	darkTheme,
+import { useSafeContext } from "@safe-fin/ui/hooks";
+import { createContext, useCallback, useMemo } from "react";
+import { type StyleProp, useColorScheme } from "react-native";
+import { useMMKVString } from "react-native-mmkv";
+import type {
+	Theme,
+	ThemeContexts,
+	ThemedStyle,
+	ThemedStyleArray,
 } from "@/theme";
-import * as SystemUI from "expo-system-ui";
-import { MissingContextError } from "./error";
+import { darkTheme, lightTheme } from "@/theme";
+import { storage } from "./storage";
 
 type ThemeContextType = {
-	themeScheme: ThemeContexts;
-	setThemeContextOverride: (newTheme: ThemeContexts) => void;
+	theme: ThemeContexts;
+	setTheme: (newTheme: ThemeContexts) => void;
 };
 
-// create a React context and provider for the current theme
-export const ThemeContext = createContext<ThemeContextType>({
-	themeScheme: undefined, // default to the system theme
-	setThemeContextOverride: (_newTheme: ThemeContexts) => {
+const ThemeContext = createContext<ThemeContextType>({
+	theme: "system",
+	setTheme: (_newTheme: ThemeContexts) => {
 		console.error(
 			"Tried to call setThemeContextOverride before the ThemeProvider was initialized",
 		);
 	},
 });
 
+const ThemeProvider = ThemeContext.Provider;
+
 const themeContextToTheme = (themeContext: ThemeContexts): Theme =>
 	themeContext === "dark" ? darkTheme : lightTheme;
 
-const setImperativeTheming = (theme: Theme) => {
-	SystemUI.setBackgroundColorAsync(theme.colors.background);
-};
-
-export const useThemeProvider = (initialTheme: ThemeContexts = undefined) => {
-	const colorScheme = useColorScheme();
-	const [overrideTheme, setTheme] = useState<ThemeContexts>(initialTheme);
-
-	const setThemeContextOverride = useCallback((newTheme: ThemeContexts) => {
-		setTheme(newTheme);
-	}, []);
-
-	const themeScheme = overrideTheme || colorScheme || "light";
-	const navigationTheme = themeScheme === "dark" ? DarkTheme : DefaultTheme;
-
-	useEffect(() => {
-		setImperativeTheming(themeContextToTheme(themeScheme));
-	}, [themeScheme]);
-
-	return {
-		themeScheme,
-		navigationTheme,
-		setThemeContextOverride,
-		ThemeProvider: ThemeContext.Provider,
-	};
-};
-
 interface UseAppThemeValue {
-	// The theme object from react-navigation
 	navTheme: typeof DefaultTheme;
-	// A function to set the theme context override (for switching modes)
 	setThemeContextOverride: (newTheme: ThemeContexts) => void;
-	// The current theme object
 	theme: Theme;
-	// The current theme context "light" | "dark"
 	themeContext: ThemeContexts;
-	// A function to apply the theme to a style object.
-	// See examples in the components directory or read the docs here:
-	// https://docs.infinite.red/ignite-cli/boilerplate/app/utils/
 	themed: <T>(
 		styleOrStyleFn: ThemedStyle<T> | StyleProp<T> | ThemedStyleArray<T>,
 	) => T;
 }
 
-/**
- * Custom hook that provides the app theme and utility functions for theming.
- *
- * @returns {UseAppThemeReturn} An object containing various theming values and utilities.
- * @throws {Error} If used outside of a ThemeProvider.
- */
-export const useAppTheme = (): UseAppThemeValue => {
+const useAppTheme = () => {
 	const navTheme = useNavTheme();
-	const context = useContext(ThemeContext);
-	if (!context) {
-		throw new MissingContextError("useTheme", " ThemeProvider");
-	}
+	const systemColorScheme = useColorScheme();
+	const context = useSafeContext(ThemeContext, "useAppTheme");
 
-	const { themeScheme: overrideTheme, setThemeContextOverride } = context;
+	const { theme: themeScheme, setTheme: setThemeContextOverride } = context;
 
-	const themeContext: ThemeContexts = useMemo(
-		() => overrideTheme || (navTheme.dark ? "dark" : "light"),
-		[overrideTheme, navTheme],
+	const actualTheme = useMemo(
+		() => (themeScheme === "system" ? systemColorScheme : themeScheme),
+		[themeScheme, systemColorScheme],
 	);
 
 	const themeVariant: Theme = useMemo(
-		() => themeContextToTheme(themeContext),
-		[themeContext],
+		() => themeContextToTheme(actualTheme as ThemeContexts),
+		[actualTheme],
 	);
 
 	const themed = useCallback(
@@ -123,17 +74,44 @@ export const useAppTheme = (): UseAppThemeValue => {
 				}
 			});
 
-			// Flatten the array of styles into a single object
 			return Object.assign({}, ...stylesArray) as T;
 		},
 		[themeVariant],
 	);
 
+	const isDark = useMemo(() => actualTheme === "dark", [actualTheme]);
+
 	return {
+		isDark,
 		navTheme,
 		setThemeContextOverride,
+		actualTheme,
 		theme: themeVariant,
-		themeContext,
+		themeContext: themeScheme,
 		themed,
+	} as const;
+};
+
+const useThemePersister = () => {
+	const THEME_KEY = "safe-fin.theme";
+
+	const getTheme = () =>
+		(storage.getString(THEME_KEY) as ThemeContexts) || "system";
+	const setTheme = (newTheme: ThemeContexts) =>
+		storage.set(THEME_KEY, newTheme);
+
+	return {
+		getTheme,
+		setTheme,
+		THEME_KEY,
 	};
 };
+
+const usePersistTheme = () => {
+	const { THEME_KEY } = useThemePersister();
+	const [theme, setTheme] = useMMKVString(THEME_KEY, storage);
+
+	return [theme ?? "system", setTheme];
+};
+
+export { ThemeProvider, useAppTheme, useThemePersister, usePersistTheme };

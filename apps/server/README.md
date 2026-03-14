@@ -1,11 +1,4 @@
-To install dependencies:
-```sh
-bun install
-```
+# Guide
 
-To run:
-```sh
-bun run dev
-```
-
-open http://localhost:3000
+## API Versioning Rules
+1. Only Add, Never Remove [No Data Type Change, No Renaming Fields, No Removing Fields]

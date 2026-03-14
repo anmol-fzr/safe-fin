@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read
+  statuses: write
+
+jobs:
+  run_ci:
+    runs-on: ubuntu-latest
+    name: Deploy Server
+
+    steps:
+      - name: Create commit comment
+        run: echo "CI Workflow Action"

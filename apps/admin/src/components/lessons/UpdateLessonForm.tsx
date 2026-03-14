@@ -1,8 +1,9 @@
-import { newLessonSchema } from "@/schema/lesson";
-import { useYupForm } from "@/hooks/form/useYupForm";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { useGetLesson, useUpdateLesson } from "@/hooks/api/lesson";
-import { convertJsonToMarkdown } from "../editor/Editor";
+import { newLessonSchema } from "@/schema/lesson";
 import type { ResourceId } from "@/services/api/types";
+import { convertJsonToMarkdown } from "../editor/Editor";
 import { LessonForm, useLessonActionFormRef } from "./LessonForm";
 
 type UpdateLessonFormProps = {
@@ -10,17 +11,18 @@ type UpdateLessonFormProps = {
 	disabled?: boolean;
 };
 
-export function UpdateLessonForm({
+function UpdateLessonForm({
 	lessonId,
 	disabled = false,
 }: UpdateLessonFormProps) {
 	const { lesson } = useGetLesson(lessonId);
 
-	const form = useYupForm({
-		schema: newLessonSchema,
+	const form = useForm({
+		resolver: yupResolver(newLessonSchema),
 		disabled,
 		defaultValues: {
-			...lesson.data,
+			title: lesson.data.title,
+			desc: lesson.data.desc,
 			content: lesson.data.contentJson,
 		},
 	});
@@ -45,13 +47,20 @@ export function UpdateLessonForm({
 	});
 
 	return (
-		<>
-			<LessonForm
-				form={form}
-				handleSubmit={handleSubmit}
-				handleDraft={toDraft}
-				handlePublish={toPublish}
-			/>
-		</>
+		<LessonForm.Root form={form} handleSubmit={handleSubmit}>
+			<LessonForm.Editor />
+			<div className="w-full max-w-md space-y-4">
+				<div className="w-full max-w-md space-y-4">
+					<LessonForm.TitleField />
+					<LessonForm.DescField />
+				</div>
+				<LessonForm.Actions>
+					<LessonForm.PublishAction handlePublish={toPublish} />
+					<LessonForm.DraftAction handleDraft={toDraft} />
+				</LessonForm.Actions>
+			</div>
+		</LessonForm.Root>
 	);
 }
+export { UpdateLessonForm };
+export default UpdateLessonForm;

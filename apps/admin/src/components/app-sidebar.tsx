@@ -1,17 +1,15 @@
-import * as React from "react";
+import type { LinkComponentProps } from "@tanstack/react-router";
 import {
 	CircleQuestionMark,
-	Brain,
-	User,
 	LifeBuoy,
+	type LucideIcon,
 	Send,
 	Settings,
-	type LucideIcon,
+	User,
 } from "lucide-react";
+import { Book } from "iconsax-reactjs";
+import type * as React from "react";
 
-import type { LinkComponentProps } from "@tanstack/react-router";
-
-import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
@@ -19,13 +17,8 @@ import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
-	SidebarHeader,
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSession } from "@/hooks/api/auth";
-import { logout } from "@/lib/auth";
 
 type Data = {
 	[key: string]: {
@@ -55,18 +48,13 @@ const data: Data = {
 	],
 	navigation: [
 		{
-			title: "Users",
-			url: "/dashboard/users",
-			icon: User,
+			title: "Courses",
+			url: "/dashboard/courses",
+			icon: Book,
 		},
 		{
-			title: "Lessons",
-			url: "/dashboard/lessons",
-			icon: Brain,
-		},
-		{
-			title: "Quiz",
-			url: "/dashboard/quiz",
+			title: "Exercises",
+			url: "/dashboard/exercises",
 			icon: CircleQuestionMark,
 		},
 	],
@@ -85,25 +73,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
 			{...props}
 		>
-			{/*
-			<SidebarHeader>
-				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton size="lg" asChild>
-							<a href="#">
-								<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-									<Command className="size-4" />
-								</div>
-								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-medium">Acme Inc</span>
-									<span className="truncate text-xs">Enterprise</span>
-								</div>
-							</a>
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu>
-			</SidebarHeader>
-      */}
 			<SidebarContent>
 				<NavProjects projects={data.navigation} />
 				<NavSecondary items={data.footer} className="mt-auto" />

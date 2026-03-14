@@ -1,120 +1,205 @@
-import demoHi from "./demo-hi";
+import { base } from "./base";
 
 const hi = {
+	tabs: {
+		home: "हम",
+		calculator: "कलकलटर",
+		learnings: "कर",
+		scams: "सम",
+		profile: "अकउट",
+	},
+	screens: {
+		homeScreen: {
+			actions: {
+				learn: "सख",
+				calculator: "कलकलटर",
+				scams: "सम",
+				more: "और दख",
+			},
+		},
+		calculatorList: {
+			title: "कलकलटर",
+			tagLine: "सभ फइनशयल कलकलटर दख",
+		},
+		learningList: {
+			title: "कर",
+			tagLine: "फइनस पर नए कर",
+		},
+		scamList: {
+			title: "सम",
+			tagLine: "फइनस स जड नए सम",
+		},
+		profileList: {
+			accountList: {
+				userProfile: { title: "यजर पफइल", desc: "नम, फन नबर आद" },
+				demographics: {
+					title: "डमगफक",
+					desc: "पत, पश आद",
+				},
+				financialDetails: {
+					title: "फइनशयल डटल",
+					desc: "आय, खर क आदत आद",
+				},
+				account: { title: "अकउट", desc: "सशन, अकउट डलट आद" },
+				appSettings: {
+					title: "ऐप सटग",
+					desc: "थम, भष आद",
+				},
+				debug: {
+					title: "डबग",
+					desc: "ऐप आईड, बल आईड, वरन",
+				},
+			},
+			appInfoList: {
+				aboutUs: "हमर बर म",
+				shareApp: {
+					title: "ऐप शयर कर",
+					desc: "दसर क पस सभलन सखन म मदद कर",
+				},
+				rateApp: {
+					title: "ऐप क रट कर",
+					desc: "Play Store पर हम रव द",
+				},
+				feedback: {
+					title: "फडबक",
+					desc: "SafeFin क बर म अपन रय बतए",
+				},
+				support: "सपर",
+				terms: "सव क शर",
+				privacyPolicy: "पइवस पलस",
+			},
+		},
+	},
 	common: {
 		ok: "ठक ह!",
+		next: "आग",
 		cancel: "रद कर",
 		back: "वपस",
-		submit: "जम कर",
+		submit: "सबमट",
 		logOut: "लग आउट",
+		logOutAsGuest: "गस क रप म लग आउट",
 	},
 	welcomeScreen: {
 		postscript:
-			"psst — शयद आपक ऐप ऐस नह दखत। (अगर आपक डजइनर न य सन द ह, त तरत लन कर!)",
-		readyForLaunch: "आपक ऐप लगभग लन क लए तयर ह!",
-		exciting: "(ओह, यह रमचक ह!)",
-		letsGo: "चलए शर कर!",
+			"अर — ह सकत ह आपक ऐप ऐस न दखत ह। (अगर आपक डजइनर न यह सन द ह, त फर लन कर दजए!)",
+		readyForLaunch: "आपक ऐप लन क लए लगभग तयर ह!",
+		exciting: "(वह, य त मजदर ह!)",
+		letsGo: "चल शर कर!",
 	},
 	errorScreen: {
-		title: "कछ गलत ह गय!",
+		title: "कछ गडबड ह गई!",
 		friendlySubtitle:
-			"उपयगकरओ क उतदन म तट आन पर यह सन दखई दग। आप इस सदश क (`app/i18n/en.ts`) और लआउट (`app/screens/ErrorScreen`) क अनकलत करन चहग। यद आप इस पर तरह स हटन चहत ह, त `<ErrorBoundary>` दख (`app/app.tsx` म)।",
+			"अभ इस लड करन म दकत आ रह ह। गलत आपक नह, हमर ह। कपय दबर कशश कर।",
 		reset: "ऐप रसट कर",
-		traceTitle: "%{name} सक स तट",
+		traceTitle: "%{name} सक स एरर",
+	},
+	notFoundError: {
+		title: "{{name}} नह मल",
 	},
 	emptyStateComponent: {
 		generic: {
-			heading: "बहत खल... बहत दखद",
-			content: "अभ तक कई डट नह मल। तज करन य ऐप पन लड करन क लए बटन पर कक कर।",
+			heading: "यह अभ कछ नह ह",
+			content: "अभ कई डट उपलब नह ह। रफश करन क लए बटन दबए य ऐप दबर खल।",
 			button: "फर स कशश कर",
 		},
 	},
 
 	errors: {
-		invalidEmail: "अमन ईमल पत।",
+		invalidEmail: "गलत ईमल एडस।",
 	},
 	loginScreen: {
-		logIn: "लग इन कर",
-		enterDetails:
-			"नच अपन ववरण दर कर और गप जनकर अनलक कर। आप अदज भ नह लग सकत क हमन क तयर कय ह। य शयद आप लग लग; यह रकट सइस नह ह।",
-		phoneFieldLabel: "फन नबर",
-		phoneFieldPlaceholder: "अपन फन नबर दर कर",
+		title: "लग इन",
+		tagLine: "अपन अकउट तक पहचन क लए लग इन कर",
+		logIn: "लग इन",
+		guestLogIn: "गस क रप म लग इन",
+		guestLogInPending: "गस क रप म लग इन ह रह ह...",
+		enterDetails: "नच अपन जनकर दर कर। आपक लए खस चज तयर ह।",
+		emailFieldLabel: "ईमल एडस",
+		emailFieldPlaceholder: "अपन ईमल एडस दर कर",
 		otpFieldLabel: "ओटप (वन टइम पसवर)",
 		otpFieldPlaceholder: "123456",
-		verifyOtp: "ओटप सतपत कर",
+		verifyOtp: "ओटप वरफई कर",
 		sendOtp: "ओटप भज",
 	},
 	registerScreen: {
-		register: "पजकरण कर",
-		enterDetails: "चलए आपक खत सटअप करत ह",
+		register: "रजसर",
+		enterDetails: "अपन अकउट सटअप कर",
 		nameFieldLabel: "नम",
 		nameFieldPlaceholder: "अनमल",
 		emailFieldLabel: "ईमल",
 		emailFieldPlaceholder: "anmol@withanmol.com",
 	},
-	demoNavigator: {
-		componentsTab: "कज",
-		debugTab: "डबग",
-		profileTab: "पफइल",
+	mainNavigator: {
+		homeTab: "हम",
 		calculatorListTab: "कलकलटर",
+		learnTab: "सख",
+		profileTab: "पफइल",
+		scamTab: "सम",
 	},
 	quizzesScreen: {
 		title: "कज",
-		tagLine: "वत पर नवनतम कज",
+		tagLine: "फइनस पर नए कज",
+	},
+	lessonScreen: {
+		title: "लसन",
+		tagLine: "फइनस पर नए लसन",
 	},
 	resultsScreen: {
-		title: "परणम",
-		tagLine: "वत पर नवनतम कज",
+		title: "रजल",
+		tagLine: "फइनस कज क रजल",
+	},
+	settingScreen: {
+		title: "सटग",
+		tagLine: "सटग",
 	},
 	profileScreen: {
-		title: "पफइल",
-		tagLine: "पफइल",
+		title: "अकउट",
+		tagLine: "यजर पफइल और ऐप सटग मनज कर",
+	},
+	demoGraphicsScreen: {
+		title: "डम गफक",
+		tagLine: "डम गफक",
 	},
 	demoDebugScreen: {
 		howTo: "कस कर",
 		title: "डबग",
-		tagLine:
-			"बधई ह, आपक पस एक बहत ह उनत React Native ऐप टमलट ह। इसक भरपर उपयग कर!",
+		tagLine: "बधई ह, आपक पस एक एडवस React Native ऐप टमलट ह। इसक पर फयद उठए!",
 		reactotron: "Reactotron पर भज",
-		reportBugs: "बग क रपर कर",
-		demoList: "डम सच",
-		demoPodcastList: "डम पडकस सच",
+		reportBugs: "बग रपर कर",
+		demoList: "डम लस",
+		demoPodcastList: "डम पडकस लस",
 		androidReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क Reactotron डसटप ऐप चल रह ह, टरनल म `adb reverse tcp:9090 tcp:9090` चलए, और ऐप क फर स लड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह, टरनल म adb reverse tcp:9090 tcp:9090 चलए और ऐप रलड कर।",
 		iosReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क Reactotron डसटप ऐप चल रह ह और ऐप क फर स लड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 		macosReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क Reactotron डसटप ऐप चल रह ह और ऐप क फर स लड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 		webReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क Reactotron डसटप ऐप चल रह ह और ऐप क फर स लड कर।",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 		windowsReactotronHint:
-			"यद यह कम नह करत ह, त सनशत कर क Reactotron डसटप ऐप चल रह ह और ऐप क फर स लड कर।",
-	},
-	calculatorListScreen: {
-		title: "कलकलटर",
-		tagLine: "सभ वतय कलकलटर",
+			"अगर कम न कर, त सनशत कर क Reactotron डसटप ऐप चल ह और ऐप रलड कर।",
 	},
 	sipScreen: {
-		title: "एसआईप कलकलटर",
+		title: "SIP कलकलटर",
 		tagLine: "कलकलटर",
 	},
 	swpScreen: {
-		title: "एसडबप कलकलटर",
+		title: "SWP कलकलटर",
 		tagLine: "कलकलटर",
 	},
 	mfScreen: {
-		title: "एमएफ कलकलटर",
+		title: "MF कलकलटर",
 		tagLine: "कलकलटर",
 	},
 	ppfScreen: {
-		title: "पपएफ कलकलटर",
+		title: "PPF कलकलटर",
 		tagLine: "कलकलटर",
 	},
 	epfScreen: {
-		title: "ईपएफ कलकलटर",
+		title: "EPF कलकलटर",
 		tagLine: "कलकलटर",
 	},
-	...demoHi, // keep unchanged unless demoEn has language-specific content
+	...base,
 } as const;
 
 export default hi;

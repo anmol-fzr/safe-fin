@@ -20,18 +20,29 @@ coverage
 
 # Wrangler
 .wrangler
+.wrangler/
+.wrangler/*
+.wrangler/tmp/*
+
+
+# Minio
+./minio-data/*
+./minio-data/
+minio-data/
 
 # DB Dumps
 local.db
 dump.sql
 
 .dev.vars
+.secrets
 
 # Vercel
 .vercel
 
 # Build Outputs
 .next/
+.expo/
 out/
 build
 dist
@@ -45,3 +56,5 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+packages/db/.env.dev
+packages/db/.env.prod

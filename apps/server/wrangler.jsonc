@@ -1,0 +1,49 @@
+{
+	"name": "safe-fin-dev",
+	"main": "./src/index.ts",
+	"compatibility_date": "2022-07-12",
+	"compatibility_flags": ["export_commonjs_default", "nodejs_compat"],
+	"preview_urls": true,
+	"dev": {
+		"ip": "192.168.1.9",
+		"port": 3000
+	},
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1
+	},
+	"placement": {
+		"mode": "smart"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "safe-fin-dev",
+			"database_id": "123"
+		}
+	],
+	"vars": {
+		"MODE": "DEV"
+	},
+	"env": {
+		"prod": {
+			"name": "safe-fin",
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "safe-fin-dev",
+					"database_id": "f3511c33-e483-466f-b16e-428487152f19"
+				}
+			],
+			"vars": {
+				"MODE": "PROD"
+			},
+			"version_metadata": {
+				"binding": "CF_VERSION_METADATA"
+			}
+		}
+	},
+	"version_metadata": {
+		"binding": "CF_VERSION_METADATA"
+	}
+}

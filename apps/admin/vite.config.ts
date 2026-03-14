@@ -6,12 +6,16 @@ import { defineConfig } from "vite";
 
 /// <reference types="vitest" />
 export default defineConfig({
-	plugins: [tailwindcss(), tanstackRouter({}), react()],
+	plugins: [
+		tailwindcss(),
+		tanstackRouter({ autoCodeSplitting: true }),
+		react(),
+	],
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
 			"@tests": path.resolve(__dirname, "./test"),
-			"@faker-js/faker": "@faker-js/faker/locale/en",
+			"@faker-js/faker": "@faker-js/faker/locale/en_IN",
 		},
 	},
 });

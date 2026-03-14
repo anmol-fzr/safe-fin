@@ -1,51 +1,34 @@
-import { createAuthClient } from "better-auth/react";
-import {
-	phoneNumberClient,
-	adminClient,
-	multiSessionClient,
-} from "better-auth/client/plugins";
+import { createAdminAuthClient } from "@safe-fin/auth/admin";
+import { useAuthStore } from "@/store/useAuthStore";
 import { envs } from "./envs";
 
-export const authClient = createAuthClient({
-	baseURL: envs.API_URL,
-	plugins: [phoneNumberClient(), adminClient(), multiSessionClient()],
+export const authClient = createAdminAuthClient({
+	baseURL: envs.AUTH_API_URL,
 });
 
+export type AuthType = (typeof authClient)["$Infer"]["Session"];
+
+export type IUser = AuthType["user"] & {
+	role: "user" | "admin";
+};
+export type Session = AuthType["session"];
+
 export async function logout() {
-	await authClient.signOut({
-		fetchOptions: {
-			onSuccess: () => {
-				window.location.href = "/";
+	if (!useAuthStore.getState().isLogin) {
+		useAuthStore.getState().resetData();
+		window.location.href = "/";
+		return;
+	}
+	try {
+		await authClient.signOut({
+			fetchOptions: {
+				onSuccess: () => {
+					window.location.href = "/";
+				},
 			},
-		},
-	});
-	//window.location.href = "/";
-}
-
-export interface Session {
-	expiresAt: string;
-	token: string;
-	createdAt: string;
-	updatedAt: string;
-	ipAddress: string;
-	userAgent: string;
-	userId: string;
-	impersonatedBy: any;
-	id: string;
-}
-
-export interface User {
-	name: string;
-	email: string;
-	emailVerified: boolean;
-	image: string | null;
-	createdAt: string;
-	updatedAt: string;
-	role: string;
-	banned: any;
-	banReason: any;
-	banExpires: any;
-	phoneNumber: string;
-	phoneNumberVerified: boolean;
-	id: string;
+		});
+	} finally {
+		useAuthStore.getState().resetData();
+		window.location.href = "/";
+	}
 }

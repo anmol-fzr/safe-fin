@@ -1,0 +1,99 @@
+import { View } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
+import { $baseListItemSeparatorStyles, ListView, Text } from "@/components";
+import { makeSpringy } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
+import type { Chapter } from "../../api-types/course_one";
+import { ExerciseBar } from "./ExerciseBar";
+import { UnitBar } from "./UnitBar";
+
+type ChapterProps = {
+	chapter: Chapter;
+	index: number;
+};
+
+export const ChapterBar = (props: ChapterProps) => {
+	const { chapter, index = 0 } = props;
+
+	const chapterIndex = index;
+
+	const { title, units, exercises } = chapter;
+
+	const {
+		themed,
+		theme: { spacing, typography },
+	} = useAppTheme();
+
+	return (
+		<View>
+			<View style={{ flexDirection: "row", gap: 6 }}>
+				<Text
+					weight="medium"
+					color="dim"
+					style={{
+						fontFamily: typography.secondary?.medium,
+					}}
+				>
+					CHAPTER {index + 1}
+				</Text>
+				{/*
+				{level.type === "pro" && (
+					<Text style={{ color: theme.colors.textDim }}>|</Text>
+				)}
+				{level.type === "pro" && (
+					<Text weight="medium" style={{ color: theme.colors.tint }}>
+						PRO
+					</Text>
+				)}
+        */}
+			</View>
+
+			<View style={{ gap: 6 }}>
+				<Text weight="medium" size="md">
+					{title}
+				</Text>
+
+				<View style={{ gap: spacing.xs, flex: 1 }}>
+					<ListView
+						data={units}
+						keyExtractor={(item) => item.id.toString()}
+						renderItem={({ item, index }) => (
+							<Animated.View
+								entering={makeSpringy(FadeInUp).delay(
+									50 * (index + chapterIndex),
+								)}
+							>
+								<UnitBar unit={item} index={index} />
+							</Animated.View>
+						)}
+						contentContainerStyle={themed($baseListItemSeparatorStyles)}
+					/>
+				</View>
+			</View>
+
+			<View style={{ gap: 6 }}>
+				<View style={{ gap: spacing.xs, flex: 1 }}>
+					<ListView
+						data={exercises}
+						keyExtractor={(item) => item.id.toString()}
+						contentContainerStyle={themed($baseListItemSeparatorStyles)}
+						renderItem={({ item, index }) => (
+							<Animated.View
+								entering={makeSpringy(FadeInUp).delay(
+									50 * (index + chapterIndex),
+								)}
+							>
+								<ExerciseBar
+									exercise={{
+										...item,
+										title: `Chapter Test ${index + 1}`,
+									}}
+								/>
+							</Animated.View>
+						)}
+					/>
+				</View>
+			</View>
+		</View>
+	);
+};

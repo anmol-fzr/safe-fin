@@ -1,29 +1,21 @@
-import { memo } from "react"
-import type { TextStyle } from "react-native"
-import { Text } from "@/components"
-import type { TxKeyPath } from "@/i18n"
-import type { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
+import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
+import { memo } from "react";
+import type { TxKeyPath } from "@/i18n";
+import { ScreenHeaderImpl } from "./ScreenHeaderImpl";
 
-type ScreenHeaderProps = {
-  titleTx: TxKeyPath;
-  tagLineTx: TxKeyPath
+interface ScreenHeaderProps extends NativeStackHeaderProps {
+	titleTx: TxKeyPath;
+	tagLineTx: TxKeyPath;
+	isInNativeHeader?: boolean;
 }
 
-export const ScreenHeader = memo(({ titleTx, tagLineTx }: ScreenHeaderProps) => {
-  const { themed } = useAppTheme()
-  return (
-    <>
-      <Text preset="heading" tx={titleTx} style={themed($title)} />
-      <Text tx={tagLineTx} style={themed($tagline)} />
-    </>
-  )
-})
+export const ScreenHeader = memo((props: ScreenHeaderProps) => {
+	const { titleTx, tagLineTx, ...rest } = props;
 
-const $title: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  marginBottom: spacing.sm,
-})
-
-const $tagline: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  marginBottom: spacing.xxl,
-})
+	return (
+		<ScreenHeaderImpl.Root {...rest}>
+			<ScreenHeaderImpl.Title titleTx={titleTx} />
+			<ScreenHeaderImpl.SubTitle subTitleTx={tagLineTx} />
+		</ScreenHeaderImpl.Root>
+	);
+});

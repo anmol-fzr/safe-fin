@@ -1,16 +1,17 @@
+import type * as React from "react";
 import {
-	useFormContext,
 	type FieldPath,
 	type FieldValues,
+	useFormContext,
 } from "react-hook-form";
 import {
 	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
+	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import * as React from "react";
 import { Editor } from "../editor/Editor";
 
 type InputProps = React.ComponentProps<"textarea">;
@@ -20,6 +21,7 @@ type FormInputProps<
 	TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = InputProps & {
 	name: TName;
+	label: TName;
 	desc?: string;
 };
 
@@ -29,7 +31,7 @@ const FormEditor = <
 >(
 	props: FormInputProps<TFieldValues, TName>,
 ) => {
-	const { name } = props;
+	const { name, label } = props;
 	const form = useFormContext();
 	return (
 		<FormField
@@ -37,6 +39,7 @@ const FormEditor = <
 			name={name}
 			render={({ field }) => (
 				<FormItem>
+					<FormLabel>{label}</FormLabel>
 					<FormControl>
 						<Editor
 							content={field.value}

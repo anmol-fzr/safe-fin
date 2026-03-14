@@ -1,11 +1,17 @@
 {
-  "compilerOptions": {
-    "extends": "../../tsconfig.json",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "references": [
-      { "path": "../types" }
-    ]
-  }
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"composite": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"outDir": "dist",
+		"rootDir": "src",
+		"types": ["node"],
+		"lib": ["ES2020"]
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "dist"],
+	"references": [{ "path": "../db" }]
 }

@@ -34,7 +34,7 @@ const useSearchKeyBinding = ({
 		return () => {
 			window.removeEventListener("keydown", handler);
 		};
-	}, []);
+	}, [searchRef, binding, enabled]);
 };
 
 export { useSearchKeyBinding };

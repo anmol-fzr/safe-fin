@@ -9,9 +9,9 @@ import {
 	type ViewStyle,
 } from "react-native";
 import type { ThemedStyle, ThemedStyleArray } from "@/theme";
+import { useAppTheme } from "@/utils/useAppTheme";
 import { $styles } from "../theme";
 import { Text, type TextProps } from "./Text";
-import { useAppTheme } from "@/utils/useAppTheme";
 
 type Presets = "default" | "reversed";
 
@@ -259,14 +259,14 @@ export function Card(props: CardProps) {
 }
 
 const $containerBase: ThemedStyle<ViewStyle> = (theme) => ({
-	borderRadius: theme.spacing.md,
-	padding: theme.spacing.xs,
-	borderWidth: 1,
+	borderRadius: theme.roundness * 1.2,
+	padding: theme.spacing.md,
+	borderWidth: 0,
 	shadowColor: theme.colors.palette.neutral800,
-	shadowOffset: { width: 0, height: 12 },
+	shadowOffset: { width: 0, height: 0 },
 	shadowOpacity: 0.08,
-	shadowRadius: 12.81,
-	elevation: 16,
+	shadowRadius: 0,
+	elevation: 1,
 	minHeight: 96,
 });
 

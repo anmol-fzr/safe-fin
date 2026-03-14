@@ -12,7 +12,7 @@ export const Route = createFileRoute("/dashboard/settings")({
 			pathname === "/dashboard/settings/"
 		) {
 			throw redirect({
-				to: "/dashboard/settings/application",
+				to: "/dashboard/settings/account",
 			});
 		}
 	},

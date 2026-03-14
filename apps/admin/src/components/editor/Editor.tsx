@@ -1,24 +1,27 @@
-import * as React from "react";
-import {
-	EditorContent,
-	EditorContext,
-	useEditor,
-	type Content,
-	type DocumentType,
-	type NodeType,
-	type TextType,
-} from "@tiptap/react";
-import { renderToMarkdown } from "@tiptap/static-renderer";
-// --- Tiptap Core Extensions ---
-import { StarterKit } from "@tiptap/starter-kit";
+import { Highlight } from "@tiptap/extension-highlight";
 import { Image } from "@tiptap/extension-image";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
-import { TextAlign } from "@tiptap/extension-text-align";
-import { Typography } from "@tiptap/extension-typography";
-import { Highlight } from "@tiptap/extension-highlight";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Typography } from "@tiptap/extension-typography";
 import { Placeholder, Selection } from "@tiptap/extensions";
+import {
+	type Content,
+	type DocumentType,
+	EditorContent,
+	EditorContext,
+	type NodeType,
+	type TextType,
+	useEditor,
+} from "@tiptap/react";
+// --- Tiptap Core Extensions ---
+import { StarterKit } from "@tiptap/starter-kit";
+import { renderToMarkdown } from "@tiptap/static-renderer";
+import * as React from "react";
+import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
+// --- Tiptap Node ---
+import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button";
 import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
@@ -27,10 +30,6 @@ import {
 	ToolbarGroup,
 	ToolbarSeparator,
 } from "@/components/tiptap-ui-primitive/toolbar";
-
-// --- Tiptap Node ---
-import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
-import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
 import "@/components/tiptap-node/blockquote-node/blockquote-node.scss";
 import "@/components/tiptap-node/code-block-node/code-block-node.scss";
 import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss";
@@ -39,35 +38,33 @@ import "@/components/tiptap-node/image-node/image-node.scss";
 import "@/components/tiptap-node/heading-node/heading-node.scss";
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
 
-// --- Tiptap UI ---
-import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
-import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
-import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
-import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button";
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
-import {
-	ColorHighlightPopover,
-	ColorHighlightPopoverContent,
-	ColorHighlightPopoverButton,
-} from "@/components/tiptap-ui/color-highlight-popover";
-import {
-	LinkPopover,
-	LinkContent,
-	LinkButton,
-} from "@/components/tiptap-ui/link-popover";
-import { MarkButton } from "@/components/tiptap-ui/mark-button";
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
-import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
-
 // --- Icons ---
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
 import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
 import { LinkIcon } from "@/components/tiptap-icons/link-icon";
-
+import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button";
+import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
+import {
+	ColorHighlightPopover,
+	ColorHighlightPopoverButton,
+	ColorHighlightPopoverContent,
+} from "@/components/tiptap-ui/color-highlight-popover";
+// --- Tiptap UI ---
+import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
+import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
+import {
+	LinkButton,
+	LinkContent,
+	LinkPopover,
+} from "@/components/tiptap-ui/link-popover";
+import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
+import { MarkButton } from "@/components/tiptap-ui/mark-button";
+import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
+import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
+import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 // --- Hooks ---
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowSize } from "@/hooks/use-window-size";
-import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
@@ -196,7 +193,7 @@ type EditorProps = {
 			>[]
 		>,
 	) => void;
-	content?: Content;
+	content?: string;
 	disabled?: boolean;
 };
 
@@ -284,17 +281,17 @@ export function Editor({ content, setContent, disabled = false }: EditorProps) {
 	const handleLinkClick = React.useCallback(() => setMobileView("link"), []);
 	const handleMain = React.useCallback(() => setMobileView("main"), []);
 	return (
-		<div className="bg-sidebar/50 rounded-xl">
+		<div className="bg-sidebar/50 rounded-xl max-h-[700px] flex flex-col overflow-hidden">
 			<EditorContext.Provider value={{ editor }}>
 				{!disabled && (
 					<Toolbar
-						className="!bg-sidebar rounded-t-xl"
+						className="!bg-sidebar rounded-t-xl shrink-0 z-20"
 						ref={toolbarRef}
 						style={{
 							...(isMobile
 								? {
-										bottom: `calc(100% - ${height - rect.y}px)`,
-									}
+									bottom: `calc(100% - ${height - rect.y}px)`,
+								}
 								: {}),
 						}}
 					>
@@ -313,11 +310,9 @@ export function Editor({ content, setContent, disabled = false }: EditorProps) {
 					</Toolbar>
 				)}
 
-				<EditorContent
-					editor={editor}
-					role="presentation"
-					className="simple-editor-content"
-				/>
+				<div className="flex-1 overflow-y-auto min-h-0">
+					<EditorContent editor={editor} className="simple-editor-content " />
+				</div>
 			</EditorContext.Provider>
 		</div>
 	);

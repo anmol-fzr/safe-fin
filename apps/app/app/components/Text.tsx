@@ -1,18 +1,20 @@
 import type { TOptions } from "i18next";
+import type { ComponentProps } from "react";
+import { type ForwardedRef, forwardRef, type ReactNode, useMemo } from "react";
 // eslint-disable-next-line no-restricted-imports
-import {
-	type StyleProp,
+import type {
 	Text as RNText,
-	type TextProps as RNTextProps,
-	type TextStyle,
+	TextProps as RNTextProps,
+	StyleProp,
+	TextStyle,
 } from "react-native";
-import { isRTL, translate, type TxKeyPath } from "@/i18n";
+import Animated from "react-native-reanimated";
+import { isRTL, type TxKeyPath, translate } from "@/i18n";
 import { colors, type ThemedStyle, type ThemedStyleArray } from "@/theme";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { typography } from "@/theme/typography";
-import { type ReactNode, forwardRef, type ForwardedRef } from "react";
+import { useAppTheme } from "@/utils/useAppTheme";
 
-type Sizes = keyof typeof $sizeStyles;
+export type Sizes = keyof typeof $sizeStyles;
 type Weights = keyof typeof typography.primary;
 type Presets =
 	| "default"
@@ -23,7 +25,11 @@ type Presets =
 	| "formHelper"
 	| "error";
 
-export interface TextProps extends RNTextProps {
+type TextColor = "default" | "inverse" | "dim" | "disabled";
+
+type J = ComponentProps<typeof Animated.View>;
+
+export interface TextProps extends RNTextProps, J {
 	/**
 	 * Text which is looked up via i18n.
 	 */
@@ -47,6 +53,10 @@ export interface TextProps extends RNTextProps {
 	preset?: Presets;
 	/**
 	 * Text weight modifier.
+	 */
+	color?: TextColor;
+	/**
+	 * Text color modifier.
 	 */
 	weight?: Weights;
 	/**
@@ -76,14 +86,28 @@ export const Text = forwardRef(function Text(
 		tx,
 		txOptions,
 		text,
+		color = "default",
 		children,
 		style: $styleOverride,
 		...rest
 	} = props;
-	const { themed } = useAppTheme();
+	const {
+		themed,
+		theme: { colors },
+	} = useAppTheme();
 
 	const i18nText = tx && translate(tx, txOptions);
 	const content = i18nText || text || children;
+
+	const textColorConfig = useMemo(
+		() => ({
+			default: colors.text,
+			dim: colors.textDim,
+			inverse: colors.textInverse,
+			disabled: colors.textDisabled,
+		}),
+		[colors],
+	);
 
 	const preset: Presets = props.preset ?? "default";
 	const $styles: StyleProp<TextStyle> = [
@@ -91,13 +115,14 @@ export const Text = forwardRef(function Text(
 		themed($presets[preset]),
 		weight && $fontWeightStyles[weight],
 		size && $sizeStyles[size],
+		{ color: textColorConfig[color] },
 		$styleOverride,
 	];
 
 	return (
-		<RNText {...rest} style={$styles} ref={ref}>
+		<Animated.Text {...rest} style={$styles} ref={ref}>
 			{content}
-		</RNText>
+		</Animated.Text>
 	);
 });
 
@@ -109,7 +134,7 @@ export const $sizeStyles = {
 	sm: { fontSize: 16, lineHeight: 24 } satisfies TextStyle,
 	xs: { fontSize: 14, lineHeight: 21 } satisfies TextStyle,
 	xxs: { fontSize: 12, lineHeight: 18 } satisfies TextStyle,
-};
+} as const;
 
 export const $fontWeightStyles = Object.entries(typography.primary).reduce(
 	(acc, [weight, fontFamily]) => {

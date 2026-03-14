@@ -1,10 +1,10 @@
-import { newLessonSchema } from "@/schema/lesson";
-import { useYupForm } from "@/hooks/form/useYupForm";
 import { useCreateLesson } from "@/hooks/api/lesson";
+import { useYupForm } from "@/hooks/form/useYupForm";
+import { newLessonSchema } from "@/schema/lesson";
 import { convertJsonToMarkdown } from "../editor/Editor";
 import { LessonForm, useLessonActionFormRef } from "./LessonForm";
 
-export function NewLessonForm() {
+function NewLessonForm() {
 	const form = useYupForm({ schema: newLessonSchema });
 	const { ref, toPublish, toDraft } = useLessonActionFormRef();
 
@@ -18,7 +18,8 @@ export function NewLessonForm() {
 		const markdown = convertJsonToMarkdown(jsonString);
 
 		createLesson({
-			...values,
+			title: values.title,
+			desc: values.desc,
 			isPublished,
 			content: markdown,
 			contentJson: jsonString,
@@ -26,11 +27,21 @@ export function NewLessonForm() {
 	});
 
 	return (
-		<LessonForm
-			form={form}
-			handlePublish={toPublish}
-			handleDraft={toDraft}
-			handleSubmit={handleSubmit}
-		/>
+		<LessonForm.Root form={form} handleSubmit={handleSubmit}>
+			<LessonForm.Editor />
+			<div className="w-full max-w-md space-y-4">
+				<div className="w-full max-w-md space-y-4">
+					<LessonForm.TitleField />
+					<LessonForm.DescField />
+				</div>
+				<LessonForm.Actions>
+					<LessonForm.PublishAction handlePublish={toPublish} />
+					<LessonForm.DraftAction handleDraft={toDraft} />
+				</LessonForm.Actions>
+			</div>
+		</LessonForm.Root>
 	);
 }
+
+export { NewLessonForm };
+export default NewLessonForm;

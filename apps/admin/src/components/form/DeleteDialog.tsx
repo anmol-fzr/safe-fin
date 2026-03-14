@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -9,11 +10,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { FormInput } from "./form-input";
-import type { ReactNode } from "react";
-import * as Yup from "yup";
-import { useYupForm } from "@/hooks/form/useYupForm";
 import { Form } from "@/components/ui/form";
+import { useYupForm } from "@/hooks/form/useYupForm";
+import { getPhraseSchema } from "@/schema/phrase.schema";
+import { FormInput } from "./form-input";
 
 export interface DeleteDialogProps {
 	onDelete: VoidFunction;
@@ -26,14 +26,7 @@ export function DeleteDialog({
 	children,
 	phrase,
 }: DeleteDialogProps) {
-	const schema = Yup.object({
-		deleteName: Yup.string()
-			.matches(new RegExp(phrase), {
-				excludeEmptyString: true,
-				message: `Must match ${phrase}`,
-			})
-			.required("Please: Type to Confirm Deletion"),
-	});
+	const schema = getPhraseSchema(phrase);
 
 	const form = useYupForm({ schema });
 
@@ -54,7 +47,7 @@ export function DeleteDialog({
 				<div className="grid gap-4">
 					<Form {...form} onSubmit={handleSubmit} className="flex-col">
 						<FormInput
-							name="deleteName"
+							name="name"
 							label={`To confirm, type "${phrase}" below`}
 							placeholder=""
 						/>

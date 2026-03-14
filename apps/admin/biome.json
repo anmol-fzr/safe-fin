@@ -1,0 +1,29 @@
+{
+	"root": false,
+	"extends": "//",
+	"linter": {
+		"includes": [
+			"!./src/routeTree.gen.ts",
+			"!src/routeTree.gen.ts",
+			"!**/*.gen.ts"
+		],
+		"domains": {
+			"react": "recommended",
+			"test": "recommended"
+		},
+		"rules": {
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useSemanticElements": "off",
+				"useAriaPropsForRole": "off"
+			}
+		}
+	},
+	"formatter": {
+		"includes": [
+			"!./src/routeTree.gen.ts",
+			"!src/routeTree.gen.ts",
+			"!**/*.gen.ts"
+		]
+	}
+}

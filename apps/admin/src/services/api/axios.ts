@@ -1,7 +1,6 @@
-import axios, { type AxiosError, type AxiosResponse } from "axios";
-import { authClient } from "@/lib/auth";
+import axios from "axios";
+import { logout } from "@/lib/auth";
 import { envs } from "@/lib/envs";
-import type { IResData } from "./types";
 
 const axiosInstance = axios.create({
 	baseURL: envs.API_URL,
@@ -18,13 +17,13 @@ const axiosInstance = axios.create({
 
 // Response Interceptor: Extract only .data
 axiosInstance.interceptors.response.use(
-	(resp: AxiosResponse<IResData>) => {
+	(resp) => {
 		return resp.data;
 	},
-	(error: AxiosError<IResData>) => {
+	(error) => {
 		const status = error.response?.status;
 		if (status === 401) {
-			authClient.signOut();
+			logout();
 		}
 
 		if (error.response?.data) {
@@ -34,7 +33,7 @@ axiosInstance.interceptors.response.use(
 		return Promise.reject({
 			data: null,
 			message: error.message || "Unknown error",
-		} as IResData);
+		});
 	},
 );
 

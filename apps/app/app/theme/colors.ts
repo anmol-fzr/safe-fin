@@ -1,141 +1,68 @@
-import { stylePropsAll } from "tamagui";
-
 const palette = {
-	neutral100: "#FFFFFF",
-	neutral200: "#F4F2F1",
-	neutral300: "#D7CEC9",
-	neutral400: "#B6ACA6",
-	neutral500: "#978F8A",
-	neutral600: "#564E4A",
-	neutral700: "#3C3836",
-	neutral800: "#191015",
-	neutral900: "#000000",
+	neutral100: "#FFFFFF", // Main Background
+	neutral200: "#F8F8F8", // Secondary Background / Cards
+	neutral300: "#E5E5E5", // Borders and Dividers
+	neutral400: "#D4D4D4", // Disabled state borders
+	neutral500: "#737373", // Muted text / Captions
+	neutral600: "#525252", // Secondary text
+	neutral700: "#262626", // Bold text / Subheadings
+	neutral800: "#171717", // Main Heading text
+	neutral900: "#000000", // Absolute black
 
-	primary100: "#F4E0D9",
-	primary200: "#E8C1B4",
-	primary300: "#DDA28E",
-	primary400: "#D28468",
-	primary500: "#C76542",
-	primary600: "#A54F31",
+	// Primary: Electric Violet (#8A43E1)
+	// Used for: Main buttons, active states, brand identity
+	primary100: "#F3E8FF", // Very light background
+	primary200: "#D8B4FE",
+	primary300: "#B073FD",
+	primary400: "#9D5BF0",
+	primary500: "#8A43E1", // Your Input: Main Brand Color
+	primary600: "#7029C9", // Hover state
 
-	secondary100: "#DCDDE9",
-	secondary200: "#BCC0D6",
-	secondary300: "#9196B9",
-	secondary400: "#626894",
-	secondary500: "#41476E",
+	// Secondary: Vivid Orange (#EF7B16)
+	// Used for: Highlights, Badges, "New" tags
+	secondary100: "#FFF1E0",
+	secondary200: "#FEDBB0",
+	secondary300: "#FDBF80",
+	secondary400: "#FA9D4B",
+	secondary500: "#EF7B16", // Your Input: Highlight Color
 
-	accent100: "#FFEED4",
-	accent200: "#FFE1B2",
-	accent300: "#FDD495",
-	accent400: "#FBC878",
-	accent500: "#FFBB50",
+	// Accents: Derived from Primary to keep UI clean
+	accent100: "#F3E8FF",
+	accent200: "#E9D5FF",
+	accent300: "#D8B4FE",
+	accent400: "#8A43E1",
+	accent500: "#7029C9",
 
-	angry100: "#F2D6CD",
-	angry500: "#C03403",
+	// Angry: Vivid Red (#FF2F2F)
+	angry100: "#FFE5E5",
+	angry500: "#FF2F2F", // Your Input: Error State
 
-	success: "#2F855A",
-	successBackground: "#C6F6D5",
+	// Success: Balanced Green (Generated to match the vibrancy of your Purple)
+	success: "#10B981",
+	successBackground: "#D1FAE5",
 
-	overlay20: "rgba(25, 16, 21, 0.2)",
-	overlay50: "rgba(25, 16, 21, 0.5)",
+	// Warning: Warm Amber (Generated to harmonize with your Orange)
+	warning: "#F59E0B",
+	warningBackground: "#FEF3C7",
+
+	overlay20: "rgba(0, 0, 0, 0.2)",
+	overlay50: "rgba(0, 0, 0, 0.5)",
 } as const;
 
-// const palette = {
-// 	// Clean & readable neutrals
-// 	neutral100: "#FFFFFF",
-// 	neutral200: "#F5F7FA",
-// 	neutral300: "#E4E7EB",
-// 	neutral400: "#CBD2D9",
-// 	neutral500: "#9AA5B1",
-// 	neutral600: "#52606D",
-// 	neutral700: "#323F4B",
-// 	neutral800: "#1F2933",
-// 	neutral900: "#0B0E11",
-//
-// 	// Primary – Finance-safe blue (Trust, CTA)
-// 	primary100: "#E6F0FF",
-// 	primary200: "#B3D4FF",
-// 	primary300: "#80B8FF",
-// 	primary400: "#4D9CFF",
-// 	primary500: "#1A80FF",
-// 	primary600: "#0063D1",
-//
-// 	// Secondary – Calming teal (Balance, Highlights)
-// 	secondary100: "#E6FFFA",
-// 	secondary200: "#B2F5EA",
-// 	secondary300: "#81E6D9",
-// 	secondary400: "#4FD1C5",
-// 	secondary500: "#38B2AC",
-//
-// 	// Accent – Energetic amber (Focus, Warnings)
-// 	accent100: "#FFFBEA",
-// 	accent200: "#FEEBCB",
-// 	accent300: "#FBD38D",
-// 	accent400: "#F6AD55",
-// 	accent500: "#ED8936",
-//
-// 	// Angry – Fraud alerts, loss
-// 	angry100: "#FFE6E6",
-// 	angry500: "#E53E3E",
-//
-// 	// Overlay – For modal/background blur
-// 	overlay20: "rgba(15, 23, 42, 0.2)",
-// 	overlay50: "rgba(15, 23, 42, 0.5)",
-// } as const;
-
 export const colors = {
-	/**
-	 * The palette is available to use, but prefer using the name.
-	 * This is only included for rare, one-off cases. Try to use
-	 * semantic names as much as possible.
-	 */
 	palette,
-	/**
-	 * A helper for making something see-thru.
-	 */
 	transparent: "rgba(0, 0, 0, 0)",
-	/**
-	 * The default text color in many components.
-	 */
 	text: palette.neutral800,
-	/**
-	 * Secondary text information.
-	 */
-	textDim: palette.neutral600,
-	/**
-	 * The default color of the screen background.
-	 */
-	background: palette.neutral200,
-	/**
-	 * The default border color.
-	 */
-	border: palette.neutral400,
-	/**
-	 * The main tinting color.
-	 */
-	tint: palette.primary500,
-	/**
-	 * The inactive tinting color.
-	 */
+	textInverse: palette.neutral100,
+	textDim: palette.neutral500,
+	textDisabled: palette.neutral400,
+	background: palette.neutral100, // Light Mode White
+	border: palette.neutral300,
+	tint: palette.primary500, // Purple Tint
 	tintInactive: palette.neutral300,
-	/**
-	 * A subtle color used for lines.
-	 */
-	separator: palette.neutral300,
-	/**
-	 * Error messages.
-	 */
+	separator: palette.neutral200,
 	error: palette.angry500,
-	/**
-	 * Error Background.
-	 */
 	errorBackground: palette.angry100,
-	/**
-	 * Success messages.
-	 */
 	success: palette.success,
-	/**
-	 * Success Background.
-	 */
 	successBackground: palette.successBackground,
 } as const;

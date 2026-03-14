@@ -1,33 +1,46 @@
 {
 	"name": "safefin",
-	"devDependencies": {
-		"@biomejs/biome": "2.1.4",
-		"syncpack": "^13.0.4",
-		"turbo": "^2.5.5",
-		"typescript": "5.9.2",
-		"wrangler": "^4.24.3"
-	},
+	"private": true,
+	"packageManager": "pnpm@10.24.0",
 	"engines": {
 		"node": ">=18"
 	},
-	"packageManager": "bun@1.2.18",
-	"private": true,
 	"scripts": {
 		"build": "turbo run build",
-		"dev": "turbo run dev -F @safe-fin/server -F @safe-fin/admin",
+		"build:admin": "turbo run build -F @safe-fin/admin",
+		"build:docs": "turbo run build -F @safe-fin/docs",
+		"dev": "turbo run dev",
 		"test": "turbo run test -F @safe-fin/server",
 		"check": "biome check",
 		"lint": "biome lint",
 		"lint:fix": "biome lint --write",
-		"format": "biome format --write",
+		"format": "turbo format",
 		"check-types": "turbo run check-types",
 		"deps:check": "syncpack list-mismatches",
 		"deps:fix": "syncpack fix-mismatches",
 		"deps:update": "syncpack update",
-		"auth:generate": "turbo run auth:generate --filter=@safe-fin/auth"
+		"prepare": "husky"
 	},
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	]
+	"devDependencies": {
+		"@biomejs/biome": "2.2.4",
+		"husky": "^9.1.7",
+		"syncpack": "^13.0.4",
+		"turbo": "^2.5.6",
+		"typescript": "5.9.2",
+		"wrangler": "^4.40.3"
+	},
+	"pnpm": {
+		"overrides": {
+			"@types/react": "19.1.10",
+			"react": "19.1.0",
+			"react-dom": "19.1.0",
+			"react-native": "0.81.5",
+			"better-auth": "1.4.7",
+			"@better-auth/expo": "1.4.7",
+			"@cloudflare/workers-types": "^4.20260114.0"
+		},
+		"onlyBuiltDependencies": [
+			"@shopify/react-native-skia"
+		]
+	}
 }

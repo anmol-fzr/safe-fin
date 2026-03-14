@@ -1,4 +1,4 @@
-import { type LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import {
 	SidebarGroup,
 	SidebarGroupLabel,
@@ -23,7 +23,7 @@ export function NavProjects({
 			<SidebarMenu>
 				{projects.map((item) => (
 					<SidebarMenuItem key={item.title}>
-						<Link to={item.url} activeOptions={{ exact: true }}>
+						<Link to={item.url}>
 							{({ isActive }) => (
 								<SidebarMenuButton tooltip={item.title} isActive={isActive}>
 									<item.icon />

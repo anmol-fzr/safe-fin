@@ -8,67 +8,74 @@ import {
 import { useHotkeys } from "react-hotkeys-hook";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { Shortcut } from "@/components/Shortcut";
+import { useResource } from "@/context/resource.context";
 
 type BaseProps = ButtonProps & {
 	keyBind?: string;
 	resource: string;
 	children?: React.ReactNode;
+	withKeyBind?: boolean;
 };
 
-type ButtonOnlyProps = {
+type AddButtonProps = BaseProps & {
 	onClick: VoidFunction;
-	to?: never;
 };
-
-type LinkOnlyProps = {
-	to: LinkComponentProps["to"];
-	onClick?: never;
-};
-
-type AddButtonProps = BaseProps & (ButtonOnlyProps | LinkOnlyProps);
 
 export function AddButton({
 	keyBind = "a",
-	to,
 	onClick,
 	resource,
 	children,
+	withKeyBind,
 	...props
 }: AddButtonProps) {
+	const enabled = useSettingsStore((state) => state.shortcuts.enabled);
+
+	useHotkeys(keyBind, onClick, { enabled: withKeyBind ?? enabled });
+
+	return (
+		<Button {...props} onClick={onClick}>
+			{children ?? (
+				<>
+					<Plus /> Add {resource}
+					<Shortcut>{keyBind}</Shortcut>
+				</>
+			)}
+		</Button>
+	);
+}
+
+type AddButtonLinkProps = Omit<BaseProps, "resource"> & {
+	to: LinkComponentProps["to"];
+};
+
+export function AddButtonLink({
+	keyBind = "a",
+	to,
+	children,
+	withKeyBind,
+	...props
+}: AddButtonLinkProps) {
 	const navigate = useNavigate();
-	const shortcutsEnabled = useSettingsStore((state) => state.shortcuts.enabled);
+	const enabled = useSettingsStore((state) => state.shortcuts.enabled);
+	const { resource } = useResource();
 
 	useHotkeys(
 		keyBind,
 		() => {
-			if (onClick) {
-				onClick();
-				return;
-			}
-			navigate({ to: to! });
+			navigate({ to });
 		},
-		{ enabled: shortcutsEnabled },
+		{ enabled: withKeyBind ?? enabled },
 	);
-
-	if (onClick) {
-		return (
-			<Button {...props} onClick={onClick}>
-				{children ?? (
-					<>
-						<Plus /> Add {resource}
-						<Shortcut>{keyBind}</Shortcut>
-					</>
-				)}
-			</Button>
-		);
-	}
 
 	return (
 		<Button {...props} asChild>
-			<Link to={to!}>
-				<Plus /> Add {resource}
-				<Shortcut>{keyBind}</Shortcut>
-			</Link>
+			{children ?? (
+				<Link to={to}>
+					<Plus /> Add {resource}
+					<Shortcut>{keyBind}</Shortcut>
+				</Link>
+			)}
 		</Button>
 	);
 }

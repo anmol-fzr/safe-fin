@@ -1,0 +1,190 @@
+table category {
+  id integer [pk, not null]
+  title text(256) [not null]
+  description text [not null]
+  parent_category_id integer
+}
+
+table lesson {
+  id integer [pk, not null]
+  title text(256) [not null]
+  description text [not null]
+  is_published integer [default: false]
+  content text [not null]
+  content_json text
+  created_at integer [not null]
+  updated_at integer [not null]
+}
+
+table lesson_quiz {
+  id integer [pk, not null]
+  lesson_id integer [not null]
+  quiz_id integer [not null]
+  created_at integer [not null]
+  updated_at integer [not null]
+}
+
+table lesson_read {
+  user_id text [not null]
+  lesson_id integer [not null]
+  event text [not null, default: 'seen']
+  created_at integer [not null]
+  updated_at integer [not null]
+
+  indexes {
+    (user_id, lesson_id) [pk]
+  }
+}
+
+table profile {
+  id text [pk, not null]
+  id text [not null, unique]
+  dob integer [default: '1999-12-31 18:30:00.000']
+  gender text [default: 'male']
+}
+
+table quiz {
+  id integer [pk, not null]
+  title text(256) [not null]
+  desc text(256) [not null]
+  is_published integer [default: false]
+  created_at integer [not null]
+  updated_at integer [not null]
+}
+
+table quiz_question {
+  id integer [pk, not null]
+  quiz_id integer [not null]
+  question text(500) [not null]
+  answer_id integer
+  created_at integer [not null]
+  updated_at integer [not null]
+}
+
+table quiz_question_option {
+  id integer [pk, not null]
+  question_id integer [not null]
+  value text(100)
+  created_at integer [not null]
+  updated_at integer [not null]
+}
+
+table quiz_question_result {
+  id integer [pk, not null]
+  question_id integer [not null]
+  answered_id integer [not null]
+  user_quiz_result_id integer [not null]
+  created_at integer [not null]
+  updated_at integer [not null]
+}
+
+table scam {
+  id integer [pk, not null]
+  title text(256) [not null]
+  description text [not null]
+  category_id integer [not null]
+  reported_at text [not null, default: `(CURRENT_TIMESTAMP)`]
+  reported_by text(256)
+  source_url text(512)
+  region text(100)
+  is_verified integer [default: false]
+  reviewed_by text(256)
+  reported_at text
+  notes text
+}
+
+table scam_tags {
+  id integer [pk, not null]
+  scam_id integer [not null]
+  tag_id integer [not null]
+}
+
+table session {
+  id text [pk, not null]
+  expires_at integer [not null]
+  token text [not null, unique]
+  created_at integer [not null, default: `(cast(unixepoch('subsecond') * 1000 as integer))`]
+  updated_at integer [not null]
+  ip_address text
+  user_agent text
+  user_id text [not null]
+  impersonated_by text
+}
+
+table tag {
+  id integer [pk, not null]
+  name text(50) [not null, unique]
+}
+
+table user {
+  id text [pk, not null]
+  name text [not null]
+  email text [not null, unique]
+  email_verified integer [not null, default: false]
+  image text
+  created_at integer [not null, default: `(cast(unixepoch('subsecond') * 1000 as integer))`]
+  updated_at integer [not null, default: `(cast(unixepoch('subsecond') * 1000 as integer))`]
+  role text
+  banned integer [default: false]
+  ban_reason text
+  ban_expires integer
+  is_anonymous integer
+  phone_number text [unique]
+  phone_number_verified integer
+  is_new integer [default: true]
+}
+
+table "user-demographics" {
+  id integer [pk, not null]
+  user_id text [not null, unique]
+  dob integer [default: '1999-12-31 18:30:00.000']
+  occupation text [not null]
+  country text [not null]
+  state text [not null]
+  city text [not null]
+  "education-level" text [not null]
+  gender text [default: 'male']
+  created_at integer [default: `(cast(unixepoch('subsecond') * 1000 as integer))`]
+  updated_at integer [default: `(cast(unixepoch('subsecond') * 1000 as integer))`]
+
+  indexes {
+    user_id [name: 'user_id_idx']
+  }
+}
+
+table user_quiz_result {
+  id integer [pk, not null]
+  quiz_id integer [not null]
+  user_id text [not null]
+  created_at integer [not null]
+  updated_at integer [not null]
+}
+
+table verification {
+  id text [pk, not null]
+  identifier text [not null]
+  value text [not null]
+  expires_at integer [not null]
+  created_at integer [not null, default: `(cast(unixepoch('subsecond') * 1000 as integer))`]
+  updated_at integer [not null, default: `(cast(unixepoch('subsecond') * 1000 as integer))`]
+}
+
+ref: lesson_quiz.lesson_id > lesson.id
+
+ref: lesson_quiz.quiz_id > quiz.id
+
+ref: lesson_read.user_id - user.id
+
+ref: lesson_read.lesson_id - lesson.id
+
+ref: quiz_question.answer_id > quiz_question_option.id
+
+ref: quiz_question.quiz_id > quiz.id
+
+ref: scam_tags.scam_id > scam.id
+
+ref: scam_tags.tag_id > tag.id
+
+ref: "user-demographics".user_id - user.id
+
+ref: profile.id - user.id

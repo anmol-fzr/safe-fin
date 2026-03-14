@@ -1,8 +1,22 @@
-type IResData<D = any> = {
+interface PaginateMore {
+	total: number;
+	hasMore: true;
+	nextPage: number;
+}
+
+interface PaginateLast {
+	total: number;
+	hasMore: false;
+	nextPage: null;
+}
+
+type Paginate = PaginateMore | PaginateLast;
+
+type IResData<D = never, P = false> = {
 	data: D;
 	message: string;
 	error: string;
-	total: number;
+	paginate: P extends true ? Paginate : undefined;
 };
 
 type IPaginatedReqParams = {

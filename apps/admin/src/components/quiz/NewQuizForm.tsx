@@ -1,21 +1,22 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { XIcon as IconX, InfoIcon } from "lucide-react";
 import { memo, useCallback, useEffect } from "react";
-import { useYupForm } from "@/hooks/form/useYupForm";
-import { newQuizSchema } from "@/schema/quiz";
 import {
 	FormProvider,
 	useFieldArray,
 	useFormContext,
 	useWatch,
 } from "react-hook-form";
-import { XIcon as IconX, InfoIcon } from "lucide-react";
-import { FormInput } from "../form/form-input";
-import { formatOrdinals } from "@/lib/utils";
-import { AddButton } from "../form/button/AddButton";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Button } from "../ui/button";
-import { FormTextarea } from "../form/form-textarea";
-import { FormSelect } from "../form/form-select";
 import { useCreateQuiz } from "@/hooks/api/quiz";
+import { useYupForm } from "@/hooks/form/useYupForm";
+import { formatOrdinals } from "@/lib/utils";
+import { newQuizSchema } from "@/schema/quiz";
+import { AddButton } from "../form/button/AddButton";
+import { FormInput } from "../form/form-input";
+import { FormSelect } from "../form/form-select";
+import { FormTextarea } from "../form/form-textarea";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Button } from "../ui/button";
 
 const p = "You know its just a placeholder";
 const placeholders = [
@@ -74,17 +75,19 @@ const placeholders = [
 const infos = ["Minimum 3 Question per Quiz", "Minimum 3 Options per Question"];
 
 const InfoCard = memo(() => (
-	<div className=" bg-destructive  text-destructive-foreground  border border-border p-2 rounded-md max-w-sm">
-		<p className="ml-2 text-sm font-semibold">Note:</p>
-		<ul className="text-sm p-2">
-			{infos.map((info) => (
-				<li key={info}>
-					<InfoIcon className="inline mr-1" size={18} />
-					{info}
-				</li>
-			))}
-		</ul>
-	</div>
+	<Alert variant="destructive">
+		<AlertTitle>Note: </AlertTitle>
+		<AlertDescription>
+			<ul className="text-sm p-2">
+				{infos.map((info) => (
+					<li key={info}>
+						<InfoIcon className="inline mr-1" size={18} />
+						{info}
+					</li>
+				))}
+			</ul>
+		</AlertDescription>
+	</Alert>
 ));
 
 export function NewQuizForm() {
@@ -155,9 +158,12 @@ function NewQuestionForm() {
 	return (
 		<fieldset className="gap-4 border @container border-border p-3 rounded-md w-full">
 			<legend>Questions</legend>
-			<AddButton className="ml-auto mr-0" onClick={handleAddNewQuestion}>
-				Add Question
-			</AddButton>
+			<AddButton
+				withKeyBind={false}
+				className="ml-auto mr-0"
+				onClick={handleAddNewQuestion}
+				resource="Question"
+			/>
 			{/*
 			<div ref={animate} className="grid gap-3 @lg:grid-cols-2 @xl:grid-cols-4">
       */}
@@ -195,7 +201,11 @@ const OptionsField = memo(({ questionIndex }: { questionIndex: number }) => {
 		<fieldset className="grid gap-4 border border-border p-3 rounded-md">
 			<legend className="font-medium">Options</legend>
 			<div className="flex items-center justify-between ml-auto mr-0">
-				<AddButton onClick={handleAddNewOption}>Add Option</AddButton>
+				<AddButton
+					onClick={handleAddNewOption}
+					resource="Option"
+					withKeyBind={false}
+				/>
 			</div>
 
 			<div ref={animate} className="grid gap-2">

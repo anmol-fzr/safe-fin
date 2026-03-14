@@ -10,6 +10,10 @@
 		"lint": {
 			"dependsOn": ["^lint"]
 		},
+		"format": {
+			"dependsOn": ["^format"],
+			"persistent": false
+		},
 		"check-types": {
 			"dependsOn": ["^check-types"]
 		},
@@ -32,6 +36,10 @@
 		"db:generate": {
 			"cache": false,
 			"persistent": true
+		},
+		"build:android:preview": {
+			"cache": true,
+			"persistent": false
 		}
 	}
 }

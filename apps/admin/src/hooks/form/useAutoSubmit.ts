@@ -1,10 +1,10 @@
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
-import {
-	type UseFormWatch,
-	type FieldValues,
-	type UseFormTrigger,
-	type Path,
+import type {
+	UseFormWatch,
+	FieldValues,
+	UseFormTrigger,
+	Path,
 } from "react-hook-form";
 
 interface AutoSubmitProps<T extends FieldValues> {
@@ -28,12 +28,14 @@ export const useAutoSubmit = <T extends FieldValues>({
 	onValidationFailed,
 }: AutoSubmitProps<T>) => {
 	const [isSubmiting, setIsSubmiting] = useState(false);
+
 	const debouncedSumbit = useCallback(
-		debounce((submitFn: () => void) => {
+		debounce((submitFn: VoidFunction) => {
 			submitFn();
 		}, debounceTime),
 		[],
 	);
+
 	useEffect(() => {
 		const subscription = watch((_data, info) => {
 			if (info?.type !== "change") return;
@@ -47,6 +49,14 @@ export const useAutoSubmit = <T extends FieldValues>({
 				.finally(() => setIsSubmiting(false));
 		});
 		return () => subscription.unsubscribe();
-	}, [watch, onSubmit]);
+	}, [
+		watch,
+		onSubmit,
+		debouncedSumbit,
+		onValidationFailed,
+		excludeFields,
+		trigger,
+	]);
+
 	return { isSubmiting };
 };

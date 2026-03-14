@@ -4,7 +4,7 @@ import {
 	type StatusBarProps,
 	type StatusBarStyle,
 } from "expo-status-bar";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	type KeyboardAvoidingViewProps,
@@ -16,15 +16,15 @@ import {
 	View,
 	type ViewStyle,
 } from "react-native";
-import { $styles, spacing } from "../theme";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { useIsOnline } from "@/hooks/useIsOnline";
+import { useAppTheme } from "@/utils/useAppTheme";
+import { $styles } from "../theme";
 import {
 	type ExtendedEdge,
 	useSafeAreaInsetsStyle,
 } from "../utils/useSafeAreaInsetsStyle";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import { useAppTheme } from "@/utils/useAppTheme";
 import { Text } from "./Text";
-import NetInfo from "@react-native-community/netinfo";
 
 export const DEFAULT_BOTTOM_OFFSET = 50;
 
@@ -161,7 +161,7 @@ function useAutoPreset(props: AutoScreenProps): {
 	 * @param {number} w - The width of the content.
 	 * @param {number} h - The height of the content.
 	 */
-	function onContentSizeChange(w: number, h: number) {
+	function onContentSizeChange(_w: number, h: number) {
 		// update scroll-view content height
 		scrollViewContentHeight.current = h;
 		updateScrollState();
@@ -264,10 +264,10 @@ function ScreenWithScrolling(props: ScreenProps) {
  * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/app/components/Screen/}
  */
 export function Screen(props: ScreenProps) {
-	const [isConnected, setIsConnected] = useState(true);
+	const isOnline = useIsOnline();
 	const {
-		theme: { colors },
-		themeContext,
+		theme: { colors, spacing },
+		actualTheme,
 	} = useAppTheme();
 	const {
 		backgroundColor,
@@ -280,14 +280,6 @@ export function Screen(props: ScreenProps) {
 
 	const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges);
 
-	useEffect(() => {
-		const unsubscribe = NetInfo.addEventListener((state) => {
-			setIsConnected(state.isConnected ?? false);
-		});
-
-		return unsubscribe;
-	}, []);
-
 	return (
 		<View
 			style={[
@@ -297,7 +289,8 @@ export function Screen(props: ScreenProps) {
 			]}
 		>
 			<StatusBar
-				style={statusBarStyle || (themeContext === "dark" ? "light" : "dark")}
+				style={statusBarStyle || (actualTheme === "dark" ? "light" : "dark")}
+				backgroundColor={colors.background}
 				{...StatusBarProps}
 			/>
 
@@ -307,7 +300,7 @@ export function Screen(props: ScreenProps) {
 				{...KeyboardAvoidingViewProps}
 				style={[$styles.flex1, KeyboardAvoidingViewProps?.style]}
 			>
-				{!isConnected ? (
+				{!isOnline && (
 					<View
 						style={{
 							backgroundColor: colors.errorBackground,
@@ -316,8 +309,6 @@ export function Screen(props: ScreenProps) {
 					>
 						<Text>Disconnected from Internet 🌐</Text>
 					</View>
-				) : (
-					<></>
 				)}
 				{isNonScrolling(props.preset) ? (
 					<ScreenWithoutScrolling {...props} />

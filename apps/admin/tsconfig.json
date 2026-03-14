@@ -1,34 +1,23 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "verbatimModuleSyntax": true,
-    "skipLibCheck": true,
-    "types": [
-      "vite/client",
-      "vitest/globals"
-    ],
-    "rootDirs": ["."],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@tests/*": ["./test/*"],
-      "@faker-js/faker": ["node_modules/@faker-js/faker/locale/en"]
-    }
-  },
-  "include": [
-    "src/**/*",
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx"
-  ],
-  "references": [
-    { "path": "../server/tsconfig.json" }
-  ]
+	"compilerOptions": {
+		"strict": true,
+		"esModuleInterop": true,
+		"jsx": "react-jsx",
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true,
+		"types": ["vite/client", "vitest/globals"],
+		"rootDirs": ["."],
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+			"@tests/*": ["./test/*"],
+			"@faker-js/faker": ["node_modules/@faker-js/faker/locale/en"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "src/**/*.test.ts", "src/**/*.test.tsx"],
+	"references": [{ "path": "../../packages/ui" }]
 }

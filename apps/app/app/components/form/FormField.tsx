@@ -1,51 +1,41 @@
+import { forwardRef, type Ref } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import type { TextInput } from "react-native";
 import { TextField, type TextFieldProps } from "../TextField";
-import { useAppTheme } from "@/utils/useAppTheme";
-import { View, type ViewStyle } from "react-native";
-import type { ThemedStyle } from "@/theme";
 
-type FormFieldProps = Omit<
-	TextFieldProps,
-	"value" | "onChangeText" | "onBlur"
-> & {
+export interface FormFieldProps
+	extends Omit<TextFieldProps, "value" | "onChangeText" | "onBlur"> {
 	name: string;
-};
+}
 
-export const FormField = (props: FormFieldProps) => {
-	const { control, formState } = useFormContext();
-	const { themed } = useAppTheme();
+export const FormField = forwardRef(
+	(props: FormFieldProps, ref: Ref<TextInput>) => {
+		const { name, helper, ...rest } = props;
 
-	type T = typeof formState.errors;
+		const { control, formState } = useFormContext();
 
-	const getValue = (obj: T, path: string) =>
-		path.split(".").reduce((acc, key) => acc && acc[key], obj);
+		type T = typeof formState.errors;
 
-	const error = getValue(formState?.errors, props.name)?.message.toString();
+		const getValue = (obj: T, path: string) =>
+			path.split(".").reduce((acc, key) => acc && acc[key], obj);
 
-	return (
-		<View>
+		const error = getValue(formState?.errors, name)?.message.toString();
+
+		return (
 			<Controller
-				control={control}
+				{...{ control, name }}
 				render={({ field: { onChange, onBlur, value, disabled } }) => (
 					<TextField
+						ref={ref}
 						value={value}
 						onChangeText={onChange}
 						onBlur={onBlur}
-						containerStyle={themed($textField)}
-						status={(disabled && "disabled") || (error && "error") || undefined}
-						helper={props.helper || error}
-						{...props}
+						status={disabled ? "disabled" : error ? "error" : undefined}
+						helper={helper || error}
+						{...rest}
 					/>
 				)}
-				name={props.name}
 			/>
-			{/*
-      <Text preset="error" >{error}</Text>
-      */}
-		</View>
-	);
-};
-
-const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-	marginBottom: spacing.lg,
-});
+		);
+	},
+);
