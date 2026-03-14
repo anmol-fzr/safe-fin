@@ -1,6 +1,6 @@
 import type { ConfigContext, ExpoConfig } from "@expo/config";
 
-require("ts-node/register");
+require("tsx/cjs");
 
 const { APP_VARIANT } = process.env;
 if (!APP_VARIANT) {
@@ -121,8 +121,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 					"The app accesses your photos to let you set your Public Profile Image",
 			},
 		],
-
-		require("./plugins/withSplashScreen").withSplashScreen,
 		"expo-web-browser",
 		"expo-build-properties",
 	],
@@ -134,7 +132,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
 	extra: {
 		eas: {
-			projectId: "xxxxx",
+			projectId: "65ecfa2b-b101-4892-b765-64c97a4898d4",
 		},
 	},
 });

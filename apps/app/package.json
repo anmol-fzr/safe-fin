@@ -57,6 +57,7 @@
 		"expo-build-properties": "~1.0.9",
 		"expo-constants": "~18.0.11",
 		"expo-dev-client": "~6.0.18",
+		"expo-device": "~8.0.10",
 		"expo-file-system": "~19.0.21",
 		"expo-font": "~14.0.11",
 		"expo-haptics": "~15.0.8",
@@ -142,6 +143,7 @@
 		"reactotron-react-native-mmkv": "^0.2.8",
 		"ts-jest": "^29.4.0",
 		"ts-node": "^10.9.2",
+		"tsx": "^4.21.0",
 		"typescript": "~5.9.2"
 	},
 	"engines": {

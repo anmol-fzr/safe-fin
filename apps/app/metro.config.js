@@ -42,4 +42,5 @@ config.transformer = {
 	unstable_transformProfile: "hermes-stable",
 };
 
+require("tsx/cjs");
 module.exports = config;
